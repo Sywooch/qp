@@ -14,14 +14,15 @@ class RegForm extends Model
 {
     public $email;
     public $name;
+    public $password;
     public $pin;
     public $status;
     public function rules()
     {
         return [
-            [['email', 'name'],'filter', 'filter' => 'trim'],
-            [['email', 'name'],'required'],
-            ['name', 'string', 'min' => 2, 'max' => 255],
+            [['email'],'filter', 'filter' => 'trim'],
+            [['email', 'password'],'required'],
+            ['password', 'string', 'min' => 6, 'max' => 50],
             ['email', 'email'],
             ['email', 'unique',
                 'targetClass' => User::className(),
@@ -38,26 +39,22 @@ class RegForm extends Model
     {
         return [
             'email' => 'Эл. почта',
-            'name' => 'Имя'
+            'name' => 'Имя',
+            'password' => 'Пароль',
         ];
     }
 
     public function reg()
     {
-        $this->pin = $this->generatePin();
-
+        $this->generateAuthKey();
         $user = new User;
-        $user->name = $this->name;
+        $user->name = "";
         $user->email = $this->email;
         $user->status = $this->status;
-        $user->setPassword($this->pin);
+        $user->setPassword($this->password);
         $user->generateAuthKey();
         //return $user;
         return $user->save() ? $user : null;
-    }
-
-    public function generatePin() {
-        return rand(1000, 9999);
     }
 
     public function sendActivationEmail($user)
@@ -67,5 +64,10 @@ class RegForm extends Model
             ->setTo($this->email)
             ->setSubject('Активация для '.Yii::$app->name)
             ->send();
+    }
+
+    public function generateAuthKey()
+    {
+        $this->pin = Yii::$app->security->generateRandomString();
     }
 }
