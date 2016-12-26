@@ -11,6 +11,11 @@ use app\models\ContactForm;
 use app\models\RegForm;
 use app\models\User;
 use yii\base\ExitException;
+use yii\base\InvalidParamException;
+use yii\web\BadRequestHttpException;
+use yii\helpers\Url;
+use yii\helpers\Html;
+use app\models\AccountActivation;
 
 class SiteController extends Controller
 {
@@ -124,6 +129,23 @@ class SiteController extends Controller
         Yii::$app->user->logout();
 
         return $this->goHome();
+    }
+
+    public function actionActivateAccount($key)
+    {
+        try {
+            $user = new AccountActivation($key);
+        }
+        catch(InvalidParamException $e) {
+            throw new BadRequestHttpException($e->getMessage());
+        }
+        if($user->activateAccount()):
+            Yii::$app->session->setFlash('success', 'Активация прошла успешно.');
+        else:
+            Yii::$app->session->setFlash('error', 'Ошибка активации.');
+            Yii::error('Ошибка при активации.');
+        endif;
+        return $this->redirect(Url::to(['/site/login']));
     }
 
     /**

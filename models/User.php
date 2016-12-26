@@ -49,7 +49,6 @@ class User extends ActiveRecord implements IdentityInterface
     {
         return [
             ['status', 'default', 'value' => self::STATUS_ACTIVE],
-            ['status', 'in', 'range' => [self::STATUS_ACTIVE, self::STATUS_DELETED]],
         ];
     }
 
@@ -101,7 +100,6 @@ class User extends ActiveRecord implements IdentityInterface
 
 
 
-
     /**
      * Finds user by password reset token
      *
@@ -113,10 +111,9 @@ class User extends ActiveRecord implements IdentityInterface
         if (!static::isPasswordResetTokenValid($token)) {
             return null;
         }
-
         return static::findOne([
             'password_reset_token' => $token,
-            'status' => self::STATUS_ACTIVE,
+            // 'status' => self::STATUS_ACTIVE,
         ]);
     }
 
@@ -140,6 +137,18 @@ class User extends ActiveRecord implements IdentityInterface
     /////////////////////////////////////////////
     // HELPERS
     /////////////////////////////////////////////
+
+    public function fill($email, $password) {
+        $this->setPassword($password);
+        $this->email = $email;
+        $this->generatePasswordResetToken();
+        $this->status = self::STATUS_NOT_ACTIVE;
+    }
+
+    public function getPasswordResetToken()
+    {
+        return $this->password_reset_token;
+    }
 
     /**
      * @inheritdoc

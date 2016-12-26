@@ -3,5 +3,5 @@
 return [
     'adminEmail' => 'admin@illuzion.ru',
     'supportEmail' => 'mo-reply@illuzion.ru',
-    'secretKeyExpire' => 3600
+    'user.passwordResetTokenExpire' => 3600
 ];

@@ -7,4 +7,10 @@
 
 use yii\helpers\Html;
 echo 'Привет '.Html::encode($user->name).'.';
-echo 'Пин код: '.$pin;
+echo 'Ссылка для активация аккаунта' . Yii::$app->name . ': ';
+echo Yii::$app->urlManager->createAbsoluteUrl(
+    [
+        '/main/activate-account',
+        'key' => $pin
+    ]
+);
