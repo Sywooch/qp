@@ -1,0 +1,74 @@
+#header-main {
+  background: #1f4d91;
+  height: 53px;
+  color: #fff;
+  a {
+    color: #fff;
+    &:hover {
+      color: #fff;
+      opacity: .8;
+      transition: opacity 300ms linear;
+    }
+  }
+}
+.to-main {
+  text-align: center;
+  line-height: 53px;
+}
+ul {
+  &.login-menu {
+    margin-top: 11px;
+    .login {
+      a {
+        display: inline-block;
+        border-radius: 14px;
+        -moz-background-clip: padding;
+        -webkit-background-clip: padding-box;
+        background-clip: padding-box;
+        font-size: 15px;
+        text-decoration: none;
+        padding: 4px 20px 4px 38px;
+        background: #3e6cae url(../img/icon-login.png) no-repeat 16px 8px;
+      }
+    }
+    .info {
+      a {
+        width: 21px;
+        height: 21px;
+        display: inline-block;
+        background: url(../img/icon-q.png) no-repeat 0 0 transparent;
+        overflow: hidden;
+        text-indent: -999px;
+        position: relative;
+        top: 5px;
+      }
+    }
+  }
+}
+
+ul.login-menu .register-card a {
+  font-size: 14px;
+  text-decoration: underline;
+}
+ul.social li a {
+  width: 31px;
+  height: 31px;
+  display: inline-block;
+  text-indent: -999px;
+  overflow: hidden;
+  background-image: url(../img/social.png);
+  background-position: 0 0;
+  background-repeat: no-repeat;
+}
+ul.social {
+  margin-top: 8px;
+}
+ul.social li.twitter a {
+  background-position: -42px 0;
+}
+ul.social li.instagram a {
+  background-position: -85px 0;
+}
+ul.social li.vk a {
+  background-position: -130px 0;
+}

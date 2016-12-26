@@ -1,0 +1,31 @@
+/*
+* Custom
+*/
+@import "bootstrap";
+@import "partials/variable";
+@import "partials/header";
+@import "partials/home";
+@import "partials/form";
+@import "partials/stage";
+
+body {
+  background: #ededed;
+}
+
+.section-heading {
+  margin-bottom: 3.4rem;
+  h2 {
+    text-align: center;
+    text-transform: uppercase;
+  }
+}
+.steps {
+  padding: 3.8rem 0 3.6rem;
+}
+
+.steps-list {
+  li {
+    padding-bottom: 20px;
+  }
+
+}

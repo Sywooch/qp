@@ -1,0 +1,63 @@
+.vertical {
+  display: inline-block;
+  width: 200px;
+  height: 20px;
+  transform: rotate(-90deg);
+}
+.vertical {
+  box-shadow: inset 0px 4px 6px #ccc;
+}
+.progress-bar {
+  box-shadow: inset 0px 4px 6px rgba(100,100,100,0.6);
+}
+
+ul.stage {
+  list-style: none;
+  margin: 50px 0 30px 120px;
+  padding-left: 30px;
+  border-left: 8px solid #f00;
+  li {
+    margin: 20px 0;
+    border-bottom: 1px solid #000;
+    position: relative;
+    label {
+      z-index: 100;
+      cursor: pointer;
+      top: 20px;
+      color: #484848;
+
+    }
+  }
+  .count {
+    margin-top: -10px;
+    top: 50%;
+    left: -158px;
+    position: absolute;
+  }
+  .circle {
+    margin-top: -10px;
+    top: 50%;
+    left: -42px;
+    width: 16px;
+    height: 16px;
+    background: #ffffff;
+    border: 3px solid #f00001;
+    border-radius: 50%;
+    display: block;
+    position: absolute;
+  }
+  .radio {
+    display: none;
+  }
+
+  .radio:checked {
+    & + .relative {
+      label {
+        cursor: auto;
+        font-weight: bold;
+        color: #000;
+      }
+    }
+  }
+
+}
