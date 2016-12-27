@@ -39,6 +39,10 @@ $config = [
                 ],
             ],
         ],
+        'authManager' => [
+            'class' => 'yii\rbac\PhpManager',
+            'defaultRoles' => ['guest'],
+        ],
         'db' => require(__DIR__ . '/db.php'),
         /*
         'urlManager' => [

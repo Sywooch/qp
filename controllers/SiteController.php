@@ -27,12 +27,17 @@ class SiteController extends Controller
         return [
             'access' => [
                 'class' => AccessControl::className(),
-                'only' => ['logout'],
+                'only' => ['logout', 'login', 'reg'],
                 'rules' => [
                     [
                         'actions' => ['logout'],
                         'allow' => true,
-                        'roles' => ['@'],
+                        'roles' => ['user'],
+                    ],
+                    [
+                        'actions' => ['login', 'reg'],
+                        'allow' => false,
+                        'roles' => ['user'],
                     ],
                 ],
             ],
@@ -106,10 +111,10 @@ class SiteController extends Controller
      */
     public function actionLogin()
     {
-        if (!Yii::$app->user->isGuest) {
+/*        if (!Yii::$app->user->isGuest) {
             return $this->goHome();
         }
-
+*/
         $model = new LoginForm();
         if ($model->load(Yii::$app->request->post()) && $model->login()) {
             return $this->goBack();
@@ -127,19 +132,18 @@ class SiteController extends Controller
     public function actionLogout()
     {
         Yii::$app->user->logout();
-
         return $this->goHome();
     }
 
     public function actionActivateAccount($key)
     {
         try {
-            $user = new AccountActivation($key);
+            $activation = new AccountActivation($key);
         }
         catch(InvalidParamException $e) {
             throw new BadRequestHttpException($e->getMessage());
         }
-        if($user->activateAccount()):
+        if($activation->activateAccount()):
             Yii::$app->session->setFlash('success', 'Активация прошла успешно.');
         else:
             Yii::$app->session->setFlash('error', 'Ошибка активации.');
