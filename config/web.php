@@ -50,7 +50,7 @@ $config = [
             'showScriptName' => false,
             'rules' => [
                 '' => 'site/index',
-                '<action:about|contact|login>'=>'site/<action>',
+                '<action:about|contact|login|reg>'=>'site/<action>',
                 //'<module:[\wd-]+>/<controller:[\wd-]+>/<action:[\wd-]+>/<id:\d+>' => '<module>/<controller>/<action>',
             ],
         ],
