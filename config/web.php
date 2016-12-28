@@ -4,7 +4,7 @@ $params = require(__DIR__ . '/params.php');
 
 $config = [
     'id' => 'basic',
-    'name' => 'Новогодняя акция от сети кинотеатров Илюзион',
+    'name' => 'qpvl',
     'basePath' => dirname(__DIR__),
     'bootstrap' => ['log'],
     'language' => 'ru',
@@ -44,14 +44,17 @@ $config = [
             'defaultRoles' => ['guest'],
         ],
         'db' => require(__DIR__ . '/db.php'),
-        /*
+
         'urlManager' => [
             'enablePrettyUrl' => true,
             'showScriptName' => false,
             'rules' => [
+                '' => 'site/index',
+                '<action:about|contact|login>'=>'site/<action>',
+                //'<module:[\wd-]+>/<controller:[\wd-]+>/<action:[\wd-]+>/<id:\d+>' => '<module>/<controller>/<action>',
             ],
         ],
-        */
+
     ],
     'params' => $params,
 ];
