@@ -36,7 +36,7 @@ class ShoppingComponent extends Component
         }
         $this->content = '
             <a href="javascript:void(0)">
-                <i class="fa fa-shopping-cart" aria-hidden="true"></i>'. $this->result
+                <i class="fa fa-shopping-cart" aria-hidden="true"></i> '. $this->result
             . '</a>';
     }
 
