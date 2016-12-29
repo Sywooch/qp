@@ -4,11 +4,25 @@ $params = require(__DIR__ . '/params.php');
 
 $config = [
     'id' => 'basic',
-    'name' => 'Новогодняя акция от сети кинотеатров Илюзион',
+    'name' => 'qpvl',
     'basePath' => dirname(__DIR__),
     'bootstrap' => ['log'],
     'language' => 'ru',
     'components' => [
+        'assetManager' => [
+            'appendTimestamp' => true,
+            'bundles' => [
+                'yii\bootstrap\BootstrapPluginAsset' => [
+                    'js'=>[],
+                ],
+                'yii\bootstrap\BootstrapAsset' => [
+                    'css' => [],
+                ],
+            ],
+        ],
+        'shopping' => [
+            'class' => 'app\components\ShoppingComponent',
+        ],
         'request' => [
             // !!! insert a secret key in the following (if it is empty) - this is required by cookie validation
             'cookieValidationKey' => 'KSZvMmDXsxtwTR6LUwK4H8rDz_V6wIar',
@@ -44,14 +58,17 @@ $config = [
             'defaultRoles' => ['guest'],
         ],
         'db' => require(__DIR__ . '/db.php'),
-        /*
+
         'urlManager' => [
             'enablePrettyUrl' => true,
             'showScriptName' => false,
             'rules' => [
+                '' => 'site/index',
+                '<action:about|contact|login|reg>'=>'site/<action>',
+                //'<module:[\wd-]+>/<controller:[\wd-]+>/<action:[\wd-]+>/<id:\d+>' => '<module>/<controller>/<action>',
             ],
         ],
-        */
+
     ],
     'params' => $params,
 ];

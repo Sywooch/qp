@@ -2,30 +2,12 @@
 * Custom
 */
 @import "bootstrap";
-@import "partials/variable";
-@import "partials/header";
-@import "partials/home";
-@import "partials/form";
-@import "partials/stage";
+@import "awesom/font-awesome";
+@import "variable";
+@import "header";
+@import "home";
+@import "form";
 
 body {
-  background: #ededed;
-}
-
-.section-heading {
-  margin-bottom: 3.4rem;
-  h2 {
-    text-align: center;
-    text-transform: uppercase;
-  }
-}
-.steps {
-  padding: 3.8rem 0 3.6rem;
-}
-
-.steps-list {
-  li {
-    padding-bottom: 20px;
-  }
-
+  background: #fff;
 }
