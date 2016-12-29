@@ -1,0 +1,71 @@
+.header {
+  &__inner {
+    @media (min-width: $screen-xs-min) {
+      height: 50px;
+    }
+    @media (min-width: $screen-md-min) {
+      padding-top: 5px;
+      height: 100px;
+    }
+  }
+  &__logo {
+    a {
+      font-size: 5.5rem;
+      text-align: center;
+      width: 100%;
+    }
+  }
+  &__slogan {
+    font-size: 1.8rem;
+    height: 40px;
+    line-height: 40px;
+    text-align: center;
+  }
+  &__navbar {
+    background-color: #F3F4F9;
+    line-height: 2rem;
+    li {
+      padding: 10px 6px;
+      & > a {
+        border-radius: 3px;
+        color: #434345;
+        font-size: 1.6rem;
+        font-weight: 600;
+        padding: 8px 10px;
+      }
+      &.active > a, & > a:hover, & > a:focus {
+        background-color: $cgreen;
+        color: #fff;
+      }
+    }
+  }
+  &__phone {
+    font-size: 2.5rem;
+    text-align: center;
+    padding-top: 25px;
+  }
+  &__personal {
+    float: right;
+    li {
+      &.active > a, & > a:hover, & > a:focus {
+        background-color: #dddddf;
+        color: #434345;
+      }
+    }
+  }
+}
+.shoping {
+  .badge {
+    background-color: $cgreen;
+  }
+}
+
+.search {
+  padding-top: 20px;
+  &__btn {
+    background-color: #EEEEEE;
+    outline: none;
+    border: none;
+    width: 100%;
+  }
+}
