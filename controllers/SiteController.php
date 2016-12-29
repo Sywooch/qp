@@ -28,6 +28,9 @@ class SiteController extends Controller
             'access' => [
                 'class' => AccessControl::className(),
                 'only' => ['logout', 'login', 'reg'],
+                'denyCallback' => function($role, $action) {
+                    $this->goHome();
+                },
                 'rules' => [
                     [
                         'actions' => ['logout'],
