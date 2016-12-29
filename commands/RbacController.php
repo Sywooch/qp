@@ -8,10 +8,12 @@ class RbacController extends Controller
 {
     public function actionInit()
     {
-        $auth = Yii::$app->authManager;
+        if (!$this->confirm("Are you sure? It will re-create permissions tree.")) {
+            return self::EXIT_CODE_NORMAL;
+        }
 
-        // add "admin" role and give this role the "updatePost" permission
-        // as well as the permissions of the "author" role
+        $auth = Yii::$app->authManager;
+        $auth->removeAll();
 
         $guest = $auth->createRole('guest');
         $auth->add($guest);
