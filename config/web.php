@@ -9,6 +9,20 @@ $config = [
     'bootstrap' => ['log'],
     'language' => 'ru',
     'components' => [
+        'assetManager' => [
+            'appendTimestamp' => true,
+            'bundles' => [
+                'yii\bootstrap\BootstrapPluginAsset' => [
+                    'js'=>[],
+                ],
+                'yii\bootstrap\BootstrapAsset' => [
+                    'css' => [],
+                ],
+            ],
+        ],
+        'shopping' => [
+            'class' => 'app\components\ShoppingComponent',
+        ],
         'request' => [
             // !!! insert a secret key in the following (if it is empty) - this is required by cookie validation
             'cookieValidationKey' => 'KSZvMmDXsxtwTR6LUwK4H8rDz_V6wIar',
