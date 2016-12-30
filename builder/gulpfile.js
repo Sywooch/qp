@@ -61,8 +61,7 @@ var fonts = {
 var vendorJs = {
     in: [
         'src/vendor/jquery/dist/jquery.min.js',
-        'src/vendor/scrollreveal/dist/scrollreveal.min.js',
-        bootstrapSass.in + 'javascripts/bootstrap.min.js'
+        //bootstrapSass.in + '/javascripts/bootstrap.min.js'
     ]
 }
 var jquery = {

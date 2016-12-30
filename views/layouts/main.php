@@ -3,12 +3,14 @@
 /* @var $this \yii\web\View */
 /* @var $content string */
 
+use yii\bootstrap\ButtonDropdown;
 use yii\helpers\Html;
 use yii\bootstrap\Nav;
 use yii\bootstrap\NavBar;
 use yii\widgets\Breadcrumbs;
 use app\assets\AppAsset;
 use app\components\AlertWidget;
+use app\components\LoginWidget;
 
 AppAsset::register($this);
 ?>
@@ -81,18 +83,7 @@ AppAsset::register($this);
     echo Nav::widget([
         'options' => ['class' => 'navbar-nav nav header__personal'],
         'items' => [
-            Yii::$app->user->isGuest ? (
-            ['label' => 'Вход и регистрация', 'url' => ['/site/login']]
-            ) : (
-                '<li>'
-                . Html::beginForm(['/site/logout'], 'post')
-                . Html::submitButton(
-                    'Logout (' . Yii::$app->user->identity->email . ')',
-                    ['class' => 'btn btn-link logout']
-                )
-                . Html::endForm()
-                . '</li>'
-            ),
+            LoginWidget::widget(),
             Yii::$app->shopping->render(),
         ],
     ]);

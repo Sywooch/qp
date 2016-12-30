@@ -5,6 +5,7 @@
     <title>qpvl</title>
     <link rel="stylesheet" href="css/main.css">
     <script type="text/javascript" src="js/lib.min.js"></script>
+    <script type="text/javascript" src="vendor/bootstrap-sass/assets/javascripts/bootstrap.min.js"></script>
     <script type="text/javascript" src="js/main.js"></script>
     <meta name="viewport" content="width=device-width, initial-scale=1">
 </head>
@@ -54,13 +55,25 @@
                     <span class="icon-bar"></span>
                 </button>
                 <div id="w0-collapse" class="collapse navbar-collapse">
-                    <ul id="w1" class="navbar-nav nav"><li class="active"><a href="javascript:void(0)">Главная</a></li>
+                    <ul id="w1" class="navbar-nav nav">
+                        <li class="active"><a href="javascript:void(0)">Главная</a></li>
                         <li><a href="javascript:void(0)">Доставка и оплата</a></li>
                         <li><a href="javascript:void(0)">Контакты</a></li>
                         <li><a href="javascript:void(0)">О компании</a></li>
                     </ul>
                     <ul class="navbar-nav nav header__personal">
-                        <li><a href="javascript:void(0)">Вход и регистрация</a></li>
+                        <li class="dropdown">
+                            <div class="btn-group">
+                                <button type="button" class="btn dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                    chernov.net@ya.ru <span class="caret"></span>
+                                </button>
+                                <ul class="dropdown-menu">
+                                    <li><a href="#">Личный кабинет</a></li>
+                                    <li role="separator" class="divider"></li>
+                                    <li><a href="#">Выйти</a></li>
+                                </ul>
+                            </div>
+                        </li>
                         <li class="shopping">
                             <a href="javascript:void(0)" class="icon icon-sm icon-gray">
                                 <i class="fa fa-shopping-cart" aria-hidden="true"></i>
