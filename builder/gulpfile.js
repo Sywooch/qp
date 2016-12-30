@@ -92,6 +92,16 @@ gulp.task('sass', function() {
         .pipe(browserSync.reload({stream: true}));
 });
 
+gulp.task('move:images', function () {
+    return gulp.src('src/img/**/*.{png,jpg}')
+        .pipe(gulp.dest('../web/img/'));
+});
+
+gulp.task('remove', ['move:images'], function () {
+    return gulp.src(path.src.css + '*.css')
+        .pipe(gulp.dest('../web/css/'));
+});
+
 gulp.task('browser-sync', function() {
     browserSync({
         server: {
