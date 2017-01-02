@@ -70,7 +70,11 @@
                                 <ul class="dropdown-menu">
                                     <li><a href="#">Личный кабинет</a></li>
                                     <li role="separator" class="divider"></li>
-                                    <li><a href="#">Выйти</a></li>
+                                    <li>
+                                        <form action="/site/logout" method="post">
+                                            <button type="submit" class="btn btn-link logout">Выйти</button>
+                                        </form>
+                                    </li>
                                 </ul>
                             </div>
                         </li>

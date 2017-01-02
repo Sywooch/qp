@@ -63,11 +63,17 @@ $config = [
             'showScriptName' => false,
             'rules' => [
                 '' => 'site/index',
-                '<action:about|contact|login|reg>'=>'site/<action>',
+                '<action:(about|contact|login|reg)>'=>'site/<action>',
+                '<module:backend><action:(login|index)>'=>'<module>/default/<action>',
                 //'<module:[\wd-]+>/<controller:[\wd-]+>/<action:[\wd-]+>/<id:\d+>' => '<module>/<controller>/<action>',
             ],
         ],
 
+    ],
+    'modules' => [
+        'backend' => [
+            'class' => 'app\modules\backend\Admin',
+        ],
     ],
     'params' => $params,
 ];
