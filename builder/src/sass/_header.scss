@@ -49,7 +49,7 @@
     }
     li {
       padding: 0 5px;
-      a {
+      a, .btn {
         padding: 2px 5px;
         font-weight: normal;
         font-size: 1.5rem;
@@ -68,9 +68,14 @@
   &__personal {
     float: right;
     & > li {
-      &.active > a, & > a:hover, & > a:focus {
+      &.active > a, & > a:hover, & > a:focus, .btn {
         background-color: #dddddf;
         color: #434345;
+      }
+      .btn {
+        width: 100%;
+        text-align: left;
+        text-decoration: none;
       }
     }
   }
