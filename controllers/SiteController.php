@@ -97,10 +97,10 @@ class SiteController extends Controller
         if ($model->load(Yii::$app->request->post()) && $model->validate()) {
             if($user = $model->reg()) {
                 if ($model->sendActivationEmail($user)) {
-                    Yii::$app->session->setFlash('success', 'Письмо с дальнейшими инструкциями отправлено на емайл <strong>' . \yii\helpers\Html::encode($user->email) . '</strong> (проверьте папку спам).');
-                    return $this->render('reg', [
-                        'model' => $model,
-                    ]);
+                    Yii::$app->session->setFlash('success', 'Письмо с дальнейшими инструкциями отправлено на емайл <strong>' .
+                        \yii\helpers\Html::encode($user->email) . '</strong> (проверьте папку спам).');
+
+                    return $this->goHome();
                 } else {
                     Yii::$app->session->setFlash('error', 'Ошибка. Письмо не отправлено.');
                     Yii::error('Ошибка отправки письма.');

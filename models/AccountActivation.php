@@ -27,7 +27,7 @@ class AccountActivation extends Model
         $user->removePasswordResetToken();
         if ($user->save()) {
             $auth = Yii::$app->authManager;
-            $auth->assign($auth->getRole('user'), $user);
+            $auth->assign($auth->getRole('user'), $user->getId());
 
             return true;
         }

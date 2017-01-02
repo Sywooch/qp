@@ -28,7 +28,7 @@ class LoginForm extends Model
     {
         return [
             // email and password are both required
-            [['email', 'password'], 'required', 'on' => 'loginWithEmail'],
+            [['email', 'password'], 'required'],
             ['email', 'email'],
             // rememberMe must be a boolean value
             ['rememberMe', 'boolean'],
@@ -49,8 +49,7 @@ class LoginForm extends Model
         if (!$this->hasErrors()) {
             $user = $this->getUser();
             if (!$user || !$user->validatePassword($this->password)) {
-                $field = ($this->scenario === 'loginWithEmail') ? 'email' : 'username';
-                $this->addError($attribute, 'Неправильный ' . $field . ' или пароль.');
+                $this->addError($attribute, 'Неправильный Email или пароль.');
             }
         }
     }

@@ -15,13 +15,14 @@ class RegForm extends Model
     public $email;
     public $name;
     public $password;
+    public $repeat_password;
     public $pin;
     public $status;
     public function rules()
     {
         return [
             [['email'],'filter', 'filter' => 'trim'],
-            [['email', 'password'],'required'],
+            [['email', 'password', 'repeat_password'],'required'],
             ['password', 'string', 'min' => 6, 'max' => 50],
             ['email', 'email'],
             ['email', 'unique',
@@ -32,6 +33,7 @@ class RegForm extends Model
                 User::STATUS_NOT_ACTIVE,
                 User::STATUS_ACTIVE
             ]],
+            ['repeat_password', 'compare', 'compareAttribute' => 'password'],
             ['status', 'default', 'value' => User::STATUS_NOT_ACTIVE, 'on' => 'emailActivation'],
         ];
     }
@@ -41,6 +43,7 @@ class RegForm extends Model
             'email' => 'Эл. почта',
             'name' => 'Имя',
             'password' => 'Пароль',
+            'repeat_password' => 'Повторите пароль'
         ];
     }
 

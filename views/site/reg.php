@@ -21,7 +21,7 @@ echo Yii::$app->session->getFlash("error");
 
         <?= $form->field($model, 'email')->textInput() ?>
         <?= $form->field($model, 'password')->passwordInput() ?>
-        <?= $form->field($model, 'password')->passwordInput()->hint('Password should be within A-Za-z0-9')->label('Повторите пароьл') ?>
+        <?= $form->field($model, 'repeat_password')->passwordInput() ?>
 
     <div class="form-group">
         <div class="col-lg-offset-1 col-lg-11">

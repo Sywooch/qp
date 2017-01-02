@@ -10,7 +10,7 @@ echo 'Привет '.Html::encode($user->name).'.';
 echo 'Ссылка для активация аккаунта' . Yii::$app->name . ': ';
 echo Yii::$app->urlManager->createAbsoluteUrl(
     [
-        '/main/activate-account',
+        '/site/activate-account',
         'key' => $pin
     ]
 );
