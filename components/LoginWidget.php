@@ -17,7 +17,7 @@ class LoginWidget extends Widget
                     'label' => \Yii::$app->user->identity->email,
                     'dropdown' => [
                         'items' => [
-                            ['label' => 'Личный кабинет', 'url' => '/'],
+                            ['label' => 'Личный кабинет', 'url' => '/site/profile'],
                             '<li>'
                             . Html::beginForm(['/site/logout'], 'post')
                             . Html::submitButton(

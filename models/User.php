@@ -17,6 +17,7 @@ use yii\web\IdentityInterface;
  * @property string $password_hash
  * @property string $password_reset_token
  * @property string $email
+ * @property string $phone
  * @property string $auth_key
  * @property integer $status
  * @property integer $created_at
@@ -166,6 +167,36 @@ class User extends ActiveRecord implements IdentityInterface
         return $this->auth_key;
     }
 
+    public function getPhone()
+    {
+        if (!$this->phone_validation_key) {
+            return $this->phone;
+        }
+        return null;
+    }
+
+    public function setPhone($phone)
+    {
+        $this->phone = $phone;
+        $this->generatePhoneKey();
+    }
+
+    public function generatePhoneKey()
+    {
+        $this->phone_validation_key = sprintf("%04d", rand(1,9999));
+    }
+
+    public function validatePhoneKey($key)
+    {
+        if ($this->phone_validation_key == $key) {
+            $this->phone_validation_key = null;
+            if (!$this->save()) {
+                Yii::error('Произошла ошибка при подтверждении номера телефона');
+            }
+            return true;
+        }
+        return false;
+    }
     /**
      * @inheritdoc
      */

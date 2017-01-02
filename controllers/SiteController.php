@@ -9,6 +9,9 @@ use yii\filters\VerbFilter;
 use app\models\LoginForm;
 use app\models\ContactForm;
 use app\models\RegForm;
+use app\models\SetPhoneForm;
+use app\models\SetPasswordForm;
+use app\models\ValidatePhoneForm;
 use app\models\User;
 use yii\base\ExitException;
 use yii\base\InvalidParamException;
@@ -27,13 +30,13 @@ class SiteController extends Controller
         return [
             'access' => [
                 'class' => AccessControl::className(),
-                'only' => ['logout', 'login', 'reg'],
+                'only' => ['logout', 'login', 'reg', 'profile', 'validate_phone', 'set_phone'],
                 'denyCallback' => function($role, $action) {
                     $this->goHome();
                 },
                 'rules' => [
                     [
-                        'actions' => ['logout'],
+                        'actions' => ['logout', 'profile', 'validate_phone', 'set_phone'],
                         'allow' => true,
                         'roles' => ['user'],
                     ],
@@ -178,6 +181,68 @@ class SiteController extends Controller
         ]);
     }
 
+    public function actionProfile()
+    {
+        $user = Yii::$app->user->identity;
+        return $this->render('profile', [
+            'email' => $user->email,
+            'phone' => $user->getPhone(),
+        ]);
+    }
+    public function actionSetPassword()
+    {
+        $model = new SetPasswordForm();
+        if ($model->load(Yii::$app->request->post())) {
+            $user = Yii::$app->user->identity;
+            $user->setPassword($model->password);
+            if ($user->save()) {
+                Yii::$app->session->setFlash('success', 'Пароль успешно изменён.');
+                return $this->goBack();
+            }
+            else {
+                Yii::error('Возникла ошибка при смене пароля.');
+            }
+        }
+        return $this->render('set_password', [
+            'model' => $model,
+        ]);
+    }
+
+    public function actionSetPhone()
+    {
+        $model = new SetPhoneForm();
+        if ($model->load(Yii::$app->request->post())) {
+            if ($model->setPhone($model->phone)) {
+                Yii::$app->session->setFlash('success', 'На указанный телефон отправлено смс с кодом подтверждения.');
+                return $this->redirect('validate-phone');
+            }
+            else {
+                Yii::$app->session->setFlash('error', 'Возникла ошибка при установке номера телефона.');
+                Yii::error('Возникла ошибка при установке номера телефона.');
+            }
+        }
+        return $this->render('set_phone', [
+            'model' => $model,
+        ]);
+    }
+
+    public function actionValidatePhone()
+    {
+        $user = Yii::$app->user->identity;
+        if (!$user->phone_validation_key) {
+            $this->goHome();
+        }
+        $model = new ValidatePhoneForm();
+
+        if ($model->load(Yii::$app->request->post()) && $model->validate()) {
+            Yii::$app->session->setFlash('success', 'Телефонный номер успешно изменён.');
+            return $this->goHome();
+        }
+        return $this->render('validate_phone', [
+            'model' => $model,
+        ]);
+
+    }
     /**
      * Displays about page.
      *
