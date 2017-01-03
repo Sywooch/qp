@@ -13,6 +13,7 @@
   "author": "Chernov Sergey",
   "license": "ISC",
   "devDependencies": {
+    "beepbeep": "^1.2.0",
     "browser-sync": "^2.18.5",
     "del": "^2.2.2",
     "gulp": "^3.9.1",
