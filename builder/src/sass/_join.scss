@@ -1,0 +1,44 @@
+.join {
+  &-body {
+    background-color: $colorgray;
+  }
+  &-recovery {
+    padding-top: 11px;
+  }
+  &-tab {
+    height: 56px;
+    margin-bottom: 10px;
+    a {
+      display: inline-block;
+      width: 100%;
+      height: 56px;
+      line-height: 56px;
+      font-size: 2rem;
+      text-align: center;
+      text-decoration: none;
+      background-color: $colorgray - 11;
+
+    }
+    .active {
+      a {
+        color: $colorblack;
+        background-color: $colorgray;
+        box-shadow: none;
+      }
+
+    }
+  }
+}
+.tab-login, .tab-reg {
+  padding: 0;
+}
+.tab-login {
+  a {
+    box-shadow: inset -2px -2px 5px 2px rgba(0,0,0,.1);
+  }
+}
+.tab-reg {
+  a {
+    box-shadow: inset 2px -2px 5px 2px rgba(0,0,0,.1);
+  }
+}
