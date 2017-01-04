@@ -1,0 +1,59 @@
+header.header
+    .header__inner
+        .container
+            .row
+                .col-md-3
+                    .row
+                        .col-xs-12.header__logo
+                            a.navbar-brand(href='/') Купи
+                        .col-xs-12.header__slogan
+                            | Интернет-супермаркет
+                .col-md-6
+                    section.search
+                        form.form.form-search(action='/', method='GET')
+                            .input-group
+                                span.input-group-addon
+                                    button.search__btn
+                                        i.fa.fa-search(aria-hidden='true')
+                                        span.sr-only Search icons
+                                input#search-input.form-control.input-lg(placeholder='Поиск среди более 10 000 товаров', autocomplete='off', spellcheck='false', autocorrect='off', tabindex='1')
+                .col-md-3
+                    .header__phone
+                        | 8 (800) 123-12-12
+    nav#w0.header__navbar.navbar(role='navigation')
+        .container
+            button.navbar-toggle(type='button', data-toggle='collapse', data-target='#w0-collapse')
+                span.sr-only Toggle navigation
+                span.icon-bar
+                span.icon-bar
+                span.icon-bar
+            #w0-collapse.collapse.navbar-collapse
+                ul#w1.navbar-nav.nav
+                    li.active
+                        a(href='javascript:void(0)') Главная
+                    li
+                        a(href='javascript:void(0)') Доставка и оплата
+                    li
+                        a(href='javascript:void(0)') Контакты
+                    li
+                        a(href='javascript:void(0)') О компании
+                ul.navbar-nav.nav.header__personal
+                    li.dropdown
+                        .btn-group
+                            button.btn.dropdown-toggle(type='button', data-toggle='dropdown', aria-haspopup='true', aria-expanded='false')
+                                | chernov.net@ya.ru
+                                span.caret
+                            ul.dropdown-menu
+                                li
+                                    a(href='#') Личный кабинет
+                                li.divider(role='separator')
+                                li
+                                    form(action='/site/logout', method='post')
+                                        button.btn.btn-link.logout(type='submit') Выйти
+                    li.shopping
+                        a.icon.icon-sm.icon-gray(href='javascript:void(0)')
+                            i.fa.fa-shopping-cart(aria-hidden='true')
+                            span.shopping__price
+                                |  1 355
+                                i.fa.fa-rub
+                            span.badge(data-toggle='visible', data-of='totalCount')  1

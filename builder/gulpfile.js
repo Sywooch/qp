@@ -1,9 +1,11 @@
 'use strict';
 
 var gulp            = require('gulp'),
+    beep            = require('beepbeep'),
     sass            = require('gulp-sass'),
     browserSync     = require('browser-sync'),
     concat          = require('gulp-concat'),
+    jade            = require('gulp-jade'),
     uglify          = require('gulp-uglifyjs'),
     cssnano			= require('gulp-cssnano'),
     rename			= require('gulp-rename'),
@@ -35,6 +37,7 @@ var path = {
     src: {
         html: 'src/*.html',
         js: 'src/js/main.js',
+        jade: 'src/jade/*.jade',
         sass: 'src/sass/main.scss',
         css: 'src/css/',
         img: 'src/img/**/*.*',
@@ -43,6 +46,7 @@ var path = {
     watch: {
         html: 'src/**/*.html',
         js: 'src/js/**/*.js',
+        jade: 'src/jade/*.jade',
         sass: 'src/sass/**/*.scss',
         img: 'src/img/**/*.*',
         fonts: [source + 'fonts/*.*', bootstrapSass.in + 'assets/fonts/**/*']
@@ -60,7 +64,7 @@ var fonts = {
 
 var vendorJs = {
     in: [
-        'src/vendor/jquery/dist/jquery.min.js',
+        'src/vendor/jquery/dist/jquery.min.js'
         //bootstrapSass.in + '/javascripts/bootstrap.min.js'
     ]
 }
@@ -72,10 +76,40 @@ gulp.task('fonts', function() {
     return gulp.src([
         fonts.in
     ])
-        .pipe(gulp.dest(fonts.out));
+    .pipe(gulp.dest(fonts.out));
 });
 
+// -----------------------------------------------------------------------------
+// Error handler
+// -----------------------------------------------------------------------------
+var onError     = function(err) {
+    var errorLine = (err.line) ? 'Line ' + err.line : '',
+        errorTitle  = (err.plugin) ? 'Error: [ ' + err.plugin + ' ]' : 'Error';
 
+    notify.logLevel(0);
+    notify({
+        title: errorTitle,
+        message: errorLine
+    }).write(err);
+    beep();
+    gutil.log(gutil.colors.red('\n' + errorTitle + '\n\n', err.message));
+    this.emit('end');
+};
+
+// -----------------------------------------------------------------------------
+// Jade
+// -----------------------------------------------------------------------------
+gulp.task('jade', function() {
+    return gulp.src(path.src.jade)
+        .pipe(jade({pretty: true}))
+        .pipe(gulp.dest('src/'))
+        .pipe(browserSync.reload({stream: true}));
+});
+
+// -----------------------------------------------------------------------------
+// Sass
+// Compile Sass Files and autoprefix css
+// -----------------------------------------------------------------------------
 gulp.task('sass', function() {
     return gulp.src(path.watch.sass)
         .pipe(sass({
@@ -110,6 +144,9 @@ gulp.task('browser-sync', function() {
     });
 });
 
+// -----------------------------------------------------------------------------
+// Combine/minify JS
+// -----------------------------------------------------------------------------
 gulp.task('scripts', function() {
     return gulp.src(
         vendorJs.in
@@ -147,10 +184,11 @@ gulp.task('img', function() {
         .pipe(gulp.dest(path.dest.img));
 });
 
-gulp.task('watch', ['browser-sync', 'scripts', 'css-libs', ], function() {
+gulp.task('watch', ['browser-sync', 'scripts', 'css-libs'], function() {
     gulp.watch(path.watch.sass, ['sass']);
     gulp.watch(path.watch.html, browserSync.reload);
     gulp.watch(path.watch.js, browserSync.reload);
+    gulp.watch(path.watch.jade, ['jade']);
 });
 
 gulp.task('build', ['clean', 'img', 'sass', 'fonts', 'scripts'], function() {
