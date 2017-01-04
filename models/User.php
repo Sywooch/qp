@@ -46,16 +46,6 @@ class User extends ActiveRecord implements IdentityInterface
     /**
      * @inheritdoc
      */
-    public function rules()
-    {
-        return [
-            ['status', 'default', 'value' => self::STATUS_ACTIVE],
-        ];
-    }
-
-    /**
-     * @inheritdoc
-     */
     public function attributeLabels()
     {
         return [

@@ -58,13 +58,19 @@ class RegForm extends Model
 
     public function sendActivationEmail($user)
     {
-        return Yii::$app->mailer->compose('activationEmail',
-                ['user' => $user, 'pin' => $user->getPasswordResetToken()]
-            )
-            ->setFrom([Yii::$app->params['supportEmail'] => Yii::$app->name.' (отправлено роботом).'])
+        $for_what = 'активации аккаунта';
+        $link = Yii::$app->urlManager->createAbsoluteUrl(
+        [
+            '/site/activate-account',
+            'key' => $user->getPasswordResetToken(),
+        ]);
+        return Yii::$app->mailer->compose('linkEmail',
+        [
+            'for_what' => $for_what,
+            'link' => $link,
+        ])->setFrom([Yii::$app->params['supportEmail'] => Yii::$app->name.' (отправлено роботом).'])
             ->setTo($this->email)
-            ->setSubject('Активация для '.Yii::$app->name)
+            ->setSubject('Ссылка для ' .$for_what . ' ' . Yii::$app->name)
             ->send();
     }
-
 }

@@ -12,6 +12,7 @@ use app\models\RegForm;
 use app\models\SetPhoneForm;
 use app\models\SetPasswordForm;
 use app\models\ValidatePhoneForm;
+use app\models\ResetPasswordForm;
 use app\models\User;
 use yii\base\ExitException;
 use yii\base\InvalidParamException;
@@ -127,7 +128,8 @@ class SiteController extends Controller
         }
 */
         $model = new LoginForm();
-        if ($model->load(Yii::$app->request->post()) && $model->login()) {
+        if ($model->load(Yii::$app->request->post()) && $model->validate()) {
+            Yii::$app->user->login($model->getUser(), $model->rememberMe ? 3600*24*30 : 0);
             return $this->goBack();
         }
         return $this->render('login', [
@@ -191,9 +193,26 @@ class SiteController extends Controller
     }
     public function actionSetPassword()
     {
+        $key = Yii::$app->request->get('key');
+        Yii::warning($key);
         $model = new SetPasswordForm();
         if ($model->load(Yii::$app->request->post())) {
-            $user = Yii::$app->user->identity;
+            if ($key) {
+                if ($user = User::findByPasswordResetToken($key)) {
+                }
+                else {
+                    Yii::$app->session->setFlash('error', 'Неверный ключ сброса пароля');
+                    return $this->goHome();
+                }
+            }
+            else {
+                if (!Yii::$app->user->isGuest) {
+                    $user = Yii::$app->user->identity;
+                }
+                else {
+                    return $this->goHome();
+                }
+            }
             $user->setPassword($model->password);
             if ($user->save()) {
                 Yii::$app->session->setFlash('success', 'Пароль успешно изменён.');
@@ -242,6 +261,29 @@ class SiteController extends Controller
             'model' => $model,
         ]);
 
+    }
+
+    public function actionResetPassword()
+    {
+        $model= new ResetPasswordForm();
+
+        if ($model->load(Yii::$app->request->post()) && $model->validate()) {
+            if ($user = User::findByEmail($model->email)) {
+                if ($model->sendEmail($user)) {
+                    Yii::$app->getSession()->setFlash('warning', 'Проверьте Email.');
+                    return $this->goHome();
+                }
+                else{
+                    Yii::$app->getSession()->setFlash('error', 'Ошибка при сбросе пароля.');
+                }
+            }
+            else {
+                Yii::$app->session->setFlash('error', 'Вы еще и почту не помните.');
+            }
+        }
+        return $this->render('reset_password', [
+            'model' => $model,
+        ]);
     }
     /**
      * Displays about page.
