@@ -30,6 +30,7 @@ class LoginForm extends Model
             // email and password are both required
             [['email', 'password'], 'required'],
             ['email', 'email'],
+            ['email', 'validateEmail'],
             // rememberMe must be a boolean value
             ['rememberMe', 'boolean'],
             // password is validated by validatePassword()
@@ -44,31 +45,28 @@ class LoginForm extends Model
      * @param string $attribute the attribute currently being validated
      * @param array $params the additional name-value pairs given in the rule
      */
-    public function validatePassword($attribute, $params)
+    public function validateEmail($attribute, $params)
     {
         if (!$this->hasErrors()) {
             $user = $this->getUser();
-            if (!$user || !$user->validatePassword($this->password)) {
-                $this->addError($attribute, 'Неправильный Email или пароль.');
+            if (!$user) {
+                $this->addError($attribute, 'Пользователь с таким Email не зарегистрирован.');
+            }
+            else if ($user->status === User::STATUS_NOT_ACTIVE){
+                $this->addError($attribute, 'Аккаунт ожидает активации.');
             }
         }
     }
 
-    /**
-     * Logs in a user using the provided username and password.
-     * @return bool whether the user is logged in successfully
-     */
-    public function login()
+    public function validatePassword($attribute, $params)
     {
-        if ($this->validate()) {
-            $this->status = ($user = $this->getUser()) ? $user->status : User::STATUS_NOT_ACTIVE;
-            if ($this->status === User::STATUS_ACTIVE) {
-                return Yii::$app->user->login($user, $this->rememberMe ? 3600*24*30 : 0);
+        if (!$this->hasErrors()) {
+            if (!$this->_user->validatePassword($this->password)) {
+                $this->addError($attribute, 'Неправильный пароль.');
             }
-            return false;
         }
-        return false;
     }
+
 
     /**
      * Finds user by [[username]]
@@ -80,7 +78,6 @@ class LoginForm extends Model
         if ($this->_user === false) {
             $this->_user = User::findByEmail($this->email);
         }
-
         return $this->_user;
     }
 }
