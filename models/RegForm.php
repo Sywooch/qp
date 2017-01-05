@@ -25,9 +25,7 @@ class RegForm extends Model
             [['email', 'password', 'repeat_password'],'required'],
             ['password', 'string', 'min' => 6, 'max' => 50],
             ['email', 'email'],
-            ['email', 'unique',
-                'targetClass' => User::className(),
-                'message' => 'Эта почта уже занята.'],
+            ['email', 'notExistActivated'],
             ['status', 'default', 'value' => User::STATUS_ACTIVE, 'on' => 'default'],
             ['status', 'in', 'range' =>[
                 User::STATUS_NOT_ACTIVE,
@@ -45,6 +43,16 @@ class RegForm extends Model
             'password' => 'Пароль',
             'repeat_password' => 'Повторите пароль'
         ];
+    }
+
+    public function notExistActivated($attribute, $params) {
+        if (!$this->hasErrors() && $user = User::findByEmail($this->email)) {
+            if ($user->status !== User::STATUS_ACTIVE) {
+                $user->delete();
+            } else {
+                $this->addError($attribute, 'Эта эл.почта уже занята');
+            }
+        }
     }
 
     public function reg()
