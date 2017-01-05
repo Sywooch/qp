@@ -191,76 +191,15 @@ class SiteController extends Controller
             'phone' => $user->getPhone(),
         ]);
     }
-    public function actionSetPassword()
+
+    /**
+     * Displays about page.
+     *
+     * @return string
+     */
+    public function actionAbout()
     {
-        $key = Yii::$app->request->get('key');
-        Yii::warning($key);
-        $model = new SetPasswordForm();
-        if ($model->load(Yii::$app->request->post())) {
-            if ($key) {
-                if ($user = User::findByPasswordResetToken($key)) {
-                }
-                else {
-                    Yii::$app->session->setFlash('error', 'Неверный ключ сброса пароля');
-                    return $this->goHome();
-                }
-            }
-            else {
-                if (!Yii::$app->user->isGuest) {
-                    $user = Yii::$app->user->identity;
-                }
-                else {
-                    return $this->goHome();
-                }
-            }
-            $user->setPassword($model->password);
-            if ($user->save()) {
-                Yii::$app->session->setFlash('success', 'Пароль успешно изменён.');
-                return $this->goBack();
-            }
-            else {
-                Yii::error('Возникла ошибка при смене пароля.');
-            }
-        }
-        return $this->render('set_password', [
-            'model' => $model,
-        ]);
-    }
-
-    public function actionSetPhone()
-    {
-        $model = new SetPhoneForm();
-        if ($model->load(Yii::$app->request->post())) {
-            if ($model->setPhone($model->phone)) {
-                Yii::$app->session->setFlash('success', 'На указанный телефон отправлено смс с кодом подтверждения.');
-                return $this->redirect('validate-phone');
-            }
-            else {
-                Yii::$app->session->setFlash('error', 'Возникла ошибка при установке номера телефона.');
-                Yii::error('Возникла ошибка при установке номера телефона.');
-            }
-        }
-        return $this->render('set_phone', [
-            'model' => $model,
-        ]);
-    }
-
-    public function actionValidatePhone()
-    {
-        $user = Yii::$app->user->identity;
-        if (!$user->phone_validation_key) {
-            $this->goHome();
-        }
-        $model = new ValidatePhoneForm();
-
-        if ($model->load(Yii::$app->request->post()) && $model->validate()) {
-            Yii::$app->session->setFlash('success', 'Телефонный номер успешно изменён.');
-            return $this->goHome();
-        }
-        return $this->render('validate_phone', [
-            'model' => $model,
-        ]);
-
+        return $this->render('about');
     }
 
     public function actionResetPassword()
@@ -284,14 +223,5 @@ class SiteController extends Controller
         return $this->render('reset_password', [
             'model' => $model,
         ]);
-    }
-    /**
-     * Displays about page.
-     *
-     * @return string
-     */
-    public function actionAbout()
-    {
-        return $this->render('about');
     }
 }

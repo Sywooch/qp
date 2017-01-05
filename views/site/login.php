@@ -18,7 +18,7 @@ $this->params['breadcrumbs'][] = $this->title;
                     <?php
                     echo  Html::a(
                         '<i class="fa fa-sign-in hidden-xs"></i> ' . Html::encode($this->title),
-                        ['javascript::void(0)']
+                        'javascript::void(0)'
                     );
                     ?>
                 </div>
