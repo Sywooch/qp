@@ -1,0 +1,32 @@
+-var menu = { 'История покупок': 'profile.html', 'Избранное': 'profile2.html', 'Настройки профиля': 'profile-setting.html' };
+doctype html
+html(lang='ru')
+    block link
+        -var selected = 'profile.html'; //default
+
+    head
+        include ../partials/_head
+        block title
+            title qpvl
+    body
+        include  ../partials/_header
+        section.profile
+            .container
+                .row
+                    .col-sm-3
+                        .profile-nav
+                            ul.nav.nav-pills.nav-stacked
+                                each val, key in menu
+                                    if selected === key
+                                        li.active
+                                            a(href=val, title=key)= key
+                                    else
+                                        li
+                                            a(href=val, title=key)= key
+                    .col-sm-9
+                        h1
+                            block titleContent
+                                titleContent=selected
+
+                        block content
+

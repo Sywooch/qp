@@ -1,0 +1,31 @@
+extends ./layouts/profile
+block link
+    -var selected = 'Настройки профиля';
+
+block title
+    title Profile
+
+block content
+    .row
+        .col-md-8
+            .profile-edit
+                .row.item
+                    .col-xs-4.name Имя
+                    .col-xs-5.value Вася Пупкин
+                    .col-xs-3.edit
+                        a(href="javascript::void(0)") Изменить
+                .row.item
+                    .col-xs-4.name Email
+                    .col-xs-5.value example@mail.ru
+                    .col-xs-3.edit
+                        a(href="javascript::void(0)") Изменить
+                .row.item
+                    .col-xs-4.name Телефон
+                    .col-xs-5.value +7 (913) 999-99-99
+                    .col-xs-3.edit
+                        a(href="javascript::void(0)") Изменить
+                .row.item
+                    .col-xs-4.name Пароль
+                    .col-xs-5.value ••••••••••••
+                    .col-xs-3.edit
+                        a(href="javascript::void(0)") Изменить

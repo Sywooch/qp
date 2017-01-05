@@ -1,8 +1,41 @@
 extends ./layouts/default
 
 block title
-    title Profile
+    title Reg
 
 block content
-    h1 Profile
-
+    section.join
+        .container
+            .row
+                .join-body.card.col-md-4.col-md-offset-4.col-xs-10.col-xs-offset-1.col-sm-6.col-sm-offset-3
+                    .row.join-tab
+                        .col-xs-6.tab-login
+                            a(href='login.html', role='tab')
+                                i.fa.fa-sign-in
+                                span  Вход
+                        .col-xs-6.tab-reg.active
+                            a(href='javascript:', role='tab')
+                                i.fa.fa-plus
+                                span  Регистрация
+                    form#login-form(action='/login', method='post', role='form')
+                        .form-group.field-loginform-email
+                            label.control-label(for='loginform-email') Эл. почта
+                            input#loginform-email.form-control(type='text', name='LoginForm[email]', autofocus='')
+                            .help-block.help-block-error
+                        .form-group.field-loginform-password
+                            label.ontrol-label(for='loginform-password') Пароль
+                            input#loginform-password.form-control(type='password', name='LoginForm[password]')
+                            .help-block.help-block-error
+                        .form-group.field-loginform-password
+                            label.ontrol-label(for='loginform-password') Повторите пароль
+                            input#loginform-password.form-control(type='password', name='LoginForm[password]')
+                            .help-block.help-block-error
+                        .form-group
+                            .row
+                                .col-xs-12
+                                    button.btn.btn-primary.btn-block.btn-flat(type='submit', name='login-button') Зарегитрироваться
+                    .social-auth-links.text-center
+                        p - или  зарегитрироваться с помощью -
+                        include partials/_social
+                    // /.social-auth-links
+                //- End join-body
