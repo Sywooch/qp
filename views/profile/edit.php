@@ -13,8 +13,8 @@ $this->params['breadcrumbs'][] = $this->title;
 
 $items = [
         ['label' => 'Email', 'value' => $email, 'url' => ['']],
-        ['label' => 'Телефон', 'value' => $phone, 'url' => ['profile/set-phone']],
-        ['label' => 'Пароль', 'value' => '••••••••••••', 'url' => ['profile/set-password']],
+        ['label' => 'Телефон', 'value' => $phone, 'url' => ['profile/edit/phone']],
+        ['label' => 'Пароль', 'value' => '••••••••••••', 'url' => ['profile/edit/password']],
 ];
 ?>
 

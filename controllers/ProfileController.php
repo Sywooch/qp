@@ -37,7 +37,7 @@ class ProfileController extends \yii\web\Controller
         ]);
     }
 
-    public function actionSetPassword()
+    public function actionPassword()
     {
         $key = Yii::$app->request->get('key');
         Yii::warning($key);
@@ -68,12 +68,12 @@ class ProfileController extends \yii\web\Controller
                 Yii::error('Возникла ошибка при смене пароля.');
             }
         }
-        return $this->render('set_password', [
+        return $this->render('edit/password', [
             'model' => $model,
         ]);
     }
 
-    public function actionSetPhone()
+    public function actionPhone()
     {
         $model = new SetPhoneForm();
         if ($model->load(Yii::$app->request->post())) {
@@ -86,7 +86,7 @@ class ProfileController extends \yii\web\Controller
                 Yii::error('Возникла ошибка при установке номера телефона.');
             }
         }
-        return $this->render('set_phone', [
+        return $this->render('edit/phone', [
             'model' => $model,
         ]);
     }
