@@ -100,6 +100,7 @@ class User extends ActiveRecord implements IdentityInterface
     public static function findByPasswordResetToken($token)
     {
         if (!static::isPasswordResetTokenValid($token)) {
+            Yii::$app->session->setFlash('error', 'Срок действия ключа истёк');
             return null;
         }
         return static::findOne([

@@ -9,16 +9,11 @@ use yii\filters\VerbFilter;
 use app\models\LoginForm;
 use app\models\ContactForm;
 use app\models\RegForm;
-use app\models\SetPhoneForm;
-use app\models\SetPasswordForm;
-use app\models\ValidatePhoneForm;
 use app\models\ResetPasswordForm;
 use app\models\User;
-use yii\base\ExitException;
 use yii\base\InvalidParamException;
 use yii\web\BadRequestHttpException;
 use yii\helpers\Url;
-use yii\helpers\Html;
 use app\models\AccountActivation;
 
 class SiteController extends Controller

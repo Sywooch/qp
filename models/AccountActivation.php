@@ -28,7 +28,6 @@ class AccountActivation extends Model
         if ($user->save()) {
             $auth = Yii::$app->authManager;
             $auth->assign($auth->getRole('user'), $user->getId());
-
             return true;
         }
         return false;

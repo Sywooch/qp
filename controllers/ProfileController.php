@@ -13,7 +13,6 @@ use yii\filters\VerbFilter;
 
 class ProfileController extends \yii\web\Controller
 {
-
     public function actionIndex()
     {
         $user = Yii::$app->user->identity;
@@ -46,6 +45,7 @@ class ProfileController extends \yii\web\Controller
             }
             $user = Yii::$app->user->identity;
             $user->setPassword($model->password);
+            $user->removePasswordResetToken();
             if (!$user->save()) {
                 Yii::error('Возникла ошибка при смене пароля.');
             }
