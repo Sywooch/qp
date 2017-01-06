@@ -13,6 +13,26 @@ use yii\filters\VerbFilter;
 
 class ProfileController extends \yii\web\Controller
 {
+    public function behaviors()
+    {
+        return [
+            'access' => [
+                'class' => AccessControl::className(),
+                'denyCallback' => function($role, $action) {
+                    $this->redirect('/site/login');
+                },
+                'except' => ['password'],
+                'rules' => [
+                    [
+                        'allow' => true,
+                        'roles' => ['user'],
+                    ],
+                ],
+            ],
+        ];
+    }
+
+
     public function actionIndex()
     {
         $user = Yii::$app->user->identity;
@@ -41,7 +61,7 @@ class ProfileController extends \yii\web\Controller
         $model = new SetPasswordForm();
         if ($model->load(Yii::$app->request->post())) {
             if (Yii::$app->user->isGuest) {
-                return $this->goHome();
+                return $this->redirect('/site/login');
             }
             $user = Yii::$app->user->identity;
             $user->setPassword($model->password);
@@ -62,7 +82,9 @@ class ProfileController extends \yii\web\Controller
                     return $this->redirect('/site/login');
                 }
             }
-
+            if (Yii::$app->user->isGuest) {
+                return $this->redirect('/site/login');
+            }
             return $this->render('edit/password', [
                 'model' => $model,
             ]);

@@ -26,13 +26,13 @@ class SiteController extends Controller
         return [
             'access' => [
                 'class' => AccessControl::className(),
-                'only' => ['logout', 'login', 'reg', 'profile', 'validate_phone', 'set_phone'],
+                'only' => ['logout', 'login', 'reg', 'profile'],
                 'denyCallback' => function($role, $action) {
                     $this->goHome();
                 },
                 'rules' => [
                     [
-                        'actions' => ['logout', 'profile', 'validate_phone', 'set_phone'],
+                        'actions' => ['logout', 'profile'],
                         'allow' => true,
                         'roles' => ['user'],
                     ],
