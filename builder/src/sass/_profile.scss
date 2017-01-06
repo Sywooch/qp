@@ -1,0 +1,22 @@
+.profile {
+  &-nav {
+    ul {
+      list-style: none;
+      li {
+        &.active {
+
+        }
+      }
+    }
+  }
+  &-edit {
+    .item {
+      padding-top: 15px;
+      padding-bottom: 15px;
+      border-top: 1px solid #ccc;
+    }
+    .item:last-child {
+      border-bottom: 1px solid #ccc;
+    }
+  }
+}

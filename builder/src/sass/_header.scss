@@ -22,9 +22,15 @@
     line-height: 40px;
     text-align: center;
   }
+  .navbar-collapse {
+    padding-left: 0;
+  }
   &__navbar {
     background-color: $colorgray;
     line-height: 2rem;
+    li:first-child {
+      padding-left: 0;
+    }
     li {
       padding: 10px 6px;
       & > a {

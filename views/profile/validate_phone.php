@@ -11,7 +11,8 @@ use yii\widgets\ActiveForm;
     <?= $form->field($model, 'key') ?>
 
     <div class="form-group">
-        <?= Html::submitButton('Submit', ['class' => 'btn btn-primary']) ?>
+        <?= Html::a('Отмена', ['profile/edit'], ['class' => 'btn btn-default']) ?>
+        <?= Html::submitButton('Сохранить', ['class' => 'btn btn-primary']) ?>
     </div>
     <?php ActiveForm::end(); ?>
 

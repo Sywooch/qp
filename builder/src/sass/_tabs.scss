@@ -1,0 +1,26 @@
+.tabs {
+  &-container {
+    border-bottom: 1px solid $colorgray;
+    padding-left: 0;
+  }
+  ul {
+    list-style: none;
+    li {
+      display: inline-block;
+      padding: 15px;
+      &.active {
+        border-bottom: 1px solid $colorblue;
+        a {
+          color: $colorblue;
+        }
+      }
+      a {
+        color: $colorblack;
+        &:hover {
+          color: $colorblue;
+          text-decoration: none;
+        }
+      }
+    }
+  }
+}

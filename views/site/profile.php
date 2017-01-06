@@ -1,7 +1,7 @@
 <?php
 
 use yii\helpers\Html;
-
+$this->params['profileLayout'] = true;
 $this->title = 'Profile';
 $this->params['breadcrumbs'][] = $this->title;
 ?>

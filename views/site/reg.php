@@ -27,7 +27,7 @@ $this->params['breadcrumbs'][] = $this->title;
                     <?php
                     echo  Html::a(
                         '<i class="fa fa-plus hidden-xs"></i> Регистрация',
-                        ['javascript::void(0)']
+                        'javascript::void(0)'
                     );
                     ?>
                 </div>
