@@ -30,7 +30,7 @@ class ResetPasswordForm extends Model
         }
         $link = Yii::$app->urlManager->createAbsoluteUrl(
             [
-                '/site/set-password',
+                '/profile/edit/password',
                 'key' => $user->getPasswordResetToken(),
             ]);
 

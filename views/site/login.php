@@ -50,7 +50,7 @@ $this->params['breadcrumbs'][] = $this->title;
                         'template' => "<div class=\"col-xs-7 checkbox\">{input} {label}\n<div>{error}</div>",
                     ]) ?>
                         <div class="col-xs-5 join-recovery">
-                            <a href="#">Напомнить пароль</a>
+                            <a href="/site/reset-password">Напомнить пароль</a>
                         </div>
                     </div>
                 </div>

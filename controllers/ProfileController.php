@@ -39,38 +39,35 @@ class ProfileController extends \yii\web\Controller
 
     public function actionPassword()
     {
-        $key = Yii::$app->request->get('key');
-        Yii::warning($key);
         $model = new SetPasswordForm();
         if ($model->load(Yii::$app->request->post())) {
-            if ($key) {
+            if (Yii::$app->user->isGuest) {
+                return $this->goHome();
+            }
+            $user = Yii::$app->user->identity;
+            $user->setPassword($model->password);
+            if (!$user->save()) {
+                Yii::error('Возникла ошибка при смене пароля.');
+            }
+            Yii::$app->session->setFlash('success', 'Пароль успешно изменён.');
+            return $this->goBack();
+        }
+        else {
+            if ($key = Yii::$app->request->get('key')) {
                 if ($user = User::findByPasswordResetToken($key)) {
+                    Yii::$app->user->login($user);
                 }
                 else {
                     Yii::$app->session->setFlash('error', 'Неверный ключ сброса пароля');
-                    return $this->goHome();
+                    return $this->redirect('/site/login');
                 }
             }
-            else {
-                if (!Yii::$app->user->isGuest) {
-                    $user = Yii::$app->user->identity;
-                }
-                else {
-                    return $this->goHome();
-                }
-            }
-            $user->setPassword($model->password);
-            if ($user->save()) {
-                Yii::$app->session->setFlash('success', 'Пароль успешно изменён.');
-                return $this->goBack();
-            }
-            else {
-                Yii::error('Возникла ошибка при смене пароля.');
-            }
+
+            return $this->render('edit/password', [
+                'model' => $model,
+            ]);
         }
-        return $this->render('edit/password', [
-            'model' => $model,
-        ]);
+
     }
 
     public function actionPhone()
