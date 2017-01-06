@@ -5,37 +5,11 @@ namespace app\modules\backend\controllers;
 use Yii;
 use yii\web\Controller;
 use app\models\LoginForm;
-use yii\filters\AccessControl;
-use app\models\User;
 /**
  * Default controller for the `admin` module
  */
 class DefaultController extends Controller
 {
-    public function behaviors()
-    {
-        return [
-            'access' => [
-                'class' => AccessControl::className(),
-                'only' => ['index'],
-                'denyCallback' => function($role, $action) {
-                    if (Yii::$app->user->isGuest) {
-                        $this->redirect('/backend/default/login');
-                        return;
-                    }
-                    Yii::$app->session->setFlash('error', 'Недостаточно прав.');
-                    $this->goBack();
-                },
-                'rules' => [
-                    [
-                        'actions' => ['index'],
-                        'allow' => true,
-                        'roles' => ['admin'],
-                    ],
-                ],
-            ],
-        ];
-    }
     /**
      * Renders the index view for the module
      * @return string
@@ -56,7 +30,8 @@ class DefaultController extends Controller
             return $this->redirect('index');
         }
         $model = new LoginForm();
-        if ($model->load(Yii::$app->request->post()) && $model->login()) {
+        if ($model->load(Yii::$app->request->post()) && $model->validate()) {
+            Yii::$app->user->login($model->getUser(), $model->rememberMe ? 3600*24*30 : 0);
             return $this->redirect('/backend/default');
         }
         return $this->render('login', [
