@@ -33,3 +33,4 @@ config/db.php
 *_log
 public_html
 robot.txt
+*.orig

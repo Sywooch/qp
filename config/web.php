@@ -4,7 +4,7 @@ $params = require(__DIR__ . '/params.php');
 
 $config = [
     'id' => 'basic',
-    'name' => 'qpvl',
+    'name' => 'qp',
     'basePath' => dirname(__DIR__),
     'bootstrap' => ['log'],
     'language' => 'ru',
@@ -78,6 +78,15 @@ $config = [
                 //'<module:[\wd-]+>/<controller:[\wd-]+>/<action:[\wd-]+>/<id:\d+>' => '<module>/<controller>/<action>',
             ],
         ],
+        'i18n' => [
+            'translations' => [
+                'eauth' => [
+                    'class' => 'yii\i18n\PhpMessageSource',
+                    'basePath' => '@eauth/messages',
+                ],
+            ],
+        ],
+        'eauth' => require('eauth.php'),
 
     ],
     'modules' => [

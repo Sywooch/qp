@@ -41,8 +41,7 @@ class ResetPasswordForm extends Model
         ])
             ->setFrom([Yii::$app->params['supportEmail'] => Yii::$app->name.' (отправлено роботом).'])
             ->setTo($this->email)
-            ->setSubject('Ссылка для ' . $for_what . ' '. Yii::$app->name)
+            ->setSubject('Ссылка для ' . $for_what . '  ' . Yii::$app->name)
             ->send();
-
     }
 }
