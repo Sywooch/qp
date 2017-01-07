@@ -18,7 +18,6 @@ class Admin extends \yii\base\Module
                 'denyCallback' => function($role, $action) {
                     if (Yii::$app->user->isGuest) {
                         Yii::$app->getResponse()->redirect('/backend/default/login');
-
                     }
                     Yii::$app->session->setFlash('error', 'Недостаточно прав.');
                     Yii::$app->getResponse()->redirect('/');

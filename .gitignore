@@ -30,3 +30,6 @@ tests/_output/*
 tests/_support/_generated
 
 config/db.php
+*_log
+public_html
+robot.txt

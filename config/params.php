@@ -2,6 +2,6 @@
 
 return [
     'adminEmail' => 'admin@qpvl.ru',
-    'supportEmail' => 'mo-reply@qpvl.ru',
+    'supportEmail' => 'no-reply@qpvl.ru',
     'user.passwordResetTokenExpire' => 3600
 ];
