@@ -14,13 +14,15 @@ class Admin extends \yii\base\Module
         return [
             'access' => [
                 'class' => AccessControl::className(),
-                'except' => ['/backend/default/login'],
+                'except' => ['default/login'],
                 'denyCallback' => function($role, $action) {
                     if (Yii::$app->user->isGuest) {
                         Yii::$app->getResponse()->redirect('/backend/default/login');
                     }
-                    Yii::$app->session->setFlash('error', 'Недостаточно прав.');
-                    Yii::$app->getResponse()->redirect('/');
+                    else {
+                        Yii::$app->session->setFlash('error', 'Недостаточно прав.');
+                        Yii::$app->getResponse()->redirect('/');
+                    }
                 },
 
                 'rules' => [
