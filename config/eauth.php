@@ -12,8 +12,8 @@ return [
         'google' => [
             // register your app here: https://code.google.com/apis/console/
             'class' => 'nodge\eauth\services\GoogleOAuth2Service',
-            'clientId' => '...',
-            'clientSecret' => '...',
+            'clientId' => '35092284851-939vp4kdri7ao8tlnofru1fmfem74m9f.apps.googleusercontent.com',
+            'clientSecret' => '8A6aOC30ZQBOtVJdjBDuI25o',
             'title' => 'Google',
         ],
         'twitter' => [
@@ -79,8 +79,8 @@ return [
         'vkontakte' => [
             // register your app here: https://vk.com/editapp?act=create&site=1
             'class' => 'nodge\eauth\services\VKontakteOAuth2Service',
-            'clientId' => '5810688',
-            'clientSecret' => 's0fkHuSEAvENjyRddQ2F',
+            'clientId' => '5810800',
+            'clientSecret' => 'Pxdoog8WZ6WGggdDyQtw',
         ],
         'mailru' => [
             // register your app here: http://api.mail.ru/sites/my/add

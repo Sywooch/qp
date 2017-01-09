@@ -8,7 +8,7 @@ use yii\base\NotSupportedException;
 use yii\behaviors\TimestampBehavior;
 use yii\db\ActiveRecord;
 use yii\web\IdentityInterface;
-
+use \nodge\eauth\ErrorException;
 /**
  * User model
  *
@@ -68,9 +68,7 @@ class User extends ActiveRecord implements IdentityInterface
 
     public static function findByEmail($email)
     {
-        return static::findOne([
-            'email' => $email
-        ]);
+        return static::findOne(['email' => $email]);
     }
     /**
      * @inheritdoc
@@ -87,12 +85,7 @@ class User extends ActiveRecord implements IdentityInterface
     public $profile;
 
     public static function findIdentity($id) {
-        if (Yii::$app->getSession()->has('user-'.$id)) {
-            return new self(Yii::$app->getSession()->get('user-'.$id));
-        }
-        else {
-            return static::findOne(['id' => $id, 'status' => self::STATUS_ACTIVE]);
-        }
+        return static::findOne(['id' => $id, 'status' => self::STATUS_ACTIVE]);
     }
 
     /**
@@ -104,19 +97,28 @@ class User extends ActiveRecord implements IdentityInterface
         if (!$service->getIsAuthenticated()) {
             throw new ErrorException('EAuth user should be authenticated before creating identity.');
         }
-
-        $id = $service->getServiceName().'-'.$service->getId();
-        $attributes = [
-            'id' => $id,
-            'username' => $service->getAttribute('name'),
-            'authKey' => md5($id),
-            'profile' => $service->getAttributes(),
-        ];
-        $attributes['profile']['service'] = $service->getServiceName();
-        Yii::$app->getSession()->set('user-'.$id, $attributes);
-        return new self($attributes);
+        if ($email = $service->getAttribute('email')) {
+            if ($user = static::findByEmail($email)) {
+                return $user;
+            }
+            else {
+                $user = new self;
+                $pass = Yii::$app->security->generateRandomString(6);
+                $user->fill($email, $pass);
+                if (!$user->save() || !$user->ActivateAccount()) {
+                    throw new ErrorException('Ошибка при регистрации пользователя через соц. сеть.');
+                }
+                Yii::$app->session->setFlash('warning',
+                    "Для вашего аккаунта был сгенерирован пароль: <code>$pass</code>,
+                    чтобы изменить его перейдите в Личный кабинет -> Настройки профиля.");
+                return static::findByEmail($email);
+            }
+        }
+        else {
+            throw new ErrorException('Сервис авторизации не вернул эл. почту.');
+        }
     }
-    //////////////////////////////////////////////////
+//////////////////////////////////////////////////////
 
     /**
      * Finds user by password reset token
@@ -156,6 +158,18 @@ class User extends ActiveRecord implements IdentityInterface
     /////////////////////////////////////////////
     // HELPERS
     /////////////////////////////////////////////
+
+    public function activateAccount()
+    {
+        $this->status = User::STATUS_ACTIVE;
+        $this->removePasswordResetToken();
+        if ($this->save()) {
+            $auth = Yii::$app->authManager;
+            $auth->assign($auth->getRole('user'), $this->getId());
+            return true;
+        }
+        return false;
+    }
 
     public function fill($email, $password) {
         $this->setPassword($password);

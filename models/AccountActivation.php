@@ -19,17 +19,8 @@ class AccountActivation extends Model
         parent::__construct($config);
     }
 
-    public function activateAccount()
-    {
-        /* @var $_user User */
-        $user = $this->_user;
-        $user->status = User::STATUS_ACTIVE;
-        $user->removePasswordResetToken();
-        if ($user->save()) {
-            $auth = Yii::$app->authManager;
-            $auth->assign($auth->getRole('user'), $user->getId());
-            return true;
-        }
-        return false;
+    /* @var $_user User */
+    public function getUser() {
+        return $this->_user;
     }
 }

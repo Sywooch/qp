@@ -139,7 +139,7 @@ class SiteController extends Controller
 //                  var_dump($eauth->getIsAuthenticated(), $eauth->getAttributes()); exit;
 
                     $identity = User::findByEAuth($eauth);
-                    Yii::$app->getUser()->login($identity);
+                    Yii::$app->user->login($identity, 0);
 
                     // special redirect with closing popup window
                     $eauth->redirect();
@@ -188,7 +188,7 @@ class SiteController extends Controller
         catch(InvalidParamException $e) {
             throw new BadRequestHttpException($e->getMessage());
         }
-        if($activation->activateAccount()):
+        if($activation->getUser()->activateAccount()):
             Yii::$app->session->setFlash('success', 'Активация прошла успешно.');
         else:
             Yii::$app->session->setFlash('error', 'Ошибка активации.');
