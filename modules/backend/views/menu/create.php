@@ -2,13 +2,24 @@
 
 use yii\helpers\Html;
 use yii\widgets\ActiveForm;
+use yii\helpers\Url;
 
 /* @var $this yii\web\View */
 /* @var $model app\models\Menu */
-/* @var $parent_name string */
+/* @var $parent app\models\Menu  */
 /* @var $form yii\widgets\ActiveForm */
 
-$this->title = 'Создание подкатегории в ' . $parent_name;
+foreach($parent->parents()->all() as $par) {
+    $this->params['breadcrumbs'][] =  [
+        'label' => $par->name,
+        'url' => Url::to(['menu/view', 'id' => $par->id])
+    ];
+}
+$this->params['breadcrumbs'][] = [
+    'label' => $parent->name,
+    'url' => Url::to(['menu/view', 'id' => $parent->id])
+];
+$this->title = 'Создание подкатегории';
 $this->params['breadcrumbs'][] = $this->title;
 ?>
 <div>

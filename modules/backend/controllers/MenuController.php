@@ -44,7 +44,7 @@ class MenuController extends Controller
         } else {
             return $this->render('create', [
                 'model' => $model,
-                'parent_name' => $par->name,
+                'parent' => $par,
             ]);
         }
     }

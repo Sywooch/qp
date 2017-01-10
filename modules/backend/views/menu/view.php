@@ -2,12 +2,12 @@
 
 use yii\helpers\Html;
 use yii\helpers\Url;
+
 /* @var $this yii\web\View */
 /* @var $model app\models\Menu*/
 
 $this->title = $model->name;
 
-//var_dump($model->parents()->all());exit;
 foreach($model->parents()->all() as $par) {
     $this->params['breadcrumbs'][] =  [
         'label' => $par->name,
