@@ -34,6 +34,7 @@
                     ['label' => 'Gii', 'icon' => 'fa fa-file-code-o', 'url' => ['/gii']],
                     ['label' => 'Debug', 'icon' => 'fa fa-dashboard', 'url' => ['/debug']],
                     ['label' => 'Пользователи', 'icon' => 'fa fa-user', 'url' => ['user/index']],
+                    ['label' => 'Категории товаров', 'icon' => 'fa fa-user', 'url' => ['menu/index']],
                     ['label' => 'Login', 'url' => ['/default/login'], 'visible' => Yii::$app->user->isGuest],
                     [
                         'label' => 'Same tools',
