@@ -26,13 +26,12 @@ class RegForm extends Model
             ['password', 'string', 'min' => 6, 'max' => 50],
             ['email', 'email'],
             ['email', 'notExistActivated'],
-            ['status', 'default', 'value' => User::STATUS_ACTIVE, 'on' => 'default'],
+            ['status', 'default', 'value' => User::STATUS_NOT_ACTIVE],
             ['status', 'in', 'range' =>[
                 User::STATUS_NOT_ACTIVE,
                 User::STATUS_ACTIVE
             ]],
             ['repeat_password', 'compare', 'compareAttribute' => 'password'],
-            ['status', 'default', 'value' => User::STATUS_NOT_ACTIVE, 'on' => 'emailActivation'],
         ];
     }
     public function attributeLabels()
@@ -59,7 +58,6 @@ class RegForm extends Model
     {
         $user = new User;
         $user->fill($this->email, $this->password);
-        $user->name = "";           // remove that
         //return $user;
         return $user->save() ? $user : null;
     }
