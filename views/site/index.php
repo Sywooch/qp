@@ -10,3 +10,10 @@ $this->title = Yii::$app->name;
 $this->params['sidebarLayout'] = true;
 
 ?>
+
+<?php
+for($i = 0; $i < 10; $i++) {
+    echo \app\components\product\ProductWidget::widget();
+}
+
+?>
