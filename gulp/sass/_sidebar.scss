@@ -1,0 +1,31 @@
+.sidebar {
+  &-title {
+    text-transform: uppercase;
+    font-weight: bold;
+    font-size: 2rem;
+  }
+}
+.categories {
+  &-list {
+    list-style: none;
+    padding-left: 0;
+    li {
+      text-indent: 0;
+      padding: 4px 0;
+      a {
+        color: rgb(67, 67, 69);
+      }
+    }
+  }
+}
+.text-subline {
+  border-bottom: 1px solid rgb(217, 217, 217);
+  margin: 5px 0;
+  height: 1px;
+  &:before {
+    border-bottom: 1px solid $cgreen;
+    content: "";
+    position: absolute;
+    width: 45px;
+  }
+}
