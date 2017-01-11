@@ -11,9 +11,16 @@
     padding-left: 0;
     li {
       text-indent: 0;
-      padding: 4px 0;
+
       a {
         color: rgb(67, 67, 69);
+        width: 100%;
+        display: block;
+        padding: 4px 15px;
+        &:hover {
+          background-color: $colorgray;
+          text-decoration: none;
+        }
       }
     }
   }

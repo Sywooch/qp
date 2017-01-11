@@ -5,6 +5,7 @@
 @import "awesom/font-awesome";
 @import "variable";
 @import "header";
+@import "footer";
 @import "home";
 @import "form";
 @import "join";
@@ -17,4 +18,38 @@ body {
 }
 .card {
   box-shadow: 0 1px 3px rgba(0,0,0,.12),0 1px 2px rgba(0,0,0,.24);
+}
+.page-container {
+  h1 {
+    margin-top: 0;
+  }
+}
+/*
+ * Product
+ */
+.product {
+  box-shadow: 0 0 6px rgba(0,0,0,.12);
+  margin-bottom: 20px;
+  border-radius: 4px;
+  &-title {
+    a {
+      color: $colorgreen;
+      font-weight: bold;
+      font-size: 1.8rem;
+    }
+
+  }
+  &-panel {
+    background-color: $colorgray;
+    padding: 5px 0;
+    border-radius: 4px;
+  }
+  &-price {
+    min-width: 60px;
+    font-size: 1.8rem;
+    text-align: left;
+  }
+  input {
+    width: 60px;
+  }
 }
