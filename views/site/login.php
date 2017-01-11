@@ -69,34 +69,10 @@ $this->params['breadcrumbs'][] = $this->title;
                 echo '<div class="alert alert-danger">'.Yii::$app->getSession()->getFlash('error').'</div>';
             }
             ?>
-            <p class="lead">Do you already have an account on one of these sites? Click the logo to log in with it here:</p>
-            <?php echo \nodge\eauth\Widget::widget(['action' => 'site/login']); ?>
-
             <!-- .social-auth-links -->
             <div class="social-auth-links text-center">
                 <p>- или войти с помощью -</p>
-                <ul class="social-list">
-                    <li>
-                        <a href="#" class="btn btn-block btn-social btn-vk btn-flat">
-                            <i class="fa fa-vk"></i>
-                        </a>
-                    </li>
-                    <li>
-                        <a href="#" class="btn btn-block btn-social btn-ok btn-flat">
-                            <i class="fa fa-odnoklassniki"></i>
-                        </a>
-                    </li>
-                    <li>
-                        <a href="#" class="btn btn-block btn-social btn-facebook btn-flat">
-                            <i class="fa fa-facebook"></i>
-                        </a>
-                    </li>
-                    <li>
-                        <a href="#" class="btn btn-block btn-social btn-google-plus btn-flat">
-                            <i class="fa fa-google-plus"></i>
-                        </a>
-                    </li>
-                </ul>
+                <?php echo \nodge\eauth\Widget::widget(['action' => 'site/login']); ?>
             </div>
             <!-- /.social-auth-links -->
 
