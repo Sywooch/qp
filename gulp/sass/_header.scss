@@ -1,0 +1,103 @@
+.header {
+  &__inner {
+    @media (min-width: $screen-xs-min) {
+      height: 50px;
+    }
+    @media (min-width: $screen-md-min) {
+      padding-top: 5px;
+      height: 100px;
+    }
+  }
+  &__logo {
+    a {
+      color: $cgreen;
+      font-size: 5.5rem;
+      text-align: center;
+      width: 100%;
+    }
+  }
+  &__slogan {
+    font-size: 1.8rem;
+    height: 40px;
+    line-height: 40px;
+    text-align: center;
+  }
+  .navbar-collapse {
+    padding-left: 0;
+  }
+  &__navbar {
+    background-color: $colorgray;
+    line-height: 2rem;
+    li:first-child {
+      padding-left: 0;
+    }
+    li {
+      padding: 10px 6px;
+      & > a {
+        border-radius: 3px;
+        color: #434345;
+        font-size: 1.6rem;
+        font-weight: 600;
+        padding: 8px 10px;
+      }
+      &.active > a, & > a:hover, & > a:focus {
+        background-color: $cgreen;
+        color: #fff;
+      }
+    }
+  }
+  .dropdown {
+    .btn {
+      background-color: transparent;
+    }
+    .btn:hover {
+      background-color: #dddddf;
+    }
+    li {
+      padding: 0 5px;
+      a, .btn {
+        padding: 2px 5px;
+        font-weight: normal;
+        font-size: 1.5rem;
+      }
+      a:hover {
+        background-color: #dddddf;
+        color: #434345;
+      }
+    }
+  }
+  &__phone {
+    font-size: 2.5rem;
+    text-align: center;
+    padding-top: 25px;
+  }
+  &__personal {
+    float: right;
+    & > li {
+      &.active > a, & > a:hover, & > a:focus, .btn {
+        background-color: #dddddf;
+        color: #434345;
+      }
+      .btn {
+        width: 100%;
+        text-align: left;
+        text-decoration: none;
+      }
+    }
+  }
+}
+.shopping {
+  .badge {
+    background-color: $cgreen;
+  }
+}
+
+.search {
+  padding-top: 20px;
+  &__btn {
+    background-color: #EEEEEE;
+    outline: none;
+    border: none;
+    width: 100%;
+  }
+}

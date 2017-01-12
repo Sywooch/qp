@@ -39,7 +39,9 @@ AppAsset::register($this);
         if (isset($this->params['profileLayout']) && $this->params['profileLayout']) {
             // show sidebar for profile page
             echo $this->render('_profileLayout', ['content' => $content]);
-        } else {
+        } elseif (isset($this->params['sidebarLayout']) && $this->params['sidebarLayout']) {
+            echo $this->render('_sidebarLayout', ['content' => $content]);
+        } else{
             echo $content;
         }
         ?>

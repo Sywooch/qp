@@ -1,0 +1,59 @@
+.checkbox {
+  input[type="checkbox"] {
+    margin-left: 0;
+  }
+}
+.btn {
+  &-success {
+    background-color: $cgreen;
+    border: 1px solid rgb(53, 186, 82);
+    border-radius: 4px;
+    transition: background-color 200ms linear;
+    &:focus,&:hover {
+      background-color: #fff;
+      color: rgb(45, 142, 71);
+    }
+  }
+
+
+  &-social {
+    border-radius: 16px;
+    color: #fff;
+    width: 32px;
+    height: 32px;
+    &:hover {
+      color: #fff;
+      transition: opacity .3s linear;
+    }
+  }
+  @mixin social($bg, $bghover) {
+    background-color: $bg;
+    &:hover {
+      background-color: $bghover;
+    }
+  }
+  &-vk {
+    text-indent: -2px;
+    @include social(#6390B6, #4c7598);
+  }
+  &-facebook {
+    text-indent: -1px;
+    @include social(#3A60A1, #2d3f73);
+  }
+  &-ok {
+    text-indent: -1px;
+    @include social(#FB8C39, #c76432);
+  }
+  &-google-plus {
+    text-indent: -2px;
+    @include social(#F05A4D, #b8493d);
+  }
+}
+.social-list {
+  list-style: none;
+  padding: 0;
+  li {
+    margin-right: 8px;
+    display: inline-block;
+  }
+}

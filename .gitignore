@@ -34,3 +34,5 @@ config/db.php
 public_html
 robot.txt
 *.orig
+
+node_modules

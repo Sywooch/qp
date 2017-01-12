@@ -2,6 +2,7 @@
 
 namespace app\controllers;
 
+use app\models\Menu;
 use Yii;
 use yii\filters\AccessControl;
 use yii\web\Controller;
@@ -15,6 +16,7 @@ use yii\base\InvalidParamException;
 use yii\web\BadRequestHttpException;
 use yii\helpers\Url;
 use app\models\AccountActivation;
+use yii\web\NotFoundHttpException;
 
 class SiteController extends Controller
 {
@@ -85,11 +87,25 @@ class SiteController extends Controller
      */
     public function actionIndex()
     {
-        $model = new RegForm();
+        if (!($catalog = Menu::find()->roots()->one())) {
+            $catalog = new Menu([ 'name' => 'Категории товаров' ]);
+            $catalog->makeRoot();
+        }
+
+        //return $this->actionView($catalog->id);
 
         return $this->render('index', [
-            'model' => $model
+            'model' => $this->findModel(1),
         ]);
+    }
+
+    protected static function findModel($id)
+    {
+        if (($model = Menu::findOne($id)) !== null) {
+            return $model;
+        } else {
+            throw new NotFoundHttpException('The requested page does not exist.');
+        }
     }
 
     public function actionReg()
