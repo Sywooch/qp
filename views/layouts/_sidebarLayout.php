@@ -2,13 +2,13 @@
 
 /* @var $this \yii\web\View */
 use yii\bootstrap\Nav;
-use app\components\catalog\CatalogWidget;
+use app\components\catalog\CatalogRootWidget;
 /* @var $content string */
 ?>
 <div class="row">
     <!-- Sidebar-->
     <div class="col-md-3">
-        <?=CatalogWidget::widget();?>
+        <?=CatalogRootWidget::widget();?>
     </div>
     <!-- End Sidebar-->
     <div class="col-md-9">

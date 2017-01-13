@@ -1,5 +1,5 @@
 <?php
-namespace app\components\product;
+namespace app\components\catalog;
 
 use app\models\Menu;
 use yii\bootstrap\Widget;
@@ -12,14 +12,13 @@ class ProductWidget extends Widget
     public function init()
     {
         parent::init();
-        if (!($this->product === null)) {
-            $this->product = [];
-        }
     }
 
     public function run() {
         return $this->render('product', [
-            'product' => $this->product,
+            'name' => '<i>Бараны</i>',
+            'link' => '/catalog/view?id=' . $this->product->id,
+            'img' => '@web/img/catalog/product/1.png',
         ]);
     }
 }
