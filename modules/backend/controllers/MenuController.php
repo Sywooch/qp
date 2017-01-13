@@ -28,8 +28,17 @@ class MenuController extends Controller
     }
    public function actionView($id)
     {
+        $menu = new Menu;
+        $par = static::findModel($id);
+
+        if ($menu->load(Yii::$app->request->post())) {
+            $menu->appendTo($par);
+            return $this->redirect(['view', 'id' => $par->id]);
+        }
+
         return $this->render('view', [
             'model' => $this->findModel($id),
+            'menu' => $menu,
         ]);
     }
 
