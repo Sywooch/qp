@@ -1,5 +1,5 @@
 <?php
-/** @var $catalog app\models\Menu  */
+/** @var $root_ch array of app\models\Menu  */
 use yii\helpers\Html;
 ?>
 <aside class="sidebar">
@@ -8,7 +8,7 @@ use yii\helpers\Html;
             <div class="text-subline"></div>
             <ul class="categories-list">
                 <?php
-                foreach($catalog->children(1)->all() as $ch) {
+                foreach($root_ch as $ch) {
                     echo '<li>' . Html::a($ch->name, ['catalog/view', 'id' => $ch->id]) . '</li>';
                 }
                 ?>

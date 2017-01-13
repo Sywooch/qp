@@ -4,6 +4,8 @@ namespace app\models;
 
 use Yii;
 use creocoder\nestedsets\NestedSetsBehavior;
+use yii\base\InvalidParamException;
+
 /**
  * This is the model class for table "menu".
  *
@@ -54,5 +56,25 @@ class Menu extends \yii\db\ActiveRecord
     public static function find()
     {
         return new MenuQuery(get_called_class());
+    }
+
+    /**
+     * @inheritdoc
+     * @return return root node, or create new one if not yet exist.
+     */
+    public static function findById($id) {
+        if (($model = self::findOne($id)) !== null) {
+            return $model;
+        } else {
+            throw new InvalidParamException('Нет такого раздела в каталоге.');
+        }
+    }
+
+    public static function getRoot() {
+        if (($root = Menu::find()->roots()->one()) === null) {
+            $root = new Menu([ 'name' => 'Категории товаров' ]);
+            $root->makeRoot();
+        }
+        return $root;
     }
 }

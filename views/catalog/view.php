@@ -17,9 +17,16 @@ $this->params['breadcrumbs'][] = $this->title;
 
 <div class="row">
     <?php
-    for($i = 0; $i < 10; $i++) {
-        echo \app\components\product\ProductWidget::widget();
+    if ($chs = $catalog->children(1)->all()) {
+        foreach ($chs as $ch) {
+            echo \app\components\catalog\CategoryWidget::widget([ 'catalog_item' => $ch ]);
+        }
     }
-
+    else {
+        for ($i = 0; $i < 10; $i++) {
+            // CHANGE TO PRODUCT OBJ
+            echo \app\components\catalog\ProductWidget::widget([ 'product' => $catalog ]);
+        }
+    }
     ?>
 </div>

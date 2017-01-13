@@ -1,17 +1,24 @@
 <?php
-/** @var $catalog app\models\Menu  */
+/** @var
+ * $name string
+ * $link string
+ * $img string
+ */
 use yii\helpers\Html;
 ?>
 <div class='col-md-4 col-sm-6 col-xs-12'>
     <div class="product text-center">
-        <div class="product-images">
-            <?=Html::img(['@web/img/product/1.png'], ['height'=>204, 'width'=>270, 'class'=>'img-responsive'])?>
-        </div>
-        <div class="product-title">
-            <div class="h7 text-sbold">
-                <a href="#" class="text-chateau-green">Бананы</a>
+        <a href=<?=$link?>>
+            <div class="product-images">
+                <?=Html::img([$img],
+                    ['height'=>204, 'width'=>270, 'class'=>'img-responsive'])?>
             </div>
-        </div>
+            <div class="product-title">
+                <div class="h7 text-sbold">
+                    <?=$name?>
+                </div>
+            </div>
+        </a>
         <div class="product-panel">
             <form class="form-inline">
                 <div class="btn-group">
