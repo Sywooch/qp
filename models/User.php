@@ -9,11 +9,13 @@ use yii\behaviors\TimestampBehavior;
 use yii\db\ActiveRecord;
 use yii\web\IdentityInterface;
 use \nodge\eauth\ErrorException;
+use yii\helpers\Html;
+
 /**
  * User model
  *
  * @property integer $id
- * @property string $username
+ * @property string $name
  * @property string $password_hash
  * @property string $password_reset_token
  * @property string $email
@@ -82,7 +84,6 @@ class User extends ActiveRecord implements IdentityInterface
     /**
      * @var array EAuth attributes
      */
-    public $profile;
 
     public static function findIdentity($id) {
         return static::findOne(['id' => $id, 'status' => self::STATUS_ACTIVE]);
@@ -108,9 +109,11 @@ class User extends ActiveRecord implements IdentityInterface
                 if (!$user->save() || !$user->ActivateAccount()) {
                     throw new ErrorException('Ошибка при регистрации пользователя через соц. сеть.');
                 }
+                $link = Html::a("Личный кабинет&rarr;Настройки профиля", ['/profile/edit']);
                 Yii::$app->session->setFlash('warning',
                     "Для вашего аккаунта был сгенерирован пароль: <code>$pass</code>,
-                    чтобы изменить его перейдите в Личный кабинет -> Настройки профиля.");
+                    чтобы изменить его перейдите в $link.");
+
                 return static::findByEmail($email);
             }
         }
@@ -174,6 +177,7 @@ class User extends ActiveRecord implements IdentityInterface
     public function fill($email, $password) {
         $this->setPassword($password);
         $this->email = $email;
+        $this->name = 'qwe';
         $this->generatePasswordResetToken();
         $this->status = self::STATUS_NOT_ACTIVE;
     }

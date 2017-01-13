@@ -32,8 +32,8 @@ return [
         'facebook' => [
             // register your app here: https://developers.facebook.com/apps/
             'class' => 'nodge\eauth\services\FacebookOAuth2Service',
-            'clientId' => '...',
-            'clientSecret' => '...',
+            'clientId' => '157127531441787',
+            'clientSecret' => '13d4aeac03613daa3012eac24c43732a',
         ],
         'yahoo' => [
             'class' => 'nodge\eauth\services\YahooOpenIDService',
@@ -73,8 +73,8 @@ return [
         'instagram' => [
             // register your app here: https://instagram.com/developer/register/
             'class' => 'nodge\eauth\services\InstagramOAuth2Service',
-            'clientId' => '...',
-            'clientSecret' => '...',
+            'clientId' => 'ded5211ee04b46a09c312e22f914dfd0',
+            'clientSecret' => '03cf3e7370304377bcd25cc38dde78ff ',
         ],
         'vkontakte' => [
             // register your app here: https://vk.com/editapp?act=create&site=1
