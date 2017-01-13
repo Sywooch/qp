@@ -22,11 +22,13 @@ use dmstr\widgets\Alert;
         <?php } ?>
 
         <?=
-        Breadcrumbs::widget(
-            [
-                'links' => isset($this->params['breadcrumbs']) ? $this->params['breadcrumbs'] : [],
-            ]
-        ) ?>
+        Breadcrumbs::widget([
+            'homeLink' => [
+                'label' => Yii::t('yii', 'Admin Panel'),
+                'url' => ['/backend'],
+            ],
+            'links' => isset($this->params['breadcrumbs']) ? $this->params['breadcrumbs'] : [],
+        ]) ?>
     </section>
 
     <section class="content">

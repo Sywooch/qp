@@ -72,10 +72,10 @@ $config = [
             'rules' => [
                 '' => 'site/index',
                 '<action:(about|contact|login|reg)>'=>'site/<action>',
-                '<module:backend><action:(login|index)>'=>'<module>/default/<action>',
+                '<module:backend><controller:default><action:(login|index)>'=>'<module>/default/<action>',
                 '<controller:profile>/<action:edit>/phone'=>'profile/phone',
                 '<controller:profile>/<action:edit>/password'=>'profile/password',
-                //'<module:[\wd-]+>/<controller:[\wd-]+>/<action:[\wd-]+>/<id:\d+>' => '<module>/<controller>/<action>',
+                '<controller:catalog>/<action:[\wd-]+>/<id:\d+>' => '<controller>/<action>',
             ],
         ],
         'i18n' => [
