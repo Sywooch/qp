@@ -9,8 +9,8 @@ var gulp = require('gulp'),
 var reload      = browserSync.reload;
 
 var paths = {
-    html:['views/**/*.php'],
-    css:['gulp/**/*.scss'],
+    html:['views/**/*.php', 'modules/**/*.php', 'components/**/*.php'],
+    css:['gulp/sass/**/*.scss'],
     bootstrap: {
         sass: ['gulp/libs/bootstrap-sass/assets/stylesheets']
     }

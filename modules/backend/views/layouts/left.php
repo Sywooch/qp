@@ -33,8 +33,8 @@
                     ['label' => 'Menu Yii2', 'options' => ['class' => 'header']],
                     ['label' => 'Gii', 'icon' => 'fa fa-file-code-o', 'url' => ['/gii']],
                     ['label' => 'Debug', 'icon' => 'fa fa-dashboard', 'url' => ['/debug']],
-                    ['label' => 'Пользователи', 'icon' => 'fa fa-user', 'url' => ['user/index']],
-                    ['label' => 'Категории товаров', 'icon' => 'fa fa-user', 'url' => ['menu/index']],
+                    ['label' => 'Пользователи', 'icon' => 'fa fa-user', 'url' => ['/backend/user']],
+                    ['label' => 'Категории товаров', 'icon' => 'fa fa-user', 'url' => ['/backend/menu']],
                     ['label' => 'Login', 'url' => ['/default/login'], 'visible' => Yii::$app->user->isGuest],
                     [
                         'label' => 'Same tools',
