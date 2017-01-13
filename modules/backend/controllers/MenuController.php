@@ -19,12 +19,7 @@ class MenuController extends Controller
      */
     public function actionIndex()
     {
-        if (!($catalog = Menu::find()->roots()->one())) {
-            $catalog = new Menu([ 'name' => 'Категории товаров' ]);
-            $catalog->makeRoot();
-        }
-
-        return $this->actionView($catalog->id);
+        return $this->actionView(Menu::getRoot()->id);
     }
    public function actionView($id)
     {

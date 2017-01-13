@@ -87,25 +87,9 @@ class SiteController extends Controller
      */
     public function actionIndex()
     {
-        if (!($catalog = Menu::find()->roots()->one())) {
-            $catalog = new Menu([ 'name' => 'Категории товаров' ]);
-            $catalog->makeRoot();
-        }
-
-        //return $this->actionView($catalog->id);
-
         return $this->render('index', [
-            'model' => $this->findModel(1),
+            'catalog' => Menu::getRoot(),
         ]);
-    }
-
-    protected static function findModel($id)
-    {
-        if (($model = Menu::findOne($id)) !== null) {
-            return $model;
-        } else {
-            throw new NotFoundHttpException('The requested page does not exist.');
-        }
     }
 
     public function actionReg()
