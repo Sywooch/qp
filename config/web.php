@@ -8,6 +8,7 @@ $config = [
     'basePath' => dirname(__DIR__),
     'bootstrap' => ['log'],
     'language' => 'ru',
+    'timeZone' => 'Asia/Vladivostok',
     'components' => [
         'assetManager' => [
             'appendTimestamp' => true,
