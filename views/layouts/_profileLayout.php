@@ -2,6 +2,7 @@
 
 /* @var $this \yii\web\View */
 use yii\bootstrap\Nav;
+use yii\widgets\Breadcrumbs;
 
 /* @var $content string */
 ?>
@@ -23,6 +24,9 @@ use yii\bootstrap\Nav;
                 </div>
             </div>
             <div class="col-sm-9">
+                <?=Breadcrumbs::widget([
+                    'links' => isset($this->params['breadcrumbs']) ? $this->params['breadcrumbs'] : [],
+                ])?>
                 <?= $content ?>
             </div>
         </div>
