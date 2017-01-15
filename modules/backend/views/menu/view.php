@@ -51,7 +51,12 @@ $this->params['breadcrumbs'][] = $this->title;
                 <td><?=$ch->id?></td>
                 <td><?=Html::a($ch->name, ['view', 'id' => $ch->id])?></td>
                 <td>
-                    <?=Html::a("<i class='fa fa-trash-o'></i>", ['delete', 'id' => $ch->id])?>
+                    <?=Html::a("<i class='fa fa-trash-o'></i>", ['delete', 'id' => $ch->id],
+                        [ 'data' => [
+                            'confirm' => 'Вы уверены, что хотите удалить эту и все вложеные категорию?',
+                            'method' => 'post',
+                        ]]
+                    )?>
                     <?=Html::a("<i class='fa fa-pencil'></i>", ['update', 'id' => $ch->id])?>
                 </td>
             </tr>
