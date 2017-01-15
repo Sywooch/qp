@@ -29,9 +29,6 @@ AppAsset::register($this);
     <?= $this->render('_header') ?>
 
     <div class="container">
-        <?= Breadcrumbs::widget([
-            'links' => isset($this->params['breadcrumbs']) ? $this->params['breadcrumbs'] : [],
-        ]) ?>
 
         <?= AlertWidget::widget() ?>
 
@@ -42,6 +39,9 @@ AppAsset::register($this);
         } elseif (isset($this->params['sidebarLayout']) && $this->params['sidebarLayout']) {
             echo $this->render('_sidebarLayout', ['content' => $content]);
         } else{
+            echo Breadcrumbs::widget([
+                'links' => isset($this->params['breadcrumbs']) ? $this->params['breadcrumbs'] : [],
+            ]);
             echo $content;
         }
         ?>

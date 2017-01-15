@@ -3,6 +3,8 @@
 /* @var $this \yii\web\View */
 use yii\bootstrap\Nav;
 use app\components\catalog\CatalogRootWidget;
+use yii\widgets\Breadcrumbs;
+
 /* @var $content string */
 ?>
 <div class="row">
@@ -15,6 +17,9 @@ use app\components\catalog\CatalogRootWidget;
         <!-- Main-->
         <div class="page">
             <div class="page-container">
+                <?=Breadcrumbs::widget([
+                    'links' => isset($this->params['breadcrumbs']) ? $this->params['breadcrumbs'] : [],
+                ])?>
                 <?=$content?>
             </div>
         </div>

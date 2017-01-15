@@ -28,7 +28,27 @@ $this->params['breadcrumbs'][] = $this->title;
             'created_at:datetime',
             'updated_at:datetime',
 
-            ['class' => 'yii\grid\ActionColumn'],
+            [
+                'class' => 'yii\grid\ActionColumn',
+                'template' => '{view} {update} {delete}',
+                'buttons' => [
+                    'view' => function ($url,$model) {
+                        return Html::a(
+                            '<i class="fa fa-eye"></i>',
+                            $url);
+                    },
+                    'update' => function ($url,$model) {
+                        return Html::a(
+                            '<i class="fa fa-edit"></i>',
+                            $url);
+                    },
+                    'delete' => function ($url,$model) {
+                        return Html::a(
+                            '<i class="fa fa-trash"></i>',
+                            $url);
+                    },
+                ],
+            ],
         ],
     ]); ?>
 </div>
