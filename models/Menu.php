@@ -20,8 +20,9 @@ class Menu extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-        ['name', 'string'],
+        [[ 'name', 'c1id' ], 'string'],
         ['name', 'required'],
+        ['c1id', 'unique'],
     ];
 }
     public function behaviors() {
@@ -58,10 +59,6 @@ class Menu extends \yii\db\ActiveRecord
         return new MenuQuery(get_called_class());
     }
 
-    /**
-     * @inheritdoc
-     * @return return root node, or create new one if not yet exist.
-     */
     public static function findById($id) {
         if (($model = self::findOne($id)) !== null) {
             return $model;
@@ -70,6 +67,14 @@ class Menu extends \yii\db\ActiveRecord
         }
     }
 
+    public static function findByC1id($c1id) {
+        return self::findOne([ 'c1id' => $c1id ]);
+    }
+
+    /**
+     * @inheritdoc
+     * @return return root node, or create new one if not yet exist.
+     */
     public static function getRoot() {
         if (($root = Menu::find()->roots()->one()) === null) {
             $root = new Menu([ 'name' => 'Категории товаров' ]);

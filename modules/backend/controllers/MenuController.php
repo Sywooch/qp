@@ -7,24 +7,31 @@ use yii\data\ActiveDataProvider;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use app\models\Menu;
+use yii\filters\VerbFilter;
+use app\modules\backend\models\UploadZipModel;
+use yii\web\UploadedFile;
 
 /**
  * UserController implements the CRUD actions for User model.
  */
 class MenuController extends Controller
 {
-    /**
-     * Lists all User models.
-     * @return mixed
-     */
-    public function actionIndex()
+    public function behaviors()
     {
-        return $this->actionView(Menu::getRoot()->id);
+        return [
+            'verbs' => [
+                'class' => VerbFilter::className(),
+                'actions' => [
+                    'delete' => ['POST'],
+                ],
+            ],
+        ];
     }
+
    public function actionView($id)
     {
         $menu = new Menu;
-        $par = static::findModel($id);
+        $par = Menu::findById($id);
 
         if ($menu->load(Yii::$app->request->post())) {
             $menu->appendTo($par);
@@ -32,7 +39,7 @@ class MenuController extends Controller
         }
 
         return $this->render('view', [
-            'model' => $this->findModel($id),
+            'model' => Menu::findById($id),
             'menu' => $menu,
         ]);
     }
@@ -40,7 +47,7 @@ class MenuController extends Controller
     public function actionCreate($par_id)
     {
         $model = new Menu;
-        $par = static::findModel($par_id);
+        $par = Menu::findById($par_id);
 
         if ($model->load(Yii::$app->request->post())) {
             $model->appendTo($par);
@@ -53,13 +60,25 @@ class MenuController extends Controller
         }
     }
 
-
-    protected static function findModel($id)
+    public function actionDelete($id)
     {
-        if (($model = Menu::findOne($id)) !== null) {
-            return $model;
-        } else {
-            throw new NotFoundHttpException('The requested page does not exist.');
+        $model = Menu::findById($id);
+        $par_id = $model->parents(1)->one()->id;
+        $model->deleteWithChildren();
+        return $this->redirect([ 'view', 'id' => $par_id ]);
+    }
+
+    public function actionIndex()
+    {
+        $model = new UploadZipModel();
+
+        if (Yii::$app->request->isPost) {
+            $model->zipFile = UploadedFile::getInstance($model, 'zipFile');
+            if ($model->upload()) {
+                yii::$app->session->setFlash('success', 'Архив принят на обработку');
+                return $this->refresh();
+            }
         }
+        return $this->render('index', ['model' => $model, 'par' => Menu::getRoot()]);
     }
 }
