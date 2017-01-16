@@ -6,6 +6,8 @@ use yii\web\UploadedFile;
 use SimpleXMLElement;
 use ZipArchive;
 use app\models\Menu;
+use app\models\GoodProperty;
+use app\models\PropertyDictionary;
 use Yii;
 
 class UploadZipModel extends Model
@@ -77,6 +79,52 @@ class UploadZipModel extends Model
         $this->recursivelyAddCategory($xml->Классификатор->Группы->Группа, Menu::getRoot());
     }
 
+    public function propertyHandler($xml) {
+        foreach($xml->Классификатор->Свойства->Свойство as $prop_xml) {
+            $prop_c1id = (string) $prop_xml->Ид;
+            $prop_model = GoodProperty::findOne([ 'c1id' => $prop_c1id ]);
+
+            if (static::str2bool($prop_xml->ПометкаУдаления)) {
+                if ($prop_model && !$prop_model->delete()) {
+                    Yii::$app->session->addFlash('error',
+                        "Ошибка при удалении свойства товара <i>$prop_model->name</i>");
+                };
+            }
+            else {
+                if (!$prop_model) {
+                    $prop_model = new GoodProperty([
+                        'c1id' => $prop_c1id,
+                        'name' => (string)$prop_xml->Наименование,
+                        'type' => GoodProperty::getTypeByC1name((string)$prop_xml->ТипЗначений),
+                    ]);
+                    if (!$prop_model->validate() || !$prop_model->save()) {
+                        Yii::$app->session->addFlash('error',
+                            "Ошибка при добавлении свойства товара <i>$prop_model->name</i>. " .
+                            implode(', ', $prop_model->getFirstErrors()));
+                        continue;
+                    }
+                }
+
+                if ($prop_model->type === GoodProperty::DICTIONARY_TYPE) {
+                    foreach($prop_xml->ВариантыЗначений->Справочник as $dict_xml) {
+                        $dict_c1id = (string) $dict_xml->ИдЗначения;
+                        if (!PropertyDictionary::findOne([ 'c1id' => $dict_c1id ])) {
+                            $dict_model = new PropertyDictionary([
+                                'c1id' => $dict_c1id,
+                                'value' => (string) $dict_xml->Значение,
+                                'property_id' => $prop_model->id,
+                            ]);
+                            if (!$dict_model->validate() || !$dict_model->save()) {
+                                Yii::$app->session->addFlash('error',
+                                    "Ошибка при добавлении значения <i>$dict_model->value</i> в справочник. " .
+                                    implode(', ', $modelc->getFirstErrors()));
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
 
     public function upload()
     {
@@ -111,7 +159,8 @@ class UploadZipModel extends Model
                 }
             }
 
-            $this->catalogHandler($files['catalog']);
+            $this->catalogHandler(new SimpleXMLElement($files['catalog']));
+            $this->propertyHandler(new SimpleXMLElement($files['property']));
             $zip->close();
 
 
