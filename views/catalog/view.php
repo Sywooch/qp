@@ -2,6 +2,8 @@
 /* @var $this yii\web\View */
 /** @var $catalog app\models\Menu */
 use yii\helpers\Url;
+use app\components\catalog\CategoryWidget;
+use app\components\catalog\ProductWidget;
 
 $this->title = $catalog->name;
 $this->params['sidebarLayout'] = true;
@@ -19,13 +21,13 @@ $this->params['breadcrumbs'][] = $this->title;
     <?php
     if ($chs = $catalog->children(1)->all()) {
         foreach ($chs as $ch) {
-            echo \app\components\catalog\CategoryWidget::widget([ 'catalog_item' => $ch ]);
+            echo CategoryWidget::widget([ 'item' => $ch ]);
         }
     }
     else {
         for ($i = 0; $i < 10; $i++) {
             // CHANGE TO PRODUCT OBJ
-            echo \app\components\catalog\ProductWidget::widget([ 'product' => $catalog ]);
+            echo ProductWidget::widget([ 'product' => $catalog ]);
         }
     }
     ?>

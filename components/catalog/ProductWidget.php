@@ -16,9 +16,7 @@ class ProductWidget extends Widget
 
     public function run() {
         return $this->render('product', [
-            'name' => '<i>Бараны</i>',
-            'link' => '/catalog/view?id=' . $this->product->id,
-            'img' => '@web/img/catalog/product/1.png',
+            'product' => $this->product
         ]);
     }
 }

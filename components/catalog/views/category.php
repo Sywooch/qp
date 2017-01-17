@@ -1,23 +1,23 @@
 <?php
-/** @var
- * $name string
- * $link string
- * $img string
- */
+/* @var $item app\models\Menu */
 use yii\helpers\Html;
+
+$img = Html::img(['@web/img/catalog/category/1.png'],
+    ['height'=>204, 'width'=>270, 'class'=>'img-responsive']);
+
+$url = ['catalog/view', 'id' => $item->id];
 ?>
-<div class='col-md-4 col-sm-6 col-xs-12'>
-    <div class="product text-center">
-        <a href=<?=$link?>>
-            <div class="product-images">
-                <?=Html::img([$img],
-                    ['height'=>204, 'width'=>270, 'class'=>'img-responsive'])?>
+<div class='col-md-3 col-sm-4 col-xs-6'>
+    <div class="category card">
+        <div class="thumbnail">
+            <div class="image">
+                <?=Html::a($img, $url)?>
             </div>
-            <div class="product-title">
-                <div class="h7 text-sbold">
-                    <?=$name?>
+            <div class="caption">
+                <div class="category-title">
+                    <?=Html::a($item->name, $url)?>
                 </div>
             </div>
-        </a>
+        </div>
     </div>
 </div>

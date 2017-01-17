@@ -9,9 +9,7 @@ use yii\web\NotFoundHttpException;
 
 class CategoryWidget extends Widget
 {
-    public $catalog_item;
-    public $img;
-    public $link;
+    public $item;
 
     public function init()
     {
@@ -20,9 +18,7 @@ class CategoryWidget extends Widget
 
     public function run() {
         return $this->render('category', [
-            'name' => $this->catalog_item->name,
-            'link' => '/catalog/view?id=' . $this->catalog_item->id,
-            'img' => '@web/img/catalog/category/1.png',
+            'item' => $this->item,
         ]);
     }
 }
