@@ -98,7 +98,7 @@ class ProfileController extends \yii\web\Controller
         if ($model->load(Yii::$app->request->post())) {
             if ($model->setPhone($model->phone)) {
                 Yii::$app->session->setFlash('success', 'На указанный телефон отправлено смс с кодом подтверждения.');
-                return $this->redirect('validate-phone');
+                return $this->redirect('/profile/confirm/phone');
             }
             else {
                 Yii::$app->session->setFlash('error', 'Возникла ошибка при установке номера телефона.');
@@ -110,7 +110,7 @@ class ProfileController extends \yii\web\Controller
         ]);
     }
 
-    public function actionValidatePhone()
+    public function actionConfirmPhone()
     {
         $user = Yii::$app->user->identity;
         if (!$user->phone_validation_key) {
@@ -120,9 +120,9 @@ class ProfileController extends \yii\web\Controller
 
         if ($model->load(Yii::$app->request->post()) && $model->validate()) {
             Yii::$app->session->setFlash('success', 'Телефонный номер успешно изменён.');
-            return $this->goHome();
+            return $this->redirect('/profile/edit');
         }
-        return $this->render('validate_phone', [
+        return $this->render('confirm/phone', [
             'model' => $model,
         ]);
 
