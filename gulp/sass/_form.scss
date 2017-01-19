@@ -8,6 +8,7 @@
     background-color: $cgreen;
     border: 1px solid rgb(53, 186, 82);
     border-radius: 4px;
+    color: $colorwhite;
     transition: background-color 200ms linear;
     &:focus,&:hover {
       background-color: #fff;
