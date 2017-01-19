@@ -1,6 +1,7 @@
 <?php
 
 namespace app\models\Profile;
+use app\models\User;
 use Yii;
 use yii\base\Model;
 use yii\base\InvalidParamException;
