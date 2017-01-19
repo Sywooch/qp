@@ -7,6 +7,7 @@
  */
 
 namespace app\models\Profile;
+use app\models\User;
 use yii\base\Model;
 use Yii;
 
