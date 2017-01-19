@@ -1,7 +1,7 @@
 <?php
 namespace app\components\catalog;
 
-use app\models\Menu;
+use app\models\Good\Menu;
 use yii\bootstrap\Widget;
 use yii\web\NotFoundHttpException;
 

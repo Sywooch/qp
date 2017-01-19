@@ -5,8 +5,8 @@ use yii\widgets\ActiveForm;
 use yii\helpers\Url;
 
 /* @var $this yii\web\View */
-/* @var $model app\models\Menu */
-/* @var $parent app\models\Menu  */
+/* @var $model app\models\Good\Menu */
+/* @var $parent app\models\Good\Menu  */
 /* @var $form yii\widgets\ActiveForm */
 
 foreach($parent->parents()->all() as $par) {

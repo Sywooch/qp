@@ -1,6 +1,6 @@
 <?php
 
-namespace app\models;
+namespace app\models\Good;
 use creocoder\nestedsets\NestedSetsQueryBehavior;
 
 class MenuQuery extends \yii\db\ActiveQuery

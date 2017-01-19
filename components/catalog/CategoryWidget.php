@@ -1,9 +1,9 @@
 <?php
-/** @var $catalog_item app\models\Menu  */
+/** @var $catalog_item app\models\Good\Menu  */
 
 namespace app\components\catalog;
 
-use app\models\Menu;
+use app\models\Good\Menu;
 use yii\bootstrap\Widget;
 use yii\web\NotFoundHttpException;
 

@@ -1,5 +1,5 @@
 <?php
-/** @var $root_ch array of app\models\Menu  */
+/** @var $root_ch array of app\models\Good\Menu  */
 use yii\helpers\Html;
 ?>
 <aside class="sidebar">

@@ -6,7 +6,7 @@ use Yii;
 use yii\data\ActiveDataProvider;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
-use app\models\Menu;
+use app\models\Good\Menu;
 use yii\filters\VerbFilter;
 use app\modules\backend\models\UploadZipModel;
 use yii\web\UploadedFile;

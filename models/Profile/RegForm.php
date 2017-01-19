@@ -6,7 +6,7 @@
  * Time: 15:19
  */
 
-namespace app\models;
+namespace app\models\Profile;
 use yii\base\Model;
 use Yii;
 

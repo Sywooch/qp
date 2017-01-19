@@ -1,6 +1,6 @@
 <?php
 /* @var $this yii\web\View */
-/** @var $catalog app\models\Menu */
+/** @var $catalog app\models\Good\Menu */
 use yii\helpers\Url;
 
 $this->title = $catalog->name;

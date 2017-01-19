@@ -5,8 +5,8 @@ use yii\helpers\Url;
 use yii\widgets\ActiveForm;
 
 /* @var $this yii\web\View */
-/* @var $model app\models\Menu */
-/* @var $menu app\models\Menu */
+/* @var $model app\models\Good\Menu */
+/* @var $menu app\models\Good\Menu */
 
 $this->title = $model->name;
 

@@ -2,7 +2,7 @@
 
 namespace app\controllers;
 
-use app\models\Menu;
+use app\models\Good\Menu;
 use yii\web\NotFoundHttpException;
 
 class CatalogController extends \yii\web\Controller

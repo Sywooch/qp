@@ -2,11 +2,11 @@
 
 namespace app\controllers;
 
-use app\models\ResetPasswordForm;
-use app\models\SetPasswordForm;
-use app\models\SetPhoneForm;
+use app\models\Profile\ResetPasswordForm;
+use app\models\Profile\SetPasswordForm;
+use app\models\Profile\SetPhoneForm;
 use app\models\User;
-use app\models\ValidatePhoneForm;
+use app\models\Profile\ValidatePhoneForm;
 use Yii;
 use yii\filters\AccessControl;
 use yii\filters\VerbFilter;

@@ -5,7 +5,7 @@ use yii\widgets\ActiveForm;
 
 /* @var $this yii\web\View */
 /* @var $model app\modules\backend\models\UploadZipModel */
-/* @var $par app\models\Menu */
+/* @var $par app\models\Good\Menu */
 ?>
 
 

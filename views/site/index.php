@@ -1,7 +1,7 @@
 <?php
 /* @var $this yii\web\View */
 /* @var $form yii\bootstrap\ActiveForm */
-/** @var $catalog app\models\Menu  */
+/** @var $catalog app\models\Good\Menu  */
 
 $this->title = Yii::$app->name;
 $this->params['sidebarLayout'] = true;

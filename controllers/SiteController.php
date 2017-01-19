@@ -2,20 +2,20 @@
 
 namespace app\controllers;
 
-use app\models\Menu;
+use app\models\Good\Menu;
 use Yii;
 use yii\filters\AccessControl;
 use yii\web\Controller;
 use yii\filters\VerbFilter;
-use app\models\LoginForm;
+use app\models\Profile\LoginForm;
 use app\models\ContactForm;
-use app\models\RegForm;
-use app\models\ResetPasswordForm;
+use app\models\Profile\RegForm;
+use app\models\Profile\ResetPasswordForm;
 use app\models\User;
 use yii\base\InvalidParamException;
 use yii\web\BadRequestHttpException;
 use yii\helpers\Url;
-use app\models\AccountActivation;
+use app\models\Profile\AccountActivation;
 use yii\web\NotFoundHttpException;
 
 class SiteController extends Controller

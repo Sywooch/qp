@@ -5,7 +5,7 @@ use yii\base\Model;
 use yii\web\UploadedFile;
 use SimpleXMLElement;
 use ZipArchive;
-use app\models\Menu;
+use app\models\Good\Menu;
 use app\models\GoodProperty;
 use app\models\PropertyDictionary;
 use Yii;
