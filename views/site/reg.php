@@ -1,5 +1,5 @@
 <?php
-/* @var $model app\models\RegForm */
+/* @var $model app\models\Profile\RegForm */
 
 use yii\helpers\Html;
 use yii\bootstrap\ActiveForm;
@@ -58,29 +58,8 @@ $this->params['breadcrumbs'][] = $this->title;
 
             <!-- .social-auth-links -->
             <div class="social-auth-links text-center">
-                <p>- или зарегистрироваться с помощью -</p>
-                <ul class="social-list">
-                    <li>
-                        <a href="#" class="btn btn-block btn-social btn-vk btn-flat">
-                            <i class="fa fa-vk"></i>
-                        </a>
-                    </li>
-                    <li>
-                        <a href="#" class="btn btn-block btn-social btn-ok btn-flat">
-                            <i class="fa fa-odnoklassniki"></i>
-                        </a>
-                    </li>
-                    <li>
-                        <a href="#" class="btn btn-block btn-social btn-facebook btn-flat">
-                            <i class="fa fa-facebook"></i>
-                        </a>
-                    </li>
-                    <li>
-                        <a href="#" class="btn btn-block btn-social btn-google-plus btn-flat">
-                            <i class="fa fa-google-plus"></i>
-                        </a>
-                    </li>
-                </ul>
+                <p>- или войти с помощью -</p>
+                <?php echo \nodge\eauth\Widget::widget(['action' => 'site/login']); ?>
             </div>
             <!-- /.social-auth-links -->
             </div>

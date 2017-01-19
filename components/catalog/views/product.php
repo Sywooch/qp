@@ -9,9 +9,9 @@ $url = ['catalog/view', 'id' => 1];
 <div class='col-md-4 col-sm-6 col-xs-12'>
     <div class="product card">
         <div class="thumbnail">
-            <div class="image">
+            <figure>
                 <?=Html::a($img, $url)?>
-            </div>
+            </figure>
         </div>
         <div class="caption">
             <div class="product-title">
