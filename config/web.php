@@ -76,6 +76,7 @@ $config = [
                 '<module:backend><controller:default><action:(login|index)>'=>'<module>/default/<action>',
                 '<controller:profile>/<action:edit>/phone'=>'profile/phone',
                 '<controller:profile>/<action:edit>/password'=>'profile/password',
+                '<controller:profile>/<action:confirm>/phone'=>'profile/confirm-phone',
                 '<controller:catalog>/<action:[\wd-]+>/<id:\d+>' => '<controller>/<action>',
             ],
         ],

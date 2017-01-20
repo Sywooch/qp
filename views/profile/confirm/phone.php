@@ -1,5 +1,5 @@
 <?php
-
+/* @var $model app\models\Profile\ValidatePhoneForm */
 use yii\helpers\Html;
 use yii\widgets\ActiveForm;
 

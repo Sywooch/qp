@@ -9,7 +9,6 @@
 namespace app\models\Profile;
 use app\models\User;
 use yii\base\Model;
-use app\models\User;
 use Yii;
 
 class RegForm extends Model
