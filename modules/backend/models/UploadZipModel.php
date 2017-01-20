@@ -6,8 +6,9 @@ use yii\web\UploadedFile;
 use SimpleXMLElement;
 use ZipArchive;
 use app\models\Good\Menu;
-use app\models\GoodProperty;
-use app\models\PropertyDictionary;
+use app\models\Good\GoodProperty;
+use app\models\Good\PropertyDictionary;
+use app\models\Good\Good;
 use Yii;
 
 class UploadZipModel extends Model
@@ -117,7 +118,7 @@ class UploadZipModel extends Model
                             if (!$dict_model->validate() || !$dict_model->save()) {
                                 Yii::$app->session->addFlash('error',
                                     "Ошибка при добавлении значения <i>$dict_model->value</i> в справочник. " .
-                                    implode(', ', $modelc->getFirstErrors()));
+                                    implode(', ', $dict_model->getFirstErrors()));
                             }
                         }
                     }
@@ -126,10 +127,87 @@ class UploadZipModel extends Model
         }
     }
 
+    public function goodHandler($xml) {
+        foreach($xml->Каталог->Товары->Товар as $good_xml) {
+            $good_c1id = (string) $good_xml->Ид;
+            $good_model = Good::findOne([ 'c1id' => $good_c1id ]);
+
+            if (static::str2bool($good_xml->ПометкаУдаления)) {
+                if ($good_model && !$good_model->delete()) {
+                    Yii::$app->session->addFlash('error',
+                        "Ошибка при удалении товара <i>$good_model->name</i>");
+                };
+            }
+            else {
+                if ($good_model && !$good_model->delete()) {
+                    Yii::$app->session->addFlash('error',
+                        "Ошибка при редактироваании товара <i>$good_model->name</i>");
+                    continue;
+                }
+                if (!$category = Menu::findByC1id($good_xml->Группы->Ид)) {
+                    Yii::$app->session->addFlash('error',
+                        "Неизвестная категория товаров с ГУИД <i>$good_xml->Группы->Ид</i>");
+                    continue;
+                }
+
+                $props = [];
+                foreach ($good_xml->ЗначенияСвойств->ЗначенияСвойства as $prop_val_xml) {
+                    if (!$prop = GoodProperty::findOne([ 'c1id' => (string) $prop_val_xml->Ид ])) {
+                        Yii::$app->session->addFlash('error',
+                            "Неизвестное свойство товара с ГУИД <i>$prop_val_xml->Ид</i>");
+                        continue;
+                    }
+                    $val = $prop->valueToString((string) $prop_val_xml->Значение);
+                    if (isset($val)) {
+                        $props[$prop->name] = $val;
+                    }
+                }
+                $good_model = new Good([
+                    'c1id' => $good_c1id,
+                    'name' => (string) $good_xml->Наименование,
+                    'measure' => (int) $good_xml->БазоваяЕдиница,
+
+                    // I made this gavno because i can't copy dir with copy()
+                    // and ZipArchive::extractTo extract with full path inside archive
+
+                    'pic' => 'webdata/000000001/goods/1/' . (string) $good_xml->Картинка,
+                    'category_id' => $category->id,
+                    'properties' => serialize($props),
+                ]);
+
+                if (!$good_model->validate() || !$good_model->save()) {
+                    Yii::$app->session->addFlash('error',
+                        "Ошибка при добавлении товара <i>$good_model->name</i>. " .
+                        implode(', ', $good_model->getFirstErrors()));
+                    continue;
+                }
+            }
+        }
+    }
+
+    public function priceHandler($xml) {
+        foreach($xml->ПакетПредложений->Предложения->Предложение as $price_xml) {
+            $good_c1id = (string) $price_xml->Ид;
+            if ($good_model = Good::findOne([ 'c1id' => $good_c1id ])) {
+                    // Change ЦенаЗаЕдиницу for another measure type
+                $good_model->price = (int) $price_xml->ЦенаЗаЕдиницу;
+                if (!$good_model->validate() || !$good_model->save()) {
+                    Yii::$app->session->addFlash('error',
+                        "Ошибка при добавлении цены товара <i>$good_model->name</i>. " .
+                        implode(', ', $good_model->getFirstErrors()));
+                };
+            }
+            else {
+                Yii::$app->session->addFlash('error',
+                    "Неизвествный товар с ГУИД <i>$good_c1id</i>.");
+                continue;
+            }
+        }
+    }
+
+
     public function upload()
     {
-        //Menu::findById(77)->appendTo(Menu::getRoot());
-        //exit;
         if ($this->validate()) {
             $file_name = '../temp/' . date('d-m-Y_H-i-s', time()) . '.' . $this->zipFile->extension;
             $this->zipFile->saveAs($file_name);
@@ -141,29 +219,43 @@ class UploadZipModel extends Model
             $zip = new ZipArchive;
             $zip->open($file_name);
 
-            $files = [];
             $file_pref = [
                 'catalog' => 'webdata/000000001/import__',
                 'property' => 'webdata/000000001/properties/1/import__',
                 'good' => 'webdata/000000001/goods/1/import__',
                 'price' => 'webdata/000000001/goods/1/prices__',
-//                'image' => 'webdata/000000001/goods/import_files/',
             ];
-            $n = $zip->numFiles;
+            $zip_img_dir = 'webdata/000000001/goods/1/import_files/';
+            $server_img_dir = 'img/catalog/good/';
 
-            foreach ($file_pref as $file => $pref)  {
+            $n = $zip->numFiles;
+            for ($i = 0; $i < $n; $i++){
+                $fname = $zip->getNameIndex($i);
+                if (strpos($fname, $zip_img_dir) === 0 && pathinfo($fname, PATHINFO_EXTENSION)) {
+
+                    if ($zip->extractTo($server_img_dir, $fname) !== true) {
+                        Yii::$app->session->addFlash('error',
+                            "Не удалось извлечь изображение <i>$fname</i>.");
+                    }
+                }
+            }
+
+            $files = [];
+            foreach ($file_pref as $name => $pref)  {
                 for ($i = 0; $i < $n; $i++){
-                    if (strpos($zip->getNameIndex($i), $pref) === 0) {
-                        $files[$file] = $zip->getFromIndex($i);
+                    $fname = $zip->getNameIndex($i);
+                    if (strpos($fname, $pref) === 0) {
+                        $files[$name] = $zip->getFromIndex($i);
                     }
                 }
             }
 
             $this->catalogHandler(new SimpleXMLElement($files['catalog']));
             $this->propertyHandler(new SimpleXMLElement($files['property']));
+            $this->goodHandler(new SimpleXMLElement($files['good']));
+            $this->priceHandler(new SimpleXMLElement($files['price']));
+
             $zip->close();
-
-
         } else {
             return false;
         }

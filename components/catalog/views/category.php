@@ -1,5 +1,5 @@
 <?php
-/* @var $item app\models\Menu */
+/* @var $item app\models\Good\Menu */
 use yii\helpers\Html;
 
 $img = Html::img(['@web/img/catalog/category/1.png'],

@@ -9,6 +9,7 @@ use Yii;
  *
  * @property integer $id
  * @property string $c1id
+ * @property string $value
  * @property integer $property_id
  */
 class PropertyDictionary extends \yii\db\ActiveRecord

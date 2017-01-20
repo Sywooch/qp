@@ -33,7 +33,6 @@ class m170115_163619_create_property_dictionary_table extends Migration
             'id',
             'CASCADE'
         );
-        $this->execute('dump.sql');
     }
 
     /**

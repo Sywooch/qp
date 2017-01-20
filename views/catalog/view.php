@@ -4,6 +4,7 @@
 use yii\helpers\Url;
 use app\components\catalog\CategoryWidget;
 use app\components\catalog\ProductWidget;
+use app\models\Good\Good;
 
 $this->title = $catalog->name;
 $this->params['sidebarLayout'] = true;
@@ -25,9 +26,9 @@ $this->params['breadcrumbs'][] = $this->title;
         }
     }
     else {
-        for ($i = 0; $i < 10; $i++) {
-            // CHANGE TO PRODUCT OBJ
-            echo ProductWidget::widget([ 'product' => $catalog ]);
+        $products = Good::findAll([ 'category_id' => $catalog->id ]);
+        foreach ($products as $product) {
+            echo ProductWidget::widget([ 'product' => $product ]);
         }
     }
     ?>

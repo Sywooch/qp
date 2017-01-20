@@ -69,4 +69,22 @@ class GoodProperty extends \yii\db\ActiveRecord
             'type' => 'Type',
         ];
     }
+
+    public function valueToString($value) {
+        if (!$value) {
+            return null;
+        }
+
+        if ($this->type == self::DICTIONARY_TYPE) {             // ADD code for rest cases
+            if ($dict = PropertyDictionary::findOne(['c1id' => $value])) {
+                return $dict->value;
+            }
+            else {
+                Yii::$app->session->addFlash('error',
+                    "Неизвестное значение свойства товара <i>$this->name</i> 
+                        с ГУИД <i>$value</i>");
+            }
+        }
+        return $value;
+    }
 }
