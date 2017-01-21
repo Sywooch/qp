@@ -190,7 +190,8 @@ class UploadZipModel extends Model
             $good_c1id = (string) $price_xml->Ид;
             if ($good_model = Good::findOne([ 'c1id' => $good_c1id ])) {
                     // Change ЦенаЗаЕдиницу for another measure type
-                $good_model->price = (int) $price_xml->ЦенаЗаЕдиницу;
+                    // Also decide issue with currency
+                $good_model->price = (int) $price_xml->Цены->Цена->ЦенаЗаЕдиницу;
                 if (!$good_model->validate() || !$good_model->save()) {
                     Yii::$app->session->addFlash('error',
                         "Ошибка при добавлении цены товара <i>$good_model->name</i>. " .
