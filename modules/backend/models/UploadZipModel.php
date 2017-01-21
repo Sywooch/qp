@@ -139,11 +139,6 @@ class UploadZipModel extends Model
                 };
             }
             else {
-                if ($good_model && !$good_model->delete()) {
-                    Yii::$app->session->addFlash('error',
-                        "Ошибка при редактироваании товара <i>$good_model->name</i>");
-                    continue;
-                }
                 if (!$category = Menu::findByC1id($good_xml->Группы->Ид)) {
                     Yii::$app->session->addFlash('error',
                         "Неизвестная категория товаров с ГУИД <i>$good_xml->Группы->Ид</i>");
@@ -162,7 +157,11 @@ class UploadZipModel extends Model
                         $props[$prop->name] = $val;
                     }
                 }
-                $good_model = new Good([
+
+                if (!$good_model) {
+                    $good_model = new Good();
+                }
+                $good_model->setAttributes([
                     'c1id' => $good_c1id,
                     'name' => (string) $good_xml->Наименование,
                     'measure' => (int) $good_xml->БазоваяЕдиница,
@@ -179,7 +178,6 @@ class UploadZipModel extends Model
                     Yii::$app->session->addFlash('error',
                         "Ошибка при добавлении товара <i>$good_model->name</i>. " .
                         implode(', ', $good_model->getFirstErrors()));
-                    continue;
                 }
             }
         }
@@ -201,7 +199,6 @@ class UploadZipModel extends Model
             else {
                 Yii::$app->session->addFlash('error',
                     "Неизвествный товар с ГУИД <i>$good_c1id</i>.");
-                continue;
             }
         }
     }
