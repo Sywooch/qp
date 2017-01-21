@@ -47,23 +47,6 @@ class Good extends \yii\db\ActiveRecord
     }
 
     /**
-     * @inheritdoc
-     */
-    public function attributeLabels()
-    {
-        return [
-            'id' => 'ID',
-            'measure' => 'Measure',
-            'c1id' => 'C1id',
-            'name' => 'Name',
-            'pic' => 'Pic',
-            'price' => 'Price',
-            'category_id' => 'Category ID',
-            'properties' => 'Properties',
-        ];
-    }
-
-    /**
      * @return \yii\db\ActiveQuery
      */
     public function getCategory()

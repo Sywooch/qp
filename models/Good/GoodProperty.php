@@ -45,7 +45,6 @@ class GoodProperty extends \yii\db\ActiveRecord
     /**
      * @inheritdoc
      */
-
     public function rules()
     {
         return [
@@ -54,19 +53,6 @@ class GoodProperty extends \yii\db\ActiveRecord
             ['type', 'in', 'range' => array_values(static::$__type_enum)],
             [['c1id', 'name'], 'string', 'max' => 255],
             [['c1id'], 'unique'],
-        ];
-    }
-
-    /**
-     * @inheritdoc
-     */
-    public function attributeLabels()
-    {
-        return [
-            'id' => 'ID',
-            'c1id' => 'C1id',
-            'name' => 'Name',
-            'type' => 'Type',
         ];
     }
 
