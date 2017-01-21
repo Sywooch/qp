@@ -21,7 +21,7 @@ use Yii;
 class Good extends \yii\db\ActiveRecord
 {
     const ITEM_MEASURE = 796;
-    const KG_MEASURE = NULL;
+    //  const KG_MEASURE = 42;
     /**
      * @inheritdoc
      */
@@ -40,6 +40,8 @@ class Good extends \yii\db\ActiveRecord
             [['properties'], 'string'],
             [['c1id', 'name', 'pic'], 'string', 'max' => 255],
             [['c1id'], 'unique'],
+            ['measure', 'in', 'range' => [ self::ITEM_MEASURE ],
+                'message' => 'Неизвестный тип единиц измерения.'],
             [['category_id'], 'exist', 'skipOnError' => true, 'targetClass' => Menu::className(), 'targetAttribute' => ['category_id' => 'id']],
         ];
     }
