@@ -22,7 +22,7 @@ class m170119_065126_create_good_table extends Migration
             'price' => $this->integer(),
             'category_id' => $this->integer(),
             'properties' => $this->binary()
-        ]);
+        ], 'ENGINE InnoDB');
 
         $this->createIndex('idx-' . self::TABLE_NAME . '-category_id',
             self::TABLE_NAME, 'category_id');
@@ -37,7 +37,7 @@ class m170119_065126_create_good_table extends Migration
      */
     public function safeDown()
     {
-        $this->dropForeignKey('fk-good-category_id', self::TABLE_NAME);
+        $this->dropForeignKey('fk-' . self::TABLE_NAME . '-category_id', self::TABLE_NAME);
         $this->dropIndex('idx-' . self::TABLE_NAME . '-category_id',
             self::TABLE_NAME);
         $this->dropTable(self::TABLE_NAME);

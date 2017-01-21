@@ -2,6 +2,7 @@
 
 namespace app\models\Profile;
 use yii\base\Model;
+
 use Yii;
 
 class ResetPasswordForm extends Model

@@ -17,7 +17,7 @@ class m170115_144103_create_good_property_table extends Migration
             'c1id' => $this->string()->unique(),
             'name' => $this->string()->notNull(),
             'type' => $this->smallInteger()->notNull(),
-        ]);
+        ], 'ENGINE InnoDB');
     }
 
     /**

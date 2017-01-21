@@ -19,7 +19,7 @@ class m170110_040804_create_menu_table extends Migration
             'rgt' => $this->integer()->notNull(),
             'depth' => $this->integer()->notNull(),
             'name' => $this->string()->notNull(),
-        ]);
+        ], 'ENGINE InnoDB');
     }
 
     /**

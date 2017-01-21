@@ -17,7 +17,7 @@ class m170115_163619_create_property_dictionary_table extends Migration
             'c1id' => $this->string()->unique(),
             'property_id' => $this->integer(),
             'value' => $this->string()->notNull(),
-        ]);
+        ], 'ENGINE InnoDB');
         $this->createIndex('idx-property_dictionary-c1id',
             'property_dictionary',
             'c1id'
