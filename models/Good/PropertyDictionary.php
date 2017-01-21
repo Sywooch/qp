@@ -35,16 +35,4 @@ class PropertyDictionary extends \yii\db\ActiveRecord
         ];
     }
 
-    /**
-     * @inheritdoc
-     */
-    public function attributeLabels()
-    {
-        return [
-            'id' => 'ID',
-            'c1id' => 'C1id',
-            'property_id' => 'Property ID',
-            'value' => 'Value',
-        ];
-    }
 }
