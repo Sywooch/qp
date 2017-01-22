@@ -25,6 +25,14 @@ class Good extends \yii\db\ActiveRecord
     /**
      * @inheritdoc
      */
+    static $MEASURE_TO_STRING = [
+        self::ITEM_MEASURE => 'Штука',
+    ];
+
+    public function getMeasureString() {
+        return self::$MEASURE_TO_STRING[$this->measure];
+    }
+
     public static function tableName()
     {
         return 'good';
@@ -47,8 +55,21 @@ class Good extends \yii\db\ActiveRecord
     }
 
     /**
-     * @return \yii\db\ActiveQuery
+     * @inheritdoc
      */
+    public function attributeLabels()
+    {
+        return [
+            'id' => 'ID',
+            'measure' => 'Единица измерения',
+            'c1id' => 'ГУИД 1С',
+            'name' => 'Название',
+            'pic' => 'Файл изображения',
+            'price' => 'Цена',
+            'category_id' => 'ID категории',
+            'properties' => 'Свойства',
+        ];
+    }
     public function getCategory()
     {
         return $this->hasOne(Menu::className(), ['id' => 'category_id']);
