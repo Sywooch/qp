@@ -37,27 +37,9 @@ class MenuController extends Controller
             $menu->appendTo($par);
             return $this->redirect(['view', 'id' => $par->id]);
         }
-
-        return $this->render('view', [
-            'model' => Menu::findById($id),
-            'menu' => $menu,
-        ]);
-    }
-
-    public function actionCreate($par_id)
-    {
-        $model = new Menu;
-        $par = Menu::findById($par_id);
-
-        if ($model->load(Yii::$app->request->post())) {
-            $model->appendTo($par);
-            return $this->redirect(['view', 'id' => $par->id]);
-        } else {
-            return $this->render('create', [
-                'model' => $model,
-                'parent' => $par,
-            ]);
-        }
+        return $par->children(1)->all() ?
+            $this->render('view', [ 'model' => $par, 'menu' => $menu,]) :
+            $this->redirect([ '/backend/good', 'category_id' => $id ]);
     }
 
     public function actionDelete($id)
