@@ -3,6 +3,7 @@
 namespace app\models\Good;
 
 use Yii;
+use yii\web\NotFoundHttpException;
 
 /**
  * This is the model class for table "good".
@@ -70,8 +71,18 @@ class Good extends \yii\db\ActiveRecord
             'properties' => 'Свойства',
         ];
     }
+
     public function getCategory()
     {
         return $this->hasOne(Menu::className(), ['id' => 'category_id']);
     }
+
+    public static function findByIdOr404($id) {
+        if (($model = self::findOne($id)) !== null) {
+            return $model;
+        } else {
+            throw new NotFoundHttpException('Нет такого товара в каталоге.');
+        }
+    }
+
 }

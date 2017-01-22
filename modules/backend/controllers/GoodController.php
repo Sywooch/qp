@@ -6,7 +6,6 @@ use Yii;
 use app\models\Good\Good;
 use yii\data\ActiveDataProvider;
 use yii\web\Controller;
-use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
 
 /**
@@ -52,7 +51,7 @@ class GoodController extends Controller
     public function actionView($id)
     {
         return $this->render('view', [
-            'model' => $this->findModel($id),
+            'model' => Good::findByIdOr404($id),
         ]);
     }
 
@@ -82,7 +81,7 @@ class GoodController extends Controller
      */
     public function actionUpdate($id)
     {
-        $model = $this->findModel($id);
+        $model = Good::findByIdOr404($id);
 
         if ($model->load(Yii::$app->request->post()) && $model->save()) {
             return $this->redirect(['view', 'id' => $model->id]);
@@ -102,24 +101,8 @@ class GoodController extends Controller
      */
     public function actionDelete($id)
     {
-        $this->findModel($id)->delete();
+        Good::findByIdOr404($id)->delete();
 
         return $this->redirect(['index']);
-    }
-
-    /**
-     * Finds the Good model based on its primary key value.
-     * If the model is not found, a 404 HTTP exception will be thrown.
-     * @param integer $id
-     * @return Good the loaded model
-     * @throws NotFoundHttpException if the model cannot be found
-     */
-    protected function findModel($id)
-    {
-        if (($model = Good::findOne($id)) !== null) {
-            return $model;
-        } else {
-            throw new NotFoundHttpException('The requested page does not exist.');
-        }
     }
 }

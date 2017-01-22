@@ -4,7 +4,7 @@ namespace app\models\Good;
 
 use Yii;
 use creocoder\nestedsets\NestedSetsBehavior;
-use yii\base\InvalidParamException;
+use yii\web\NotFoundHttpException;
 
 /**
  * This is the model class for table "menu".
@@ -59,11 +59,11 @@ class Menu extends \yii\db\ActiveRecord
         return new MenuQuery(get_called_class());
     }
 
-    public static function findById($id) {
+    public static function findByIdOr404($id) {
         if (($model = self::findOne($id)) !== null) {
             return $model;
         } else {
-            throw new InvalidParamException('Нет такого раздела в каталоге.');
+            throw new NotFoundHttpException('Нет такой категории в каталоге.');
         }
     }
 

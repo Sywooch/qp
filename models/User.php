@@ -10,6 +10,7 @@ use yii\db\ActiveRecord;
 use yii\web\IdentityInterface;
 use \nodge\eauth\ErrorException;
 use yii\helpers\Html;
+use yii\web\NotFoundHttpException;
 
 /**
  * User model
@@ -285,4 +286,13 @@ class User extends ActiveRecord implements IdentityInterface
     {
         $this->password_reset_token = null;
     }
+
+    public static function findByIdOr404($id) {
+        if (($model = self::findOne($id)) !== null) {
+            return $model;
+        } else {
+            throw new NotFoundHttpException('Пользователя с таким id не существует.');
+        }
+    }
+
 }
