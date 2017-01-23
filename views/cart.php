@@ -17,22 +17,25 @@ $this->params['breadcrumbs'][] = $this->title;
         'dataProvider' => $dataProvider,
         'columns' => [
             ['class' => 'yii\grid\SerialColumn'],
-
-            'measure',
+            [
+                'format' => 'html',
+                'value' => function ($product) {
+                    /* @var $product app\models\Good\Good */
+                    return  Html::img([ $product->getImgPath() ],
+                        [ 'height'=>100, 'width'=>100, 'class'=>'img-responsive' ]
+                    );
+                }
+            ],
             'name',
-            'pic',
-
-            ['attribute' => 'Количество', 'value' => function ($model) {
-                /* @var $model app\models\Good\Good */
-                return  $model->getQuantity();
+            ['attribute' => 'Количество', 'value' => function ($product) {
+                /* @var $product app\models\Good\Good */
+                return  $product->getQuantity();
             }],
-            ['attribute' => 'Сумма', 'value' => function ($model) {
+            'price',
+            ['attribute' => 'Сумма', 'value' => function ($product) {
                 /* @var $model app\models\Good\Good */
-                return  $model->getQuantity() * $model->getPrice();
+                return  $product->getQuantity() * $product->getPrice();
             }],
-            // 'price',
-            // 'category_id',
-            // 'properties',
 
             [
                 'class' => 'yii\grid\ActionColumn',

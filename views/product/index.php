@@ -5,9 +5,15 @@ use yii\widgets\ListView;
 
 /* @var $this yii\web\View */
 /* @var $dataProvider yii\data\ActiveDataProvider */
+/* @var $catalog app\models\Good\Menu */
 
-$this->title = 'Goods';
-$this->params['breadcrumbs'][] = $this->title;
+$this->title = $catalog->name;
+foreach($catalog->parents()->all() as $par) {
+    $this->params['breadcrumbs'][] =  [
+        'label' => $par->name,
+        'url' => Url::to(['/catalog/view', 'id' => $par->id])
+    ];
+}
 ?>
 <div class="good-index">
 
