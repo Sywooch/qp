@@ -4,7 +4,7 @@ namespace app\modules\backend\controllers;
 
 use Yii;
 use yii\web\Controller;
-use app\models\LoginForm;
+use app\models\Profile\LoginForm;
 /**
  * Default controller for the `admin` module
  */
