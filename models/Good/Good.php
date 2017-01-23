@@ -91,6 +91,11 @@ class Good extends \yii\db\ActiveRecord implements CartPositionInterface
         return $this->hasOne(Menu::className(), ['id' => 'category_id']);
     }
 
+    public function getImgPath()
+    {
+        return '@web/img/catalog/good/' . $this->pic;
+    }
+
     public static function findByIdOr404($id) {
         if (($model = self::findOne($id)) !== null) {
             return $model;

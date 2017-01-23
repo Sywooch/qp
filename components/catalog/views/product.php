@@ -2,7 +2,7 @@
 /** @var $product app\models\Good\Good */
 
 use yii\helpers\Html;
-$img = Html::img(['@web/img/catalog/good/' . $product->pic ],
+$img = Html::img([ $product->getImgPath() ],
     ['height'=>204, 'width'=>270, 'class'=>'img-responsive']);
 
 $url = ['product/view', 'id' => $product->id];
