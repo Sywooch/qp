@@ -3,6 +3,7 @@
 namespace app\components;
 
 use yii\base\Component;
+use Yii;
 use yii\helpers\Html;
 
 class ShoppingComponent extends Component
@@ -21,8 +22,8 @@ class ShoppingComponent extends Component
 
     public function set()
     {
-        $this->price = 0;
-        $this->countProduct = 0;
+        $this->price = Yii::$app->cart->getCost();
+        $this->countProduct = Yii::$app->cart->getCount();
         if($this->countProduct < 1) {
             $this->result = '<span>Корзина</span>';
         } else {
@@ -35,7 +36,7 @@ class ShoppingComponent extends Component
                     </span>';
         }
         $this->content = '
-            <a href="javascript:void(0)">
+            <a href="/cart">
                 <i class="fa fa-shopping-cart" aria-hidden="true"></i> '. $this->result
             . '</a>';
     }

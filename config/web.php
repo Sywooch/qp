@@ -20,6 +20,10 @@ $config = [
                 ],
             ],
         ],
+        'cart' => [
+            'class' => 'yz\shoppingcart\ShoppingCart',
+            'cartId' => 'my_application_cart',
+        ],
         'shopping' => [
             'class' => 'app\components\ShoppingComponent',
         ],

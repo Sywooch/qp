@@ -5,7 +5,7 @@ use yii\helpers\Html;
 $img = Html::img(['@web/img/catalog/good/' . $product->pic ],
     ['height'=>204, 'width'=>270, 'class'=>'img-responsive']);
 
-$url = ['catalog/view', 'id' => 1];         // change to good view
+$url = ['product/view', 'id' => $product->id];
 ?>
 <div class='col-md-4 col-sm-6 col-xs-12'>
     <div class="product card">
@@ -25,7 +25,8 @@ $url = ['catalog/view', 'id' => 1];         // change to good view
                     <label class="product-price">
                         <?= $product->price ?>
                     </label>
-                    <input type="number" min="1" value="1">
+                    <input type="number" min="1" value="1" name="product_count">
+                    <input type="hidden" name="product_id" value=<?= $product->id ?>>
                 </div>
                 <button class="btn btn-icon btn-icon-left btn-success">
                     <i class="fa fa-shopping-cart" aria-hidden="true"></i>

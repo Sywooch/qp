@@ -2,8 +2,9 @@
 
 namespace app\models\Good;
 
-use Yii;
 use yii\web\NotFoundHttpException;
+use yz\shoppingcart\CartPositionInterface;
+use yz\shoppingcart\CartPositionTrait;
 
 /**
  * This is the model class for table "good".
@@ -19,8 +20,21 @@ use yii\web\NotFoundHttpException;
  *
  * @property Menu $category
  */
-class Good extends \yii\db\ActiveRecord
+class Good extends \yii\db\ActiveRecord implements CartPositionInterface
 {
+
+    use CartPositionTrait;
+
+    public function getPrice()
+    {
+        return $this->price;
+    }
+
+    public function getId()
+    {
+        return $this->id;
+    }
+
     const ITEM_MEASURE = 796;
     //  const KG_MEASURE = 42;
     /**
