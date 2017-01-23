@@ -10,7 +10,7 @@ use yii\bootstrap\NavBar;
     <div class="header__inner">
         <div class="container">
             <div class="row">
-                <div class="col-md-3">
+                <div class="col-md-3 col-xs-6 col-xs-offset-3 col-md-offset-0">
                     <div class="row">
                         <div class="col-xs-12 header__logo">
                             <a class="navbar-brand" href="/">Купи</a>
@@ -18,23 +18,32 @@ use yii\bootstrap\NavBar;
                         <div class="col-xs-12 header__slogan">
                             Интернет-супермаркет
                         </div>
+
                     </div>
                 </div>
-                <div class="col-md-6">
-                    <section class="search">
-                        <form action="/" method="GET" class="form form-search">
+                <div class="col-xs-3 visible-xs visible-sm mobile-nav-controls">
+                    <button class="btn search-visible">
+                        <i class="fa fa-search"></i>
+                    </button>
+                </div>
+                <div class="col-md-6 col-xs-12">
+                    <section class="search row">
+                        <form action="/" method="GET" class="form form-search col-xs-9 col-md-12">
                             <div class="input-group">
-                                <span class="input-group-addon">
-                                    <button class="search__btn">
-                                        <i class="fa fa-search" aria-hidden="true"></i><span class="sr-only">Search icons</span>
-                                    </button>
-                                </span>
+                            <span class="input-group-addon">
+                                <button class="search__btn">
+                                    <i class="fa fa-search" aria-hidden="true"></i><span class="sr-only">Search icons</span>
+                                </button>
+                            </span>
                                 <input id="search-input" class="form-control input-lg" placeholder="Поиск среди более 10 000 товаров" autocomplete="off" spellcheck="false" autocorrect="off" tabindex="1">
                             </div>
                         </form>
+                        <div class="col-xs-2 search__cancel visible-xs visible-sm">
+                            <button class=" btn search-hidden">Отмена</button>
+                        </div>
                     </section>
                 </div>
-                <div class="col-md-3">
+                <div class="col-md-3 hidden-xs hidden-sm">
                     <div class="header__phone">
                         8 (800) 123-12-12
                     </div>
@@ -57,7 +66,9 @@ use yii\bootstrap\NavBar;
             ['label' => 'Контакты', 'url' => ['/site/contact']],
         ],
     ]);
+    ?>
 
+    <?php
     echo Nav::widget([
         'options' => ['class' => 'navbar-nav nav header__personal'],
         'items' => [
@@ -69,3 +80,5 @@ use yii\bootstrap\NavBar;
     NavBar::end();
     ?>
 </header>
+
+<div class="modal-search"></div>
