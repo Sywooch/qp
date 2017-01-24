@@ -4,16 +4,13 @@
   &-title {
     height: 2em;
   }
-  figure {
+  .thumbnail {
     height: 140px;
-    width: 135px;
     @media (max-width: $screen-sm) {
       height: 90px;
-      width: 90px;
     }
     @media (max-width: $screen-md) {
       height: 120px;
-      width: 115px;
     }
   }
 }
@@ -25,6 +22,15 @@
   margin-bottom: 10px;
   border-radius: 4px;
   position: relative;
+  .thumbnail {
+    height: 170px;
+    @media (max-width: $screen-sm) {
+      height: 109px;
+    }
+    @media (max-width: $screen-md) {
+      height: 141px;
+    }
+  }
   a {
     color: $colorblack;
     font-size: 1.6rem;
@@ -76,13 +82,7 @@
       height: 100%;
       width: auto;
     }
-    height: 170px;
-    @media (max-width: $screen-sm) {
-      height: 109px;
-    }
-    @media (max-width: $screen-md) {
-      height: 141px;
-    }
+
   }
   .caption {
     padding: 9px 0;
