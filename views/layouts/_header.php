@@ -3,7 +3,22 @@
 use app\components\LoginWidget;
 use yii\bootstrap\Nav;
 use yii\bootstrap\NavBar;
-
+$this->registerJs('
+$(".btn-compare").click(function () {
+            $.ajax({
+                url: "'.\yii\helpers\Url::toRoute(['catalog/add']).'",
+                dataType: "html",
+                type: "POST",
+                data: "product-id="+this.getAttribute(\'data-product-id\')+"&product-count="+this.getAttribute(\'data-product-count\'),
+                success: function(data){
+                    $(".shopping").html(data);
+                },
+                error: function () {
+                    $("#shopping").html("ERROR");
+                }
+            });
+        });
+');
 ?>
 
 <header class="header">
@@ -73,7 +88,7 @@ use yii\bootstrap\NavBar;
         'options' => ['class' => 'navbar-nav nav header__personal'],
         'items' => [
             LoginWidget::widget(),
-            Yii::$app->shopping->render(),
+            "<li class=\"shopping\">".Yii::$app->shopping->render()."</li>",
         ],
     ]);
 

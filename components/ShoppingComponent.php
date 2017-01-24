@@ -44,6 +44,6 @@ class ShoppingComponent extends Component
     public function render()
     {
         $this->set();
-        return '<li class="shopping">' . $this->content . '</li>';
+        return $this->content;
     }
 }
