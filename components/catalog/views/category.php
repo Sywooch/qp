@@ -9,14 +9,10 @@ $url = ['catalog/view', 'id' => $item->id];
 ?>
 <div class='col-md-3 col-sm-4 col-xs-6'>
     <div class="category card">
-        <div class="thumbnail">
-            <figure>
-                <?=Html::a($img, $url)?>
-            </figure>
-            <div class="caption">
-                <div class="category-title">
-                    <?=Html::a($item->name, $url)?>
-                </div>
+        <?=Html::a($img, $url, ['class' => 'thumbnail'])?>
+        <div class="caption">
+            <div class="category-title">
+                <?=Html::a($item->name, $url)?>
             </div>
         </div>
     </div>

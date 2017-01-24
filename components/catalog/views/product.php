@@ -10,11 +10,7 @@ $url = ['product/view', 'id' => $product->id];
 ?>
 <div class='col-md-4 col-sm-6 col-xs-12'>
     <div class="product card">
-        <div class="thumbnail">
-            <figure>
-                <?=Html::a($img, $url)?>
-            </figure>
-        </div>
+        <?=Html::a($img, $url, ['class' => 'thumbnail'])?>
         <div class="caption">
             <div class="product-title">
                 <?=Html::a($product->name, $url)?>
