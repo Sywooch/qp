@@ -65,7 +65,8 @@ class Good extends \yii\db\ActiveRecord implements CartPositionInterface
             [['c1id'], 'unique'],
             ['measure', 'in', 'range' => [ self::ITEM_MEASURE ],
                 'message' => 'Неизвестный тип единиц измерения.'],
-            [['category_id'], 'exist', 'skipOnError' => true, 'targetClass' => Menu::className(), 'targetAttribute' => ['category_id' => 'id']],
+            [['category_id'], 'exist', 'skipOnError' => true, 'targetClass' => Menu::className(),
+                'targetAttribute' => ['category_id' => 'id']],
         ];
     }
 

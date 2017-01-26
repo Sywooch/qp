@@ -24,7 +24,18 @@ $this->params['breadcrumbs'][] = $this->title;
             'id',
             'name',
             'email:email',
-            'status',
+            [ 'attribute' => 'status', 'value' => function($model) {
+                /* @var $model app\models\User */
+                return $model->getStatusString();
+            } ],
+            [ 'attribute' => 'role', 'value' => function($model) {
+                /* @var $model app\models\User */
+                return $model->getRole();
+            }],
+            [ 'attribute' => 'phone', 'value' => function($model) {
+                /* @var $model app\models\User */
+                return $model->getPhone();
+            }],
             'created_at:datetime',
             'updated_at:datetime',
 

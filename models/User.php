@@ -26,18 +26,33 @@ use yii\web\NotFoundHttpException;
  * @property integer $created_at
  * @property integer $updated_at
  * @property string $password write-only password
+ * @property string $role
  */
 class User extends ActiveRecord implements IdentityInterface
 {
-    const STATUS_DELETED = 0;
+    public $role;
+
+//    const STATUS_DELETED = 0;
     const STATUS_NOT_ACTIVE = 1;
     const STATUS_ACTIVE = 10;
 
-    public static function tableName()
-    {
-        return 'user';
-    }
+    static $STATUS_TO_STRING = [
+//        self::STATUS_DELETED => 'Удалён',
+        self::STATUS_NOT_ACTIVE  => 'Не активирован',
+        self::STATUS_ACTIVE => 'Активирован',
+    ];
 
+    public function rules()
+    {
+        return [
+            [['email', 'name'], 'filter', 'filter' => 'trim'],
+            ['email', 'email'],
+            ['phone', 'string'],
+            ['status', 'default', 'value' => User::STATUS_NOT_ACTIVE],
+            ['status', 'in', 'range' => array_keys(self::$STATUS_TO_STRING)],
+            ['role', 'in', 'range' => array_keys(Yii::$app->authManager->getRoles())],
+        ];
+    }
 
     public function behaviors()
     {
@@ -46,6 +61,23 @@ class User extends ActiveRecord implements IdentityInterface
         ];
     }
 
+    public static function getRolesNames() {
+        return array_keys(\Yii::$app->authManager->getRoles());
+    }
+
+    public function getStatusString() {
+        return self::$STATUS_TO_STRING[$this->status];
+    }
+    public function getRole() {
+        if ($roles = Yii::$app->authManager->getRolesByUser($this->getId())) {
+            return array_keys($roles)[0];
+        }
+    }
+
+    public static function tableName()
+    {
+        return 'user';
+    }
     /**
      * @inheritdoc
      */
@@ -54,16 +86,28 @@ class User extends ActiveRecord implements IdentityInterface
         return [
             'id' => 'ID',
             'name' => 'Имя',
-            'auth_key' => 'Auth Key',
-            'password_hash' => 'Password Hash',
-            'password_reset_token' => 'Password Reset Token',
             'email' => 'Email',
-            'status' => 'Status',
-            'created_at' => 'Created At',
-            'updated_at' => 'Updated At',
+            'status' => 'Статус',
+            'role' => 'Роль',
+            'phone' => 'Подтвержённый телефон',
+            'created_at' => 'Создан',
+            'updated_at' => 'Изменён',
         ];
     }
 
+    public function save($runValidation = true, $attributeNames = null)
+    {
+        if ($this->role) {
+            $auth = Yii::$app->authManager;
+            if ($auth->getRolesByUser($this->getId())) {
+                $auth->revokeAll($this->getId());
+            }
+            if (!$auth->assign($auth->getRole($this->role), $this->getId())) {
+                return false;
+            }
+        }
+        return parent::save($runValidation, $attributeNames);
+    }
 
     /////////////////////////////////////////////
     // FINDERS
