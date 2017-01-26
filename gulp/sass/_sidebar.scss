@@ -9,22 +9,103 @@
   &-list {
     list-style: none;
     padding-left: 0;
+    li.has-child {
+      & > a {
+        &:before, &:after {
+          background: #b3b3b3;
+          right: 10px;
+          content: '';
+          margin-top: -1px;
+          display: inline-block;
+          height: 2px;
+          width: 10px;
+          position: absolute;
+          transform-origin: 9px 50%;
+          top: 50%;
+        }
+        &:before {
+          transform: rotate(45deg);
+        }
+        &:after {
+          transform: rotate(-45deg);
+        }
+      }
+
+      & > ul {
+        position: absolute;
+        left: 100%;
+        width: 200px;
+        list-style: none;
+        top: 0;
+        display: none;
+        background: #fff;
+        border: 1px solid #ccc;
+        padding: 0;
+        z-index: 5;
+      }
+
+    }
     li {
       text-indent: 0;
-
+      position: relative;
       a {
         color: rgb(67, 67, 69);
         width: 100%;
         display: block;
-        padding: 4px 15px;
+        padding: 5px 15px;
         &:hover {
           background-color: $colorgray;
           text-decoration: none;
+          &:before, &:after {
+            background: $cgreen;
+          }
+        }
+      }
+      &:hover {
+        & > ul {
+          display: block;
         }
       }
     }
   }
 }
+
+@media (max-width: $screen-sm-max) {
+  .categories {
+    cursor: pointer;
+    background-color: $cgreen;
+    margin-top: -20px;
+    padding-top: 10px;
+    padding-bottom: 10px;
+    .sidebar-title {
+      color: $colorwhite;
+      text-transform: none;
+      display: block;
+    }
+
+    .text-subline {
+      display: none;
+    }
+    &-list {
+      position: fixed;
+      background-color: $colorwhite;
+      width: 100%;
+      height: 100%;
+      min-width: 320px;
+      left: 0;
+      top: 101px;
+      z-index: 2;
+      li {
+        a {
+          padding: 15px;
+          border-bottom: 1px solid $colorgray;
+        }
+      }
+    }
+  }
+
+}
+
 .text-subline {
   border-bottom: 1px solid rgb(217, 217, 217);
   margin: 5px 0;
