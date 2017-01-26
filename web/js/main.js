@@ -1,8 +1,13 @@
 $(document).ready(function () {
+    /**
+     * Search panel
+     */
     var $search = $('.search'),
         $searchInput = $('#search-input'),
         $modalSearch = $('.modal-search'),
-        $navBarToggle = $('.navbar-toggle');
+        $navBarToggle = $('.navbar-toggle'),
+        $productCount = $('.product_count'),
+        $transform = $('.transform');
 
     function showModalSearch() {
         $search.addClass('visible');
@@ -23,14 +28,27 @@ $(document).ready(function () {
         $('.search-hidden').on('click', function () {
             hideModalSearch();
         });
+        $transform.on('click', function () {
+
+            if($(this).hasClass('shown')){
+                $(this).removeClass('shown');
+            } else {
+                $(this).addClass('shown');
+            }
+
+        });
         $modalSearch.on('click', function () {
             hideModalSearch();
         });
+        $productCount.on('change', function () {
+            $console.log(('btn-compare').data('productId'));
+        })
     }
 
     function init() {
         event();
     }
     init();
-
+    
+    
 });

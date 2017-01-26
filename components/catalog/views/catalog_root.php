@@ -6,9 +6,9 @@ $depth = 1;
 ?>
 <aside class="sidebar">
     <div class="row">
-        <div class="col-md-12 categories"><span class="sidebar-title">Каталог</span>
+        <div class="col-md-12 categories transform transform-top"><span class="sidebar-title">Каталог</span>
             <div class="text-subline"></div>
-            <ul class="categories-list">
+            <ul class="categories-list transform-body">
                 <?php
                 /** @var $item app\models\Good\Menu  */
                 $items = [];
@@ -27,7 +27,7 @@ $depth = 1;
                     }
                     if($next->depth > $cur->depth) {
                         echo Html::beginTag('li', ['class' => 'has-child']) . "\n";
-                        echo Html::a($cur->name. " (".$cur->depth . ")", ['catalog/view', 'id' => $cur->id]);
+                        echo Html::a($cur->name, ['catalog/view', 'id' => $cur->id]);
                         echo Html::beginTag('ul') . "\n";
 
                     } else {
