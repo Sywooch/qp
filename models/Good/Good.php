@@ -81,7 +81,7 @@ class Good extends \yii\db\ActiveRecord implements CartPositionInterface
             'c1id' => 'ГУИД 1С',
             'name' => 'Название',
             'pic' => 'Файл изображения',
-            'price' => 'Цена',
+            'price' => 'Цена в копейках',
             'category_id' => 'ID категории',
             'properties' => 'Свойства',
         ];

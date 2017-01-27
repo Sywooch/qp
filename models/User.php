@@ -47,7 +47,6 @@ class User extends ActiveRecord implements IdentityInterface
         return [
             [['email', 'name'], 'filter', 'filter' => 'trim'],
             ['email', 'email'],
-            ['phone', 'string'],
             ['status', 'default', 'value' => User::STATUS_NOT_ACTIVE],
             ['status', 'in', 'range' => array_keys(self::$STATUS_TO_STRING)],
             ['role', 'in', 'range' => array_keys(Yii::$app->authManager->getRoles())],
@@ -89,7 +88,7 @@ class User extends ActiveRecord implements IdentityInterface
             'email' => 'Email',
             'status' => 'Статус',
             'role' => 'Роль',
-            'phone' => 'Подтвержённый телефон',
+            'role' => 'Роль',
             'created_at' => 'Создан',
             'updated_at' => 'Изменён',
         ];

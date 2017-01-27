@@ -19,7 +19,8 @@ $url = ['product/view', 'id' => $product->id];
         <div class="product-panel">
             <div class="btn-group">
                 <label class="product-price">
-                    <?= $product->price ?>
+                    <?= (int)($product->price / 100) ?> руб.
+                    <?= ($kop = $product->price % 100) ? $kop . 'коп.' : '' ?>
                 </label>
                 <input type="number" min="1" value="1"
                        name="product_count"
