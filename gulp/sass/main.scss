@@ -31,3 +31,42 @@ body {
 .breadcrumb {
   background-color: transparent;
 }
+
+@media (max-width: $screen-sm-max) {
+  .transform-top {
+
+  }
+  .transform {
+    &.shown {
+      &:before, &:after  {
+        width: 18px;
+      }
+      .transform-body {
+        display: block;
+        transform: translateX(0);
+      }
+    }
+    &-body {
+      transform: translateX(-100%);
+      transition: transform 0.3s 0.1s;
+    }
+    &:before, &:after {
+      background: $colorwhite;
+      right: 10px;
+      content: '';
+      margin-top: -1px;
+      display: inline-block;
+      height: 3px;
+      width: 10px;
+      position: absolute;
+      transform-origin: 9px 50%;
+      top: 50%;
+    }
+    &:before {
+      transform: rotate(45deg);
+    }
+    &:after {
+      transform: rotate(-45deg);
+    }
+  }
+}

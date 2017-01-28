@@ -52,7 +52,7 @@
         color: rgb(67, 67, 69);
         width: 100%;
         display: block;
-        padding: 10px 15px;
+        padding: 5px 15px;
         &:hover {
           background-color: $colorgray;
           text-decoration: none;
@@ -69,6 +69,43 @@
     }
   }
 }
+
+@media (max-width: $screen-sm-max) {
+  .categories {
+    cursor: pointer;
+    background-color: $cgreen;
+    margin-top: -20px;
+    padding-top: 10px;
+    padding-bottom: 10px;
+    .sidebar-title {
+      color: $colorwhite;
+      text-transform: none;
+      display: block;
+    }
+
+    .text-subline {
+      display: none;
+    }
+    &-list {
+      position: fixed;
+      background-color: $colorwhite;
+      width: 100%;
+      height: 100%;
+      min-width: 320px;
+      left: 0;
+      top: 101px;
+      z-index: 2;
+      li {
+        a {
+          padding: 15px;
+          border-bottom: 1px solid $colorgray;
+        }
+      }
+    }
+  }
+
+}
+
 .text-subline {
   border-bottom: 1px solid rgb(217, 217, 217);
   margin: 5px 0;
