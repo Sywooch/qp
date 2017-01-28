@@ -169,7 +169,8 @@ class UploadZipModel extends Model
                     // I made this gavno because i can't copy dir with copy()
                     // and ZipArchive::extractTo extract with full path inside archive
 
-                    'pic' => 'webdata/000000001/goods/1/' . (string) $good_xml->Картинка,
+                    'pic' => (string) $good_xml->Картинка ?
+                        'webdata/000000001/goods/1/' . (string) $good_xml->Картинка : '',
                     'category_id' => $category->id,
                     'properties' => serialize($props),
                 ]);
