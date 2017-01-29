@@ -38,6 +38,9 @@ $config = [
             'identityClass' => 'app\models\User',
             'enableAutoLogin' => true,
         ],
+        'view' => [
+            'class' => 'app\components\View',
+        ],
         'errorHandler' => [
             'errorAction' => 'site/error',
         ],
