@@ -13,9 +13,9 @@ class CatalogController extends \yii\web\Controller
     public function actionView($id = null)
     {
         $catalog = isset($id) ? Menu::findByIdOr404($id) : Menu::getRoot();
-        return //$catalog->children(1)->all() ?
-            $this->render('view', [ 'catalog' => $catalog ]) ;//:
-            //$this->redirect([ '/product/index', 'category_id' => $catalog->id ]);
+        return $catalog->children(1)->all() ?
+            $this->render('view', [ 'catalog' => $catalog ]) :
+            $this->redirect([ '/product/index', 'cid' => $catalog->id ]);
     }
 
     public function actionAdd()

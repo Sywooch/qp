@@ -5,6 +5,7 @@ namespace app\models\Good;
 use yii\web\NotFoundHttpException;
 use yz\shoppingcart\CartPositionInterface;
 use yz\shoppingcart\CartPositionTrait;
+use baibaratsky\yii\behaviors\model\SerializedAttributes;
 
 /**
  * This is the model class for table "good".
@@ -24,6 +25,17 @@ class Good extends \yii\db\ActiveRecord implements CartPositionInterface
 {
 
     use CartPositionTrait;
+
+    public function behaviors()
+    {
+        return [
+            'serializedAttributes' => [
+                'class' => SerializedAttributes::className(),
+                // Define the attributes you want to be serialized
+                'attributes' => ['properties'],
+            ],
+        ];
+    }
 
     public function getPrice()
     {
@@ -60,15 +72,22 @@ class Good extends \yii\db\ActiveRecord implements CartPositionInterface
     {
         return [
             [['measure', 'price', 'category_id'], 'integer'],
-            [['properties'], 'string'],
+            ['properties', 'checkIsArrayOrEmpty'],
             [['c1id', 'name', 'pic'], 'string', 'max' => 255],
             [['c1id'], 'unique'],
             ['measure', 'in', 'range' => [ self::ITEM_MEASURE ],
                 'message' => 'Неизвестный тип единиц измерения.'],
-            [['category_id'], 'exist', 'skipOnError' => true, 'targetClass' => Menu::className(), 'targetAttribute' => ['category_id' => 'id']],
+            [['category_id'], 'exist', 'skipOnError' => true, 'targetClass' => Menu::className(),
+                'targetAttribute' => ['category_id' => 'id']],
         ];
     }
 
+    public function checkIsArrayOrEmpty($attribute, $params)
+    {
+        if ($this->properties && !is_array($this->properties)) {
+            $this->addError('config', 'Properties should be array');
+        }
+    }
     /**
      * @inheritdoc
      */
@@ -80,7 +99,7 @@ class Good extends \yii\db\ActiveRecord implements CartPositionInterface
             'c1id' => 'ГУИД 1С',
             'name' => 'Название',
             'pic' => 'Файл изображения',
-            'price' => 'Цена',
+            'price' => 'Цена в копейках',
             'category_id' => 'ID категории',
             'properties' => 'Свойства',
         ];
@@ -93,7 +112,7 @@ class Good extends \yii\db\ActiveRecord implements CartPositionInterface
 
     public function getImgPath()
     {
-        return '@web/img/catalog/good/' . $this->pic;
+        return 'img/catalog/good/' . ($this->pic ? $this->pic : 'default');
     }
 
     public static function findByIdOr404($id) {

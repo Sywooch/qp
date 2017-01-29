@@ -18,10 +18,13 @@ class GoodProperty extends \yii\db\ActiveRecord
 {
     const STRING_TYPE = 0;
     const DICTIONARY_TYPE = 10;
+    const NUMBER_TYPE = 20;
+    const DATE_TYPE = 30;
 
     static private $__type_enum = [
         'Строка' => self::STRING_TYPE,
         'Справочник' => self::DICTIONARY_TYPE,
+        'Число' => self::NUMBER_TYPE,
     ];
 
     static function getTypeByC1name($c1name)

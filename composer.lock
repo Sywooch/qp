@@ -4,8 +4,8 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "hash": "54a003517157401474769ac48fff8e92",
-    "content-hash": "ad5cf8f7762166c066f43612ebe564cc",
+    "hash": "866fc6bb15d519bc080b5702a398f23e",
+    "content-hash": "ee19a180e057ecb7fa32621f78993b96",
     "packages": [
         {
             "name": "almasaeed2010/adminlte",
@@ -46,6 +46,53 @@
                 "web"
             ],
             "time": "2017-01-08 21:03:57"
+        },
+        {
+            "name": "baibaratsky/yii2-serialized-attributes-behavior",
+            "version": "v1.2.0",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/baibaratsky/yii2-serialized-attributes-behavior.git",
+                "reference": "f4a956d8a9f3751228e075078063a038111261ab"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/baibaratsky/yii2-serialized-attributes-behavior/zipball/f4a956d8a9f3751228e075078063a038111261ab",
+                "reference": "f4a956d8a9f3751228e075078063a038111261ab",
+                "shasum": ""
+            },
+            "require": {
+                "yiisoft/yii2": "~2.0.8"
+            },
+            "type": "yii2-extension",
+            "autoload": {
+                "psr-4": {
+                    "baibaratsky\\yii\\behaviors\\model\\": ""
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "BSD-3-Clause"
+            ],
+            "authors": [
+                {
+                    "name": "Andrei Baibaratsky",
+                    "email": "andrei@baibaratsky.com"
+                }
+            ],
+            "description": "Yii2 Serialized Attributes Behavior",
+            "homepage": "http://github.com/baibaratsky/yii2-serialized-attributes-behavior",
+            "keywords": [
+                "Behavior",
+                "array",
+                "attribute",
+                "attributes",
+                "serialize",
+                "serialized",
+                "yii",
+                "yii2"
+            ],
+            "time": "2016-08-18 20:25:32"
         },
         {
             "name": "bower-asset/bootstrap",

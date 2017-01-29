@@ -4,7 +4,7 @@ namespace app\controllers;
 
 use Yii;
 use app\models\Good\Good;
-use yii\data\ActiveDataProvider;
+use app\models\Good\Menu;
 use yii\web\Controller;
 
 /**
@@ -12,17 +12,30 @@ use yii\web\Controller;
  */
 class ProductController extends Controller
 {
-    /**
-     * Lists all Good models.
-     * @return mixed
-     */
-    public function actionIndex()
+    public function actionIndex($cid)
     {
-        $dataProvider = new ActiveDataProvider([
-            'query' => Good::find()->where(Yii::$app->request->get()),
-        ]);
+        $products = Good::findAll([ 'category_id' => $cid ]);
+        $fst_prod = array_shift($products);
+        $common_props = $fst_prod->properties;
+        foreach ($fst_prod->properties as $name => $pr) {
+            $common_props[$name]['value'] = [ $common_props[$name]['value'] ];
+        }
+
+        foreach ($products as $prod) {
+            foreach ($common_props as $name => &$pr) {
+                if (isset($prod->properties[$name])) {
+                    array_push($pr['value'], $prod->properties[$name]['value']);
+                }
+                else {
+                    unset($common_props[$name]);
+                }
+            }
+        }
+
         return $this->render('index', [
-            'dataProvider' => $dataProvider,
+            'products' => Good::findAll([ 'category_id' => $cid ]),
+            'category' => Menu::findByIdOr404($cid),
+            'filters' => $common_props,
         ]);
     }
 
@@ -33,8 +46,10 @@ class ProductController extends Controller
      */
     public function actionView($id)
     {
+        $model = Good::findByIdOr404($id);
         return $this->render('view', [
-            'model' => Good::findByIdOr404($id),
+            'model' => $model,
+            'category' => Menu::findByIdOr404($model->category_id)
         ]);
     }
 }

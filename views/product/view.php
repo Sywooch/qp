@@ -2,13 +2,27 @@
 
 use yii\helpers\Html;
 use yii\widgets\DetailView;
+use yii\helpers\Url;
 
 /* @var $this yii\web\View */
 /* @var $model app\models\Good\Good */
+/* @var $category app\models\Good\Menu */
 
 $this->title = $model->name;
-$this->params['breadcrumbs'][] = ['label' => 'Goods', 'url' => ['index']];
+
+
+foreach($category->parents()->all() as $par) {
+    $this->params['breadcrumbs'][] =  [
+        'label' => $par->name,
+        'url' => Url::to(['catalog/view', 'id' => $par->id])
+    ];
+}
+$this->params['breadcrumbs'][] =  [
+    'label' => $category->name,
+    'url' => Url::to(['catalog/view', 'id' => $category->id])
+];
 $this->params['breadcrumbs'][] = $this->title;
+
 ?>
 <div class="good-view">
 

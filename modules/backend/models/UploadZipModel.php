@@ -154,10 +154,9 @@ class UploadZipModel extends Model
                     }
                     $val = $prop->valueToString((string) $prop_val_xml->Значение);
                     if (isset($val)) {
-                        $props[$prop->name] = $val;
+                        $props[$prop->name] = [ 'value' => $val, 'type' => $prop->type ];
                     }
                 }
-
                 if (!$good_model) {
                     $good_model = new Good();
                 }
@@ -169,11 +168,11 @@ class UploadZipModel extends Model
                     // I made this gavno because i can't copy dir with copy()
                     // and ZipArchive::extractTo extract with full path inside archive
 
-                    'pic' => 'webdata/000000001/goods/1/' . (string) $good_xml->Картинка,
+                    'pic' => (string) $good_xml->Картинка ?
+                        'webdata/000000001/goods/1/' . (string) $good_xml->Картинка : '',
                     'category_id' => $category->id,
-                    'properties' => serialize($props),
+                    'properties' => $props,
                 ]);
-
                 if (!$good_model->validate() || !$good_model->save()) {
                     Yii::$app->session->addFlash('error',
                         "Ошибка при добавлении товара <i>$good_model->name</i>. " .
@@ -188,8 +187,7 @@ class UploadZipModel extends Model
             $good_c1id = (string) $price_xml->Ид;
             if ($good_model = Good::findOne([ 'c1id' => $good_c1id ])) {
                     // Change ЦенаЗаЕдиницу for another measure type
-                    // Also decide issue with currency
-                $good_model->price = (int) $price_xml->Цены->Цена->ЦенаЗаЕдиницу;
+                $good_model->price = (int) (100 * floatval($price_xml->Цены->Цена->ЦенаЗаЕдиницу));
                 if (!$good_model->validate() || !$good_model->save()) {
                     Yii::$app->session->addFlash('error',
                         "Ошибка при добавлении цены товара <i>$good_model->name</i>. " .
