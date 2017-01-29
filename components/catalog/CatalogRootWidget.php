@@ -16,7 +16,7 @@ class CatalogRootWidget extends Widget
 
     public function run() {
         return $this->render('catalog_root', [
-            'root_ch' => Menu::getRoot()->children()->all(),
+            'root' => Menu::getRoot(),
         ]);
     }
 }
