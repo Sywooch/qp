@@ -85,8 +85,8 @@ return [
         'mailru' => [
             // register your app here: http://api.mail.ru/sites/my/add
             'class' => 'nodge\eauth\services\MailruOAuth2Service',
-            'clientId' => '...',
-            'clientSecret' => '...',
+            'clientId' => '751590',
+            'clientSecret' => 'e0d855f81fe6c5c7bfb5dd62e117ba2d',
         ],
 //        'odnoklassniki' => [
 //            // register your app here: http://dev.odnoklassniki.ru/wiki/pages/viewpage.action?pageId=13992188
