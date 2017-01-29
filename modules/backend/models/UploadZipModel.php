@@ -172,7 +172,7 @@ class UploadZipModel extends Model
                     'pic' => (string) $good_xml->Картинка ?
                         'webdata/000000001/goods/1/' . (string) $good_xml->Картинка : '',
                     'category_id' => $category->id,
-                    'properties' => serialize($props),
+                    'properties' => $props,
                 ]);
 
                 if (!$good_model->validate() || !$good_model->save()) {

@@ -22,7 +22,8 @@
         "dmstr/yii2-adminlte-asset": "*",
         "nodge/yii2-eauth": "~2.0",
         "creocoder/yii2-nested-sets": "0.9.*",
-        "omnilight/yii2-shopping-cart": "*"
+        "omnilight/yii2-shopping-cart": "*",
+        "baibaratsky/yii2-serialized-attributes-behavior": "^1.2"
     },
     "require-dev": {
         "yiisoft/yii2-debug": "~2.0.0",

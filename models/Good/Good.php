@@ -5,6 +5,7 @@ namespace app\models\Good;
 use yii\web\NotFoundHttpException;
 use yz\shoppingcart\CartPositionInterface;
 use yz\shoppingcart\CartPositionTrait;
+use baibaratsky\yii\behaviors\model\SerializedAttributes;
 
 /**
  * This is the model class for table "good".
@@ -24,6 +25,17 @@ class Good extends \yii\db\ActiveRecord implements CartPositionInterface
 {
 
     use CartPositionTrait;
+
+    public function behaviors()
+    {
+        return [
+            'serializedAttributes' => [
+                'class' => SerializedAttributes::className(),
+                // Define the attributes you want to be serialized
+                'attributes' => ['properties'],
+            ],
+        ];
+    }
 
     public function getPrice()
     {
@@ -60,7 +72,7 @@ class Good extends \yii\db\ActiveRecord implements CartPositionInterface
     {
         return [
             [['measure', 'price', 'category_id'], 'integer'],
-            [['properties'], 'string'],
+            ['properties', 'checkIsArrayOrEmpty'],
             [['c1id', 'name', 'pic'], 'string', 'max' => 255],
             [['c1id'], 'unique'],
             ['measure', 'in', 'range' => [ self::ITEM_MEASURE ],
@@ -70,6 +82,12 @@ class Good extends \yii\db\ActiveRecord implements CartPositionInterface
         ];
     }
 
+    public function checkIsArrayOrEmpty($attribute, $params)
+    {
+        if ($this->properties && !is_array($this->properties)) {
+            $this->addError('config', 'Properties should be array');
+        }
+    }
     /**
      * @inheritdoc
      */
