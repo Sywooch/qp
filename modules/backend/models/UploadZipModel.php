@@ -154,10 +154,9 @@ class UploadZipModel extends Model
                     }
                     $val = $prop->valueToString((string) $prop_val_xml->Значение);
                     if (isset($val)) {
-                        $props[$prop->name] = $val;
+                        $props[$prop->name] = [ 'value' => $val, 'type' => $prop->type ];
                     }
                 }
-
                 if (!$good_model) {
                     $good_model = new Good();
                 }
@@ -174,7 +173,6 @@ class UploadZipModel extends Model
                     'category_id' => $category->id,
                     'properties' => $props,
                 ]);
-
                 if (!$good_model->validate() || !$good_model->save()) {
                     Yii::$app->session->addFlash('error',
                         "Ошибка при добавлении товара <i>$good_model->name</i>. " .
