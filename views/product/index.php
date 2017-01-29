@@ -1,32 +1,31 @@
 <?php
 
 use yii\helpers\Html;
-use yii\widgets\ListView;
+use yii\helpers\Url;
+use app\components\catalog\ProductWidget;
+use app\models\Good\Good;
 
 /* @var $this yii\web\View */
-/* @var $dataProvider yii\data\ActiveDataProvider */
-/* @var $catalog app\models\Good\Menu */
+/* @var $category app\models\Good\Menu */
+/* @var $products array app\models\Good\Menu */
 
-$this->title = $catalog->name;
-foreach($catalog->parents()->all() as $par) {
+$this->title = $category->name;
+foreach($category->parents()->all() as $par) {
     $this->params['breadcrumbs'][] =  [
         'label' => $par->name,
-        'url' => Url::to(['/catalog/view', 'id' => $par->id])
+        'url' => Url::to(['catalog/view', 'id' => $par->id])
     ];
 }
+$this->params['breadcrumbs'][] = $this->title;
+
 ?>
 <div class="good-index">
 
     <h1><?= Html::encode($this->title) ?></h1>
 
-    <p>
-        <?= Html::a('Create Good', ['create'], ['class' => 'btn btn-success']) ?>
-    </p>
-    <?= ListView::widget([
-        'dataProvider' => $dataProvider,
-        'itemOptions' => ['class' => 'item'],
-        'itemView' => function ($model, $key, $index, $widget) {
-            return Html::a(Html::encode($model->name), ['view', 'id' => $model->id]);
-        },
-    ]) ?>
+    <?php
+        foreach ($products as $product) {
+            echo ProductWidget::widget(['product' => $product]);
+        }
+    ?>
 </div>

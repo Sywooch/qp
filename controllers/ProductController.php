@@ -4,7 +4,7 @@ namespace app\controllers;
 
 use Yii;
 use app\models\Good\Good;
-use yii\data\ActiveDataProvider;
+use app\models\Good\Menu;
 use yii\web\Controller;
 
 /**
@@ -22,7 +22,7 @@ class ProductController extends Controller
             'query' => Good::find()->where(Yii::$app->request->get()),
         ]);
         return $this->render('index', [
-            'dataProvider' => $dataProvider,
+            'products' => Good::findAll([ 'category_id' => $cid ]),
         ]);
     }
 
@@ -33,8 +33,10 @@ class ProductController extends Controller
      */
     public function actionView($id)
     {
+        $model = Good::findByIdOr404($id);
         return $this->render('view', [
-            'model' => Good::findByIdOr404($id),
+            'model' => $model,
+            'category' => Menu::findByIdOr404($model->category_id)
         ]);
     }
 }

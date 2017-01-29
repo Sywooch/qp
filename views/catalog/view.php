@@ -3,8 +3,6 @@
 /** @var $catalog app\models\Good\Menu */
 use yii\helpers\Url;
 use app\components\catalog\CategoryWidget;
-use app\components\catalog\ProductWidget;
-use app\models\Good\Good;
 
 $this->title = $catalog->name;
 $this->params['sidebarLayout'] = true;
@@ -20,16 +18,8 @@ $this->params['breadcrumbs'][] = $this->title;
 
 <div class="row">
     <?php
-    if ($chs = $catalog->children(1)->all()) {
-        foreach ($chs as $ch) {
-            echo CategoryWidget::widget([ 'item' => $ch ]);
-        }
-    }
-    else {
-        $products = Good::findAll([ 'category_id' => $catalog->id ]);
-        foreach ($products as $product) {
-            echo ProductWidget::widget([ 'product' => $product ]);
-        }
+    foreach ($catalog->children(1)->all() as $ch) {
+        echo CategoryWidget::widget([ 'item' => $ch ]);
     }
     ?>
 </div>
