@@ -33,8 +33,22 @@ $this->params['breadcrumbs'][] = $this->title;
         </div>
         <div class="col-md-4">
             <label class="product-price">
-                <?=$this->convertPrice($model->price)?>
+                <?=$model->convertPrice()?>
             </label>
+            <div class="product-panel">
+                <div class="btn-group">
+                    <input type="number" min="1" value="1"
+                           name="product_count"
+                           class="product_count"
+                           data-product-id="<?= $model->id ?>">
+                    <input type="hidden" name="product_id" value=<?= $model->id ?>>
+                </div>
+                <button class="btn btn-icon btn-icon-left btn-success btn-compare"
+                        data-product-id="<?= $model->id ?>"
+                        data-product-count="1">
+                    <i class="fa fa-shopping-cart" aria-hidden="true"></i>
+                </button>
+            </div>
         </div>
     </div>
     <?php

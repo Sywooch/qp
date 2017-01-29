@@ -22,7 +22,7 @@ $url = ['product/view', 'id' => $product->id];
         <div class="product-panel">
             <div class="btn-group">
                 <label class="product-price">
-                    <?=$this->convertPrice($product->price)?>
+                    <?=$product->convertPrice()?>
                 </label>
                 <input type="number" min="1" value="1"
                        name="product_count"
