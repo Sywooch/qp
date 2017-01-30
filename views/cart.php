@@ -3,54 +3,73 @@
 use app\components\Html;
 use yii\grid\GridView;
 
-/* @var $this yii\web\View */
-/* @var $dataProvider yii\data\ArrayDataProvider */
+/** @var $this yii\web\View */
+/** @var $dataProvider yii\data\ArrayDataProvider */
+/** @var $cart \yz\shoppingcart\ShoppingCart */
 
 $this->title = 'Корзина';
-$this->params['breadcrumbs'][] = $this->title;
 ?>
-<div class="good-index">
+<main class="cart">
 
     <h1><?= Html::encode($this->title) ?></h1>
 
-    <?= GridView::widget([
-        'dataProvider' => $dataProvider,
-        'columns' => [
-            ['class' => 'yii\grid\SerialColumn'],
-            [
-                'format' => 'html',
-                'value' => function ($product) {
-                    /* @var $product app\models\Good\Good */
-                    return  Html::img([ $product->getImgPath() ],
-                        [ 'height'=>100, 'width'=>100, 'class'=>'img-responsive' ]
-                    );
-                }
-            ],
-            'name',
-            ['attribute' => 'Количество', 'value' => function ($product) {
-                /* @var $product app\models\Good\Good */
-                return  $product->getQuantity();
-            }],
-            'price',
-            ['attribute' => 'Сумма', 'value' => function ($product) {
-                /* @var $model app\models\Good\Good */
-                return  $product->getQuantity() * $product->getPrice();
-            }],
+    <div class="cart-list">
+        <?= GridView::widget([
+            'dataProvider' => $dataProvider,
+            'columns' => [
+                [
+                    'class' => 'yii\grid\SerialColumn'
+                ], [
+                    'format' => 'html',
+                    'value' => function ($product) {
+                        /* @var $product app\models\Good\Good */
+                        return  Html::img([ $product->getImgPath() ],
+                            [ 'height'=>100, 'width'=>100, 'class'=>'img-responsive' ]
+                        );
+                    }
+                ],
+                'name',
+                [
+                    'attribute' => 'Количество',
+                    'format' => 'html',
+                    'value' => function ($product) {
+                        /* @var $product app\models\Good\Good */
+                        return  $product->getQuantity();
+                    }
+                ], [
+                    'attribute' => 'Сумма',
+                    'format' => 'html',
+                    'value' => function ($product) {
+                        /* @var $product app\models\Good\Good */
+                        return  Html::price($product->getQuantity() * $product->getPrice());
+                    }
+                ], [
+                    'class' => 'yii\grid\ActionColumn',
+                    'visibleButtons' => [ 'update' => false, 'view' => false],
+                    'template' => '{delete}',
+                    'buttons' => [
+                        'delete' => function ($url,$model) {
+                            return Html::a(
+                                '<i class="fa fa-close"></i>',
+                                $url, ['class' => 'cart-delete']);
+                        },
 
-            [
-                'class' => 'yii\grid\ActionColumn',
-                'visibleButtons' => [ 'update' => false, 'view' => false],
-            ],
-        ],
-    ]) ?>
-
-    <p>
-        <?= Html::a('Очистить корзину', ['clear'], [
-            'class' => 'btn btn-danger',
-            'data-confirm' => 'Вы уверены, что хотите очистить корзину?'
+                    ],
+                ],
+            ]
         ]) ?>
-        <?= Html::a('Купить', [''], [
-            'class' => 'btn btn-success ',
+        <div class="cart-total">
+            <span class="label">
+                Итого:
+            </span>
+            <span class="price">
+                <?=Html::price($cart->getCost())?>
+            </span>
+        </div>
+    </div>
+    <div class="cart-btn">
+        <?= Html::a('Оформить заказ', [''], [
+            'class' => 'btn btn-success btn-lg ',
         ]) ?>
-    </p>
-</div>
+    </div>
+</main>

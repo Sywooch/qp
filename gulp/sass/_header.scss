@@ -103,6 +103,9 @@ $line-height-header: 50px;
       position: absolute;
       z-index: 1;
       width: 100%;
+      .btn {
+        font-size: 18px;
+      }
     }
 
     &__logo {
@@ -215,7 +218,7 @@ $line-height-header: 50px;
   transition: background-color 200ms linear;
   background-color: transparent;
   float: left;
-  margin-left: 15px;
+  margin-left: 5px;
   z-index: 2;
   .icon-bar {
     border-bottom: 1px solid $colorblack;

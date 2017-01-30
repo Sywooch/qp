@@ -26,7 +26,7 @@ class ProductController extends Controller
     {
         $model = Good::findByIdOr404($id);
         return $this->render('view', [
-            'model' => $model,
+            'product' => $model,
             'category' => Menu::findByIdOr404($model->category_id)
         ]);
     }

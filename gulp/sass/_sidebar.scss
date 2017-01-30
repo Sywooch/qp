@@ -22,6 +22,7 @@
           position: absolute;
           transform-origin: 9px 50%;
           top: 50%;
+          transition: all 0.3s 0.1s;
         }
         &:before {
           transform: rotate(45deg);
