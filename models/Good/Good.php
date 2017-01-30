@@ -46,6 +46,7 @@ class Good extends \yii\db\ActiveRecord implements CartPositionInterface
     {
         return $this->id;
     }
+    
 
     const ITEM_MEASURE = 796;
     //  const KG_MEASURE = 42;

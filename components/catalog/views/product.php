@@ -1,7 +1,7 @@
 <?php
 /** @var $product app\models\Good\Good */
 
-use yii\helpers\Html;
+use app\components\Html;
 
 $img = Html::img([ $product->getImgPath() ],
     ['height'=>204, 'width'=>270, 'class'=>'img-responsive']);
@@ -19,8 +19,7 @@ $url = ['product/view', 'id' => $product->id];
         <div class="product-panel">
             <div class="btn-group">
                 <label class="product-price">
-                    <?= (int)($product->price / 100) ?> руб.
-                    <?= ($kop = $product->price % 100) ? $kop . 'коп.' : '' ?>
+                    <?=Html::price($product->price)?>
                 </label>
                 <input type="number" min="1" value="1"
                        name="product_count"

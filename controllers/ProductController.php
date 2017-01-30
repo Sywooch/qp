@@ -12,31 +12,9 @@ use yii\web\Controller;
  */
 class ProductController extends Controller
 {
-    public function actionIndex($cid)
+    public function actionIndex()
     {
-        $products = Good::findAll([ 'category_id' => $cid ]);
-        $fst_prod = array_shift($products);
-        $common_props = $fst_prod->properties;
-        foreach ($fst_prod->properties as $name => $pr) {
-            $common_props[$name]['value'] = [ $common_props[$name]['value'] ];
-        }
-
-        foreach ($products as $prod) {
-            foreach ($common_props as $name => &$pr) {
-                if (isset($prod->properties[$name])) {
-                    array_push($pr['value'], $prod->properties[$name]['value']);
-                }
-                else {
-                    unset($common_props[$name]);
-                }
-            }
-        }
-
-        return $this->render('index', [
-            'products' => Good::findAll([ 'category_id' => $cid ]),
-            'category' => Menu::findByIdOr404($cid),
-            'filters' => $common_props,
-        ]);
+        return [];
     }
 
     /**
