@@ -3,7 +3,6 @@ namespace app\components;
 
 use yii\bootstrap\Widget;
 use yii\bootstrap\ButtonDropdown;
-use yii\helpers\Html;
 
 class LoginWidget extends Widget
 {
