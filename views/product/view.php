@@ -1,9 +1,10 @@
 <?php
 
 use app\components\Html;
+use yii\web\View;
 use yii\helpers\Url;
 
-/* @var $this app\components\View */
+/* @var $this yii\web\View */
 /* @var $product app\models\Good\Good */
 /* @var $category app\models\Good\Menu */
 

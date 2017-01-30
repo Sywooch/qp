@@ -1,10 +1,7 @@
 <?php
 /** @var $product app\models\Good\Good */
-/* @var $this app\components\View */
 
 use app\components\Html;
-
-
 
 $img = Html::img([ $product->getImgPath() ],
     ['height'=>204, 'width'=>270, 'class'=>'img-responsive']);
