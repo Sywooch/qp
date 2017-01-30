@@ -2,7 +2,7 @@
 /** @var $product app\models\Good\Good */
 /* @var $this app\components\View */
 
-use yii\helpers\Html;
+use app\components\Html;
 
 
 
@@ -22,7 +22,7 @@ $url = ['product/view', 'id' => $product->id];
         <div class="product-panel">
             <div class="btn-group">
                 <label class="product-price">
-                    <?=$product->convertPrice()?>
+                    <?=Html::price($product->price)?>
                 </label>
                 <input type="number" min="1" value="1"
                        name="product_count"

@@ -53,6 +53,6 @@ class CatalogController extends \yii\web\Controller
         if (isset($get['product-id'])) {
             Yii::$app->cart->put(Good::findByIdOr404($get['product-id']), $get['product-count']);
         }
-        return Yii::$app->shopping->render();
+        return Yii::$app->shopping->render;
     }
 }
