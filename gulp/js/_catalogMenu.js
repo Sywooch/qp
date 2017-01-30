@@ -1,5 +1,4 @@
 var CatalogMenu = (function(){
-    "use strict";
 
     var el = $('.transform');
 

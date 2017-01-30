@@ -21,10 +21,13 @@ class CartController extends \yii\web\Controller
     }
 
     public function actionIndex() {
-        $array = Yii::$app->cart->getPositions();
+        /** @var $cart \yz\shoppingcart\ShoppingCart */
+        $cart = Yii::$app->cart;
+        $array = $cart->getPositions();
         $dataProvider = new ArrayDataProvider([ 'allModels' => $array ]);
         return $this->render('/cart', [
             'dataProvider' => $dataProvider,
+            'cart' => $cart
         ]);
     }
 

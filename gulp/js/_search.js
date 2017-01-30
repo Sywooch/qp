@@ -1,5 +1,4 @@
 var Search = (function(){
-    "use strict";
 
     var open = $('.btn-search-modal'),
         input = $('#search-input-mobile');

@@ -3,22 +3,6 @@
 use app\components\LoginWidget;
 use yii\bootstrap\Nav;
 use yii\bootstrap\NavBar;
-$this->registerJs('
-$(".btn-compare").click(function () {
-            $.ajax({
-                url: "'.\yii\helpers\Url::toRoute(['catalog/add']).'",
-                dataType: "html",
-                type: "POST",
-                data: "product-id="+this.getAttribute(\'data-product-id\')+"&product-count="+this.getAttribute(\'data-product-count\'),
-                success: function(data){
-                    $(".shopping").html(data);
-                },
-                error: function () {
-                    $("#shopping").html("ERROR");
-                }
-            });
-        });
-');
 ?>
 
 <header class="header">
@@ -98,7 +82,7 @@ $(".btn-compare").click(function () {
 </header>
 
 <div class="modal fade bs-search-modal-lg" id="searchModal" tabindex="-1" role="dialog" aria-labelledby="searchLabel">
-    <div class="modal-dialog modal-lg"" role="document">
+    <div class="modal-dialog modal-lg" role="document">
         <div class="modal-content">
             <div class="modal-header">
                 <div class="row">
