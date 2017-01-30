@@ -1,6 +1,5 @@
 <?php
 /** @var $product app\models\Good\Good */
-use yii\helpers\Html;
 use yii\bootstrap\ActiveForm;
 use app\models\Bookmark;
 use app\components\Html;

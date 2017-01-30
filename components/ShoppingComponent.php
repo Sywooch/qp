@@ -4,7 +4,6 @@ namespace app\components;
 
 use yii\base\Component;
 use Yii;
-use app\components\Html;
 
 class ShoppingComponent extends Component
 {
