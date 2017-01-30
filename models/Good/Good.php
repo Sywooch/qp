@@ -113,7 +113,7 @@ class Good extends \yii\db\ActiveRecord implements CartPositionInterface
 
     public function getImgPath()
     {
-        return 'img/catalog/good/' . ($this->pic ? $this->pic : 'default');
+        return 'img/catalog/good/' . ($this->pic ? $this->pic : 'default.png');
     }
 
     public static function findByIdOr404($id) {

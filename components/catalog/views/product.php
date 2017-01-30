@@ -1,6 +1,8 @@
 <?php
 /** @var $product app\models\Good\Good */
-
+use yii\helpers\Html;
+use yii\bootstrap\ActiveForm;
+use app\models\Bookmark;
 use app\components\Html;
 
 $img = Html::img([ $product->getImgPath() ],
@@ -32,6 +34,28 @@ $url = ['product/view', 'id' => $product->id];
                     data-product-count="1">
                 <i class="fa fa-shopping-cart" aria-hidden="true"></i>
             </button>
+            <?php
+            $data = [
+                'user_id' => Yii::$app->user->getId(),
+                'product_id' => $product->getId(),
+            ];
+            $model = Bookmark::findOne($data);
+            $form = ActiveForm::begin([
+                'id' => 'bookmark',
+                 'action' => [ $model ? 'catalog/delete-bookmark' : 'catalog/add-bookmark'],
+            ]);
+            $model = $model ? $model : new Bookmark($data);
+
+            echo $form->field($model, 'user_id')->hiddenInput()->label(false);
+            echo $form->field($model, 'product_id')->hiddenInput()->label(false);
+            echo Html::submitButton($model->isNewRecord ?
+                '<i class="fa fa-thumbs-o-up" aria-hidden="true"></i>' :
+                '<i class="fa fa-thumbs-o-down" aria-hidden="true"></i>'
+            );
+            ActiveForm::end();
+            ?>
+
+
         </div>
     </div>
 </div>
