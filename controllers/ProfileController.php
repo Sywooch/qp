@@ -7,9 +7,11 @@ use app\models\Profile\SetPasswordForm;
 use app\models\Profile\SetPhoneForm;
 use app\models\User;
 use app\models\Profile\ValidatePhoneForm;
+use app\models\Good\Good;
+
+use yii\data\ActiveDataProvider;
 use Yii;
 use yii\filters\AccessControl;
-use yii\filters\VerbFilter;
 
 class ProfileController extends \yii\web\Controller
 {
@@ -32,7 +34,6 @@ class ProfileController extends \yii\web\Controller
         ];
     }
 
-
     public function actionIndex()
     {
         $user = Yii::$app->user->identity;
@@ -44,7 +45,12 @@ class ProfileController extends \yii\web\Controller
 
     public function actionBookmark()
     {
-        return $this->render('bookmark');
+        $dataProvider = new ActiveDataProvider([
+            'query' => Good::find()->innerJoin('bookmark')->where([ 'bookmark.user_id' => Yii::$app->user->getId() ]),
+        ]);
+        return $this->render('bookmark', [
+            'dataProvider' => $dataProvider,
+        ]);
     }
 
     public function actionEdit()
@@ -125,6 +131,5 @@ class ProfileController extends \yii\web\Controller
         return $this->render('confirm/phone', [
             'model' => $model,
         ]);
-
     }
 }
