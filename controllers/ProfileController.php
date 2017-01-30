@@ -39,7 +39,6 @@ class ProfileController extends \yii\web\Controller
         $user = Yii::$app->user->identity;
         return $this->render('index', [
             'email' => $user->email,
-            'phone' => $user->getPhone(),
         ]);
     }
 
@@ -100,7 +99,7 @@ class ProfileController extends \yii\web\Controller
 
     public function actionPhone()
     {
-        $model = new SetPhoneForm();
+        $model = new SetPhoneForm( [ 'phone' => Yii::$app->user->identity->getPhone() ] );
         if ($model->load(Yii::$app->request->post())) {
             if ($model->setPhone($model->phone)) {
                 Yii::$app->session->setFlash('success', 'На указанный телефон отправлено смс с кодом подтверждения.');

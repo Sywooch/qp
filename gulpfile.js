@@ -4,7 +4,10 @@ var gulp = require('gulp'),
     connectPHP = require('gulp-connect-php'),
     autoprefixer 	= require('gulp-autoprefixer'),
     sourcemaps      = require('gulp-sourcemaps'),
-    minify_css = require('gulp-minify-css');
+    minify_css = require('gulp-minify-css'),
+    concat = require('gulp-concat'),
+    rename = require('gulp-rename'),
+    uglify = require('gulp-uglify');
 
 var reload      = browserSync.reload;
 
@@ -13,15 +16,13 @@ var paths = {
     css:['gulp/sass/**/*.scss'],
     bootstrap: {
         sass: ['gulp/libs/bootstrap-sass/assets/stylesheets']
+    },
+    js: {
+        src: 'gulp/js/**/*.js',
+        dest: 'web/js'
     }
 };
 
-gulp.task('sass', function(){
-    return gulp.src(paths.css)
-        .pipe(sass())
-        .pipe(gulp.dest('web/css'))
-        .pipe(reload({stream: true}));
-});
 
 // -----------------------------------------------------------------------------
 // Sass
@@ -49,6 +50,16 @@ gulp.task('sass', function() {
 //     });
 // });
 
+gulp.task('scripts', function() {
+    return gulp.src(paths.js.src)
+        .pipe(concat('app.js'))
+        .pipe(gulp.dest(paths.js.dest))
+        .pipe(rename('app.min.js'))
+        .pipe(uglify())
+        .pipe(gulp.dest(paths.js.dest))
+        .pipe(reload({stream: true}));
+});
+
 gulp.task('php', function(){
     connectPHP.server({ base: 'web/', keepalive:true, hostname: 'localhost', port:7000, open: false}, function () {
         browserSync({
@@ -65,5 +76,6 @@ gulp.task('html', function(){
 gulp.task('watch', function () {
     gulp.watch(paths.css, ['sass']);
     gulp.watch(paths.html, ['html']);
+    gulp.watch(paths.js.src, ['scripts']);
 });
 gulp.task('default', ['watch', 'php']);

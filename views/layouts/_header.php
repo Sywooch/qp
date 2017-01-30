@@ -37,9 +37,13 @@ $(".btn-compare").click(function () {
                     </div>
                 </div>
                 <div class="col-xs-3 visible-xs visible-sm mobile-nav-controls">
-                    <button class="btn search-visible">
+                    <button class="btn btn-search-modal" data-toggle="modal" data-target=".bs-search-modal-lg">
                         <i class="fa fa-search"></i>
                     </button>
+<!--                    <a href="#" class="btn cart-mobile">-->
+<!--                        <i class="fa fa-shopping-cart"></i>-->
+<!--                        <span class="badge" data-toggle="visible" data-of="totalCount" style="">2</span>-->
+<!--                    </a>-->
                 </div>
                 <div class="col-md-6 col-xs-12">
                     <section class="search row">
@@ -53,9 +57,6 @@ $(".btn-compare").click(function () {
                                 <input id="search-input" class="form-control input-lg" placeholder="Поиск среди более 10 000 товаров" autocomplete="off" spellcheck="false" autocorrect="off" tabindex="1">
                             </div>
                         </form>
-                        <div class="col-xs-2 search__cancel visible-xs visible-sm">
-                            <button class=" btn search-hidden">Отмена</button>
-                        </div>
                     </section>
                 </div>
                 <div class="col-md-3 hidden-xs hidden-sm">
@@ -96,4 +97,29 @@ $(".btn-compare").click(function () {
     ?>
 </header>
 
-<div class="modal-search"></div>
+<div class="modal fade bs-search-modal-lg" id="searchModal" tabindex="-1" role="dialog" aria-labelledby="searchLabel">
+    <div class="modal-dialog modal-lg"" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <div class="row">
+                    <form action="/" method="GET" class="form form-search col-xs-9">
+                        <div class="input-group">
+                        <span class="input-group-addon">
+                            <button class="search__btn">
+                                <i class="fa fa-search" aria-hidden="true"></i><span class="sr-only">Search icons</span>
+                            </button>
+                        </span>
+                            <input id="search-input-mobile" class="form-control input-lg search-input-mobile" placeholder="Поиск среди более 10 000 товаров" autocomplete="off" spellcheck="false" autocorrect="off" tabindex="1">
+                        </div>
+                    </form>
+                    <div class="col-xs-2 search__cancel visible-xs visible-sm">
+                        <button type="button" class="btn search-hidden" data-dismiss="modal" aria-label="Close">Отмена</button>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-body" style="padding: 0;">
+
+            </div>
+        </div>
+    </div>
+</div>

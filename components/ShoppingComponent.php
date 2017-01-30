@@ -4,7 +4,7 @@ namespace app\components;
 
 use yii\base\Component;
 use Yii;
-use yii\helpers\Html;
+use app\components\Html;
 
 class ShoppingComponent extends Component
 {
@@ -22,14 +22,16 @@ class ShoppingComponent extends Component
 
     public function set()
     {
-        $this->price = Yii::$app->cart->getCost();
-        $this->countProduct = Yii::$app->cart->getCount();
+        /** @var \yz\shoppingcart\ShoppingCart $cart */
+        $cart = Yii::$app->get('cart');
+        $this->price = $cart->getCost();
+        $this->countProduct = $cart->getCount();
         if($this->countProduct < 1) {
             $this->result = '<span>Корзина</span>';
         } else {
             $this->result = '
                     <span class="shopping__price">
-                        ' . $this->price . ' <i class="fa fa-rub"></i>
+                        ' . Html::price($this->price) . '
                     </span>
                     <span class="badge" data-toggle="visible" data-of="totalCount" style="">
                     '. $this->countProduct .'
