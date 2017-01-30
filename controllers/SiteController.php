@@ -16,7 +16,6 @@ use yii\base\InvalidParamException;
 use yii\web\BadRequestHttpException;
 use yii\helpers\Url;
 use app\models\Profile\AccountActivation;
-use yii\web\NotFoundHttpException;
 
 class SiteController extends Controller
 {
@@ -30,6 +29,7 @@ class SiteController extends Controller
                 'class' => AccessControl::className(),
                 'only' => ['logout', 'login', 'reg', 'profile'],
                 'denyCallback' => function($role, $action) {
+                    Yii::$app->session->setFlash('warning', 'Необходимо авторизоваться.');
                     $this->goHome();
                 },
                 'rules' => [

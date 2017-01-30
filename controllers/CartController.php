@@ -22,7 +22,6 @@ class CartController extends \yii\web\Controller
 
     public function actionIndex() {
         $array = Yii::$app->cart->getPositions();
-//        var_dump(array_values(Yii::$app->cart->getPositions()));exit;
         $dataProvider = new ArrayDataProvider([ 'allModels' => $array ]);
         return $this->render('/cart', [
             'dataProvider' => $dataProvider,
