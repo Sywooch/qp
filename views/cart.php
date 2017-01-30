@@ -51,7 +51,7 @@ $this->title = 'Корзина';
                         'delete' => function ($url,$model) {
                             return Html::a(
                                 '<i class="fa fa-close"></i>',
-                                $url, ['class' => 'cart-delete']);
+                                $url, ['class' => 'cart-delete', 'data-method' => 'post', 'title' => 'Удалить', 'aria-label' => 'Удалить']);
                         },
 
                     ],
