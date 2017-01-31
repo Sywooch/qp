@@ -2,7 +2,7 @@ var Cart = (function(){
 
     var inputCount = $('.product_count'),
         compare = $('.btn-compare'),
-        el = $('.shopping');
+        cart = $('.shopping');
 
     //todo: Сделать функцию, которая будет предотвращать множественное отправление ajax запросов
 
@@ -20,13 +20,34 @@ var Cart = (function(){
             });
 
             compare.on('click', function () {
-                var id = $(this).data('productId'),
-                    count = $(this).attr('data-product-count');
-                self.getData('/catalog/add', {
-                    id: id,
-                    count: count
-                });
+                self.addToCart($(this));
             });
+        },
+        addToCart: function (el) {
+            var id = el.data('productId'),
+                count = el.attr('data-product-count');
+
+            this.getData('/catalog/add', {
+                id: id,
+                count: count
+            });
+
+            var imgtofly = $('img[data-product-id=' + id + ']');
+            if (imgtofly) {
+                var imgclone = imgtofly.clone()
+                    .offset(imgtofly.offset())
+                    .css({'opacity':'0.7', 'position':'absolute', 'height':'150px', 'width':'150px', 'z-index':'1000'})
+                    .appendTo($('body'))
+                    .animate({
+                        'top':cart.offset().top + 10,
+                        'left':cart.offset().left + 50,
+                        'width':35,
+                        'height':35
+                    }, 'slow');
+                imgclone.animate({'width':0, 'height':0}, function(){ $(this).detach() });
+            }
+
+
         },
         getData: function(url, options){
             var self = this;
@@ -45,7 +66,7 @@ var Cart = (function(){
             });
         },
         render: function (result) {
-            el.html(result);
+            setTimeout(function() {cart.html(result)}, 600);
         },
         changeCount: function (element) {
             var id = element.data('productId'),
@@ -123,9 +144,9 @@ $(document).ready(function () {
         //public API
         return {
             init: function() {
-                Search.init();
-                CatalogMenu.init();
-                Cart.init();
+                Search.init;
+                CatalogMenu.init;
+                Cart.init;
             }
         }
     })();

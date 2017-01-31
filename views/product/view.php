@@ -29,7 +29,7 @@ $this->params['breadcrumbs'][] = $this->title;
     <h1><?= Html::encode($this->title) ?></h1>
     <div class="row">
         <div class="col-sm-8 col-xs-12">
-            <?=Html::img([ $product->getImgPath() ], ['height'=>204, 'width'=>270, 'class'=>'img-responsive'])?>
+            <?=Html::img([ $product->getImgPath() ], ['height'=>204, 'width'=>270, 'class'=>'img-responsive', 'data-product-id'=>$product->id])?>
         </div>
         <div class="col-sm-4 col-xs-12">
             <label class="product-price">

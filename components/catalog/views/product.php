@@ -5,7 +5,7 @@ use app\models\Bookmark;
 use app\components\Html;
 
 $img = Html::img([ $product->getImgPath() ],
-    ['height'=>204, 'width'=>270, 'class'=>'img-responsive']);
+    ['height'=>204, 'width'=>270, 'class'=>'img-responsive', 'data-product-id'=>$product->id]);
 
 $url = ['product/view', 'id' => $product->id];
 ?>
