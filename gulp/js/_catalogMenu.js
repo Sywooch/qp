@@ -1,27 +1,26 @@
-var CatalogMenu = (function(){
+(function($){
 
-    var el = $('.transform');
+    var $el = $('.transform');
 
-    var __ = {
+    var Catalog = {
         init: function() {
             this.event();
         },
         event: function() {
             var self = this;
-            el.on('click', function () {
+            $el.on('click', function () {
                 self.shown();
             });
         },
         shown: function () {
-            if(el.hasClass('shown')){
-                el.removeClass('shown');
+            if($el.hasClass('shown')){
+                $el.removeClass('shown');
             } else {
-                el.addClass('shown');
+                $el.addClass('shown');
             }
         },
-    }
+    };
 
-    return {
-        init: __.init()
-    }
-})();
+    Catalog.init();
+
+})(jQuery);
