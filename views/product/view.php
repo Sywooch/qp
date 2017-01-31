@@ -26,7 +26,7 @@ $this->params['breadcrumbs'][] = $this->title;
 ?>
 <div class="good-view">
 
-    <h1><?= Html::encode($this->title) ?></h1>
+    <h1>123<?= Html::encode($this->title) ?></h1>
     <div class="row">
         <div class="col-sm-8 col-xs-12">
             <?=Html::img([ $product->getImgPath() ], ['height'=>204, 'width'=>270, 'class'=>'img-responsive', 'data-product-id'=>$product->id])?>

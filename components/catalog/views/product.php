@@ -17,43 +17,39 @@ $url = ['product/view', 'id' => $product->id];
                 <?=Html::a($product->name, $url)?>
             </div>
         </div>
+        <label class="product-price">
+            <?=Html::price($product->price)?>
+        </label>
         <div class="product-panel">
             <div class="btn-group">
-                <label class="product-price">
-                    <?=Html::price($product->price)?>
-                </label>
-                <input type="number" min="1" value="1"
-                       name="product_count"
-                       class="product_count"
-                        data-product-id="<?= $product->id ?>">
-                <input type="hidden" name="product_id" value=<?= $product->id ?>>
+                <?=Html::stepper($product->id)?>
+                <button class="btn btn-icon btn-icon-left btn-success btn-compare"
+                        data-product-id="<?= $product->id ?>"
+                        data-product-count="1">
+                    <i class="fa fa-shopping-cart" aria-hidden="true"></i>
+                </button>
+                <?php
+                $data = [
+                    'user_id' => Yii::$app->user->getId(),
+                    'product_id' => $product->getId(),
+                ];
+                $model = Bookmark::findOne($data);
+                $form = ActiveForm::begin([
+                    'id' => 'bookmark',
+                     'action' => [ $model ? 'catalog/delete-bookmark' : 'catalog/add-bookmark'],
+                ]);
+                $model = $model ? $model : new Bookmark($data);
+
+                echo $form->field($model, 'user_id')->hiddenInput()->label(false);
+                echo $form->field($model, 'product_id')->hiddenInput()->label(false);
+                echo Html::submitButton($model->isNewRecord ?
+                    '<i class="fa fa-heart-o" aria-hidden="true"></i>' :
+                    '<i class="fa fa-heart" aria-hidden="true"></i>',
+                    ['class'=>'btn btn-default']
+                );
+                ActiveForm::end();
+                ?>
             </div>
-            <button class="btn btn-icon btn-icon-left btn-success btn-compare"
-                    data-product-id="<?= $product->id ?>"
-                    data-product-count="1">
-                <i class="fa fa-shopping-cart" aria-hidden="true"></i>
-            </button>
-            <?php
-            $data = [
-                'user_id' => Yii::$app->user->getId(),
-                'product_id' => $product->getId(),
-            ];
-            $model = Bookmark::findOne($data);
-            $form = ActiveForm::begin([
-                'id' => 'bookmark',
-                 'action' => [ $model ? 'catalog/delete-bookmark' : 'catalog/add-bookmark'],
-            ]);
-            $model = $model ? $model : new Bookmark($data);
-
-            echo $form->field($model, 'user_id')->hiddenInput()->label(false);
-            echo $form->field($model, 'product_id')->hiddenInput()->label(false);
-            echo Html::submitButton($model->isNewRecord ?
-                '<i class="fa fa-thumbs-o-up" aria-hidden="true"></i>' :
-                '<i class="fa fa-thumbs-o-down" aria-hidden="true"></i>'
-            );
-            ActiveForm::end();
-            ?>
-
 
         </div>
     </div>

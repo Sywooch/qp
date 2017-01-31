@@ -31,17 +31,21 @@ $this->title = 'Корзина';
                 'name',
                 [
                     'attribute' => 'Количество',
-                    'format' => 'html',
+                    'format' => 'raw',
                     'value' => function ($product) {
                         /* @var $product app\models\Good\Good */
-                        return  $product->getQuantity();
+                        return  Html::stepper($product->id, $product->getQuantity());
                     }
                 ], [
-                    'attribute' => 'Сумма',
+                    'attribute' => 'Цена',
                     'format' => 'html',
                     'value' => function ($product) {
                         /* @var $product app\models\Good\Good */
-                        return  Html::price($product->getQuantity() * $product->getPrice());
+                        return  $product->getQuantity()
+                                . 'x'
+                                .Html::price($product->getPrice())
+                                . '<br/> = '
+                                .Html::price($product->getQuantity() * $product->getPrice());
                     }
                 ], [
                     'class' => 'yii\grid\ActionColumn',

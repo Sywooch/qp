@@ -80,8 +80,8 @@ class CatalogController extends \yii\web\Controller
     public function actionAdd()
     {
         $get = Yii::$app->request->post();
-        if (isset($get['product-id'])) {
-            Yii::$app->cart->put(Good::findByIdOr404($get['product-id']), $get['product-count']);
+        if (isset($get['product_id'])) {
+            Yii::$app->cart->put(Good::findByIdOr404($get['product_id']), $get['product_count']);
         }
         return Yii::$app->shopping->render();
     }
