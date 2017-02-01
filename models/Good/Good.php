@@ -6,7 +6,7 @@ use yii\web\NotFoundHttpException;
 use yz\shoppingcart\CartPositionInterface;
 use yz\shoppingcart\CartPositionTrait;
 use baibaratsky\yii\behaviors\model\SerializedAttributes;
-
+use app\models\Bookmark;
 /**
  * This is the model class for table "good".
  *
@@ -109,6 +109,12 @@ class Good extends \yii\db\ActiveRecord implements CartPositionInterface
     public function getCategory()
     {
         return $this->hasOne(Menu::className(), ['id' => 'category_id']);
+    }
+
+    public function getBookmark()
+    {
+        return $this->hasOne(Bookmark::className(), ['product_id' => 'id'])
+            ->onCondition(['user_id' => \Yii::$app->user->getId()]);
     }
 
     public function getImgPath()

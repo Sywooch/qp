@@ -1,5 +1,6 @@
 <?php
 /** @var $product app\models\Good\Good */
+
 use yii\bootstrap\ActiveForm;
 use app\models\Bookmark;
 use app\components\Html;
@@ -29,20 +30,18 @@ $url = ['product/view', 'id' => $product->id];
                     <i class="fa fa-shopping-cart" aria-hidden="true"></i>
                 </button>
                 <?php
-                $data = [
+                $bookmark = $product->bookmark ? $product->bookmark : new Bookmark([
                     'user_id' => Yii::$app->user->getId(),
                     'product_id' => $product->getId(),
-                ];
-                $model = Bookmark::findOne($data);
+                ]);
                 $form = ActiveForm::begin([
                     'id' => 'bookmark',
-                     'action' => [ $model ? 'catalog/delete-bookmark' : 'catalog/add-bookmark'],
+                    'action' => [ $bookmark->isNewRecord ?  'catalog/add-bookmark' : 'catalog/delete-bookmark' ],
                 ]);
-                $model = $model ? $model : new Bookmark($data);
 
-                echo $form->field($model, 'user_id')->hiddenInput()->label(false);
-                echo $form->field($model, 'product_id')->hiddenInput()->label(false);
-                echo Html::submitButton($model->isNewRecord ?
+                echo $form->field($bookmark, 'user_id')->hiddenInput()->label(false);
+                echo $form->field($bookmark, 'product_id')->hiddenInput()->label(false);
+                echo Html::submitButton($bookmark->isNewRecord ?
                     '<i class="fa fa-heart-o" aria-hidden="true"></i>' :
                     '<i class="fa fa-heart" aria-hidden="true"></i>',
                     ['class'=>'btn btn-default']

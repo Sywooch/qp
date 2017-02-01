@@ -52,7 +52,9 @@ class CatalogController extends \yii\web\Controller
 
     public function actionProducts($cid)
     {
-        $products = Good::findAll([ 'category_id' => $cid ]);
+        $products = Good::find()->joinWith('bookmark')->where([ 'category_id' => $cid ])->all();
+        $products_copy = $products;
+
         $fst_prod = array_shift($products);
         $common_props = $fst_prod->properties;
         foreach ($fst_prod->properties as $name => $pr) {
@@ -71,7 +73,7 @@ class CatalogController extends \yii\web\Controller
         }
 
         return $this->render('/product/index', [
-            'products' => Good::findAll([ 'category_id' => $cid ]),
+            'products' => $products_copy,
             'category' => Menu::findByIdOr404($cid),
             'filters' => $common_props,
         ]);
