@@ -82,4 +82,20 @@ class Menu extends \yii\db\ActiveRecord
         }
         return $root;
     }
+
+    public function getProducts() {
+        return $this->hasMany(Good::className(), ['category_id' => 'id']);
+    }
+
+    public function getProductCount() {
+        if ($leaves = $this->leaves()->all()) {
+            $ret = 0;
+            foreach($leaves as $leaf) {
+                $ret += $leaf->getProducts()->count();
+            }
+            return $ret;
+        }
+
+        return $this->getProducts()->count();
+    }
 }
