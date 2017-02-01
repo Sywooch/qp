@@ -45,7 +45,7 @@ class ProfileController extends \yii\web\Controller
     public function actionBookmark()
     {
         $dataProvider = new ActiveDataProvider([
-            'query' => Good::find()->innerJoin('bookmark')->where([ 'bookmark.user_id' => Yii::$app->user->getId() ]),
+            'query' => Yii::$app->user->identity->getBookmarks()->joinWith('product'),
         ]);
         return $this->render('bookmark', [
             'dataProvider' => $dataProvider,

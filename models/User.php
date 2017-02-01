@@ -338,4 +338,8 @@ class User extends ActiveRecord implements IdentityInterface
         }
     }
 
+    public function getBookmarks() {
+        return $this->hasMany(Bookmark::className(), ['user_id' => 'id']);
+    }
+
 }
