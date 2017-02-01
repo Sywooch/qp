@@ -25,7 +25,7 @@ class Html extends \yii\helpers\Html
      * @return string
      */
     public static function stepper($id, $count = 1) {
-        $html = "<input type=\"number\" class=\"form-control\" value=\"$count\" data-product-id=\"$id\">";
+        $html = "<input type=\"number\" class=\"form-control product-count\" value=\"$count\" data-product-id=\"$id\">";
 
         return $html;
     }

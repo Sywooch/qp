@@ -1,26 +1,33 @@
-(function($){
+var Cart = (function($){
 
-    const $inputCount = $('.product_count'),
+    const $inputCount = $('.product-count'),
         $compare = $('.btn-compare'),
         $cart = $('.shopping');
 
-    // TODO: Сделать функцию, которая будет предотвращать множественное отправление ajax запросов
-
     // Time in milliseconds between Ajax requests
-    const interval = 200;
+    const interval = 1000;
+    var timer = true;
 
-    var Cart = {
+    var csrfToken = $('meta[name="csrf-token"]').attr("content");
+
+    var __ = {
+        /**
+         * @access public
+         */
         init: function() {
             this.event();
         },
         event: function() {
             var self = this;
-            $inputCount.on('change', function () {
-                self.changeCount($(this));
-            });
 
             $compare.on('click', function () {
-                self.addToCart($(this));
+                if(timer) {
+                    self.addToCart($(this));
+                    timer = false;
+                    setTimeout(function() {
+                        timer = true;
+                    }, interval);
+                }
             });
         },
 
@@ -33,6 +40,8 @@
             var id = el.data('productId') || 0,
                 count = el.attr('data-product-count') || 0;
 
+
+
             this.getData('/catalog/add', {
                 id: id,
                 count: count
@@ -43,18 +52,25 @@
             if ($imgToFly) {
                 var $imgClone = $imgToFly.clone()
                     .offset($imgToFly.offset())
-                    .css({'opacity':'0.7', 'position':'absolute', 'height':'150px', 'width':'150px', 'z-index':'1000'})
+                    .css({
+                        'opacity': '0.7',
+                        'position': 'absolute',
+                        'height': '150px',
+                        'width': '150px',
+                        'z-index': '1000'
+                    })
                     .appendTo($('body'))
                     .animate({
                         'top': $cart.offset().top + 10,
                         'left': $cart.offset().left + 50,
-                        'width':35,
-                        'height':35
+                        'width': 35,
+                        'height': 35
                     }, 'slow');
 
-                $imgClone.animate({'width':0, 'height':0}, function(){ $(this).detach() });
+                $imgClone.animate({'width': 0, 'height': 0}, function () {
+                    $(this).detach();
+                });
             }
-
         },
 
         /**
@@ -63,7 +79,7 @@
          * @param {string} url example:"/controller/action"
          * @param {object} options
          */
-        getData: function(url, options){
+        getData: function(url, options) {
             var self = this;
             $.ajax({
                 url: url,
@@ -71,7 +87,8 @@
                 type: "POST",
                 data: {
                     product_id: options.id,
-                    product_count: options.count
+                    product_count: options.count,
+                    _csrf: csrfToken
                 },
                 success: function(result){
                     self.render(result);
@@ -91,19 +108,31 @@
         render: function (result) {
             setTimeout(function() {$cart.html(result)}, 600);
         },
-        changeCount: function (element) {
-            var id = element.data('productId'),
-                count = element.val();
+
+        /**
+         * Change event input number
+         *
+         * @access public
+         * @param {object} element
+         * @param {number} val
+         */
+        changeCount: function (element, val) {
+            var id = element.data('productId');
 
             $compare.each(function (index, el) {
 
                 if($(el).data('productId') === id) {
-                    $(el).attr('data-product-count', count);
+                    $(el).attr('data-product-count', val);
                 }
             });
         },
     };
 
-    Cart.init();
+    return {
+        init: __.init(),
+        changeCount: __.changeCount
+    };
+
+
 
 })(jQuery);
