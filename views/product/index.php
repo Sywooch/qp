@@ -8,7 +8,7 @@ use app\models\Good\Good;
 /* @var $this yii\web\View */
 /* @var $category app\models\Good\Menu */
 /* @var $products array app\models\Good\Menu */
-/* @var $bookmark array app\models\Bookmark */
+/* @var $filters null or array [ prop_name => [ 'value' => [values], 'type' => type ]] */
 
 $this->title = $category->name;
 foreach($category->parents()->all() as $par) {

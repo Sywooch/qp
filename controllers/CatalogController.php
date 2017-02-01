@@ -53,27 +53,30 @@ class CatalogController extends \yii\web\Controller
     public function actionProducts($cid)
     {
         $products = Good::find()->joinWith('bookmark')->where([ 'category_id' => $cid ])->all();
-        $products_copy = $products;
+        $common_props = null;
+        if ($products) {
+            $products_copy = $products;
 
-        $fst_prod = array_shift($products);
-        $common_props = $fst_prod->properties;
-        foreach ($fst_prod->properties as $name => $pr) {
-            $common_props[$name]['value'] = [ $common_props[$name]['value'] ];
-        }
+            $fst_prod = array_shift($products_copy);
+            $common_props = $fst_prod->properties;
+            foreach ($fst_prod->properties as $name => $pr) {
+                $common_props[$name]['value'] = [ $common_props[$name]['value'] ];
+            }
 
-        foreach ($products as $prod) {
-            foreach ($common_props as $name => &$pr) {
-                if (isset($prod->properties[$name])) {
-                    array_push($pr['value'], $prod->properties[$name]['value']);
-                }
-                else {
-                    unset($common_props[$name]);
+            foreach ($products_copy as $prod) {
+                foreach ($common_props as $name => &$pr) {
+                    if (isset($prod->properties[$name])) {
+                        array_push($pr['value'], $prod->properties[$name]['value']);
+                    }
+                    else {
+                        unset($common_props[$name]);
+                    }
                 }
             }
         }
 
         return $this->render('/product/index', [
-            'products' => $products_copy,
+            'products' => $products,
             'category' => Menu::findByIdOr404($cid),
             'filters' => $common_props,
         ]);
