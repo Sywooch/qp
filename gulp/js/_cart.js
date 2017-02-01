@@ -1,40 +1,95 @@
-var Cart = (function(){
+var Cart = (function($){
 
-    var inputCount = $('.product_count'),
-        compare = $('.btn-compare'),
-        el = $('.shopping');
+    const $inputCount = $('.product-count'),
+        $compare = $('.btn-compare'),
+        $cart = $('.shopping');
 
-    //todo: Сделать функцию, которая будет предотвращать множественное отправление ajax запросов
+    // Time in milliseconds between Ajax requests
+    const interval = 1000;
+    var timer = true;
 
-    //Time in milliseconds between Ajax requests
-    var interval = 200;
+    var csrfToken = $('meta[name="csrf-token"]').attr("content");
 
     var __ = {
+        /**
+         * @access public
+         */
         init: function() {
             this.event();
         },
         event: function() {
             var self = this;
-            inputCount.on('change', function () {
-                self.changeCount($(this));
-            });
 
-            compare.on('click', function () {
-                var id = $(this).data('productId'),
-                    count = $(this).attr('data-product-count');
-                self.getData('/catalog/add', {
-                    id: id,
-                    count: count
-                });
+            $compare.on('click', function () {
+                if(timer) {
+                    self.addToCart($(this));
+                    timer = false;
+                    setTimeout(function() {
+                        timer = true;
+                    }, interval);
+                }
             });
         },
-        getData: function(url, options){
+
+        /**
+         * Add product to cart
+         *
+         * @param {object} el dom element (button)
+         */
+        addToCart: function (el) {
+            var id = el.data('productId') || 0,
+                count = el.attr('data-product-count') || 0;
+
+
+
+            this.getData('/catalog/add', {
+                id: id,
+                count: count
+            });
+
+            // Animation goods movement to cart
+            var $imgToFly = $('img[data-product-id=' + id + ']');
+            if ($imgToFly) {
+                var $imgClone = $imgToFly.clone()
+                    .offset($imgToFly.offset())
+                    .css({
+                        'opacity': '0.7',
+                        'position': 'absolute',
+                        'height': '150px',
+                        'width': '150px',
+                        'z-index': '1000'
+                    })
+                    .appendTo($('body'))
+                    .animate({
+                        'top': $cart.offset().top + 10,
+                        'left': $cart.offset().left + 50,
+                        'width': 35,
+                        'height': 35
+                    }, 'slow');
+
+                $imgClone.animate({'width': 0, 'height': 0}, function () {
+                    $(this).detach();
+                });
+            }
+        },
+
+        /**
+         * Get data using ajax
+         *
+         * @param {string} url example:"/controller/action"
+         * @param {object} options
+         */
+        getData: function(url, options) {
             var self = this;
             $.ajax({
                 url: url,
                 dataType: "html",
                 type: "POST",
-                data: "product-id="+options.id+"&product-count="+options.count,
+                data: {
+                    product_id: options.id,
+                    product_count: options.count,
+                    _csrf: csrfToken
+                },
                 success: function(result){
                     self.render(result);
                 },
@@ -44,23 +99,40 @@ var Cart = (function(){
 
             });
         },
-        render: function (result) {
-            el.html(result);
-        },
-        changeCount: function (element) {
-            var id = element.data('productId'),
-                count = element.val();
 
-            compare.each(function (index, el) {
+        /**
+         * Render html in cart element
+         *
+         * @param {string} result Result from server
+         */
+        render: function (result) {
+            setTimeout(function() {$cart.html(result)}, 600);
+        },
+
+        /**
+         * Change event input number
+         *
+         * @access public
+         * @param {object} element
+         * @param {number} val
+         */
+        changeCount: function (element, val) {
+            var id = element.data('productId');
+
+            $compare.each(function (index, el) {
 
                 if($(el).data('productId') === id) {
-                    $(el).attr('data-product-count', count);
+                    $(el).attr('data-product-count', val);
                 }
             });
         },
     };
 
     return {
-        init: __.init()
-    }
-})();
+        init: __.init(),
+        changeCount: __.changeCount
+    };
+
+
+
+})(jQuery);

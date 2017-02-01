@@ -20,16 +20,12 @@ class Html extends \yii\helpers\Html
     /**
      * Render input form for product counter
      *
+     * @param $id integer product id
      * @param $count integer
      * @return string
      */
-    public static function counter($count = 1) {
-        $html =
-        '<div class="product-counter">'
-            . '<button class="btn btn-down">-<button>'
-            . '<input type="text" class="form-control" value="' . $count . '">'
-            . '<button class="btn btn-up">+<button>'
-        . '</div>';
+    public static function stepper($id, $count = 1) {
+        $html = "<input type=\"number\" class=\"form-control product-count\" value=\"$count\" data-product-id=\"$id\">";
 
         return $html;
     }

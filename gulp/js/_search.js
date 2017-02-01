@@ -1,25 +1,25 @@
-var Search = (function(){
+(function($){
 
-    var open = $('.btn-search-modal'),
-        input = $('#search-input-mobile');
+    "use strict";
 
-    var __ = {
+    var $open = $('.btn-search-modal'),
+        $input = $('#search-input-mobile');
+
+    var Search = {
         init: function() {
             this.event();
         },
         event: function() {
             var self = this;
-            open.on('click', function () {
+            $open.on('click', function () {
                 setTimeout(self.openSearch, 800);
             });
         },
         openSearch: function () {
-            input.focus();
-        },
+            $input.focus();
+        }
+    };
 
-    }
+    Search.init();
 
-    return {
-        init: __.init()
-    }
-})();
+})(jQuery);

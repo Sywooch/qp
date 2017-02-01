@@ -25,6 +25,7 @@ class ProductController extends Controller
     public function actionView($id)
     {
         $model = Good::findByIdOr404($id);
+
         return $this->render('view', [
             'product' => $model,
             'category' => Menu::findByIdOr404($model->category_id)

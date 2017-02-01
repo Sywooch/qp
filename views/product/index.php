@@ -8,6 +8,7 @@ use app\models\Good\Good;
 /* @var $this yii\web\View */
 /* @var $category app\models\Good\Menu */
 /* @var $products array app\models\Good\Menu */
+/* @var $filters null or array [ prop_name => [ 'value' => [values], 'type' => type ]] */
 
 $this->title = $category->name;
 foreach($category->parents()->all() as $par) {
@@ -25,7 +26,9 @@ $this->params['breadcrumbs'][] = $this->title;
 
     <?php
         foreach ($products as $product) {
-            echo ProductWidget::widget(['product' => $product]);
+            echo ProductWidget::widget([
+                'product' => $product,
+            ]);
         }
     ?>
 </div>

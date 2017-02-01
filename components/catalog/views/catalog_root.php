@@ -6,7 +6,7 @@ function traversal($node) {
     /** @var $node app\models\Good\Menu  */
     if ($chs = $node->children(1)->all()) {
         echo Html::beginTag('li' , ['class' => 'has-child']) . "\n";
-        echo Html::a($node->name, ['catalog/view', 'id' => $node->id]);
+        echo Html::a($node->name . '(' . $node->getProductCount() . ')', ['catalog/view', 'id' => $node->id]);
         echo Html::beginTag('ul') . "\n";
         foreach($chs as $ch) {
             traversal($ch);
@@ -15,7 +15,7 @@ function traversal($node) {
     }
     else {
         echo Html::beginTag('li') . "\n";
-        echo Html::a($node->name . "(кол-во товара)", ['catalog/view', 'id' => $node->id]);
+        echo Html::a($node->name . '(' . $node->getProductCount() . ')', ['catalog/view', 'id' => $node->id]);
     }
     echo Html::endTag('li') . "\n";
 }
