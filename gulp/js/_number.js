@@ -1,6 +1,6 @@
 (function($)
 {
-    // Chernov Sergey: This plugin is changed for project qpvl.ru
+    // This plugin is changed for project qpvl.ru
     /*
      Numeric Stepper jQuery plugin
 

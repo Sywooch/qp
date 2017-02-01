@@ -4,6 +4,11 @@
   }
 }
 .btn {
+  &.active {
+    box-shadow: none;
+    background-color: transparent;
+  }
+
   &-success {
     background-color: $cgreen;
     border: 1px solid rgb(53, 186, 82);

@@ -20,7 +20,7 @@ class CatalogController extends \yii\web\Controller
                 'only' => ['add-bookmark', 'delete-bookmark'],
                 'denyCallback' => function($role, $action) {
                     Yii::$app->session->setFlash('warning', 'Необходимо авторизоваться.');
-                    $this->goBack();
+                    $this->redirect('/site/login');
                 },
                 'rules' => [
                     [
@@ -86,7 +86,7 @@ class CatalogController extends \yii\web\Controller
     public function actionAdd()
     {
         $get = Yii::$app->request->post();
-        if (isset($get['product_id'])) {
+        if (isset($get['_csrf'])) {
             Yii::$app->cart->put(Good::findByIdOr404($get['product_id']), $get['product_count']);
         }
         return Yii::$app->shopping->render();
@@ -94,24 +94,35 @@ class CatalogController extends \yii\web\Controller
 
     public function actionAddBookmark()
     {
-        $model = new Bookmark();
-        if ($model->load(Yii::$app->request->post()) && $model->save()) {
-            Yii::$app->session->setFlash('success', 'Товар добавлен в избранное.');
+        $get = Yii::$app->request->post();
+        if (isset($get['_csrf'])) {
+            $model = new Bookmark([
+                'user_id' => Yii::$app->user->getId(),
+                'product_id' => $get['product_id']
+            ]);
+            if($model->save()) {
+                return "Add";
+            }
+            return "Error: ".$get['product_id'];
         }
-        return $this->goBack();
+
+        return "Error";
     }
 
     public function actionDeleteBookmark()
     {
-        $post = Yii::$app->request->post('Bookmark');
-        if (($model = Bookmark::findOne([
-            'user_id' => $post['user_id'],
-            'product_id' => $post['product_id'],
-            ]))
-            && $model->delete()) {
-
-            Yii::$app->session->setFlash('success', 'Товар удалён из избранного.');
+        $get = Yii::$app->request->post();
+        if (isset($get['_csrf'])) {
+            if (($model = Bookmark::findOne([
+                    'user_id' => Yii::$app->user->id,
+                    'product_id' => $get['product_id'],
+                ]))
+                && $model->delete()) {
+                return "Delete";
+            }
+            return "Error";
         }
-        return $this->goBack();
+
+        return "error";
     }
 }
