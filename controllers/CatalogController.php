@@ -43,6 +43,7 @@ class CatalogController extends \yii\web\Controller
     public function actionView($id = null)
     {
         $catalog = isset($id) ? Menu::findByIdOr404($id) : Menu::getRoot();
+
         if($catalog->children(1)->all()) {
             return $this->render('view', [ 'catalog' => $catalog ]);
         }
