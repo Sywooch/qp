@@ -5,6 +5,8 @@ namespace app\controllers;
 use Yii;
 use yii\data\ArrayDataProvider;
 use yii\filters\VerbFilter;
+use app\models\Order;
+use app\models\OrderProduct;
 
 class CartController extends \yii\web\Controller
 {
@@ -43,5 +45,30 @@ class CartController extends \yii\web\Controller
         Yii::$app->cart->removeAll();
 
         return $this->redirect(['index']);
+    }
+
+    public function actionOrder()
+    {
+        $order = new Order([ 'user_id' => Yii::$app->user->id ]);
+        if ($order->save()) {
+            /** @var $cart \yz\shoppingcart\ShoppingCart */
+            $cart = Yii::$app->cart;
+            foreach($cart->getPositions() as $product) {
+                $op = new OrderProduct([
+                    'products_count' => $product->getQuantity(),
+                    'product_c1id' => $product->c1id,
+                    'order_id' => $order->id,
+                ]);
+                if (!$op->save()) {
+                    Yii::error('Ошибка при оформлении заказа. ' .
+                        implode(', ', $op->getFirstErrors()));
+                }
+            }
+            $cart->removeAll();
+            return $this->render('/order', [ 'order' => $order ]);
+        }
+
+        Yii::error('Ошибка при оформлении заказа. ' .
+            implode(', ', $order->getFirstErrors()));
     }
 }

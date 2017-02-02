@@ -36,9 +36,11 @@ class ProfileController extends \yii\web\Controller
 
     public function actionIndex()
     {
-        $user = Yii::$app->user->identity;
+        $dataProvider = new ActiveDataProvider([
+            'query' => Yii::$app->user->identity->getOrders(),
+        ]);
         return $this->render('index', [
-            'email' => $user->email,
+            'ordersDataProvider' => $dataProvider,
         ]);
     }
 
