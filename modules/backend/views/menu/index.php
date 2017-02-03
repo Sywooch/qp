@@ -11,11 +11,8 @@ use yii\widgets\ActiveForm;
 
 
 <?php $form = ActiveForm::begin(['options' => ['enctype' => 'multipart/form-data']]) ?>
-
 <?= $form->field($model, 'zipFile')->fileInput() ?>
-
     <button>Submit</button>
-
 <?php ActiveForm::end() ?>
 
 <div class="row">
@@ -34,7 +31,6 @@ use yii\widgets\ActiveForm;
                                 'method' => 'post',
                             ]]
                         )?>
-                        <?=Html::a("<i class='fa fa-pencil'></i>", ['update', 'id' => $ch->id])?>
                     </td>
                 </tr>
             <?php endforeach; ?>

@@ -38,12 +38,12 @@ $this->params['breadcrumbs'][] = $this->title;
             'category_id',
         ]
     ]);
-    if ($prop = unserialize($model->properties)) {
+    if ($prop = $model->properties) {
         echo 'Свойства';
         echo DetailView::widget([
             'model' => $model,
             'attributes' => array_map(function($key, $val) {
-                return [ 'value' => $val, 'attribute' => $key ];
+                return [ 'value' => $val['value'], 'attribute' => $key ];
             }, array_keys($prop), $prop)
         ]);
     }
