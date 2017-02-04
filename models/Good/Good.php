@@ -2,11 +2,14 @@
 
 namespace app\models\Good;
 
+use Behat\Gherkin\Keywords\CachedArrayKeywords;
 use yii\web\NotFoundHttpException;
 use yz\shoppingcart\CartPositionInterface;
 use yz\shoppingcart\CartPositionTrait;
 use baibaratsky\yii\behaviors\model\SerializedAttributes;
 use app\models\Bookmark;
+use himiklab\yii2\search\behaviors\SearchBehavior;
+
 /**
  * This is the model class for table "good".
  *
@@ -29,6 +32,25 @@ class Good extends \yii\db\ActiveRecord implements CartPositionInterface
     public function behaviors()
     {
         return [
+            'search' => [
+                'class' => SearchBehavior::className(),
+                'searchScope' => function ($model) {
+                    /** @var \yii\db\ActiveQuery $model */
+                    $model->select(['id', 'name', 'properties', 'pic', 'price']);
+                    //$model->andWhere(['indexed' => true]);
+                },
+                'searchFields' => function ($model) {
+                    /** @var self $model */
+                    return [
+                        ['name' => 'id', 'value' => $model->id, 'type' => SearchBehavior::FIELD_UNINDEXED],
+                        ['name' => 'name', 'value' => $model->name],
+                        ['name' => 'properties', 'value' => serialize($model->properties)],
+                        ['name' => 'pic', 'value' => $model->pic, SearchBehavior::FIELD_BINARY],
+                        ['name' => 'price', 'value' => $model->price],
+                    ];
+                }
+            ],
+
             'serializedAttributes' => [
                 'class' => SerializedAttributes::className(),
                 // Define the attributes you want to be serialized

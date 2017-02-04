@@ -16,6 +16,7 @@ use yii\base\InvalidParamException;
 use yii\web\BadRequestHttpException;
 use yii\helpers\Url;
 use app\models\Profile\AccountActivation;
+use yii\data\ArrayDataProvider;
 
 class SiteController extends Controller
 {
@@ -255,5 +256,26 @@ class SiteController extends Controller
         return $this->render('reset_password', [
             'model' => $model,
         ]);
+    }
+
+    public function actionSearch($q = '')
+    {
+        /** @var \himiklab\yii2\search\Search $search */
+        $searchData = Yii::$app->search->find($q); // Search by full index.
+        //$searchData = $search->find($q, ['model' => 'page']); // Search by index provided only by model `page`.
+
+        $dataProvider = new ArrayDataProvider([
+            'allModels' => $searchData['results'],
+            'pagination' => ['pageSize' => 10],
+        ]);
+
+        return $this->render(
+            'found',
+            [
+                'hits' => $dataProvider->getModels(),
+                'pagination' => $dataProvider->getPagination(),
+                'query' => $searchData['query']
+            ]
+        );
     }
 }
