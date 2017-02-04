@@ -10,6 +10,8 @@ use yii\helpers\Url;
 
 $this->title = $product->name;
 
+$this->params['sidebarLayout'] = true;
+
 
 foreach($category->parents()->all() as $par) {
     $this->params['breadcrumbs'][] =  [
@@ -24,17 +26,22 @@ $this->params['breadcrumbs'][] =  [
 $this->params['breadcrumbs'][] = $this->title;
 
 ?>
-<div class="good-view">
+<div class="product-view">
 
-    <h1>123<?= Html::encode($this->title) ?></h1>
+    <h1><?= Html::encode($this->title) ?></h1>
     <div class="row">
-        <div class="col-sm-8 col-xs-12">
-            <?=Html::img([ $product->getImgPath() ], ['height'=>204, 'width'=>270, 'class'=>'img-responsive', 'data-product-id'=>$product->id])?>
+        <div class="col-sm-5 col-xs-12">
+            <div class="thumbnails">
+                <div class="product-image">
+                    <?=Html::img([ $product->getImgPath() ], ['height'=>204, 'width'=>270, 'class'=>'img-responsive', 'data-product-id'=>$product->id])?>
+                </div>
+            </div>
         </div>
-        <div class="col-sm-4 col-xs-12">
-            <label class="product-price">
+        <div class="col-sm-7 col-xs-12 product-detail">
+
+            <div class="price">
                 <?=Html::price($product->price)?>
-            </label>
+            </div>
             <div class="product-panel">
                 <div class="btn-group">
                     <input type="number" min="1" value="1"
@@ -46,9 +53,22 @@ $this->params['breadcrumbs'][] = $this->title;
                 <button class="btn btn-icon btn-icon-left btn-success btn-compare"
                         data-product-id="<?= $product->id ?>"
                         data-product-count="1">
-                    <i class="fa fa-shopping-cart" aria-hidden="true"></i>
+                    <i class="fa fa-shopping-cart" aria-hidden="true"></i> Добавить в корзину
                 </button>
             </div>
+
+            <div>
+                <h3>Характеристики:</h3>
+                <table class="table product-info">
+                    <?php
+                    foreach ($product->properties as $key => $value) {
+                        echo "<tr><td>" . $key . "</td><td>" . $value['value'] . "</td></tr>";
+                    }
+                    ?>
+                </table>
+            </div>
+
+
         </div>
     </div>
 </div>

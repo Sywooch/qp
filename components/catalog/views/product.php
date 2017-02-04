@@ -35,7 +35,10 @@ $bookmark = $product->bookmark ? $product->bookmark : new Bookmark([
                     <i class="fa fa-shopping-cart" aria-hidden="true"></i>
                 </button>
                 <label class="btn btn-default bookmark <?=$bookmark->isNewRecord ? '' : 'active'?>"
-                       data-product-id="<?= $product->id ?>">
+                       data-product-id="<?= $product->id ?>"
+                       data-toggle="tooltip"
+                       data-placement="top"
+                       title="<?=$bookmark->isNewRecord ? 'В избранное' : 'В избранном'?>">
                     <input type="checkbox">
                 </label>
             </div>
