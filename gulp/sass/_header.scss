@@ -3,7 +3,8 @@ $line-height-header: 50px;
  * Header default
  */
 .header {
-  &__inner {
+
+  &__middle {
     @media (max-width: $screen-xs-min) {
       height: $line-height-header;
     }
@@ -13,6 +14,7 @@ $line-height-header: 50px;
       position: relative;
     }
   }
+
   &__logo {
     a {
       color: $cgreen;
@@ -98,7 +100,7 @@ $line-height-header: 50px;
 @media (max-width: $screen-md-min) {
   .header {
 
-    &__inner {
+    &__middle {
       height: $line-height-header;
       position: absolute;
       z-index: 1;

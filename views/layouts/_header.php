@@ -6,7 +6,7 @@ use yii\bootstrap\NavBar;
 ?>
 
 <header class="header">
-    <div class="header__inner">
+    <div class="header__middle">
         <div class="container">
             <div class="row">
                 <div class="col-md-3 col-xs-6 col-xs-offset-3 col-md-offset-0">
@@ -24,10 +24,6 @@ use yii\bootstrap\NavBar;
                     <button class="btn btn-search-modal" data-toggle="modal" data-target=".bs-search-modal-lg">
                         <i class="fa fa-search"></i>
                     </button>
-<!--                    <a href="#" class="btn cart-mobile">-->
-<!--                        <i class="fa fa-shopping-cart"></i>-->
-<!--                        <span class="badge" data-toggle="visible" data-of="totalCount" style="">2</span>-->
-<!--                    </a>-->
                 </div>
                 <div class="col-md-6 col-xs-12">
                     <section class="search row">
@@ -79,6 +75,11 @@ use yii\bootstrap\NavBar;
 
     NavBar::end();
     ?>
+
+    <div class="header__bottom">
+
+    </div>
+
 </header>
 
 <div class="modal fade bs-search-modal-lg" id="searchModal" tabindex="-1" role="dialog" aria-labelledby="searchLabel">
