@@ -12,4 +12,3 @@ use yii\helpers\Url;
 
 </div><!-- /input-group -->
 <?= Html::endForm() ?>
-<br/>
