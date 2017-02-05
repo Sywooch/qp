@@ -57,7 +57,6 @@ $this->params['breadcrumbs'][] = $this->title;
                             'method' => 'post',
                         ]]
                     )?>
-                    <?=Html::a("<i class='fa fa-pencil'></i>", ['update', 'id' => $ch->id])?>
                 </td>
             </tr>
             <?php endforeach; ?>

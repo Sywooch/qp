@@ -9,6 +9,10 @@ $img = Html::img([ $product->getImgPath() ],
     ['height'=>204, 'width'=>270, 'class'=>'img-responsive', 'data-product-id'=>$product->id]);
 
 $url = ['product/view', 'id' => $product->id];
+$bookmark = $product->bookmark ? $product->bookmark : new Bookmark([
+    'user_id' => Yii::$app->user->getId(),
+    'product_id' => $product->getId(),
+]);
 ?>
 <div class='col-md-4 col-sm-6 col-xs-12'>
     <div class="product card">
@@ -22,32 +26,21 @@ $url = ['product/view', 'id' => $product->id];
             <?=Html::price($product->price)?>
         </label>
         <div class="product-panel">
-            <div class="btn-group">
+            <div class="btn-group"  data-toggle="buttons">
                 <?=Html::stepper($product->id)?>
                 <button class="btn btn-icon btn-icon-left btn-success btn-compare"
                         data-product-id="<?= $product->id ?>"
-                        data-product-count="1">
+                        data-product-count="1"
+                        data-active="1">
                     <i class="fa fa-shopping-cart" aria-hidden="true"></i>
                 </button>
-                <?php
-                $bookmark = $product->bookmark ? $product->bookmark : new Bookmark([
-                    'user_id' => Yii::$app->user->getId(),
-                    'product_id' => $product->getId(),
-                ]);
-                $form = ActiveForm::begin([
-                    'id' => 'bookmark',
-                    'action' => [ $bookmark->isNewRecord ?  'catalog/add-bookmark' : 'catalog/delete-bookmark' ],
-                ]);
-
-                echo $form->field($bookmark, 'user_id')->hiddenInput()->label(false);
-                echo $form->field($bookmark, 'product_id')->hiddenInput()->label(false);
-                echo Html::submitButton($bookmark->isNewRecord ?
-                    '<i class="fa fa-heart-o" aria-hidden="true"></i>' :
-                    '<i class="fa fa-heart" aria-hidden="true"></i>',
-                    ['class'=>'btn btn-default']
-                );
-                ActiveForm::end();
-                ?>
+                <label class="btn btn-default bookmark <?=$bookmark->isNewRecord ? '' : 'active'?>"
+                       data-product-id="<?= $product->id ?>"
+                       data-toggle="tooltip"
+                       data-placement="top"
+                       title="<?=$bookmark->isNewRecord ? 'В избранное' : 'В избранном'?>">
+                    <input type="checkbox">
+                </label>
             </div>
 
         </div>

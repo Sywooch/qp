@@ -5,7 +5,7 @@ var Cart = (function($){
         $cart = $('.shopping');
 
     // Time in milliseconds between Ajax requests
-    const interval = 1000;
+    const interval = 900;
     var timer = true;
 
     var csrfToken = $('meta[name="csrf-token"]').attr("content");
@@ -39,8 +39,6 @@ var Cart = (function($){
         addToCart: function (el) {
             var id = el.data('productId') || 0,
                 count = el.attr('data-product-count') || 0;
-
-
 
             this.getData('/catalog/add', {
                 id: id,

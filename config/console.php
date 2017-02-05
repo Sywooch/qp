@@ -9,6 +9,12 @@ $config = [
     'bootstrap' => ['log'],
     'controllerNamespace' => 'app\commands',
     'components' => [
+        'search' => [
+            'class' => 'himiklab\yii2\search\Search',
+            'models' => [
+                'app\models\Good\Good',
+            ],
+        ],
         'cache' => [
             'class' => 'yii\caching\FileCache',
         ],

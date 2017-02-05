@@ -72,7 +72,7 @@ $this->title = 'Корзина';
         </div>
     </div>
     <div class="cart-btn">
-        <?= Html::a('Оформить заказ', [''], [
+        <?= Html::a('Оформить заказ', ['order'], [
             'class' => 'btn btn-success btn-lg ',
         ]) ?>
     </div>

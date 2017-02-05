@@ -13,8 +13,6 @@ use app\models\User;
 
     <?php $form = ActiveForm::begin(); ?>
 
-    <?= $form->field($model, 'name')->textInput(['maxlength' => true]) ?>
-
     <?= $form->field($model, 'email')->input('email') ?>
 
     <?= $form->field($model, 'status')->dropDownList([
