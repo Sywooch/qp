@@ -26,10 +26,10 @@ use yii\bootstrap\NavBar;
                     </button>
                 </div>
                 <div>
-                    <?= $this->render('_search_form', ['text' => '']) ?>
+
                 </div>
-<!--                <div class="col-md-6 col-xs-12">-->
-<!--                    <section class="search row">-->
+                <div class="col-md-6 col-xs-12">
+                    <section class="search row">
 <!--                        <form action="/" method="GET" class="form form-search col-xs-9 col-md-12">-->
 <!--                            <div class="input-group">-->
 <!--                            <span class="input-group-addon">-->
@@ -40,8 +40,9 @@ use yii\bootstrap\NavBar;
 <!--                                <input id="search-input" class="form-control input-lg" placeholder="Поиск среди более 10 000 товаров" autocomplete="off" spellcheck="false" autocorrect="off" tabindex="1">-->
 <!--                            </div>-->
 <!--                        </form>-->
-<!--                    </section>-->
-<!--                </div>-->
+                        <?= $this->render('_search_form', ['text' => '']) ?>
+                    </section>
+                </div>
                 <div class="col-md-3 hidden-xs hidden-sm">
                     <div class="header__phone">
                         8 (800) 123-12-12
@@ -112,3 +113,7 @@ use yii\bootstrap\NavBar;
         </div>
     </div>
 </div>
+
+<?php
+echo Yii::$app->search->index();
+?>
