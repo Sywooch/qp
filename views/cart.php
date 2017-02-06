@@ -10,8 +10,10 @@ use yii\grid\GridView;
 $this->title = 'Корзина';
 ?>
 <main class="cart">
-
     <h1><?= Html::encode($this->title) ?></h1>
+<?php if($dataProvider->getTotalCount()) : ?>
+
+
 
     <div class="cart-list">
         <?= GridView::widget([
@@ -76,4 +78,16 @@ $this->title = 'Корзина';
             'class' => 'btn btn-success btn-lg ',
         ]) ?>
     </div>
+
+<?php else: ?>
+    <div class="cart-empty">
+
+        <?=Html::img('@web/img/components/cart-empty.gif');?>
+        <h2>Корзина пуста</h2>
+        <br/>
+        <p><b>В корзине нет ни одного товара или услуги</b></p>
+        <p>Если вы считаете, что это ошибка, обратитесь в IT-отдел компании: <?=Yii::$app->params['phone.it']?></p>
+    </div>
+<?php endif; ?>
+
 </main>

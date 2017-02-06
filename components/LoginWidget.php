@@ -20,6 +20,7 @@ class LoginWidget extends Widget
                         'items' => [
                             ['label' => 'Личный кабинет', 'url' => '/profile/index'],
                             ['label' => 'Избранное', 'url' => '/profile/bookmark'],
+                            ['label' => 'Backend', 'url' => ['/backend']],
                             '<li role="separator" class="divider"></li>',
                             '<li>'
                             . Html::beginForm(['/site/logout'], 'post')
