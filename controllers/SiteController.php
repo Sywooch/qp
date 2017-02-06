@@ -30,7 +30,11 @@ class SiteController extends Controller
                 'class' => AccessControl::className(),
                 'only' => ['logout', 'login', 'reg', 'profile'],
                 'denyCallback' => function($role, $action) {
-                    Yii::$app->session->setFlash('warning', 'Необходимо авторизоваться.');
+                    Yii::$app->session->setFlash('warning',
+                        ($action->id == 'logout' || $action->id == 'profile') ?
+                        'Необходимо авторизоваться.' :
+                        'Действие недоступно после авторизации.');
+
                     $this->goHome();
                 },
                 'rules' => [
