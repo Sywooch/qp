@@ -9,7 +9,7 @@ use yii\grid\GridView;
 
 $this->title = 'Корзина';
 ?>
-<main class="cart app" data-stage="cart">
+<main class="cart" id="app" data-stage="cart">
     <h1><?= Html::encode($this->title) ?></h1>
 <?php if($dataProvider->getTotalCount()) : ?>
 

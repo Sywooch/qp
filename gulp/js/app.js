@@ -5,8 +5,16 @@ var App = (function(){
     return {
         init: function() {
 
-            Product.init;
-            Cart.init;
+            var stage = [];
+
+            var currentStage = $('#app[data-stage]').data('stage') || 'product';
+
+            stage['cart'] = Cart;
+            stage['product'] = Product;
+
+            stage[currentStage].init();
+
+            console.log(currentStage);
 
             $('input[type=number]').stepper({
                 type: 'int',       // Allow floating point numbers
@@ -18,8 +26,7 @@ var App = (function(){
 
                 onStep: function( val, up )
                 {
-                    Product.changeCount(this, val);
-                    Cart.update(this, val);
+                    stage[currentStage].update(this, val);
                 }
             });
         }
