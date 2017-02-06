@@ -14,7 +14,7 @@ use Yii;
  * @property Good\Good $product
  * @property User $user
  */
-class Bookmark extends \yii\db\ActiveRecord
+class Bookmark extends CachedActiveRecord
 {
     /**
      * @inheritdoc

@@ -51,7 +51,7 @@ class GoodController extends Controller
     public function actionView($id)
     {
         return $this->render('view', [
-            'model' => Good::findByIdOr404($id),
+            'model' => Good::findOneOr404($id),
         ]);
     }
 
@@ -81,7 +81,7 @@ class GoodController extends Controller
      */
     public function actionUpdate($id)
     {
-        $model = Good::findByIdOr404($id);
+        $model = Good::findOneOr404($id);
 
         if ($model->load(Yii::$app->request->post()) && $model->save()) {
             return $this->redirect(['view', 'id' => $model->id]);
@@ -101,7 +101,7 @@ class GoodController extends Controller
      */
     public function actionDelete($id)
     {
-        Good::findByIdOr404($id)->delete();
+        Good::findOneOr404($id)->delete();
 
         return $this->redirect(['index']);
     }

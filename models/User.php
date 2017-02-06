@@ -28,7 +28,7 @@ use yii\web\NotFoundHttpException;
  * @property string $password write-only password
  * @property string $role
  */
-class User extends ActiveRecord implements IdentityInterface
+class User extends CachedActiveRecord implements IdentityInterface
 {
     public $role;
 
@@ -88,7 +88,6 @@ class User extends ActiveRecord implements IdentityInterface
             'email' => 'Email',
             'status' => 'Статус',
             'role' => 'Роль',
-            'role' => 'Роль',
             'created_at' => 'Создан',
             'updated_at' => 'Изменён',
         ];
@@ -114,7 +113,7 @@ class User extends ActiveRecord implements IdentityInterface
 
     public static function findByEmail($email)
     {
-        return static::findOne(['email' => $email]);
+        return static::cachedFindOne(['email' => $email]);
     }
     /**
      * @inheritdoc
@@ -130,7 +129,7 @@ class User extends ActiveRecord implements IdentityInterface
      */
 
     public static function findIdentity($id) {
-        return static::findOne(['id' => $id, 'status' => self::STATUS_ACTIVE]);
+        return static::cachedFindOne(['id' => $id, 'status' => self::STATUS_ACTIVE]);
     }
 
     /**
@@ -179,7 +178,7 @@ class User extends ActiveRecord implements IdentityInterface
             Yii::$app->session->setFlash('error', 'Срок действия ключа истёк');
             return null;
         }
-        return static::findOne([
+        return static::cachedFindOne([
             'password_reset_token' => $token,
             // 'status' => self::STATUS_ACTIVE,
         ]);
@@ -328,14 +327,6 @@ class User extends ActiveRecord implements IdentityInterface
     public function removePasswordResetToken()
     {
         $this->password_reset_token = null;
-    }
-
-    public static function findByIdOr404($id) {
-        if (($model = self::findOne($id)) !== null) {
-            return $model;
-        } else {
-            throw new NotFoundHttpException('Пользователя с таким id не существует.');
-        }
     }
 
     public function getBookmarks() {

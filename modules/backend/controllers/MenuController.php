@@ -31,7 +31,7 @@ class MenuController extends Controller
    public function actionView($id)
     {
         $menu = new Menu;
-        $par = Menu::findByIdOr404($id);
+        $par = Menu::findOneOr404($id);
 
         if ($menu->load(Yii::$app->request->post())) {
             $menu->appendTo($par);
@@ -44,7 +44,7 @@ class MenuController extends Controller
 
     public function actionDelete($id)
     {
-        $model = Menu::findByIdOr404($id);
+        $model = Menu::findOneOr404($id);
         $par_id = $model->parents(1)->one()->id;
         $model->deleteWithChildren();
         return $this->redirect([ 'view', 'id' => $par_id ]);

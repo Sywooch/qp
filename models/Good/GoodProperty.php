@@ -2,6 +2,7 @@
 
 namespace app\models\Good;
 
+use app\models\CachedActiveRecord;
 use Yii;
 
 /**
@@ -14,7 +15,7 @@ use Yii;
  */
 
 
-class GoodProperty extends \yii\db\ActiveRecord
+class GoodProperty extends CachedActiveRecord
 {
     const STRING_TYPE = 0;
     const DICTIONARY_TYPE = 10;
@@ -65,7 +66,7 @@ class GoodProperty extends \yii\db\ActiveRecord
         }
 
         if ($this->type == self::DICTIONARY_TYPE) {             // ADD code for rest cases
-            if ($dict = PropertyDictionary::findOne(['c1id' => $value])) {
+            if ($dict = PropertyDictionary::cachedFindOne(['c1id' => $value])) {
                 return $dict->value;
             }
             else {

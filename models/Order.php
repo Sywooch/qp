@@ -17,7 +17,7 @@ use yii\web\NotFoundHttpException;
  * @property User $user
  * @property OrderProduct[] $orderProducts
  */
-class Order extends \yii\db\ActiveRecord
+class Order extends CachedActiveRecord
 {
     /**
      * @inheritdoc
@@ -71,11 +71,4 @@ class Order extends \yii\db\ActiveRecord
         return $this->hasMany(OrderProduct::className(), ['order_id' => 'id']);
     }
 
-    public static function findByIdOr404($id) {
-        if (($model = self::findOne($id)) !== null) {
-            return $model;
-        } else {
-            throw new NotFoundHttpException('Нет такого заказа.');
-        }
-    }
 }

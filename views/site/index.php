@@ -12,7 +12,9 @@ $this->params['sidebarLayout'] = true;
 
 <div class="row">
     <?php
-    foreach ($catalog->children(1)->all() as $ch) {
+    foreach (Yii::$app->db->cache(function ($db) use ($catalog) {
+        return $catalog->children(1)->all();
+    }) as $ch) {
         echo CategoryWidget::widget([ 'item' => $ch ]);
     }
     ?>

@@ -3,6 +3,8 @@
 use app\components\Html;
 use yii\web\View;
 use yii\helpers\Url;
+use yii\caching\TagDependency;
+use app\models\Good\Menu;
 
 /* @var $this yii\web\View */
 /* @var $product app\models\Good\Good */
@@ -12,8 +14,9 @@ $this->title = $product->name;
 
 $this->params['sidebarLayout'] = true;
 
-
-foreach($category->parents()->all() as $par) {
+foreach(Yii::$app->db->cache(function() use($category) {
+    return $category->parents()->all();
+}, null, new TagDependency(['tags' => 'cache_table_' . Menu::tableName()])) as $par) {
     $this->params['breadcrumbs'][] =  [
         'label' => $par->name,
         'url' => Url::to(['catalog/view', 'id' => $par->id])

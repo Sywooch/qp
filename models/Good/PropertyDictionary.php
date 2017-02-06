@@ -1,6 +1,7 @@
 <?php
 
 namespace app\models\Good;
+use app\models\CachedActiveRecord;
 
 use Yii;
 
@@ -12,7 +13,7 @@ use Yii;
  * @property string $value
  * @property integer $property_id
  */
-class PropertyDictionary extends \yii\db\ActiveRecord
+class PropertyDictionary extends CachedActiveRecord
 {
     /**
      * @inheritdoc

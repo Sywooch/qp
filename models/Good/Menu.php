@@ -2,9 +2,11 @@
 
 namespace app\models\Good;
 
+use app\models\CachedActiveRecord;
 use Yii;
 use creocoder\nestedsets\NestedSetsBehavior;
 use yii\web\NotFoundHttpException;
+use yii\caching\TagDependency;
 
 /**
  * This is the model class for table "menu".
@@ -15,7 +17,7 @@ use yii\web\NotFoundHttpException;
  * @property integer $depth
  * @property string $name
  */
-class Menu extends \yii\db\ActiveRecord
+class Menu extends CachedActiveRecord
 {
     public function rules()
     {
@@ -59,16 +61,8 @@ class Menu extends \yii\db\ActiveRecord
         return new MenuQuery(get_called_class());
     }
 
-    public static function findByIdOr404($id) {
-        if (($model = self::findOne($id)) !== null) {
-            return $model;
-        } else {
-            throw new NotFoundHttpException('Нет такой категории в каталоге.');
-        }
-    }
-
     public static function findByC1id($c1id) {
-        return self::findOne([ 'c1id' => $c1id ]);
+        return self::cachedFindOne([ 'c1id' => $c1id ]);
     }
 
     /**
@@ -76,8 +70,13 @@ class Menu extends \yii\db\ActiveRecord
      * @return return root node, or create new one if not yet exist.
      */
     public static function getRoot() {
-        if (($root = Menu::find()->roots()->one()) === null) {
-            $root = new Menu([ 'name' => 'Категории товаров' ]);
+        $root = self::getDb()->cache(function ($db)
+        {
+            return static::find()->roots()->one();
+        }, null, new TagDependency(['tags'=>'cache_table_' . static::tableName()]));
+
+        if ($root === null) {
+            $root = new self([ 'name' => 'Категории товаров' ]);
             $root->makeRoot();
         }
         return $root;
@@ -88,14 +87,24 @@ class Menu extends \yii\db\ActiveRecord
     }
 
     public function getProductCount() {
-        if ($leaves = $this->leaves()->all()) {
+        if ($leaves = self::getDb()->cache(function ($db)
+        {
+            return $this->leaves()->all();
+        }, null, new TagDependency(['tags'=>'cache_table_' . static::tableName()])))
+        {
             $ret = 0;
             foreach($leaves as $leaf) {
-                $ret += $leaf->getProducts()->count();
+                $ret += self::getDb()->cache(function ($db) use($leaf)
+                {
+                    return $leaf->getProducts()->count();
+                }, null, new TagDependency(['tags'=>'cache_table_' . Good::tableName()]));
             }
             return $ret;
         }
 
-        return $this->getProducts()->count();
+        return self::getDb()->cache(function ($db)
+        {
+            return $this->getProducts()->count();
+        }, null, new TagDependency(['tags'=>'cache_table_' . static::tableName()]));
     }
 }
