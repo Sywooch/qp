@@ -9,11 +9,9 @@ use yii\grid\GridView;
 
 $this->title = 'Корзина';
 ?>
-<main class="cart">
+<main class="cart app" data-stage="cart">
     <h1><?= Html::encode($this->title) ?></h1>
 <?php if($dataProvider->getTotalCount()) : ?>
-
-
 
     <div class="cart-list">
         <?= GridView::widget([
@@ -40,14 +38,10 @@ $this->title = 'Корзина';
                     }
                 ], [
                     'attribute' => 'Цена',
-                    'format' => 'html',
+                    'format' => 'raw',
                     'value' => function ($product) {
                         /* @var $product app\models\Good\Good */
-                        return  $product->getQuantity()
-                                . 'x'
-                                .Html::price($product->getPrice())
-                                . '<br/> = '
-                                .Html::price($product->getQuantity() * $product->getPrice());
+                        return $this->render('/order/_itemPrice', ['product' => $product]);
                     }
                 ], [
                     'class' => 'yii\grid\ActionColumn',
@@ -68,7 +62,7 @@ $this->title = 'Корзина';
             <span class="label">
                 Итого:
             </span>
-            <span class="price">
+            <span id="total" class="price">
                 <?=Html::price($cart->getCost())?>
             </span>
         </div>

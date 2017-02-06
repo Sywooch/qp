@@ -5,6 +5,7 @@ var App = (function(){
     return {
         init: function() {
 
+            Product.init;
             Cart.init;
 
             $('input[type=number]').stepper({
@@ -17,7 +18,8 @@ var App = (function(){
 
                 onStep: function( val, up )
                 {
-                    Cart.changeCount(this, val);
+                    Product.changeCount(this, val);
+                    Cart.update(this, val);
                 }
             });
         }

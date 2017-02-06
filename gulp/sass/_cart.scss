@@ -35,6 +35,9 @@
     }
 
   }
+  &-item {
+    min-width: 100px;
+  }
   &-total {
     text-align: right;
     .label {
