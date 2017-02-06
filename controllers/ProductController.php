@@ -24,11 +24,11 @@ class ProductController extends Controller
      */
     public function actionView($id)
     {
-        $model = Good::findByIdOr404($id);
+        $model = Good::findOneOr404($id);
 
         return $this->render('view', [
             'product' => $model,
-            'category' => Menu::findByIdOr404($model->category_id)
+            'category' => Menu::findOneOr404($model->category_id)
         ]);
     }
 }

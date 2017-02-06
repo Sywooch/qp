@@ -2,6 +2,7 @@
 
 namespace app\models\Good;
 
+use app\models\CachedActiveRecord;
 use Behat\Gherkin\Keywords\CachedArrayKeywords;
 use yii\web\NotFoundHttpException;
 use yz\shoppingcart\CartPositionInterface;
@@ -24,7 +25,7 @@ use himiklab\yii2\search\behaviors\SearchBehavior;
  *
  * @property Menu $category
  */
-class Good extends \yii\db\ActiveRecord implements CartPositionInterface
+class Good extends CachedActiveRecord implements CartPositionInterface
 {
 
     use CartPositionTrait;
@@ -143,13 +144,4 @@ class Good extends \yii\db\ActiveRecord implements CartPositionInterface
     {
         return 'img/catalog/good/' . ($this->pic ? $this->pic : 'default.png');
     }
-
-    public static function findByIdOr404($id) {
-        if (($model = self::findOne($id)) !== null) {
-            return $model;
-        } else {
-            throw new NotFoundHttpException('Нет такого товара в каталоге.');
-        }
-    }
-
 }

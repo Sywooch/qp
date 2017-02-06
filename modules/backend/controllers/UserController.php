@@ -51,7 +51,7 @@ class UserController extends Controller
     public function actionView($id)
     {
         return $this->render('view', [
-            'model' => User::findByIdOr404($id),
+            'model' => User::findOneOr404($id),
         ]);
     }
 
@@ -81,7 +81,7 @@ class UserController extends Controller
      */
     public function actionUpdate($id)
     {
-        $model = User::findByIdOr404($id);
+        $model = User::findOneOr404($id);
 
         if ($model->load(Yii::$app->request->post()) && $model->save()) {
             return $this->redirect(['index']);
@@ -100,7 +100,7 @@ class UserController extends Controller
      */
     public function actionDelete($id)
     {
-        User::findByIdOr404($id)->delete();
+        User::findOneOr404($id)->delete();
 
         return $this->redirect(['index']);
     }

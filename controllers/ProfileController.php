@@ -8,10 +8,13 @@ use app\models\Profile\SetPhoneForm;
 use app\models\User;
 use app\models\Profile\ValidatePhoneForm;
 use app\models\Good\Good;
+use app\models\Bookmark;
+use app\models\Order;
 
 use yii\data\ActiveDataProvider;
 use Yii;
 use yii\filters\AccessControl;
+use yii\caching\TagDependency;
 
 class ProfileController extends \yii\web\Controller
 {
@@ -39,6 +42,9 @@ class ProfileController extends \yii\web\Controller
         $dataProvider = new ActiveDataProvider([
             'query' => Yii::$app->user->identity->getOrders(),
         ]);
+        Yii::$app->db->cache(function ($db) use ($dataProvider) {
+            $dataProvider->prepare();
+        }, null, new TagDependency(['tags' => 'cache_table_' . Order::tableName()]));
         return $this->render('index', [
             'ordersDataProvider' => $dataProvider,
         ]);
@@ -49,6 +55,9 @@ class ProfileController extends \yii\web\Controller
         $dataProvider = new ActiveDataProvider([
             'query' => Yii::$app->user->identity->getBookmarks()->joinWith('product'),
         ]);
+        Yii::$app->db->cache(function ($db) use ($dataProvider) {
+            $dataProvider->prepare();
+        }, null, new TagDependency(['tags' => 'cache_table_' . Bookmark::tableName()]));
         return $this->render('bookmark', [
             'dataProvider' => $dataProvider,
         ]);

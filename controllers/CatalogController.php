@@ -9,6 +9,7 @@ use yii\filters\AccessControl;
 use yii\filters\VerbFilter;
 
 use Yii;
+use yii\caching\TagDependency;
 
 class CatalogController extends \yii\web\Controller
 {
@@ -42,9 +43,11 @@ class CatalogController extends \yii\web\Controller
 
     public function actionView($id = null)
     {
-        $catalog = isset($id) ? Menu::findByIdOr404($id) : Menu::getRoot();
-
-        if($catalog->children(1)->all()) {
+        $catalog = isset($id) ? Menu::findOneOr404($id) : Menu::getRoot();
+        if(Yii::$app->db->cache(function ($db) use($catalog)
+        {
+            return $catalog->children(1)->all();
+        }, null, new TagDependency(['tags' => 'cache_table_' . Menu::tableName()]))) {
             return $this->render('view', [ 'catalog' => $catalog ]);
         }
         $this->layout = "products";
@@ -53,7 +56,14 @@ class CatalogController extends \yii\web\Controller
 
     public function actionProducts($cid)
     {
-        $products = Good::find()->joinWith('bookmark')->where([ 'category_id' => $cid ])->all();
+        $products = Yii::$app->db->cache(function ($db) use($cid)
+        {
+            return Good::find()->joinWith('bookmark')->where([ 'category_id' => $cid ])->all();
+        }, null, new TagDependency([
+            'tags'=> [
+                'cache_table_' . Good::tableName(),
+                'cache_table_' . Bookmark::tableName(),
+            ]]));
         $common_props = null;
         if ($products) {
             $products_copy = $products;
@@ -78,7 +88,7 @@ class CatalogController extends \yii\web\Controller
 
         return $this->render('/product/index', [
             'products' => $products,
-            'category' => Menu::findByIdOr404($cid),
+            'category' => Menu::findOneOr404($cid),
             'filters' => $common_props,
         ]);
     }
@@ -104,7 +114,7 @@ class CatalogController extends \yii\web\Controller
     {
         $get = Yii::$app->request->post();
         if (isset($get['_csrf'])) {
-            if (($model = Bookmark::findOne([
+            if (($model = Bookmark::cachedFindOne([
                     'user_id' => Yii::$app->user->id,
                     'product_id' => $get['product_id'],
                 ]))
@@ -114,6 +124,6 @@ class CatalogController extends \yii\web\Controller
             return "Error";
         }
 
-        return "error";
+        return "Error";
     }
 }

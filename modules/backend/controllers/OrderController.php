@@ -56,7 +56,7 @@ class OrderController extends Controller
      */
     public function actionUpdate($id)
     {
-        $order = Order::findByIdOr404($id);
+        $order = Order::findOneOr404($id);
         if ($order->load(Yii::$app->request->post())) {
             if ($order->save()) {
                 Yii::$app->session->setFlash('success', 'Заказ изменён');
@@ -85,14 +85,14 @@ class OrderController extends Controller
      */
     public function actionDelete($id)
     {
-        Order::findByIdOr404($id)->delete();
+        Order::findOneOr404($id)->delete();
 
         return $this->redirect(['index']);
     }
 
     public function actionProductUpdate($id)
     {
-        $model = OrderProduct::findByIdOr404($id);
+        $model = OrderProduct::findOneOr404($id);
 
         if ($model->load(Yii::$app->request->post()) && $model->save()) {
             return $this->redirect(['update', 'id' => $model->order_id]);
@@ -117,7 +117,7 @@ class OrderController extends Controller
     }
     public function actionProductDelete($id)
     {
-        $model = OrderProduct::findByIdOr404($id);
+        $model = OrderProduct::findOneOr404($id);
         $model->delete();
 
         return $this->redirect(['update', 'id' => $model->order_id ]);
