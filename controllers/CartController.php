@@ -2,6 +2,7 @@
 
 namespace app\controllers;
 
+use app\models\Good\Good;
 use Yii;
 use yii\data\ArrayDataProvider;
 use yii\filters\VerbFilter;
@@ -31,6 +32,29 @@ class CartController extends \yii\web\Controller
             'dataProvider' => $dataProvider,
             'cart' => $cart
         ]);
+    }
+
+    public function actionAdd()
+    {
+        $get = Yii::$app->request->post();
+        if (isset($get['_csrf'])) {
+            Yii::$app->cart->put(Good::findByIdOr404($get['product_id']), $get['product_count']);
+        }
+        return Yii::$app->shopping->render();
+    }
+
+    public function actionAddMultiple()
+    {
+        $get = Yii::$app->request->post();
+        if (isset($get['_csrf'])) {
+
+            /** @var $cart \yz\shoppingcart\ShoppingCart */
+            $cart = Yii::$app->cart;
+            foreach ($get['products'] as $item) {
+                $cart->update(Good::findByIdOr404($item['id']), $item['count']);
+            }
+        }
+        return Yii::$app->shopping->render();
     }
 
     public function actionDelete($id)

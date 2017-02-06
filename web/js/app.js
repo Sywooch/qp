@@ -2,7 +2,7 @@
 
     "use strict";
 
-    const $el = $('.bookmark');
+    var $el = $('.bookmark');
 
     var csrfToken = $('meta[name="csrf-token"]').attr("content");
 
@@ -13,7 +13,19 @@
         event: function() {
             var self = this;
             $el.on('click', function () {
-                var url = $(this).hasClass('active') ? '/catalog/delete-bookmark' : '/catalog/add-bookmark';
+
+                var url = (function(el) {
+
+                    // Get url and change current title
+                    if(el.hasClass('active')) {
+                        el.attr("title", "В избранное");
+                        return '/catalog/delete-bookmark';
+                    }
+                    el.attr("title", "В избранном");
+                    return '/catalog/add-bookmark';
+
+                })($(this));
+
                 var id = $(this).data('productId');
                 self.getData(url, {
                     id: id
@@ -53,17 +65,34 @@
 })(jQuery);
 var Cart = (function($){
 
-    const $inputCount = $('.product-count'),
-        $compare = $('.btn-compare'),
-        $cart = $('.shopping');
-
-    // Time in milliseconds between Ajax requests
-    const interval = 900;
-    var timer = true;
+    var $cart = $('.shopping');
 
     var csrfToken = $('meta[name="csrf-token"]').attr("content");
 
-    var __ = {
+    // These variables are used to limit Ajax requests
+    var presentOperation = 0, delayOperation = 0,
+
+        products = [];
+
+    var total = function () {
+        var $total = $("#total span");
+        var $sum = $('.cart-item__sum span');
+
+        return {
+            get: function () {
+                return $total.text();
+            },
+            update: function () {
+                var result = 0;
+                $sum.each(function (index, el) {
+                    result += parseFloat($(el).text());
+                });
+                $total.text(result);
+            }
+        };
+    };
+
+    return {
         /**
          * @access public
          */
@@ -71,57 +100,46 @@ var Cart = (function($){
             this.event();
         },
         event: function() {
-            var self = this;
 
-            $compare.on('click', function () {
-                if(timer) {
-                    self.addToCart($(this));
-                    timer = false;
-                    setTimeout(function() {
-                        timer = true;
-                    }, interval);
-                }
-            });
         },
 
         /**
-         * Add product to cart
+         * Change event input number
          *
-         * @param {object} el dom element (button)
+         * @access public
+         * @param {object} element
+         * @param {number} val
          */
-        addToCart: function (el) {
-            var id = el.data('productId') || 0,
-                count = el.attr('data-product-count') || 0;
+        update: function (element, val) {
+            var id = element.data('productId'),
+                $item = $('.cart-item[data-product-id="' + id + '"]'),
+                quantity = $item.find('.cart-item__quantity'),
+                sum = $item.find('.cart-item__sum span'),
+                price = parseFloat($item.data('productPrice'));
 
-            this.getData('/catalog/add', {
-                id: id,
-                count: count
-            });
+            quantity.text(val);
+            sum.text(parseInt(val) * price);
+            total().update();
 
-            // Animation goods movement to cart
-            var $imgToFly = $('img[data-product-id=' + id + ']');
-            if ($imgToFly) {
-                var $imgClone = $imgToFly.clone()
-                    .offset($imgToFly.offset())
-                    .css({
-                        'opacity': '0.7',
-                        'position': 'absolute',
-                        'height': '150px',
-                        'width': '150px',
-                        'z-index': '1000'
-                    })
-                    .appendTo($('body'))
-                    .animate({
-                        'top': $cart.offset().top + 10,
-                        'left': $cart.offset().left + 50,
-                        'width': 35,
-                        'height': 35
-                    }, 'slow');
+            this.addProduct(id, val);
 
-                $imgClone.animate({'width': 0, 'height': 0}, function () {
-                    $(this).detach();
-                });
-            }
+            this.addToCart();
+        },
+
+        /**
+         * Add products to cart. Creates an array changes, then all changes are sent in the request
+         *
+         */
+        addToCart: function () {
+            var self = this;
+            presentOperation++;
+            setTimeout(function () {
+                delayOperation++;
+                if(delayOperation == presentOperation) {
+                    self.saveData('/cart/add-multiple', products);
+                    products = [];
+                }
+            }, 1000);
         },
 
         /**
@@ -130,15 +148,14 @@ var Cart = (function($){
          * @param {string} url example:"/controller/action"
          * @param {object} options
          */
-        getData: function(url, options) {
+        saveData: function(url, options) {
             var self = this;
             $.ajax({
                 url: url,
                 dataType: "html",
                 type: "POST",
                 data: {
-                    product_id: options.id,
-                    product_count: options.count,
+                    products: options,
                     _csrf: csrfToken
                 },
                 success: function(result){
@@ -152,41 +169,40 @@ var Cart = (function($){
         },
 
         /**
+         * Check for existence. If exist, it adds an element to the array, otherwise change the count
+         *
+         * @param {number} id Product ID
+         * @param {number} count
+         * @return {boolean}
+         */
+        addProduct: function (id, count) {
+            var i;
+            for(i = 0; i < products.length; i++) {
+                if(products[i].id == id) {
+                    products[i].count = count;
+                    return true;
+                }
+            }
+            products.push({
+                id: id,
+                count: count
+            });
+            return false;
+        },
+
+        /**
          * Render html in cart element
          *
          * @param {string} result Result from server
          */
         render: function (result) {
-            setTimeout(function() {$cart.html(result)}, 600);
-        },
+            $cart.html(result);
+        }
 
-        /**
-         * Change event input number
-         *
-         * @access public
-         * @param {object} element
-         * @param {number} val
-         */
-        changeCount: function (element, val) {
-            var id = element.data('productId');
-
-            $compare.each(function (index, el) {
-
-                if($(el).data('productId') === id) {
-                    $(el).attr('data-product-count', val);
-                }
-            });
-        },
     };
-
-    return {
-        init: __.init(),
-        changeCount: __.changeCount
-    };
-
-
 
 })(jQuery);
+
 (function($){
 
     var $el = $('.transform');
@@ -441,6 +457,136 @@ var Cart = (function($){
         });
     }
 })(jQuery);
+var Product = (function($){
+
+    const $inputCount = $('.product-count'),
+        $compare = $('.btn-compare'),
+        $cart = $('.shopping');
+
+    var csrfToken = $('meta[name="csrf-token"]').attr("content");
+
+    // Time in milliseconds between Ajax requests
+    const interval = 900;
+    var timer = true;
+
+    return {
+        /**
+         * @access public
+         */
+        init: function() {
+            this.event();
+        },
+        event: function() {
+            var self = this;
+
+            $compare.on('click', function () {
+                if(timer) {
+                    self.addToCart($(this));
+                    timer = false;
+                    setTimeout(function() {
+                        timer = true;
+                    }, interval);
+                }
+            });
+        },
+
+        /**
+         * Add product to cart
+         *
+         * @param {object} el dom element (button)
+         */
+        addToCart: function (el) {
+            var id = el.data('productId') || 0,
+                count = el.attr('data-product-count') || 0;
+
+            this.getData('/cart/add', {
+                id: id,
+                count: count
+            });
+
+            // Animation goods movement to cart
+            var $imgToFly = $('img[data-product-id=' + id + ']');
+            if ($imgToFly) {
+                var $imgClone = $imgToFly.clone()
+                    .offset($imgToFly.offset())
+                    .css({
+                        'opacity': '0.7',
+                        'position': 'absolute',
+                        'height': '150px',
+                        'width': '150px',
+                        'z-index': '1000'
+                    })
+                    .appendTo($('body'))
+                    .animate({
+                        'top': $cart.offset().top + 10,
+                        'left': $cart.offset().left + 50,
+                        'width': 35,
+                        'height': 35
+                    }, 'slow');
+
+                $imgClone.animate({'width': 0, 'height': 0}, function () {
+                    $(this).detach();
+                });
+            }
+        },
+
+        /**
+         * Get data using ajax
+         *
+         * @param {string} url example:"/controller/action"
+         * @param {object} options
+         */
+        getData: function(url, options) {
+            var self = this;
+            $.ajax({
+                url: url,
+                dataType: "html",
+                type: "POST",
+                data: {
+                    product_id: options.id,
+                    product_count: options.count,
+                    _csrf: csrfToken
+                },
+                success: function(result){
+                    self.render(result);
+                },
+                error: function () {
+                    console.log('Error');
+                }
+
+            });
+        },
+
+        /**
+         * Render html in cart element
+         *
+         * @param {string} result Result from server
+         */
+        render: function (result) {
+            setTimeout(function() {$cart.html(result)}, 600);
+        },
+
+        /**
+         * Change event input number
+         *
+         * @access public
+         * @param {object} element
+         * @param {number} val
+         */
+        update: function (element, val) {
+            var id = element.data('productId');
+
+            $compare.each(function (index, el) {
+
+                if($(el).data('productId') === id) {
+                    $(el).attr('data-product-count', val);
+                }
+            });
+        },
+    };
+
+
+})(jQuery);
 (function($){
 
     "use strict";
@@ -473,7 +619,16 @@ var App = (function(){
     return {
         init: function() {
 
-            Cart.init;
+            var stage = [];
+
+            var currentStage = $('#app[data-stage]').data('stage') || 'product';
+
+            stage['cart'] = Cart;
+            stage['product'] = Product;
+
+            stage[currentStage].init();
+
+            console.log(currentStage);
 
             $('input[type=number]').stepper({
                 type: 'int',       // Allow floating point numbers
@@ -485,7 +640,7 @@ var App = (function(){
 
                 onStep: function( val, up )
                 {
-                    Cart.changeCount(this, val);
+                    stage[currentStage].update(this, val);
                 }
             });
         }

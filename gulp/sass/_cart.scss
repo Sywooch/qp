@@ -35,6 +35,9 @@
     }
 
   }
+  &-item {
+    min-width: 100px;
+  }
   &-total {
     text-align: right;
     .label {
@@ -49,6 +52,18 @@
   .btn-success {
     float: right;
     width: 300px;
+  }
+  &-empty {
+    img {
+      float: left;
+      margin-right: 20px;
+    }
+    h2 {
+      color: $red-1;
+    }
+    p {
+      font-size: 16px;
+    }
   }
   @media (max-width: $screen-sm) {
     .btn-success {

@@ -26,25 +26,16 @@ use yii\bootstrap\NavBar;
                     </button>
                 </div>
                 <div>
-                    <?= $this->render('_search_form', ['text' => '']) ?>
+
                 </div>
-<!--                <div class="col-md-6 col-xs-12">-->
-<!--                    <section class="search row">-->
-<!--                        <form action="/" method="GET" class="form form-search col-xs-9 col-md-12">-->
-<!--                            <div class="input-group">-->
-<!--                            <span class="input-group-addon">-->
-<!--                                <button class="search__btn">-->
-<!--                                    <i class="fa fa-search" aria-hidden="true"></i><span class="sr-only">Search icons</span>-->
-<!--                                </button>-->
-<!--                            </span>-->
-<!--                                <input id="search-input" class="form-control input-lg" placeholder="Поиск среди более 10 000 товаров" autocomplete="off" spellcheck="false" autocorrect="off" tabindex="1">-->
-<!--                            </div>-->
-<!--                        </form>-->
-<!--                    </section>-->
-<!--                </div>-->
+                <div class="col-md-6 col-xs-12">
+                    <section class="search row">
+                        <?= $this->render('_search_form', ['text' => '']) ?>
+                    </section>
+                </div>
                 <div class="col-md-3 hidden-xs hidden-sm">
                     <div class="header__phone">
-                        8 (800) 123-12-12
+                        <?=Yii::$app->params['phone.manager']?>
                     </div>
                 </div>
             </div>
@@ -90,16 +81,7 @@ use yii\bootstrap\NavBar;
         <div class="modal-content">
             <div class="modal-header">
                 <div class="row">
-                    <form action="/" method="GET" class="form form-search col-xs-9">
-                        <div class="input-group">
-                        <span class="input-group-addon">
-                            <button class="search__btn">
-                                <i class="fa fa-search" aria-hidden="true"></i><span class="sr-only">Search icons</span>
-                            </button>
-                        </span>
-                            <input id="search-input-mobile" class="form-control input-lg search-input-mobile" placeholder="Поиск среди более 10 000 товаров" autocomplete="off" spellcheck="false" autocorrect="off" tabindex="1">
-                        </div>
-                    </form>
+                    <?= $this->render('_search_form', ['text' => '']) ?>
                     <div class="col-xs-2 search__cancel visible-xs visible-sm">
                         <button type="button" class="btn search-hidden" data-dismiss="modal" aria-label="Close">Отмена</button>
                     </div>
