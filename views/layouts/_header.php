@@ -63,7 +63,6 @@ use yii\bootstrap\NavBar;
             ['label' => 'Доставка и оплата', 'url' => ['/site/about']],
             ['label' => 'О компании', 'url' => ['/site/about']],
             ['label' => 'Контакты', 'url' => ['/site/contact']],
-            ['label' => 'FUCK U', 'url' => ['/backend']],
         ],
     ]);
     ?>
