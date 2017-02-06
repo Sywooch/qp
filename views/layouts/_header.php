@@ -35,7 +35,7 @@ use yii\bootstrap\NavBar;
                 </div>
                 <div class="col-md-3 hidden-xs hidden-sm">
                     <div class="header__phone">
-                        8 (800) 123-12-12
+                        <?=Yii::$app->params['phone.manager']?>
                     </div>
                 </div>
             </div>
