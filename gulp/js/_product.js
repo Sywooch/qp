@@ -10,7 +10,7 @@ var Product = (function($){
     const interval = 900;
     var timer = true;
 
-    var __ = {
+    return {
         /**
          * @access public
          */
@@ -114,7 +114,7 @@ var Product = (function($){
          * @param {object} element
          * @param {number} val
          */
-        changeCount: function (element, val) {
+        update: function (element, val) {
             var id = element.data('productId');
 
             $compare.each(function (index, el) {
@@ -125,12 +125,6 @@ var Product = (function($){
             });
         },
     };
-
-    return {
-        init: __.init(),
-        changeCount: __.changeCount
-    };
-
 
 
 })(jQuery);
