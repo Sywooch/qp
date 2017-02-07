@@ -98,6 +98,7 @@ var Cart = (function($){
                 },
                 error: function () {
                     console.log('Error');
+                    App.message('Произошла ошибка', false);
                 }
 
             });
@@ -132,6 +133,7 @@ var Cart = (function($){
          */
         render: function (result) {
             $cart.html(result);
+            App.message('Корзина обновленна', true);
         }
 
     };
