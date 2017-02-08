@@ -3,10 +3,10 @@
 */
 @import 'bootstrap';
 @import "awesom/font-awesome";
+@import "mixin";
 @import "variable";
 @import "header";
 @import "footer";
-@import "home";
 @import "form";
 @import "join";
 @import "tabs";
@@ -14,11 +14,15 @@
 @import "sidebar";
 @import "category";
 @import "cart";
-@import "product";
+@import "product/products";
+@import "product/product";
 @import "notify";
+
+@import "home/common";
 
 body {
   background: #fff;
+  font-family: "Roboto", Helvetica,Arial;
 }
 .container {
   min-width: 320px;

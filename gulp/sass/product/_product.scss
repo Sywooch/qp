@@ -1,0 +1,35 @@
+.product {
+  &__params {
+    h3 {
+
+    }
+    &-list {
+      list-style: none;
+      padding: 0;
+      .item {
+        padding: 10px 15px;
+        border-bottom: 2px solid $gray-3;
+        text-indent: 0;
+        &:first-child {
+          border-top: 2px solid $gray-3;
+        }
+        &-key {
+          min-width: 100px;
+          width: 40%;
+          color: $black-4;
+          text-transform: uppercase;
+          font-weight: bold;
+          font-size: 12px;
+        }
+        &-value {
+          font-size: 18px;
+          color: $black-1;
+          width: 60%;
+        }
+        &-key, &-value {
+          display: inline-block;
+        }
+      }
+    }
+  }
+}
