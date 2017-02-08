@@ -10,13 +10,38 @@ $this->params['sidebarLayout'] = true;
 
 ?>
 
-<div class="row">
-    <?php
-    foreach (Yii::$app->db->cache(function ($db) use ($catalog) {
-        return $catalog->children(1)->all();
-    }) as $ch) {
-        echo CategoryWidget::widget([ 'item' => $ch ]);
-    }
-    ?>
-</div>
+<section class="schedule">
+    <div class="section-title">
+        Время доставки заказа
+    </div>
+    <div class="row schedule__list">
+        <?=$this->render('_schedule', [
+            'day' => 'Сегодня',
+            'date' => date('d M'),
+            'status' => false
+        ])?>
+        <?=$this->render('_schedule', [
+            'day' => 'Завтра',
+            'date' => date('d M'),
+            'status' => true
+        ])?>
+    </div>
+</section>
+<section class="top-product">
+    <div class="section-title">
+        Популярные товары
+    </div>
+</section>
+<section class="stat">
+    <div class="section-title">
+        Статистика
+    </div>
+    <div class="row">
+        <div class="col-md-4 col-sm-4 col-xs-12">
+            <div class="stat__"></div>
+        </div>
+        <div class="col-md-4 col-sm-4 col-xs-12"></div>
+        <div class="col-md-4 col-sm-4 col-xs-12"></div>
+    </div>
+</section>
 

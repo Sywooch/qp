@@ -1,0 +1,49 @@
+.schedule {
+  &__list {
+    .item {
+      box-shadow: 0 1px 5px rgba(0,0,0,.12),0 1px 2px rgba(0,0,0,.24);
+      padding: 10px;
+      text-align: center;
+      font-weight: bold;
+      &-day {
+        font-size: 18px;
+        padding: 5px 0;
+        border-bottom: 1px solid $gray-2;
+      }
+      &-date {
+        text-align: center;
+        color: $black-4;
+        padding: 5px 0 10px;
+      }
+      &-timebox {
+        &:first-child {
+          border-right: 1px solid $gray-1;
+        }
+      }
+      &-time {
+        font-size: 16px;
+      }
+      &-status {
+        span {
+          font-size: 12px;
+        }
+        &-limit {
+          color: $black-4;
+          font-weight: normal;
+        }
+      }
+      .free {
+        color: $green-1
+      }
+      .busy {
+        color: $red-1;
+      }
+      &.free {
+        border-left: 3px solid $green-1;
+      }
+      &.busy {
+        border-left: 3px solid $red-1;
+      }
+    }
+  }
+}
