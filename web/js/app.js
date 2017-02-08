@@ -4,6 +4,8 @@
 
     var $el = $('.bookmark');
 
+    var status = true;
+
     var csrfToken = $('meta[name="csrf-token"]').attr("content");
 
     var Bookmark = {
@@ -19,8 +21,10 @@
                     // Get url and change current title
                     if(el.hasClass('active')) {
                         el.attr("title", "В избранное");
+                        status = false;
                         return '/catalog/delete-bookmark';
                     }
+                    status = true;
                     el.attr("title", "В избранном");
                     return '/catalog/add-bookmark';
 
@@ -49,11 +53,15 @@
                     product_id: options.id,
                     _csrf: csrfToken
                 },
-                success: function(result){
-                    console.log(result);
+                success: function(result) {
+                    if(status) {
+                        App.message('Товар добавлен в избранное', true);
+                    } else {
+                        App.message('Товар удалён из избранного', true);
+                    }
                 },
                 error: function () {
-                    console.log('Error');
+                    App.message('Произошла ошибка', false);
                 }
 
             });
