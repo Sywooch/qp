@@ -32,4 +32,38 @@
       }
     }
   }
+  &__table {
+    .table {
+      &, th, td {
+        border: none;
+      }
+      tr {
+        background-color: $white-1 !important;
+        border-bottom: 1px solid $gray-2;
+      }
+    }
+    .remove {
+      font-size: 2rem;
+    }
+    .cell {
+      &-img {
+        text-align: center;
+        vertical-align: top;
+        overflow: hidden;
+        width: 120px;
+        height: 90px;
+      }
+      &-price {
+        float: right;
+        text-align: right;
+        margin: 0 0 5px 20px;
+      }
+      &-action {
+        width: 10px;
+        padding-top: 3px;
+        padding-right: 0;
+        text-align: center;
+      }
+    }
+  }
 }

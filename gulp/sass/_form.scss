@@ -21,6 +21,18 @@
     }
   }
 
+  &-bookmark {
+
+    border: none;
+    background: transparent;
+    color: $blue-2;
+    &:hover, &:focus, &:active {
+      color: $blue-1;
+      outline: none;
+      border: none;
+      box-shadow: none;
+    }
+  }
 
   &-social {
     border-radius: 16px;
