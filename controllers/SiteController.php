@@ -2,6 +2,7 @@
 
 namespace app\controllers;
 
+use app\models\Good\Good;
 use app\models\Good\Menu;
 use Yii;
 use yii\filters\AccessControl;
@@ -92,8 +93,10 @@ class SiteController extends Controller
      */
     public function actionIndex()
     {
+        $products = Good::find()->limit(3)->all();
         return $this->render('index', [
             'catalog' => Menu::getRoot(),
+            'products' => $products
         ]);
     }
 

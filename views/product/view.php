@@ -45,7 +45,7 @@ $this->params['breadcrumbs'][] = $this->title;
             <div class="price">
                 <?=Html::price($product->price)?>
             </div>
-            <div class="product-panel">
+            <div class="product__panel">
                 <div class="btn-group">
                     <input type="number" min="1" value="1"
                            name="product_count"
@@ -60,15 +60,16 @@ $this->params['breadcrumbs'][] = $this->title;
                 </button>
             </div>
 
-            <div>
-                <h3>Характеристики:</h3>
-                <table class="table product-info">
+            <div class="product__params">
+                <h3>Характеристики</h3>
+                <ul class="product__params-list">
                     <?php
                     foreach ($product->properties as $key => $value) {
-                        echo "<tr><td>" . $key . "</td><td>" . $value['value'] . "</td></tr>";
+                        echo "<li class='item'><span class='item-key'>" . $key . "</span>"
+                             . "<span class='item-value'>" . $value['value'] . "</span></li>";
                     }
                     ?>
-                </table>
+                </ul>
             </div>
 
 

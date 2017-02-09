@@ -38,7 +38,7 @@ class CartController extends \yii\web\Controller
     {
         $get = Yii::$app->request->post();
         if (isset($get['_csrf'])) {
-            Yii::$app->cart->put(Good::findByIdOr404($get['product_id']), $get['product_count']);
+            Yii::$app->cart->put(Good::findOneOr404($get['product_id']), $get['product_count']);
         }
         return Yii::$app->shopping->render();
     }
@@ -51,7 +51,7 @@ class CartController extends \yii\web\Controller
             /** @var $cart \yz\shoppingcart\ShoppingCart */
             $cart = Yii::$app->cart;
             foreach ($get['products'] as $item) {
-                $cart->update(Good::findByIdOr404($item['id']), $item['count']);
+                $cart->update(Good::findOneOr404($item['id']), $item['count']);
             }
         }
         return Yii::$app->shopping->render();

@@ -29,6 +29,29 @@ var App = (function(){
                     stage[currentStage].update(this, val);
                 }
             });
+        },
+
+        /*
+         * Notify
+         *
+         * @param {string} msg
+         * @param {string} t default "success"
+         */
+        message: function (msg, t) {
+            var type = t ? 'success' : 'danger',
+                icon = t ? '<i class="fa fa-check fa-lg" aria-hidden="true"></i> ' : '<i class="fa fa-info-circle fa-lg" aria-hidden="true"></i> ';
+            $.notify({
+                // options
+                message: icon + msg
+            },{
+                // settings
+                type: type,
+                delay: 2000,
+                animate: {
+                    enter: 'animated fadeInDown',
+                    exit: 'animated fadeOutUp'
+                }
+            });
         }
     }
 })();

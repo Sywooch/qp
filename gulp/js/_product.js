@@ -44,7 +44,10 @@ var Product = (function($){
                 id: id,
                 count: count
             });
+            //this.fly(id);
+        },
 
+        fly: function (id) {
             // Animation goods movement to cart
             var $imgToFly = $('img[data-product-id=' + id + ']');
             if ($imgToFly) {
@@ -90,9 +93,11 @@ var Product = (function($){
                 },
                 success: function(result){
                     self.render(result);
+                    App.message('Товар успешно добавлен в корзину', true);
                 },
                 error: function () {
                     console.log('Error');
+                    App.message('Произошла ошибка', false);
                 }
 
             });
@@ -104,7 +109,7 @@ var Product = (function($){
          * @param {string} result Result from server
          */
         render: function (result) {
-            setTimeout(function() {$cart.html(result)}, 600);
+            $cart.html(result);
         },
 
         /**
