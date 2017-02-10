@@ -56,23 +56,74 @@ $this->params['breadcrumbs'][] = $this->title;
                 <button class="btn btn-icon btn-icon-left btn-success btn-compare"
                         data-product-id="<?= $product->id ?>"
                         data-product-count="1">
-                    <i class="fa fa-shopping-cart" aria-hidden="true"></i> Добавить в корзину
+                    <i class="fa fa-shopping-cart" aria-hidden="true"></i> В корзину
+                </button>
+                <button class="btn btn-icon btn-icon-left btn-bookmark"
+                        data-action="add"
+                        data-product-id="<?= $product->id ?>">
+                    <i class="fa fa-star-o" aria-hidden="true"></i> В избранное
                 </button>
             </div>
 
             <div class="product__params">
-                <h3>Характеристики</h3>
-                <ul class="product__params-list">
-                    <?php
-                    foreach ($product->properties as $key => $value) {
-                        echo "<li class='item'><span class='item-key'>" . $key . "</span>"
-                             . "<span class='item-value'>" . $value['value'] . "</span></li>";
-                    }
-                    ?>
+                <!-- Nav tabs -->
+                <ul class="nav nav-tabs" role="tablist">
+                    <li role="presentation" class="active"><a href="#tab-description" aria-controls="home" role="tab" data-toggle="tab">Описание</a></li>
+                    <li role="presentation"><a href="#tab-param" aria-controls="profile" role="tab" data-toggle="tab">Характеристики</a></li>
+                    <li role="presentation"><a href="#tab-delivery" aria-controls="messages" role="tab" data-toggle="tab">Доставка и оплата</a></li>
                 </ul>
+
+                <!-- Tab panes -->
+                <div class="tab-content">
+                    <div role="tabpanel" class="tab-pane active" id="tab-description">
+                        <p>Тут будет описание?</p>
+                    </div>
+                    <div role="tabpanel" class="tab-pane" id="tab-param">
+                        <ul class="product__params-list">
+                            <?php
+                            foreach ($product->properties as $key => $value) {
+                                echo "<li class='item'><span class='item-key'>" . $key . "</span>"
+                                    . "<span class='item-value'>" . $value['value'] . "</span></li>";
+                            }
+                            ?>
+                        </ul>
+                    </div>
+                    <div role="tabpanel" class="tab-pane" id="tab-delivery">
+                        <p>
+                            Мы осуществляем доставку по Владивостоку и о. Русский.<br/>
+                        <b>Стоимость доставки зависит от общей стоимости товаров в корзине:</b><br/>
+                            <span class="green"><b>399 руб.</b></span> при сумме заказа <span class="red">от 1 500 до 2 499 руб.</span><br/>
+                            <span class="green"><b>299 руб.</b></span> при сумме заказа <span class="red">от 2 500 до 3 999 руб.</span><br/>
+                            <span class="green"><b>Бесплатная</b></span> при сумме заказа <span class="red">от 4 000 руб.</span><br/>
+                            <span class="red"><b>500 руб.</b></span> при срочной доставке (в течение 3 часов)
+                        </p>
+                        <div class="info">
+                            <b>Доставка товаров только с актуальным сроком годности.</b> При сборе Вашего заказа все товары тщательно проверяются нашими специалистами на соответствие сроку годности
+                        </div><br/>
+                        <div class="info">
+                            <b>Окончательная цена фиксируется в момент подтверждения заказа.</b> Цены товаров не постоянны и зависят от цен поставщиков, а также от конъюнктуры рынка.
+                        </div>
+                    </div>
+                </div>
+
             </div>
 
-
         </div>
+    </div>
+    <div class="product__delivery">
+        <table cellspacing="0" cellpadding="0" border="0">
+            <tr>
+                <td class="product__delivery-status available"><i class="fa fa-check fa-lg"></i> Товар в наличии</td>
+            </tr>
+            <tr>
+                <td><i class="fa fa-truck fa-lg"></i> Доставим:</td>
+            </tr>
+            <tr>
+                <td><?=Html::dateRu(date("d m", strtotime("+1 day")))?> - <?=Html::dateRu(date("d m", strtotime("+2 day")))?></td>
+            </tr>
+            <tr>
+                <td style="font-size: 12px;">(по Вашему выбору)</td>
+            </tr>
+        </table>
     </div>
 </div>

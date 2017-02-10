@@ -1,7 +1,9 @@
 .product {
   &__params {
-    h3 {
-
+    margin: 20px auto;
+    line-height: 22px;
+    .tab-pane {
+      padding-top: 10px;
     }
     &-list {
       list-style: none;
@@ -63,6 +65,17 @@
         padding-top: 3px;
         padding-right: 0;
         text-align: center;
+      }
+    }
+  }
+  &__delivery {
+    position:absolute;
+    right:10px;
+    top:60px;
+    text-align: right;
+    &-status {
+      &.available {
+        color: $green-2;
       }
     }
   }
