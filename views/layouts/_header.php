@@ -50,7 +50,7 @@ use yii\bootstrap\NavBar;
     echo Nav::widget([
         'options' => ['class' => 'navbar-nav nav'],
         'items' => [
-            ['label' => 'Главная', 'url' => ['/site/index']],
+            \app\components\catalog\CatalogWidget::widget(),
             ['label' => 'Доставка и оплата', 'url' => ['/site/about']],
             ['label' => 'О компании', 'url' => ['/site/about']],
             ['label' => 'Контакты', 'url' => ['/site/contact']],

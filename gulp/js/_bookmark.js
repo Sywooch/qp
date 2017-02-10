@@ -66,7 +66,7 @@
                     _csrf: csrfToken
                 },
                 success: function(result) {
-                    if(status) {
+                    if(action) {
                         App.message('Товар добавлен в избранное', true);
                     } else {
                         App.message('Товар удалён из избранного', true);
@@ -79,7 +79,6 @@
                 },
                 error: function () {
                     App.message('Произошла ошибка', false);
-                    status = false;
                 }
 
             });

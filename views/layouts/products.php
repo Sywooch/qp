@@ -35,7 +35,6 @@ AppAsset::register($this);
         <div class="row">
             <!-- Sidebar-->
             <div class="col-md-3">
-                <?=CatalogRootWidget::widget();?>
                 <div class="filters">
                     <h3>Фильтры</h3>
                 </div>
