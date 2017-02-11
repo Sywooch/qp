@@ -21,10 +21,6 @@
     background-color: $cgreen;
     color: $white-1 !important;
     width: 250px;
-    &:hover {
-      background-color: $cgreen !important;
-      color: $white-1 !important;
-    }
     &:before, &:after {
       background: #fff;
       content: '';

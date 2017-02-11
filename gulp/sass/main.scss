@@ -16,6 +16,7 @@
 @import "text";
 @import "product/products";
 @import "product/product";
+@import "product/filter";
 @import "notify";
 
 @import "home/common";
@@ -24,6 +25,7 @@
 
 @import "catalog/dropDownMenu";
 @import "catalog/staticMenu";
+@import "catalog/mate";
 
 body {
   background: #fff;

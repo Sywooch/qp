@@ -50,7 +50,7 @@ class CatalogController extends \yii\web\Controller
         }, null, new TagDependency(['tags' => 'cache_table_' . Menu::tableName()]))) {
             return $this->render('view', [ 'catalog' => $catalog ]);
         }
-        $this->layout = "products";
+        //$this->layout = "products";
         return $this->actionProducts($catalog->id);
     }
 
@@ -85,10 +85,11 @@ class CatalogController extends \yii\web\Controller
                 }
             }
         }
+        $category = Menu::findOneOr404($cid);
 
         return $this->render('/product/index', [
             'products' => $products,
-            'category' => Menu::findOneOr404($cid),
+            'category' => $category,
             'filters' => $common_props,
         ]);
     }

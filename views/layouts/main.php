@@ -39,6 +39,8 @@ AppAsset::register($this);
             echo $this->render('_profileLayout', ['content' => $content]);
         } elseif (isset($this->params['catalog']) && $this->params['catalog']) {
             echo $this->render('_catalog', ['content' => $content]);
+        } elseif (isset($this->params['nullLayout']) && $this->params['nullLayout']) {
+            echo $this->render('_null', ['content' => $content]);
         } else{
             echo Breadcrumbs::widget([
                 'links' => isset($this->params['breadcrumbs']) ? $this->params['breadcrumbs'] : [],
