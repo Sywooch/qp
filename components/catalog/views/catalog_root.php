@@ -12,7 +12,7 @@ function traversal($node) {
     }, null, new TagDependency(['tags' => 'cache_table_' . Menu::tableName()]));
     if ($chs) {
         echo Html::beginTag('li' , ['class' => 'has-child']) . "\n";
-        echo Html::a($node->name . '(' . $node->getProductCount() . ')', ['catalog/view', 'id' => $node->id]);
+        echo Html::a($node->name, ['catalog/view', 'id' => $node->id]);
         echo Html::beginTag('ul') . "\n";
         foreach($chs as $ch) {
             traversal($ch);

@@ -7,6 +7,8 @@ use yii\web\NotFoundHttpException;
 
 class CatalogWidget extends Widget
 {
+    public $visible;
+
     public function init()
     {
         parent::init();
@@ -15,6 +17,7 @@ class CatalogWidget extends Widget
     public function run() {
         return $this->render('catalog', [
             'root' => Menu::getRoot(),
+            'visible' => $this->visible
         ]);
     }
 }

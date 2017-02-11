@@ -11,7 +11,6 @@
 @import "join";
 @import "tabs";
 @import "profile";
-@import "sidebar";
 @import "category";
 @import "cart";
 @import "text";
@@ -23,7 +22,8 @@
 @import "home/schedule";
 @import "home/stat";
 
-@import "catalog/menu";
+@import "catalog/dropDownMenu";
+@import "catalog/staticMenu";
 
 body {
   background: #fff;

@@ -41,6 +41,7 @@ use yii\bootstrap\NavBar;
             </div>
         </div>
     </div>
+    <div class="header__bottom">
     <?php
     NavBar::begin([
         'options' => [
@@ -50,7 +51,9 @@ use yii\bootstrap\NavBar;
     echo Nav::widget([
         'options' => ['class' => 'navbar-nav nav'],
         'items' => [
-            \app\components\catalog\CatalogWidget::widget(),
+            \app\components\catalog\CatalogWidget::widget([
+                    'visible' => isset($this->params['catalog']) && $this->params['catalog']
+            ]),
             ['label' => 'Доставка и оплата', 'url' => ['/site/about']],
             ['label' => 'О компании', 'url' => ['/site/about']],
             ['label' => 'Контакты', 'url' => ['/site/contact']],
@@ -69,9 +72,6 @@ use yii\bootstrap\NavBar;
 
     NavBar::end();
     ?>
-
-    <div class="header__bottom">
-
     </div>
 
 </header>

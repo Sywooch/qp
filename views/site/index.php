@@ -9,8 +9,8 @@ use app\components\catalog\ProductWidget;
 use app\components\Html;
 
 $this->title = Yii::$app->name;
-$this->params['sidebarLayout'] = true;
-$tommorow = new DateTime('tomorrow');
+$this->params['catalog'] = true;
+$tomorrow = date("d m", strtotime("+1 day"));
 ?>
 <div class="homepage">
     <section class="schedule">
@@ -25,7 +25,7 @@ $tommorow = new DateTime('tomorrow');
             ])?>
             <?=$this->render('_schedule', [
                 'day' => 'Завтра',
-                'date' => Html::dateRu($tommorow->format('d m')),
+                'date' => Html::dateRu(date("d m", strtotime("+1 day"))),
                 'status' => true
             ])?>
         </div>

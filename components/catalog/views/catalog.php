@@ -1,5 +1,6 @@
 <?php
 /** @var $root app\models\Good\Menu  */
+/** @var $visible boolean  */
 use yii\helpers\Html;
 use app\models\Good\Menu;
 use yii\caching\TagDependency;
@@ -13,7 +14,7 @@ function traversalNode($node, $depth) {
 
     if ($chs) {
         echo Html::beginTag('li' , ['class' => 'has-child']) . "\n";
-        echo Html::a($node->name . '(' . $node->getProductCount() . ')', ['catalog/view', 'id' => $node->id]);
+        echo Html::a($node->name, ['catalog/view', 'id' => $node->id]);
         echo Html::beginTag('ul') . "\n";
         if($depth < 1) {
             foreach($chs as $ch) {
@@ -31,28 +32,26 @@ function traversalNode($node, $depth) {
 }
 
 ?>
-<li class="catalog">
-    <a href="javascript:void(0)"> <i class="fa fa-bars" aria-hidden="true"></i> Каталог</a>
+<li class="catalog <?=!$visible ? '' : 'catalog-active'?> visible-md visible-lg">
+    <a href="javascript:void(0)">
+        Каталог
+    </a>
+    <?php if(!$visible) : ?>
     <ul class="items">
+        <?php
+        $chs = Yii::$app->db->cache(function ($db) use($root) {
+            return $root->children(1)->all();
+        }, null, new TagDependency(['tags' => 'cache_table_' . Menu::tableName()]));
 
-                <?php
+        $i = 0;
+        $n = round(count($chs) / 2);
 
-                $chs = Yii::$app->db->cache(function ($db) use($root) {
-                    return $root->children(1)->all();
-                }, null, new TagDependency(['tags' => 'cache_table_' . Menu::tableName()]));
+        foreach($chs as $ch) {
+            traversalNode($ch, 0);
+        }
 
-                $i = 0;
-                $n = round(count($chs) / 2);
-
-                foreach($chs as $ch) {
-
-
-                    traversalNode($ch, 0);
-                }
-
-                ?>
-
-
+        ?>
     </ul>
+    <?php endif;?>
 </li>
 

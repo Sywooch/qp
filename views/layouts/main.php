@@ -17,6 +17,7 @@ AppAsset::register($this);
 <head>
     <meta charset="<?= Yii::$app->charset ?>">
     <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link href="https://fonts.googleapis.com/css?family=PT+Sans" rel="stylesheet">
     <?= Html::csrfMetaTags() ?>
     <title><?= Html::encode($this->title) ?></title>
     <?php $this->head() ?>
@@ -36,8 +37,8 @@ AppAsset::register($this);
         if (isset($this->params['profileLayout']) && $this->params['profileLayout']) {
             // show sidebar for profile page
             echo $this->render('_profileLayout', ['content' => $content]);
-        } elseif (isset($this->params['sidebarLayout']) && $this->params['sidebarLayout']) {
-            echo $this->render('_sidebarLayout', ['content' => $content]);
+        } elseif (isset($this->params['catalog']) && $this->params['catalog']) {
+            echo $this->render('_catalog', ['content' => $content]);
         } else{
             echo Breadcrumbs::widget([
                 'links' => isset($this->params['breadcrumbs']) ? $this->params['breadcrumbs'] : [],

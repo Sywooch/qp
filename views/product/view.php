@@ -12,7 +12,7 @@ use app\models\Good\Menu;
 
 $this->title = $product->name;
 
-$this->params['sidebarLayout'] = true;
+$this->params['catalog'] = true;
 
 foreach(Yii::$app->db->cache(function() use($category) {
     return $category->parents()->all();
