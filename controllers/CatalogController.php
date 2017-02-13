@@ -2,6 +2,7 @@
 
 namespace app\controllers;
 
+use app\models\Good\GoodProperty;
 use app\models\Good\Menu;
 use app\models\Good\Good;
 use app\models\Bookmark;
@@ -73,10 +74,17 @@ class CatalogController extends \yii\web\Controller
             foreach ($fst_prod->properties as $name => $pr) {
                 $common_props[$name]['value'] = [ $common_props[$name]['value'] ];
             }
+            $common_props['price'] = [
+                'type' => GoodProperty::NUMBER_TYPE,
+                'value' => [$fst_prod->price],
+            ];
 
             foreach ($products_copy as $prod) {
                 foreach ($common_props as $name => &$pr) {
-                    if (isset($prod->properties[$name])) {
+                    if ($name == 'price') {
+                        array_push($pr['value'], $prod->price);
+                    }
+                    elseif (isset($prod->properties[$name])) {
                         array_push($pr['value'], $prod->properties[$name]['value']);
                     }
                     else {
