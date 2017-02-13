@@ -10,9 +10,25 @@
     border: 1px solid $gray-1;
     border-top: none;
     padding: 10px;
+
     &-title {
       font-size: 16px;
     }
+  }
+
+  &-apply-btn {
+    cursor: pointer;
+    display: none;
+    height: 30px;
+    line-height: 27px;
+    padding: 0;
+    position: absolute;
+    right: -100px;
+    text-align: center;
+    top: 0;
+    width: 110px;
+    z-index: 100;
+    transition: scale 0.3s 0.1s;
   }
 
   .slider-range {
@@ -82,4 +98,7 @@
     height: 30px;
   }
   padding: 10px 0 20px 0;
+}
+.btn-apply {
+  width: 100%;
 }

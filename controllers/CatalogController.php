@@ -43,6 +43,12 @@ class CatalogController extends \yii\web\Controller
 
     public function actionView($id = null)
     {
+        $get = Yii::$app->request->get();
+
+        if(isset($get['f'])) {
+            return "Test".$get['f'];
+        }
+
         $catalog = isset($id) ? Menu::findOneOr404($id) : Menu::getRoot();
         if(Yii::$app->db->cache(function ($db) use($catalog)
         {
