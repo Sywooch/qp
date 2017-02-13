@@ -56,7 +56,7 @@ use yii\bootstrap\NavBar;
             ]),
             ['label' => 'Доставка и оплата', 'url' => ['/site/about']],
             ['label' => 'О компании', 'url' => ['/site/about']],
-            ['label' => 'Контакты', 'url' => ['/site/contact']],
+            ['label' => 'Связаться с нами', 'url' => ['/site/contact']],
         ],
     ]);
     ?>
