@@ -140,6 +140,11 @@ class Good extends CachedActiveRecord implements CartPositionInterface
             ->onCondition(['user_id' => \Yii::$app->user->getId()]);
     }
 
+    public function getBookmarksCount()
+    {
+        return $this->hasMany(Bookmark::className(), ['product_id' => 'id'])->count();
+    }
+
     public function getImgPath()
     {
         return 'img/catalog/good/' . ($this->pic ? $this->pic : 'default.png');

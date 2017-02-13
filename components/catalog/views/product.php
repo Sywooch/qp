@@ -39,6 +39,7 @@ $bookmark = $product->bookmark ? $product->bookmark : new Bookmark([
                        data-toggle="tooltip"
                        data-placement="top"
                        title="<?=$bookmark->isNewRecord ? 'В избранное' : 'В избранном'?>">
+                        <?= $product->getBookmarksCount() ? $product->getBookmarksCount() : '' ?>
                     <input type="checkbox">
                 </label>
             </div>

@@ -54,11 +54,18 @@ class CachedActiveRecord extends ActiveRecord
         }, null, new TagDependency(['tags'=>'cache_table_' . static::tableName()]));
     }
 
+    public static function cachedGetCount() {
+        return static::getDb()->cache(function ($db)
+        {
+            return static::find()->count();
+        }, null, new TagDependency(['tags'=>'cache_table_' . static::tableName()]));
+    }
+
     public static function cachedFindAll($cond) {
         return static::getDb()->cache(function ($db) use($cond)
         {
             return static::findAll($cond);
-        }, new TagDependency(['tags'=>'cache_table_' . static::tableName()]));
+        }, null, new TagDependency(['tags'=>'cache_table_' . static::tableName()]));
     }
 
     public static function findOneOr404($cond) {
