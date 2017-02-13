@@ -54,10 +54,10 @@ class CachedActiveRecord extends ActiveRecord
         }, null, new TagDependency(['tags'=>'cache_table_' . static::tableName()]));
     }
 
-    public static function cachedGetCount() {
-        return static::getDb()->cache(function ($db)
+    public static function cachedGetCount($cond = []) {
+        return static::getDb()->cache(function ($db) use($cond)
         {
-            return static::find()->count();
+            return static::find()->where($cond)->count();
         }, null, new TagDependency(['tags'=>'cache_table_' . static::tableName()]));
     }
 

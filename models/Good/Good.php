@@ -142,7 +142,7 @@ class Good extends CachedActiveRecord implements CartPositionInterface
 
     public function getBookmarksCount()
     {
-        return $this->hasMany(Bookmark::className(), ['product_id' => 'id'])->count();
+        return Bookmark::cachedGetCount(['product_id' => $this->id]);
     }
 
     public function getImgPath()
