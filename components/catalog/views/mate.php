@@ -8,7 +8,7 @@ use yii\bootstrap\Nav;
 <div class="mate">
     <div class="mate__header">
         <div class="mate__header-back">
-            <?= Html::a("<i class='fa fa-arrow-left'></i> НАЗАД", ['catalog/view', 'id' => $parent->id], ['class' => 'btn btn-default'])?>
+            <?= Html::a("<i class='fa fa-arrow-left'></i> Назад", ['catalog/view', 'id' => $parent->id], ['class' => 'btn btn-default'])?>
         </div>
         <span class="mate__header-title">
             <?=$parent->name?>

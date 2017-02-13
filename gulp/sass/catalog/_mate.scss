@@ -1,4 +1,8 @@
 .mate {
+  .btn {
+    border-color: $green-1;
+    font-size: 12px;
+  }
   &__header {
     &-back {
       margin-bottom: 10px;

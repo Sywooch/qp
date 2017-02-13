@@ -1,3 +1,104 @@
-.filters {
+.filter {
   padding-left: 15px;
+  h3 {
+    text-align: center;
+    background-color: $gray-3;
+    padding: 10px;
+    margin-bottom: 0;
+  }
+  &__item {
+    border: 1px solid $gray-1;
+    border-top: none;
+    padding: 10px;
+
+    &-title {
+      font-size: 16px;
+    }
+  }
+
+  &-apply-btn {
+    cursor: pointer;
+    display: none;
+    height: 30px;
+    line-height: 27px;
+    padding: 0;
+    position: absolute;
+    right: -100px;
+    text-align: center;
+    top: 0;
+    width: 110px;
+    z-index: 100;
+    transition: scale 0.3s 0.1s;
+  }
+
+  .slider-range {
+    &:after {
+      content: '';
+      position: absolute;
+      height: 1px;
+      border: 1px solid $gray-1;
+      width: 100%;
+      top: 3px;
+    }
+  }
+  // UI
+  .ui-widget {
+    &-header {
+      border: 1px solid $green-2;
+      margin-top: 3px;
+    }
+    &-content {
+      border: 1px solid $gray-1;
+    }
+  }
+  .ui-slider {
+    position: relative;
+    text-align: left;
+    height: 10px;
+    border: none;
+    &-range {
+      position: absolute;
+      z-index: 1;
+      font-size: .7em;
+      display: block;
+      background-position: 0 0;
+    }
+    &-handle {
+      border-radius: 50%;
+      position: absolute;
+      z-index: 2;
+      width: 1.2em;
+      height: 1.2em;
+      cursor: default;
+      touch-action: none;
+      margin-left: -.6em;
+    }
+  }
+  .ui-state {
+    &-default {
+      margin-top: -5px;
+      border: 2px solid $green-2;
+      background: #fff;
+      transition: scale 0.3s 0.1s;
+    }
+    &-active {
+      transform: scale(1.2);
+    }
+    &-focus {
+      outline: none;
+    }
+  }
+  // END UI
+}
+
+.range-controls {
+  input {
+    width: 45% !important;
+    display: inline-block;
+    height: 30px;
+  }
+  padding: 10px 0 20px 0;
+}
+.btn-apply {
+  width: 100%;
 }

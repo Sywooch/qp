@@ -14,8 +14,6 @@ var App = (function(){
 
             stage[currentStage].init();
 
-            console.log(currentStage);
-
             $('input[type=number]').stepper({
                 type: 'int',       // Allow floating point numbers
                 wheel_step:1,       // Wheel increment is 1
