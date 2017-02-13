@@ -30,15 +30,33 @@ foreach(Yii::$app->db->cache(function ($db) use($category)
     ];
 }
 $this->params['breadcrumbs'][] = $this->title;
-
 ?>
 <div class="row">
     <div class="col-sm-3">
-        <div class="filters">
+        <div class="filter">
             <?=\app\components\catalog\CatalogMateWidget::widget([
                     'catalog' => $category
             ])?>
             <h3>Фильтры</h3>
+            <div class="filter__item">
+                <span class="filter__item-title">Цена, руб.</span>
+                <div class="text-subline"></div>
+                <div class="range-controls form-inline">
+                    <input type="text" id="price_from" class="form-control" data-id="price_from" data-min="0" data-type="from" placeholder="0">
+                    <span>—</span>
+                    <input type="text" id="price_to" class="form-control" data-id="price_to" data-max="500" data-type="to" placeholder="500">
+                </div>
+                <div class="slider-range"></div>
+            </div>
+
+            <?php
+            foreach ($filters as $key => $value) {
+                echo $this->render('_filter', [
+                    'title' => $key,
+                    'options' => $value,
+                ]);
+            }
+            ?>
         </div>
     </div>
     <div class="col-sm-9">

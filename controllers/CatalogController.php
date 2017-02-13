@@ -73,7 +73,6 @@ class CatalogController extends \yii\web\Controller
             foreach ($fst_prod->properties as $name => $pr) {
                 $common_props[$name]['value'] = [ $common_props[$name]['value'] ];
             }
-
             foreach ($products_copy as $prod) {
                 foreach ($common_props as $name => &$pr) {
                     if (isset($prod->properties[$name])) {
