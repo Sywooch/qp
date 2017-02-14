@@ -33,7 +33,7 @@ function traversalNode($node, $depth) {
 
 ?>
 <li class="catalog <?=!$visible ? '' : 'catalog-active'?> visible-md visible-lg">
-    <a href="javascript:void(0)">
+    <a href="/catalog/">
         Каталог
     </a>
     <?php if(!$visible) : ?>
