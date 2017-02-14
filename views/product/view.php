@@ -5,6 +5,8 @@ use yii\web\View;
 use yii\helpers\Url;
 use yii\caching\TagDependency;
 use app\models\Good\Menu;
+use app\models\Good\PropertyValue;
+use app\models\Good\GoodProperty;
 
 /* @var $this yii\web\View */
 /* @var $product app\models\Good\Good */
@@ -82,8 +84,8 @@ $this->params['breadcrumbs'][] = $this->title;
                         <ul class="product__params-list">
                             <?php
                             foreach ($product->properties as $key => $value) {
-                                echo "<li class='item'><span class='item-key'>" . $key . "</span>"
-                                    . "<span class='item-value'>" . $value['value'] . "</span></li>";
+                                echo "<li class='item'><span class='item-key'>" . GoodProperty::cachedFindOne($key)->name . "</span>"
+                                    . "<span class='item-value'>" . PropertyValue::cachedFindOne($value)->value . "</span></li>";
                             }
                             ?>
                         </ul>

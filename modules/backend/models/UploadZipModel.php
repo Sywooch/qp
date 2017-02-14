@@ -7,7 +7,7 @@ use SimpleXMLElement;
 use ZipArchive;
 use app\models\Good\Menu;
 use app\models\Good\GoodProperty;
-use app\models\Good\PropertyDictionary;
+use app\models\Good\PropertyValue;
 use app\models\Good\Good;
 use Yii;
 
@@ -109,8 +109,8 @@ class UploadZipModel extends Model
                 if ($prop_model->type === GoodProperty::DICTIONARY_TYPE) {
                     foreach($prop_xml->ВариантыЗначений->Справочник as $dict_xml) {
                         $dict_c1id = (string) $dict_xml->ИдЗначения;
-                        if (!PropertyDictionary::findOne([ 'c1id' => $dict_c1id ])) {
-                            $dict_model = new PropertyDictionary([
+                        if (!PropertyValue::findOne([ 'c1id' => $dict_c1id ])) {
+                            $dict_model = new PropertyValue([
                                 'c1id' => $dict_c1id,
                                 'value' => (string) $dict_xml->Значение,
                                 'property_id' => $prop_model->id,
@@ -139,7 +139,7 @@ class UploadZipModel extends Model
                 };
             }
             else {
-                if (!$category = Menu::findByC1id($good_xml->Группы->Ид)) {
+                if (!$category = Menu::findByC1id((string)$good_xml->Группы->Ид)) {
                     Yii::$app->session->addFlash('error',
                         "Неизвестная категория товаров с ГУИД <i>$good_xml->Группы->Ид</i>");
                     continue;
@@ -152,9 +152,9 @@ class UploadZipModel extends Model
                             "Неизвестное свойство товара с ГУИД <i>$prop_val_xml->Ид</i>");
                         continue;
                     }
-                    $val = $prop->valueToString((string) $prop_val_xml->Значение);
-                    if (isset($val)) {
-                        $props[$prop->name] = [ 'value' => $val, 'type' => $prop->type ];
+                    $val_id = $prop->valueId((string) $prop_val_xml->Значение);
+                    if (isset($val_id)) {
+                        $props[$prop->id] = $val_id;
                     }
                 }
                 if (!$good_model) {

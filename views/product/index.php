@@ -13,7 +13,8 @@ use yii\widgets\Breadcrumbs;
 /* @var $category app\models\Good\Menu */
 /* @var $mate app\models\Good\Menu */
 /* @var $products array of app\models\Good\Good */
-/* @var $filters null or array [ prop_name => [ 'value' => [values], 'type' => type ]] */
+/* @var $filters null or array */
+/* @var $prices null or array */
 
 $this->title = $category->name;
 
