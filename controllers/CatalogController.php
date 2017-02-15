@@ -109,6 +109,26 @@ class CatalogController extends \yii\web\Controller
                 ];
             }
         }
+
+        if ($fs = Yii::$app->request->get('f')) {
+            str_replace('Testp', 'p', $fs);
+            $fs = explode(';', $fs);
+            array_pop($fs);
+            foreach($fs as $f) {
+                list($prop, $val) = explode(':', $f);
+                if ($prop == 'p') {
+                    list($min, $max) = explode('-', $val);
+                    $products = array_filter($products, function ($prod) use ($min, $max) {
+                        return 100* (int)$min <= $prod->price && $prod->price <= 100* (int)$max;
+                    });
+                }
+                else {
+                    $products = array_filter($products, function ($prod) use ($prop, $val) {
+                        return isset($prod->properties[$prop]) and $prod->properties[$prop] == $val;
+                    });
+                }
+            }
+        }
         $category = Menu::findOneOr404($cid);
 
         return $this->render('/product/index', [
