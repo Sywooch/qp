@@ -3,8 +3,9 @@
     "use strict";
 
     var $el = $('.bookmark');
+    var $btn = $('.btn-bookmark');
 
-    var status = true;
+    var action = true; // true - add to bookmark
 
     var csrfToken = $('meta[name="csrf-token"]').attr("content");
 
@@ -21,10 +22,10 @@
                     // Get url and change current title
                     if(el.hasClass('active')) {
                         el.attr("title", "В избранное");
-                        status = false;
+                        action = false;
                         return '/catalog/delete-bookmark';
                     }
-                    status = true;
+                    action = true;
                     el.attr("title", "В избранном");
                     return '/catalog/add-bookmark';
 
@@ -34,6 +35,17 @@
                 self.getData(url, {
                     id: id
                 });
+            });
+            $btn.on('click', function () {
+                var id = $(this).data('productId');
+                action = false;
+                var fn = this;
+
+                self.getData('/catalog/delete-bookmark', {
+                    id: id,
+                    remover: $(fn).parent().parent()
+                });
+
             });
         },
 
@@ -54,10 +66,15 @@
                     _csrf: csrfToken
                 },
                 success: function(result) {
-                    if(status) {
+                    if(action) {
                         App.message('Товар добавлен в избранное', true);
                     } else {
                         App.message('Товар удалён из избранного', true);
+                    }
+                    if(options.remover) {
+                        options.remover.fadeOut(400, function () {
+                            $(this).remove();
+                        });
                     }
                 },
                 error: function () {

@@ -11,20 +11,26 @@
 @import "join";
 @import "tabs";
 @import "profile";
-@import "sidebar";
 @import "category";
 @import "cart";
+@import "text";
 @import "product/products";
 @import "product/product";
+@import "product/filter";
 @import "notify";
 
 @import "home/common";
 @import "home/schedule";
 @import "home/stat";
 
+@import "catalog/dropDownMenu";
+@import "catalog/staticMenu";
+@import "catalog/mate";
+
 body {
   background: #fff;
-  font-family: "Roboto", Helvetica,Arial;
+  //font-family: "Roboto", Helvetica,Arial;
+  font-family: 'PT Sans', sans-serif;
 }
 .container {
   min-width: 320px;

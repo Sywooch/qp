@@ -48,8 +48,10 @@ $line-height-header: 50px;
         padding: 8px 10px;
       }
       &.active > a, & > a:hover, & > a:focus {
-        background-color: $cgreen;
-        color: #fff;
+        //background-color: $cgreen;
+        //color: #fff;
+        background-color: #dddddf;
+        color: #434345;
       }
     }
   }

@@ -4,6 +4,8 @@ namespace app\controllers;
 
 use app\models\Good\Good;
 use app\models\Good\Menu;
+use app\models\Order;
+use app\models\OrderProduct;
 use Yii;
 use yii\filters\AccessControl;
 use yii\web\Controller;
@@ -18,6 +20,7 @@ use yii\web\BadRequestHttpException;
 use yii\helpers\Url;
 use app\models\Profile\AccountActivation;
 use yii\data\ArrayDataProvider;
+use DateTime;
 
 class SiteController extends Controller
 {
@@ -91,12 +94,31 @@ class SiteController extends Controller
      *
      * @return string
      */
+
+    const MAX_FAKE_CLIENTS = 1000;
+    const DAYS_BEFORE_HALF_MAX = 100;
     public function actionIndex()
     {
+        $start = new DateTime();
+        $start->setDate(2017, 1, 1);
+        $left_days = $start->diff(new DateTime())->days;
+        $fake_clients = round(
+                self::MAX_FAKE_CLIENTS *
+                (1 - 1 / ($left_days / self::DAYS_BEFORE_HALF_MAX + 1))
+            );
+
+        $stats = [
+            'clients' => $fake_clients + User::cachedGetCount(),
+            'orders' => round($fake_clients * $fake_clients / 213) + Order::cachedGetCount(),
+            'products' => round($fake_clients * $fake_clients / 27) + OrderProduct::cachedGetCount()
+        ];
+
+
         $products = Good::find()->limit(3)->all();
         return $this->render('index', [
             'catalog' => Menu::getRoot(),
-            'products' => $products
+            'products' => $products,
+            'stats' => $stats,
         ]);
     }
 
@@ -213,6 +235,9 @@ class SiteController extends Controller
     public function actionContact()
     {
         $model = new ContactForm();
+        if (Yii::$app->user->can('user')) {
+            $model->email = Yii::$app->user->identity->email;
+        }
         if ($model->load(Yii::$app->request->post()) && $model->contact(Yii::$app->params['adminEmail'])) {
             Yii::$app->session->setFlash('contactFormSubmitted');
 

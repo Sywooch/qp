@@ -1,0 +1,28 @@
+.mate {
+  .btn {
+    border-color: $green-1;
+    font-size: 12px;
+  }
+  &__header {
+    &-back {
+      margin-bottom: 10px;
+    }
+    &-title {
+      text-transform: uppercase;
+      font-size: 18px;
+    }
+  }
+  &__nav {
+    li {
+      & > a {
+        padding: 5px 15px;
+      }
+    }
+    li.active {
+      a {
+        color: $black-2;
+        background-color: $gray-2;
+      }
+    }
+  }
+}

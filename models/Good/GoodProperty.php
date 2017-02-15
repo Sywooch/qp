@@ -60,14 +60,14 @@ class GoodProperty extends CachedActiveRecord
         ];
     }
 
-    public function valueToString($value) {
+    public function valueId($value) {
         if (!$value) {
             return null;
         }
 
         if ($this->type == self::DICTIONARY_TYPE) {             // ADD code for rest cases
-            if ($dict = PropertyDictionary::cachedFindOne(['c1id' => $value])) {
-                return $dict->value;
+            if ($value_model = PropertyValue::FindOne(['c1id' => $value])) {
+                return $value_model->id;
             }
             else {
                 Yii::$app->session->addFlash('error',
@@ -75,6 +75,20 @@ class GoodProperty extends CachedActiveRecord
                         с ГУИД <i>$value</i>");
             }
         }
-        return $value;
+        else {
+            $value_model = PropertyValue::FindOne(['value' => $value, 'property_id' => $this->id]);
+            if (!$value_model) {
+                $value_model = new PropertyValue([
+                    'value' => $value,
+                    'property_id' => $this->id,
+                ]);
+                if (!$value_model->save()) {
+                    Yii::$app->session->addFlash('error',
+                        "Ошибка при добавлении значения <i>$value->value</i> в справочник. " .
+                        implode(', ', $value_model->getFirstErrors()));
+                }
+            }
+            return $value_model->id;
+        }
     }
 }

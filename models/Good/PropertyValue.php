@@ -6,21 +6,21 @@ use app\models\CachedActiveRecord;
 use Yii;
 
 /**
- * This is the model class for table "property_dictionary".
+ * This is the model class for table "property_value".
  *
  * @property integer $id
  * @property string $c1id
  * @property string $value
  * @property integer $property_id
  */
-class PropertyDictionary extends CachedActiveRecord
+class PropertyValue extends CachedActiveRecord
 {
     /**
      * @inheritdoc
      */
     public static function tableName()
     {
-        return 'property_dictionary';
+        return 'property_value';
     }
 
     /**

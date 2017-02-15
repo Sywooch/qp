@@ -3,14 +3,15 @@
 /* @var $form yii\bootstrap\ActiveForm */
 /** @var $catalog app\models\Good\Menu  */
 /** @var $products app\models\Good\Good  */
+/** @var $stats array */
 
 use app\components\catalog\CategoryWidget;
 use app\components\catalog\ProductWidget;
 use app\components\Html;
 
 $this->title = Yii::$app->name;
-$this->params['sidebarLayout'] = true;
-$tommorow = new DateTime('tomorrow');
+$this->params['catalog'] = true;
+$tomorrow = date("d m", strtotime("+1 day"));
 ?>
 <div class="homepage">
     <section class="schedule">
@@ -25,7 +26,7 @@ $tommorow = new DateTime('tomorrow');
             ])?>
             <?=$this->render('_schedule', [
                 'day' => 'Завтра',
-                'date' => Html::dateRu($tommorow->format('d m')),
+                'date' => Html::dateRu(date("d m", strtotime("+1 day"))),
                 'status' => true
             ])?>
         </div>
@@ -51,17 +52,17 @@ $tommorow = new DateTime('tomorrow');
         <div class="row stat__list">
             <?=$this->render('_stat', [
                 'icon' => 'icons/deal.png',
-                'number' => 2085,
+                'number' => $stats['orders'],
                 'text' => 'сделок совершено'
             ])?>
             <?=$this->render('_stat', [
                 'icon' => 'icons/shopping-cart.png',
-                'number' => 20235,
+                'number' => $stats['products'],
                 'text' => 'товаров продано'
             ])?>
             <?=$this->render('_stat', [
                 'icon' => 'icons/like.png',
-                'number' => 205,
+                'number' => $stats['clients'],
                 'text' => 'клиентов нам доверяют'
             ])?>
         </div>

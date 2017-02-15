@@ -12,7 +12,7 @@ function traversal($node) {
     }, null, new TagDependency(['tags' => 'cache_table_' . Menu::tableName()]));
     if ($chs) {
         echo Html::beginTag('li' , ['class' => 'has-child']) . "\n";
-        echo Html::a($node->name . '(' . $node->getProductCount() . ')', ['catalog/view', 'id' => $node->id]);
+        echo Html::a($node->name, ['catalog/view', 'id' => $node->id]);
         echo Html::beginTag('ul') . "\n";
         foreach($chs as $ch) {
             traversal($ch);
@@ -29,8 +29,11 @@ function traversal($node) {
 ?>
 <aside class="sidebar">
     <div class="row">
-        <div class="col-md-12 categories transform transform-top"><span class="sidebar-title">Каталог</span>
-            <div class="text-subline"></div>
+        <div class="col-md-12 categories transform transform-top">
+            <span class="sidebar-title hidden-md hidden-lg">
+                Каталог
+            </span>
+            <div class="text-subline hidden-md hidden-lg"></div>
             <ul class="categories-list transform-body">
                 <?php
                 foreach(Yii::$app->db->cache(function ($db) use($root)

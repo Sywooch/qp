@@ -13,7 +13,7 @@ $this->title = 'Корзина';
     <h1><?= Html::encode($this->title) ?></h1>
 <?php if($dataProvider->getTotalCount()) : ?>
 
-    <div class="cart-list">
+    <div class="product__table">
         <?= GridView::widget([
             'dataProvider' => $dataProvider,
             'columns' => [
@@ -21,6 +21,7 @@ $this->title = 'Корзина';
                     'class' => 'yii\grid\SerialColumn'
                 ], [
                     'format' => 'html',
+                    'contentOptions' => ['class' => 'cell-img'],
                     'value' => function ($product) {
                         /* @var $product app\models\Good\Good */
                         return  Html::img([ $product->getImgPath() ],
@@ -46,12 +47,13 @@ $this->title = 'Корзина';
                 ], [
                     'class' => 'yii\grid\ActionColumn',
                     'visibleButtons' => [ 'update' => false, 'view' => false],
+                    'visibleButtons' => [ 'update' => false, 'view' => false],
                     'template' => '{delete}',
                     'buttons' => [
                         'delete' => function ($url,$model) {
                             return Html::a(
                                 '<i class="fa fa-close"></i>',
-                                $url, ['class' => 'cart-delete', 'data-method' => 'post', 'title' => 'Удалить', 'aria-label' => 'Удалить']);
+                                $url, ['class' => 'remove', 'data-method' => 'post', 'title' => 'Удалить', 'aria-label' => 'Удалить']);
                         },
 
                     ],

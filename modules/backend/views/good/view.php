@@ -2,6 +2,8 @@
 
 use yii\helpers\Html;
 use yii\widgets\DetailView;
+use app\models\Good\PropertyValue;
+use app\models\Good\GoodProperty;
 
 /* @var $this yii\web\View */
 /* @var $model app\models\Good\Good */
@@ -43,7 +45,10 @@ $this->params['breadcrumbs'][] = $this->title;
         echo DetailView::widget([
             'model' => $model,
             'attributes' => array_map(function($key, $val) {
-                return [ 'value' => $val['value'], 'attribute' => $key ];
+                return [
+                    'value' => PropertyValue::cachedFindOne($val)->value,
+                    'attribute' => GoodProperty::cachedFindOne($key)->name,
+                ];
             }, array_keys($prop), $prop)
         ]);
     }

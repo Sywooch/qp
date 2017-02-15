@@ -1,7 +1,7 @@
 <?php
 
 return [
-    'adminEmail' => 'admin@qpvl.ru',
+    'adminEmail' => 'pinkslot@mail.ru',
     'supportEmail' => 'no-reply@qpvl.ru',
     'user.passwordResetTokenExpire' => 3600,
     'phone.manager' => '8 (800) 123-12-12',
