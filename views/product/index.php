@@ -42,22 +42,18 @@ $this->params['breadcrumbs'][] = $this->title;
                 <span class="filter__item-title">Цена, руб.</span>
                 <div class="text-subline"></div>
                 <div class="range-controls form-inline">
-                    <input type="text" id="price_from" class="form-control" data-id="price_from" data-min="0" data-type="from" placeholder="0">
+                    <input type="text" id="price_from" class="form-control" data-id="price_from" data-min="<?=Html::rubles($prices[0])?>" data-type="from" placeholder="<?=Html::rubles($prices[0])?>">
                     <span>—</span>
-                    <input type="text" id="price_to" class="form-control" data-id="price_to" data-max="500" data-type="to" placeholder="500">
+                    <input type="text" id="price_to" class="form-control" data-id="price_to" data-max="<?=Html::rubles($prices[1])?>" data-type="to" placeholder="<?=Html::rubles($prices[1])?>">
                 </div>
                 <div class="slider-range"></div>
             </div>
 
             <?php
-            $idProp = 0;
-            foreach ($filters as $key => $value) {
+            foreach ($filters as $filter) {
                 echo $this->render('_filter', [
-                    'title' => $key,
-                    'options' => $value,
-                    'idProp' => $idProp
+                    'filter' => $filter,
                 ]);
-                $idProp++;
             }
             ?>
             <div class="filter__item">

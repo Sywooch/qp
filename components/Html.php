@@ -18,6 +18,16 @@ class Html extends \yii\helpers\Html
     }
 
     /**
+     * Convert price from kopeiki(int) to rubles(float)
+     *
+     * @param $price integer
+     * @return float
+     */
+    public static function rubles($price) {
+        return round($price / 100);
+    }
+
+    /**
      * Render input form for product counter
      *
      * @param $id integer product id
