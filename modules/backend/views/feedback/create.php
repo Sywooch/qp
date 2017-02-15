@@ -6,8 +6,8 @@ use yii\helpers\Html;
 /* @var $this yii\web\View */
 /* @var $model app\models\ContactForm */
 
-$this->title = 'Create Contact Form';
-$this->params['breadcrumbs'][] = ['label' => 'Contact Forms', 'url' => ['index']];
+$this->title = 'Добавить отзыв';
+$this->params['breadcrumbs'][] = ['label' => 'Отзывы', 'url' => ['index']];
 $this->params['breadcrumbs'][] = $this->title;
 ?>
 <div class="contact-form-create">

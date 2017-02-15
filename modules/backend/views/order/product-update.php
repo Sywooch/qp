@@ -9,7 +9,7 @@ $this->title = 'Радактирование товара в заказе: ' . $
 
 $order_id = $model->order_id;
 $this->params['breadcrumbs'][] = ['label' => 'Заказы', 'url' => ['index']];
-$this->params['breadcrumbs'][] = ['label' => "Редактирование заказа №   $order_id",
+$this->params['breadcrumbs'][] = ['label' => "Редактирование заказа №$order_id",
     'url' => ['update', 'id' => $order_id]];
 $this->params['breadcrumbs'][] = $this->title;
 ?>

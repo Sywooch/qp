@@ -6,7 +6,7 @@ use yii\grid\GridView;
 /* @var $this yii\web\View */
 /* @var $dataProvider yii\data\ActiveDataProvider */
 
-$this->title = 'Contact Forms';
+$this->title = 'Отзывы';
 $this->params['breadcrumbs'][] = $this->title;
 ?>
 <div class="contact-form-index">
@@ -14,7 +14,7 @@ $this->params['breadcrumbs'][] = $this->title;
     <h1><?= Html::encode($this->title) ?></h1>
 
     <p>
-        <?= Html::a('Create Contact Form', ['create'], ['class' => 'btn btn-success']) ?>
+        <?= Html::a('Добавить отзыв', ['create'], ['class' => 'btn btn-success']) ?>
     </p>
     <?= GridView::widget([
         'dataProvider' => $dataProvider,
