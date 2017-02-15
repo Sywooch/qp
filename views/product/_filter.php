@@ -1,27 +1,23 @@
 <?php
-/** @var string $title */
-/** @var number $idProp */
-/** @var array $options */
+/** @var app\models\Good\GoodProperty $filter */
 ?>
 
 <div class="filter__item">
-    <span class="filter__item-title"><?=$title?></span>
+    <span class="filter__item-title"><?=$filter['prop_name']?></span>
     <div class="text-subline"></div>
     <div class="input-group-custom">
-        <?php  if($options['type'] == 10 || $options['type'] == 0) :
-            $i = 0; $name = rand(100,999);
-            ?>
-            <?php foreach ($options['value'] as $option) :
-            $r = rand(); $i++;
-            ?>
-                <div class="checkbox checkbox-success">
-                    <input type='checkbox' name="<?=$name?>" id="<?=$r. "-" . $i?>" class="styled" value="<?=$i?>" data-name="<?=$idProp?>">
-                    <label class="checkbox-inline checkbox-register" for="<?=$r. "-" . $i?>">
-                        <?=$option?>
-                    </label>
-                </div>
-            <?php endforeach; ?>
-        <?php endif;?>
+        <?php
+        $i = 0;
+        foreach ($filter['values'] as $item) :
+        $r = rand(); $i++;
+        ?>
+            <div class="checkbox checkbox-success">
+                <input type='checkbox' id="<?=$r. "-" . $i?>" class="styled" value="<?=$item['value_id']?>" data-name="<?=$filter['prop_id']?>">
+                <label class="checkbox-inline checkbox-register" for="<?=$r. "-" . $i?>">
+                    <?=$item['value_name']?>
+                </label>
+            </div>
+        <?php endforeach; ?>
     </div>
 
 </div>
