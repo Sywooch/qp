@@ -4,18 +4,36 @@ namespace app\models;
 
 use Yii;
 use yii\base\Model;
+use yii\behaviors\TimestampBehavior;
 
 /**
- * ContactForm is the model behind the contact form.
+ * ContactForm is the model for feedback table.
  */
-class ContactForm extends Model
+class ContactForm extends CachedActiveRecord
 {
-    public $name;
-    public $email;
-    public $subject;
-    public $body;
     public $verifyCode;
 
+    const MAX_BODY_SIZE = 10000;
+
+    const STATUS_UNMODERATED = 0;
+    const STATUS_VISIBLE = 10;
+    const STATUS_INVISIBLE = 20;
+
+    const SCENARIO_USER_FEEDBACK = 0;
+
+    static $STATUS_TO_STRING = [
+        self::STATUS_UNMODERATED => 'Непроверенный',
+        self::STATUS_VISIBLE => 'Отображаемый',
+        self::STATUS_INVISIBLE => 'Скрытый',
+    ];
+
+    public function getStatusString() {
+        return self::$STATUS_TO_STRING[$this->status];
+    }
+
+    public static function tableName() {
+        return 'feedback';
+    }
 
     /**
      * @return array the validation rules.
@@ -24,11 +42,20 @@ class ContactForm extends Model
     {
         return [
             // name, email, subject and body are required
-            [['email', 'subject', 'body'], 'required'],
+            [['email', 'body'], 'required'],
+            [['body'], 'string', 'max' => self::MAX_BODY_SIZE],
             // email has to be a valid email address
             ['email', 'email'],
             // verifyCode needs to be entered correctly
-            ['verifyCode', 'captcha'],
+            ['verifyCode', 'captcha', 'on' => self::SCENARIO_USER_FEEDBACK ],
+            ['status', 'default', 'value' => self::STATUS_UNMODERATED]
+        ];
+    }
+
+    public function behaviors()
+    {
+        return [
+            TimestampBehavior::className()
         ];
     }
 
@@ -39,8 +66,10 @@ class ContactForm extends Model
     {
         return [
             'verifyCode' => 'Я не робот (двойной клик, чтобы изменить)',
-            'subject' => 'Тема',
             'body' => 'Сообщение',
+            'status' => 'Статус',
+            'created_at' => 'Создан',
+            'updated_at' => 'Изменён',
         ];
     }
 
@@ -54,8 +83,8 @@ class ContactForm extends Model
         if ($this->validate() && Yii::$app->mailer->compose()
                 ->setTo(Yii::$app->params['adminEmail'])
                 ->setFrom([Yii::$app->params['supportEmail']])
-                ->setSubject($this->subject)
-                ->setTextBody("Пользователь с эл. ящиком $this->email оставил следуюющее обращение на сайте " .
+                ->setSubject('Обращение на сайте ' . Yii::$app->name)
+                ->setTextBody("Пользователь с эл. ящиком $this->email оставил следующее обращение на сайте " .
                     Yii::$app->name . ":\n" . $this->body)
                 ->send()
             ) {

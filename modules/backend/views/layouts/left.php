@@ -37,6 +37,7 @@
                     ['label' => 'Категории товаров', 'icon' => 'fa fa-sitemap', 'url' => ['/backend/menu']],
                     ['label' => 'Товары', 'icon' => 'fa fa-diamond', 'url' => ['/backend/good']],
                     ['label' => 'Заказы', 'icon' => 'fa fa-hand-spock-o', 'url' => ['/backend/order']],
+                    ['label' => 'Отзывы', 'icon' => 'fa fa-toggle-on', 'url' => ['/backend/feedback']],
                     ['label' => 'Login', 'url' => ['/default/login'], 'visible' => Yii::$app->user->isGuest],
                     [
                         'label' => 'Same tools',
