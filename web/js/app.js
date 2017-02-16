@@ -295,8 +295,8 @@ var Cart = (function($){
 
         return {
             init: function () {
-                var min = parseInt(arguments[0] || $from.data('min')),
-                    max = parseInt(arguments[1] || $to.data('max'));
+                var min = parseInt(arguments[0]/100 || $from.data('min')),
+                    max = parseInt(arguments[1]/100 || $to.data('max'));
                 var self = this;
                 self.setValue(min, max);
                 $slider.slider({
