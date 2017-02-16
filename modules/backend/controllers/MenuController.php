@@ -58,7 +58,6 @@ class MenuController extends Controller
             $model->zipFile = UploadedFile::getInstance($model, 'zipFile');
             if ($model->upload()) {
                 yii::$app->session->setFlash('success', 'Архив принят на обработку');
-                return $this->refresh();
             }
         }
         return $this->render('index', ['model' => $model, 'par' => Menu::getRoot()]);

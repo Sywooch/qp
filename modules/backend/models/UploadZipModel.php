@@ -252,6 +252,8 @@ class UploadZipModel extends Model
             $this->priceHandler(new SimpleXMLElement($files['price']));
 
             $zip->close();
+
+            return true;
         } else {
             return false;
         }
