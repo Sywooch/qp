@@ -19,7 +19,8 @@ use yii\bootstrap\Nav;
     /** @var array $item */
     echo Nav::widget([
         'options' => ['class' => 'nav nav-stacked mate__nav'],
-        'items' => $item
+        'items' => $item,
+        'encodeLabels' => false
     ]);
     ?>
 </div>

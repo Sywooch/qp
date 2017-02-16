@@ -47,7 +47,7 @@ class CatalogController extends \yii\web\Controller
     {
         $get = Yii::$app->request->get();
 
-        if(isset($get['f'])) {
+        if(isset($get['f']) && isset($get['ajax'])) {
             return "Test".$get['f'];
         }
 

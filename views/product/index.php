@@ -38,16 +38,19 @@ $this->params['breadcrumbs'][] = $this->title;
                     'catalog' => $category
             ])?>
             <h3>Фильтры</h3>
-            <div class="filter__item">
-                <span class="filter__item-title">Цена, руб.</span>
-                <div class="text-subline"></div>
-                <div class="range-controls form-inline">
-                    <input type="text" id="price_from" class="form-control" data-id="price_from" data-min="<?=Html::rubles($prices[0])?>" data-type="from" placeholder="<?=Html::rubles($prices[0])?>">
-                    <span>—</span>
-                    <input type="text" id="price_to" class="form-control" data-id="price_to" data-max="<?=Html::rubles($prices[1])?>" data-type="to" placeholder="<?=Html::rubles($prices[1])?>">
+            <?php if(count($filters)) : ?>
+                <?php if(count($prices) > 1) : ?>
+                <div class="filter__item">
+                    <span class="filter__item-title">Цена, руб.</span>
+                    <div class="text-subline"></div>
+                    <div class="range-controls form-inline">
+                        <input type="text" id="price_from" class="form-control" data-id="price_from" data-min="<?=Html::rubles($prices[0])?>" data-type="from" placeholder="<?=Html::rubles($prices[0])?>">
+                        <span>—</span>
+                        <input type="text" id="price_to" class="form-control" data-id="price_to" data-max="<?=Html::rubles($prices[1])?>" data-type="to" placeholder="<?=Html::rubles($prices[1])?>">
+                    </div>
+                    <div class="slider-range"></div>
                 </div>
-                <div class="slider-range"></div>
-            </div>
+                <?php endif; ?>
 
             <?php
             foreach ($filters as $filter) {
@@ -57,9 +60,10 @@ $this->params['breadcrumbs'][] = $this->title;
             }
             ?>
             <div class="filter__item">
-                <div class="filter-apply-btn btn btn-primary animated">Показать</div>
-                <button class="btn btn-primary btn-apply">Показать</button>
+                <div class="filter-apply-btn btn btn-success animated">Показать</div>
+                <button class="btn btn-success btn-apply">Показать</button>
             </div>
+            <?php endif;?>
         </div>
     </div>
     <div class="col-sm-9">
