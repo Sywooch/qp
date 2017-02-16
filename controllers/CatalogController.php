@@ -155,7 +155,7 @@ class CatalogController extends \yii\web\Controller
                 'product_id' => $get['product_id']
             ]);
             if($model->save()) {
-                return "Add";
+                return Bookmark::cachedGetCount(['product_id' => $get['product_id']]) ;
             }
             return "Error: ".$get['product_id'];
         }

@@ -96,11 +96,22 @@
  * Bookmark product
  */
 .bookmark {
-  width: 32px;
+  width: 30px;
   height: 35px;
   font-size: 1.6rem;
   margin-left: 8px !important;
   position: static !important;
+  &.active {
+    width: 44px;
+  }
+  &-count {
+
+    position: relative;
+  }
+  &.active &-count {
+    left: 5px;
+    float: right;
+  }
   &:after {
     font-family: FontAwesome;
     content: "\f006";
@@ -118,13 +129,11 @@
   }
   &.focus {
     &:after {
-      animation: pulseOut 1s ease-out;
     }
   }
   &.active {
     &:after {
       content: "\f005";
-      animation: pulseIn 1s ease-out;
     }
   }
 }
