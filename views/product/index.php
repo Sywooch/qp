@@ -76,8 +76,6 @@ $this->params['breadcrumbs'][] = $this->title;
 
             <h1><?= Html::encode($this->title) ?></h1>
             <div class="pjax-result">
-
-            </div>
             <?php
             foreach ($products as $product) {
                 echo ProductWidget::widget([
@@ -85,6 +83,7 @@ $this->params['breadcrumbs'][] = $this->title;
                 ]);
             }
             ?>
+            </div>
         </div>
     </div>
 </div>

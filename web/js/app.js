@@ -322,7 +322,7 @@ var Cart = (function($){
             },
 
             getInterval: function () {
-                return $from.val() + "-" + $to.val();
+                return ($from.val() * 100) + "-" + ($to.val() * 100);
             }
 
         };
@@ -438,7 +438,6 @@ var Cart = (function($){
         }
         log(ddd.serialize(ddd));
         // log(data.remove({id: 2, value: 2}));
-        // log(serialize2(data));
     }
 
     function test2() {
@@ -517,9 +516,13 @@ var Cart = (function($){
             var url = '/catalog/view/'+catalogID+'?' + this.getUrl();
 
             $.ajax({
-                url:     url + '?ajax=1',
+                url:     url + '&ajax=1',
                 success: function(data){
                     $content.html(data);
+                },
+                error: function () {
+                    console.log('Error');
+                    App.message('Произошла ошибка', false);
                 }
             });
 
