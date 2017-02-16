@@ -239,7 +239,7 @@
             var url = '/catalog/view/'+catalogID+'?' + this.getUrl();
 
             $.ajax({
-                url:     url + '?ajax=1',
+                url:     url + '&ajax=1',
                 success: function(data){
                     $content.html(data);
                 }
