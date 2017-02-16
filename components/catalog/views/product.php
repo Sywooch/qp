@@ -35,14 +35,14 @@ $bookmark = $product->bookmark ? $product->bookmark : new Bookmark([
                     <i class="fa fa-shopping-cart" aria-hidden="true"></i>
                 </button>
 
-                <label class="btn btn-default bookmark <?=$bookmark->isNewRecord ? '' : 'active'?>"
+                <button class="btn btn-default bookmark <?=$bookmark->isNewRecord ? '' : 'active'?>"
                        data-product-id="<?= $product->id ?>"
                        data-toggle="tooltip"
                        data-placement="top"
                        title="<?=$bookmark->isNewRecord ? 'В избранное' : 'В избранном'?>">
-                        <?= $product->getBookmarksCount() ? $product->getBookmarksCount() : '' ?>
+                       <span class="bookmark-count"><?= $product->getBookmarksCount() ? $product->getBookmarksCount() : '' ?></span>
                     <input type="checkbox">
-                </label>
+                </button>
             </div>
 
         </div>

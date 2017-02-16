@@ -36,3 +36,5 @@ robot.txt
 *.orig
 
 node_modules
+web/css/awesome
+builder

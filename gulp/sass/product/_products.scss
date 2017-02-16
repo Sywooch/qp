@@ -5,6 +5,7 @@
   margin-bottom: 10px;
   border-radius: 4px;
   position: relative;
+  border: 1px solid $gray-2;
   .thumbnail {
     height: 170px;
     @media (max-width: $screen-sm) {
@@ -95,17 +96,30 @@
  * Bookmark product
  */
 .bookmark {
-  width: 45px;
+  width: 30px;
   height: 35px;
   font-size: 1.6rem;
-  margin-left: -2px !important;
+  margin-left: 8px !important;
   position: static !important;
+  &.active {
+    width: 44px;
+  }
+  &-count {
+
+    position: relative;
+  }
+  &.active &-count {
+    left: 5px;
+    float: right;
+  }
   &:after {
     font-family: FontAwesome;
     content: "\f006";
     color: #2d8e47;;
     border-radius: 20px;
-    padding: 9px 9px 9px;
+    padding: 9px;
+    position: relative;
+    left: -12px;
   }
   &.focus, &:hover, &.active:focus, & {
     border: none;
@@ -115,15 +129,16 @@
   }
   &.focus {
     &:after {
-      animation: pulseOut 1s ease-out;
     }
   }
   &.active {
     &:after {
       content: "\f005";
-      animation: pulseIn 1s ease-out;
     }
   }
+}
+.tooltip {
+  font-size: 14px;
 }
 @keyframes pulseOut {
   0% {

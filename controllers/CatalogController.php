@@ -45,11 +45,6 @@ class CatalogController extends \yii\web\Controller
 
     public function actionView($id = null)
     {
-        $get = Yii::$app->request->get();
-
-        if(isset($get['f'])) {
-            return "Test".$get['f'];
-        }
 
         $catalog = isset($id) ? Menu::findOneOr404($id) : Menu::getRoot();
         if(Yii::$app->db->cache(function ($db) use($catalog)
@@ -72,10 +67,41 @@ class CatalogController extends \yii\web\Controller
                 'cache_table_' . Good::tableName(),
                 'cache_table_' . Bookmark::tableName(),
             ]]));
-        $filters = null;
-        $prices = null;
+        $products_copy = $products;
+
+        $get = Yii::$app->request->get();
+        if(isset($get['f'])) {
+            $fs = $get['f'];
+            $fs = explode(';', $fs);
+            $fs = array_filter($fs, function ($f) { return $f !== ''; });
+
+            foreach($fs as $f) {
+                list($prop, $val) = explode(':', $f);
+                if ($prop == 'p') {
+                    list($min, $max) = explode('-', $val);
+                    $products = array_filter($products, function ($prod) use ($min, $max) {
+                        return (int)$min <= $prod->price && $prod->price <= (int)$max;
+                    });
+                }
+                else {
+                    $products = array_filter($products, function ($prod) use ($prop, $val) {
+                        return isset($prod->properties[$prop]) and $prod->properties[$prop] == $val;
+                    });
+                }
+            }
+            if (isset($get['ajax'])) {
+                foreach ($products as $product) {
+                    echo \app\components\catalog\ProductWidget::widget([
+                        'product' => $product,
+                    ]);
+                }
+                return null;
+            }
+        }
+
+        $filters = [];
+        $prices = [];
         if ($products) {
-            $products_copy = $products;
 
             $fst_prod = array_shift($products_copy);
             $common_props = $fst_prod->properties;
@@ -95,7 +121,6 @@ class CatalogController extends \yii\web\Controller
                 }
                 $prices[] = $prod->price;
             }
-            $filters = [];
             foreach ($common_props as $prop => $value) {
                 $prop_model = GoodProperty::cachedFindOne($prop);
                 $filters[] = [
@@ -110,8 +135,6 @@ class CatalogController extends \yii\web\Controller
                 ];
             }
         }
-
-
 
         $category = Menu::findOneOr404($cid);
 
@@ -132,7 +155,7 @@ class CatalogController extends \yii\web\Controller
                 'product_id' => $get['product_id']
             ]);
             if($model->save()) {
-                return "Add";
+                return Bookmark::cachedGetCount(['product_id' => $get['product_id']]) ;
             }
             return "Error: ".$get['product_id'];
         }

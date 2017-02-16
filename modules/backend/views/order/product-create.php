@@ -6,9 +6,9 @@ use yii\helpers\Html;
 /* @var $this yii\web\View */
 /* @var $model app\models\OrderProduct */
 
-$this->title = "Добавление товара в заказ № $order_id";
-
 $order_id = $model->order_id;
+
+$this->title = "Добавление товара в заказ №$order_id";
 $this->params['breadcrumbs'][] = ['label' => 'Заказы', 'url' => ['index']];
 $this->params['breadcrumbs'][] = ['label' => "Редактирование заказа №$order_id",
     'url' => ['update', 'id' => $order_id]];

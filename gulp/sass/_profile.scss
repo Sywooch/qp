@@ -3,8 +3,18 @@
     ul {
       list-style: none;
       li {
-        &.active {
-
+        & > a {
+          padding: 8px 15px;
+          color: $black-2;
+        }
+      }
+      li.active {
+        a {
+          color: $black-2;
+          background-color: $gray-2;
+          &:hover {
+            background-color: $gray-2;
+          }
         }
       }
     }

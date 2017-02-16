@@ -34,7 +34,7 @@
                 var id = $(this).data('productId');
                 self.getData(url, {
                     id: id
-                });
+                }, $(this));
             });
             $btn.on('click', function () {
                 var id = $(this).data('productId');
@@ -54,8 +54,9 @@
          *
          * @param {string} url example:"/controller/action"
          * @param {object} options
+         * @param {object} el
          */
-        getData: function (url, options) {
+        getData: function (url, options, el) {
             var self = this;
             $.ajax({
                 url: url,
@@ -68,8 +69,10 @@
                 success: function(result) {
                     if(action) {
                         App.message('Товар добавлен в избранное', true);
+                        el.find('.bookmark-count').html(result);
                     } else {
                         App.message('Товар удалён из избранного', true);
+                        el.find('.bookmark-count').html("");
                     }
                     if(options.remover) {
                         options.remover.fadeOut(400, function () {
@@ -295,9 +298,8 @@ var Cart = (function($){
 
         return {
             init: function () {
-                var min = parseInt(arguments[0] || $from.data('min')),
-                    max = parseInt(arguments[1] || $to.data('max'));
-                console.log(min + ":::" + max);
+                var min = parseInt(arguments[0]/100 || $from.data('min')),
+                    max = parseInt(arguments[1]/100 || $to.data('max'));
                 var self = this;
                 self.setValue(min, max);
                 $slider.slider({
@@ -323,7 +325,7 @@ var Cart = (function($){
             },
 
             getInterval: function () {
-                return $from.val() + "-" + $to.val();
+                return ($from.val() * 100) + "-" + ($to.val() * 100);
             }
 
         };
@@ -332,7 +334,14 @@ var Cart = (function($){
     var Data = function () {
         this.m = []; // [{id: 1, values: [1,2,3...n]}, ...]
 
-        //For example: obj = {id:1, value: 23}
+        /**
+         * Add object to this.m
+         *
+         * @param {Object} obj
+         * @param {number} obj.id
+         * @param {number} obj.value
+         * @returns 0
+         */
         this.add = function (obj) {
             for(var i = 0; i < this.m.length; i++) {
                 if(this.m[i].id == obj.id) {
@@ -343,6 +352,15 @@ var Cart = (function($){
             this.m.push({id: obj.id, values: [obj.value]});
             return 0;
         };
+
+        /**
+         * Remove object from this.m
+         *
+         * @param {Object} obj
+         * @param {number} obj.id
+         * @param {number} obj.value
+         * @returns {boolean}
+         */
         this.remove = function (obj) {
             for(var i = 0; i < this.m.length; i++) {
                 if(this.m[i].id == obj.id) {
@@ -372,14 +390,21 @@ var Cart = (function($){
             }
             return s;
         };
-
+        /**
+         * Unserialize and get price
+         *
+         * @param {string} s
+         * @returns {Object} price
+         * @returns {integer} price.from
+         * @returns {integer} price.to
+         */
         this.get = function(s) {
             var par = location.search.split('f=')[1];
             if(par)
                 s = par;
             var d = s.split(';');
             var price = {
-                from: 0, to:500
+                from: 0, to:0
             };
             for(var i = 0 ; i < d.length - 1; i++) {
                 var item = d[i].split(':');
@@ -416,7 +441,6 @@ var Cart = (function($){
         }
         log(ddd.serialize(ddd));
         // log(data.remove({id: 2, value: 2}));
-        // log(serialize2(data));
     }
 
     function test2() {
@@ -455,6 +479,10 @@ var Cart = (function($){
                 self.getData();
             });
         },
+
+        /*
+         * Setup filter
+         */
         setFilter: function () {
             var price = data.get(window.location.search) || {from: 0, to: 0};
             if(data.m.length > 0 || price.to > 0) {
@@ -491,9 +519,13 @@ var Cart = (function($){
             var url = '/catalog/view/'+catalogID+'?' + this.getUrl();
 
             $.ajax({
-                url:     url + '?ajax=1',
+                url:     url + '&ajax=1',
                 success: function(data){
                     $content.html(data);
+                },
+                error: function () {
+                    console.log('Error');
+                    App.message('Произошла ошибка', false);
                 }
             });
 
@@ -1367,3 +1399,7 @@ var App = (function(){
 })();
 
 App.init();
+
+$(document).ready(function () {
+    $('[data-toggle="tooltip"]').tooltip();
+});
