@@ -3,6 +3,7 @@
 /* @var $this yii\web\View */
 /* @var $form yii\bootstrap\ActiveForm */
 /* @var $model app\models\ContactForm */
+/* @var $feedbacks array of app\models\ContactForm */
 
 use yii\helpers\Html;
 use yii\bootstrap\ActiveForm;
@@ -21,7 +22,9 @@ $this->params['breadcrumbs'][] = $this->title;
         </div>
     <?php else: ?>
         <p>
-            Заполните эту форму чтобы связаться с нами.
+            Если у Вас возникли вопросы/предложения
+            к нам, или Вы просто хотите оставить отзыв
+            о работе нашего сайта, заполните следующую форму.
         </p>
 
         <div class="row">
@@ -30,8 +33,6 @@ $this->params['breadcrumbs'][] = $this->title;
                 <?php $form = ActiveForm::begin(['id' => 'contact-form']); ?>
 
                     <?= $form->field($model, 'email')->textInput(['autofocus' => true]) ?>
-
-                    <?= $form->field($model, 'subject') ?>
 
                     <?= $form->field($model, 'body')->textarea(['rows' => 6]) ?>
 
@@ -46,6 +47,7 @@ $this->params['breadcrumbs'][] = $this->title;
                 <?php ActiveForm::end(); ?>
 
             </div>
+            <?php var_dump($feedbacks) ?>
         </div>
 
     <?php endif; ?>
