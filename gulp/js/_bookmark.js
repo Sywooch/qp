@@ -34,7 +34,7 @@
                 var id = $(this).data('productId');
                 self.getData(url, {
                     id: id
-                });
+                }, $(this));
             });
             $btn.on('click', function () {
                 var id = $(this).data('productId');
@@ -54,8 +54,9 @@
          *
          * @param {string} url example:"/controller/action"
          * @param {object} options
+         * @param {object} el
          */
-        getData: function (url, options) {
+        getData: function (url, options, el) {
             var self = this;
             $.ajax({
                 url: url,
@@ -68,8 +69,10 @@
                 success: function(result) {
                     if(action) {
                         App.message('Товар добавлен в избранное', true);
+                        el.find('.bookmark-count').html(result);
                     } else {
                         App.message('Товар удалён из избранного', true);
+                        el.find('.bookmark-count').html("");
                     }
                     if(options.remover) {
                         options.remover.fadeOut(400, function () {
