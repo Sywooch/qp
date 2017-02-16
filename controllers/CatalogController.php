@@ -45,11 +45,6 @@ class CatalogController extends \yii\web\Controller
 
     public function actionView($id = null)
     {
-        $get = Yii::$app->request->get();
-
-        if(isset($get['f']) && isset($get['ajax'])) {
-            return "Test".$get['f'];
-        }
 
         $catalog = isset($id) ? Menu::findOneOr404($id) : Menu::getRoot();
         if(Yii::$app->db->cache(function ($db) use($catalog)
@@ -72,10 +67,41 @@ class CatalogController extends \yii\web\Controller
                 'cache_table_' . Good::tableName(),
                 'cache_table_' . Bookmark::tableName(),
             ]]));
+        $products_copy = $products;
+
+        $get = Yii::$app->request->get();
+        if(isset($get['f'])) {
+            $fs = $get['f'];
+            $fs = explode(';', $fs);
+            $fs = array_filter($fs, function ($f) { return $f !== ''; });
+
+            foreach($fs as $f) {
+                list($prop, $val) = explode(':', $f);
+                if ($prop == 'p') {
+                    list($min, $max) = explode('-', $val);
+                    $products = array_filter($products, function ($prod) use ($min, $max) {
+                        return (int)$min <= $prod->price && $prod->price <= (int)$max;
+                    });
+                }
+                else {
+                    $products = array_filter($products, function ($prod) use ($prop, $val) {
+                        return isset($prod->properties[$prop]) and $prod->properties[$prop] == $val;
+                    });
+                }
+            }
+            if (isset($get['ajax'])) {
+                foreach ($products as $product) {
+                    echo \app\components\catalog\ProductWidget::widget([
+                        'product' => $product,
+                    ]);
+                }
+                return null;
+            }
+        }
+
         $filters = [];
         $prices = [];
         if ($products) {
-            $products_copy = $products;
 
             $fst_prod = array_shift($products_copy);
             $common_props = $fst_prod->properties;
@@ -110,25 +136,6 @@ class CatalogController extends \yii\web\Controller
             }
         }
 
-        if ($fs = Yii::$app->request->get('f')) {
-            str_replace('Testp', 'p', $fs);
-            $fs = explode(';', $fs);
-            array_pop($fs);
-            foreach($fs as $f) {
-                list($prop, $val) = explode(':', $f);
-                if ($prop == 'p') {
-                    list($min, $max) = explode('-', $val);
-                    $products = array_filter($products, function ($prod) use ($min, $max) {
-                        return 100* (int)$min <= $prod->price && $prod->price <= 100* (int)$max;
-                    });
-                }
-                else {
-                    $products = array_filter($products, function ($prod) use ($prop, $val) {
-                        return isset($prod->properties[$prop]) and $prod->properties[$prop] == $val;
-                    });
-                }
-            }
-        }
         $category = Menu::findOneOr404($cid);
 
         return $this->render('/product/index', [
