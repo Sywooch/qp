@@ -19,6 +19,9 @@ use yii\helpers\Html;
 
             <ul class="nav navbar-nav">
 
+                <li>
+                    <?= Html::a('На сайт', ['/']); ?>
+                </li>
                 <!-- Messages: style can be found in dropdown.less-->
                 <li class="dropdown messages-menu">
                     <a href="#" class="dropdown-toggle" data-toggle="dropdown">
