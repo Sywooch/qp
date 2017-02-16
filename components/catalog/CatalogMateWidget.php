@@ -11,20 +11,20 @@ class CatalogMateWidget extends Widget
 {
     public $catalog;
     public $parent;
-    public $item;
+    public $items;
 
     public function init()
     {
         parent::init();
         $this->parent = $this->catalog->parents(1)->one();
-        $mate = $this->parent->children()->all();
+        $mate = $this->parent->children(1)->all();
 
-        $this->item = [];
+        $this->items = [];
         foreach(Yii::$app->db->cache(function ($db) use($mate)
         {
             return $mate;
         }, null, new TagDependency(['tags' => 'cache_table_' . \app\models\Good\Menu::tableName()])) as $par) {
-            $this->item[] = [
+            $this->items[] = [
                 'label' => $par->name . ' ' . Html::tag('span', $par->getProductCount(), ['class' => 'counter']),
                 'url' => ['catalog/view', 'id' => $par->id]
             ];
@@ -33,7 +33,7 @@ class CatalogMateWidget extends Widget
 
     public function run() {
         return $this->render('mate', [
-            'item' => $this->item,
+            'item' => $this->items,
             'parent' => $this->parent,
         ]);
     }
