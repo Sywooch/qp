@@ -33,7 +33,7 @@ $menuUser = [
                     </div>
                     <div class="col-md-6 col-sm-6">
                         <span class="footer-title">
-                            ПокупателямS
+                            Покупателям
                         </span>
                         <ul class="footer-nav">
                             <?php

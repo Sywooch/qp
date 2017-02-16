@@ -1,6 +1,7 @@
 <?php
 namespace app\components\catalog;
 
+use app\components\Html;
 use Yii;
 use yii\bootstrap\Widget;
 use yii\caching\TagDependency;
@@ -23,7 +24,10 @@ class CatalogMateWidget extends Widget
         {
             return $mate;
         }, null, new TagDependency(['tags' => 'cache_table_' . \app\models\Good\Menu::tableName()])) as $par) {
-            $this->item[] = ['label' => $par->name . ' (' . $par->getProductCount() . ')', 'url' => ['catalog/view', 'id' => $par->id]];
+            $this->item[] = [
+                'label' => $par->name . ' ' . Html::tag('span', $par->getProductCount(), ['class' => 'counter']),
+                'url' => ['catalog/view', 'id' => $par->id]
+            ];
         }
     }
 

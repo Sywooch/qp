@@ -1393,3 +1393,7 @@ var App = (function(){
 })();
 
 App.init();
+
+$(document).ready(function () {
+    $('[data-toggle="tooltip"]').tooltip();
+});
