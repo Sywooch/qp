@@ -146,6 +146,7 @@
         $fullApply = $('.btn-apply'),
         $header = $('header.header'),
         $content = $('.pjax-result'),
+        $loader = $('.filter-loader'),
         filterApply = 'filter-apply-btn',
         $filterApply = $('.' + filterApply);
 
@@ -236,11 +237,15 @@
 
         getData: function () {
             var url = '/catalog/view/'+catalogID+'?' + this.getUrl();
-
+            $loader.css('opacity', 1);
             $.ajax({
                 url:     url + '&ajax=1',
                 success: function(data){
                     $content.html(data);
+                    App.reinit();
+                    setTimeout(function() {
+                        $loader.css('opacity', 0);
+                    }, 150);
                 },
                 error: function () {
                     console.log('Error');
