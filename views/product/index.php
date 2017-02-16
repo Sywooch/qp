@@ -50,6 +50,7 @@ $this->params['breadcrumbs'][] = $this->title;
             </div>
 
             <?php
+            var_dump($prices);
             foreach ($filters as $filter) {
                 echo $this->render('_filter', [
                     'filter' => $filter,
@@ -57,8 +58,8 @@ $this->params['breadcrumbs'][] = $this->title;
             }
             ?>
             <div class="filter__item">
-                <div class="filter-apply-btn btn btn-primary animated">Показать</div>
-                <button class="btn btn-primary btn-apply">Показать</button>
+                <div class="filter-apply-btn btn btn-success animated">Показать</div>
+                <button class="btn btn-success btn-apply">Показать</button>
             </div>
         </div>
     </div>

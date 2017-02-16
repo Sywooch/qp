@@ -19,7 +19,6 @@
             init: function () {
                 var min = parseInt(arguments[0] || $from.data('min')),
                     max = parseInt(arguments[1] || $to.data('max'));
-                console.log(min + ":::" + max);
                 var self = this;
                 self.setValue(min, max);
                 $slider.slider({
@@ -54,7 +53,14 @@
     var Data = function () {
         this.m = []; // [{id: 1, values: [1,2,3...n]}, ...]
 
-        //For example: obj = {id:1, value: 23}
+        /**
+         * Add object to this.m
+         *
+         * @param {Object} obj
+         * @param {number} obj.id
+         * @param {number} obj.value
+         * @returns 0
+         */
         this.add = function (obj) {
             for(var i = 0; i < this.m.length; i++) {
                 if(this.m[i].id == obj.id) {
@@ -65,6 +71,15 @@
             this.m.push({id: obj.id, values: [obj.value]});
             return 0;
         };
+
+        /**
+         * Remove object from this.m
+         *
+         * @param {Object} obj
+         * @param {number} obj.id
+         * @param {number} obj.value
+         * @returns {boolean}
+         */
         this.remove = function (obj) {
             for(var i = 0; i < this.m.length; i++) {
                 if(this.m[i].id == obj.id) {
@@ -94,14 +109,21 @@
             }
             return s;
         };
-
+        /**
+         * Unserialize and get price
+         *
+         * @param {string} s
+         * @returns {Object} price
+         * @returns {integer} price.from
+         * @returns {integer} price.to
+         */
         this.get = function(s) {
             var par = location.search.split('f=')[1];
             if(par)
                 s = par;
             var d = s.split(';');
             var price = {
-                from: 0, to:500
+                from: 0, to:0
             };
             for(var i = 0 ; i < d.length - 1; i++) {
                 var item = d[i].split(':');
@@ -177,6 +199,10 @@
                 self.getData();
             });
         },
+
+        /*
+         * Setup filter
+         */
         setFilter: function () {
             var price = data.get(window.location.search) || {from: 0, to: 0};
             if(data.m.length > 0 || price.to > 0) {

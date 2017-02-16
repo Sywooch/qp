@@ -47,7 +47,7 @@ class CatalogController extends \yii\web\Controller
     {
         $get = Yii::$app->request->get();
 
-        if(isset($get['f'])) {
+        if(isset($get['f']) && isset($get['ajax'])) {
             return "Test".$get['f'];
         }
 
@@ -72,7 +72,7 @@ class CatalogController extends \yii\web\Controller
                 'cache_table_' . Good::tableName(),
                 'cache_table_' . Bookmark::tableName(),
             ]]));
-        $filters = null;
+        $filters = [];
         $prices = null;
         if ($products) {
             $products_copy = $products;
@@ -95,7 +95,6 @@ class CatalogController extends \yii\web\Controller
                 }
                 $prices[] = $prod->price;
             }
-            $filters = [];
             foreach ($common_props as $prop => $value) {
                 $prop_model = GoodProperty::cachedFindOne($prop);
                 $filters[] = [
@@ -110,8 +109,6 @@ class CatalogController extends \yii\web\Controller
                 ];
             }
         }
-
-
 
         $category = Menu::findOneOr404($cid);
 
