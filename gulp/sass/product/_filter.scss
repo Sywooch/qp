@@ -16,6 +16,17 @@
     }
   }
 
+  &-loader {
+    position: absolute;
+    right: 35px;
+    width: 30px;
+    height: 30px;
+    background: url(../img/loader-32x/loader.gif) center no-repeat $gray-3;
+    z-index: 555;
+    margin-top: -2px;
+    opacity: 0;
+  }
+
   &-apply-btn {
     cursor: pointer;
     display: none;

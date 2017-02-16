@@ -37,7 +37,8 @@ $this->params['breadcrumbs'][] = $this->title;
             <?=\app\components\catalog\CatalogMateWidget::widget([
                     'catalog' => $category
             ])?>
-            <h3>Фильтры</h3>
+            <h3>Фильтры <span class="filter-loader"></span></h3>
+
             <?php if(count($filters)) : ?>
                 <?php if(count($prices) > 1) : ?>
                 <div class="filter__item">
