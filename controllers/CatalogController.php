@@ -76,16 +76,17 @@ class CatalogController extends \yii\web\Controller
             $fs = array_filter($fs, function ($f) { return $f !== ''; });
 
             foreach($fs as $f) {
-                list($prop, $val) = explode(':', $f);
+                list($prop, $values) = explode(':', $f);
                 if ($prop == 'p') {
-                    list($min, $max) = explode('-', $val);
+                    list($min, $max) = explode('-', $values);
                     $products = array_filter($products, function ($prod) use ($min, $max) {
                         return (int)$min <= $prod->price && $prod->price <= (int)$max;
                     });
                 }
                 else {
-                    $products = array_filter($products, function ($prod) use ($prop, $val) {
-                        return isset($prod->properties[$prop]) and $prod->properties[$prop] == $val;
+                    $products = array_filter($products, function ($prod) use ($prop, $values) {
+                        $values = explode(',', $values);
+                        return isset($prod->properties[$prop]) and in_array($prod->properties[$prop], $values);
                     });
                 }
             }

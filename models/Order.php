@@ -42,7 +42,7 @@ class Order extends CachedActiveRecord
     public function behaviors()
     {
         return [
-            TimestampBehavior::className()
+            TimestampBehavior::className(),
         ];
     }
 

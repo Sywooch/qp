@@ -1189,8 +1189,8 @@ var Cart = (function($){
 })(jQuery);
 var Product = (function($){
 
-    const $inputCount = $('.product-count'),
-        $compare = $('.btn-compare'),
+    var $inputCount = $('.product-count'),
+        $compare,
         $cart = $('.shopping');
 
     var csrfToken = $('meta[name="csrf-token"]').attr("content");
@@ -1204,6 +1204,7 @@ var Product = (function($){
          * @access public
          */
         init: function() {
+            $compare = $('.btn-compare');
             this.event();
         },
         event: function() {
@@ -1350,18 +1351,14 @@ var Product = (function($){
 var App = (function(){
     "use strict";
 
+    var stage = [];
+    var currentStage = $('#app[data-stage]').data('stage') || 'product';
     //public API
     return {
         init: function() {
 
-            var stage = [];
-
-            var currentStage = $('#app[data-stage]').data('stage') || 'product';
-
             stage['cart'] = Cart;
             stage['product'] = Product;
-
-            stage[currentStage].init();
 
             this.reinit();
         },
@@ -1390,6 +1387,9 @@ var App = (function(){
         },
 
         reinit: function () {
+
+            stage[currentStage].init();
+
             $('input[type=number]').stepper({
                 type: 'int',       // Allow floating point numbers
                 wheel_step:1,       // Wheel increment is 1

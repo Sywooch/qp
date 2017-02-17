@@ -82,6 +82,8 @@ class CartController extends \yii\web\Controller
                     'products_count' => $product->getQuantity(),
                     'product_c1id' => $product->c1id,
                     'order_id' => $order->id,
+                    'product_name' => $product->name,
+                    'old_price' => $product->price,
                 ]);
                 if (!$op->save()) {
                     Yii::error('Ошибка при оформлении заказа. ' .

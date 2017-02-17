@@ -30,9 +30,8 @@ use dmstr\widgets\Alert;
             'links' => isset($this->params['breadcrumbs']) ? $this->params['breadcrumbs'] : [],
         ]) ?>
     </section>
-
     <section class="content">
-        <?= Alert::widget() ?>
+        <?= \app\components\AlertWidget::widget() ?>
         <?= $content ?>
     </section>
 </div>
