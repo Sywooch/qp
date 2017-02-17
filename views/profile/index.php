@@ -16,5 +16,16 @@ $this->params['breadcrumbs'][] = $this->title;
     'columns' => [
         'id',
         'created_at:datetime',
+        [
+            'class' => 'yii\grid\ActionColumn',
+            'template' => '{view}',
+            'buttons' => [
+                'view' => function ($url,$model) {
+                    return Html::a(
+                        '<i class="fa fa-eye"></i>',
+                        ['view-order', 'id' => $model->id]);
+                },
+            ],
+        ],
     ],
 ]); ?>

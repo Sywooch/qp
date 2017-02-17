@@ -2,6 +2,7 @@
 
 namespace app\controllers;
 
+use app\models\OrderProduct;
 use app\models\Profile\ResetPasswordForm;
 use app\models\Profile\SetPasswordForm;
 use app\models\Profile\SetPhoneForm;
@@ -48,6 +49,17 @@ class ProfileController extends \yii\web\Controller
         return $this->render('index', [
             'ordersDataProvider' => $dataProvider,
         ]);
+    }
+
+    public function actionViewOrder($id) {
+        $order = Order::cachedFindOne($id);
+        $products = Yii::$app->db->cache(function ($db) use ($order) {
+            return $order->orderProducts;
+        }, null, new TagDependency(['tags' => 'cache_table_' . OrderProduct::tableName()]));
+        foreach($products as $p) {
+            echo "Product: $p->product_name, price: $p->old_price, count: $p->products_count<br>";
+        }
+
     }
 
     public function actionBookmark()

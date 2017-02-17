@@ -32,9 +32,10 @@ class OrderProduct extends CachedActiveRecord
     {
         return [
             [['order_id', 'product_c1id'], 'required'],
-            [['order_id', 'products_count'], 'integer'],
-            [['product_c1id'], 'string', 'max' => 255],
-            [['order_id'], 'exist', 'skipOnError' => true, 'targetClass' => Order::className(), 'targetAttribute' => ['order_id' => 'id']],
+            [['order_id', 'products_count', 'old_price'], 'integer'],
+            [['product_c1id', 'product_name'], 'string', 'max' => 255],
+            [['order_id'], 'exist', 'skipOnError' => true, 'targetClass' => Order::className(),
+                'targetAttribute' => ['order_id' => 'id']],
         ];
     }
 
