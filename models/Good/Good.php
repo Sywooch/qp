@@ -33,24 +33,24 @@ class Good extends CachedActiveRecord implements CartPositionInterface
     public function behaviors()
     {
         return [
-            'search' => [
-                'class' => SearchBehavior::className(),
-                'searchScope' => function ($model) {
-                    /** @var \yii\db\ActiveQuery $model */
-                    $model->select(['id', 'name', 'properties', 'pic', 'price']);
-                    //$model->andWhere(['indexed' => true]);
-                },
-                'searchFields' => function ($model) {
-                    /** @var self $model */
-                    return [
-                        ['name' => 'id', 'value' => $model->id, 'type' => SearchBehavior::FIELD_UNINDEXED],
-                        ['name' => 'name', 'value' => $model->name],
-                        ['name' => 'properties', 'value' => serialize($model->properties)],
-                        ['name' => 'pic', 'value' => $model->pic, SearchBehavior::FIELD_BINARY],
-                        ['name' => 'price', 'value' => $model->price],
-                    ];
-                }
-            ],
+//            'search' => [
+//                'class' => SearchBehavior::className(),
+//                'searchScope' => function ($model) {
+//                    /** @var \yii\db\ActiveQuery $model */
+//                    $model->select(['id', 'name', 'properties', 'pic', 'price']);
+//                    //$model->andWhere(['indexed' => true]);
+//                },
+//                'searchFields' => function ($model) {
+//                    /** @var self $model */
+//                    return [
+//                        ['name' => 'id', 'value' => $model->id, 'type' => SearchBehavior::FIELD_UNINDEXED],
+//                        ['name' => 'name', 'value' => $model->name],
+//                        ['name' => 'properties', 'value' => serialize($model->properties)],
+//                        ['name' => 'pic', 'value' => $model->pic, SearchBehavior::FIELD_BINARY],
+//                        ['name' => 'price', 'value' => $model->price],
+//                    ];
+//                }
+//            ],
 
             'serializedAttributes' => [
                 'class' => SerializedAttributes::className(),
