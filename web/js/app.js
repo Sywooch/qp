@@ -427,6 +427,7 @@ var Cart = (function($){
         $fullApply = $('.btn-apply'),
         $header = $('header.header'),
         $content = $('.pjax-result'),
+        $loader = $('.filter-loader'),
         filterApply = 'filter-apply-btn',
         $filterApply = $('.' + filterApply);
 
@@ -517,11 +518,15 @@ var Cart = (function($){
 
         getData: function () {
             var url = '/catalog/view/'+catalogID+'?' + this.getUrl();
-
+            $loader.css('opacity', 1);
             $.ajax({
                 url:     url + '&ajax=1',
                 success: function(data){
                     $content.html(data);
+                    App.reinit();
+                    setTimeout(function() {
+                        $loader.css('opacity', 0);
+                    }, 150);
                 },
                 error: function () {
                     console.log('Error');
@@ -1184,8 +1189,8 @@ var Cart = (function($){
 })(jQuery);
 var Product = (function($){
 
-    const $inputCount = $('.product-count'),
-        $compare = $('.btn-compare'),
+    var $inputCount = $('.product-count'),
+        $compare,
         $cart = $('.shopping');
 
     var csrfToken = $('meta[name="csrf-token"]').attr("content");
@@ -1199,6 +1204,7 @@ var Product = (function($){
          * @access public
          */
         init: function() {
+            $compare = $('.btn-compare');
             this.event();
         },
         event: function() {
@@ -1345,32 +1351,16 @@ var Product = (function($){
 var App = (function(){
     "use strict";
 
+    var stage = [];
+    var currentStage = $('#app[data-stage]').data('stage') || 'product';
     //public API
     return {
         init: function() {
 
-            var stage = [];
-
-            var currentStage = $('#app[data-stage]').data('stage') || 'product';
-
             stage['cart'] = Cart;
             stage['product'] = Product;
 
-            stage[currentStage].init();
-
-            $('input[type=number]').stepper({
-                type: 'int',       // Allow floating point numbers
-                wheel_step:1,       // Wheel increment is 1
-                arrow_step: 1,    // Up/Down arrows increment is 0.5
-                limit: [1, 100],
-                incrementButton: '<i class="fa fa-plus"></i>',
-                decrementButton: '<i class="fa fa-minus"></i>',
-
-                onStep: function( val, up )
-                {
-                    stage[currentStage].update(this, val);
-                }
-            });
+            this.reinit();
         },
 
         /*
@@ -1392,6 +1382,25 @@ var App = (function(){
                 animate: {
                     enter: 'animated fadeInDown',
                     exit: 'animated fadeOutUp'
+                }
+            });
+        },
+
+        reinit: function () {
+
+            stage[currentStage].init();
+
+            $('input[type=number]').stepper({
+                type: 'int',       // Allow floating point numbers
+                wheel_step:1,       // Wheel increment is 1
+                arrow_step: 1,    // Up/Down arrows increment is 0.5
+                limit: [1, 100],
+                incrementButton: '<i class="fa fa-plus"></i>',
+                decrementButton: '<i class="fa fa-minus"></i>',
+
+                onStep: function( val, up )
+                {
+                    stage[currentStage].update(this, val);
                 }
             });
         }

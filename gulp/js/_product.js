@@ -1,7 +1,7 @@
 var Product = (function($){
 
-    const $inputCount = $('.product-count'),
-        $compare = $('.btn-compare'),
+    var $inputCount = $('.product-count'),
+        $compare,
         $cart = $('.shopping');
 
     var csrfToken = $('meta[name="csrf-token"]').attr("content");
@@ -15,6 +15,7 @@ var Product = (function($){
          * @access public
          */
         init: function() {
+            $compare = $('.btn-compare');
             this.event();
         },
         event: function() {
