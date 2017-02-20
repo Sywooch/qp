@@ -1,6 +1,7 @@
 <?php
 namespace app\components;
 
+use DateTime;
 use Yii;
 
 class Html extends \yii\helpers\Html
