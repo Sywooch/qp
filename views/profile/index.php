@@ -47,7 +47,7 @@ $this->params['breadcrumbs'][] = $this->title;
                     'view' => function ($url,$model) {
                         return Html::a(
                             '<i class="fa fa-eye"></i>',
-                            ['view-order', 'id' => $model->id]);
+                            ['/profile/order/view', 'id' => $model->id]);
                     },
                 ],
             ],

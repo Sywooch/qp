@@ -56,10 +56,12 @@ class ProfileController extends \yii\web\Controller
         $products = Yii::$app->db->cache(function ($db) use ($order) {
             return $order->orderProducts;
         }, null, new TagDependency(['tags' => 'cache_table_' . OrderProduct::tableName()]));
-        foreach($products as $p) {
-            echo "Product: $p->product_name, price: $p->old_price, count: $p->products_count<br>";
-        }
-
+//        foreach($products as $p) {
+//            echo "Product: $p->product_name, price: $p->old_price, count: $p->products_count<br>";
+//        }
+        return $this->render('order/view', [
+            'products' => $products,
+        ]);
     }
 
     public function actionBookmark()

@@ -7,7 +7,7 @@ $config = [
     'name' => 'qp',
     'basePath' => dirname(__DIR__),
     'bootstrap' => ['log'],
-    'language' => 'ru',
+    'language' => 'ru-RU',
     'timeZone' => 'Asia/Vladivostok',
     'components' => [
         'search' => [
@@ -29,6 +29,11 @@ $config = [
         'cart' => [
             'class' => 'yz\shoppingcart\ShoppingCart',
             'cartId' => 'my_application_cart',
+        ],
+        'formatter' => [
+            'dateFormat' => 'd.MM.yyyy',
+            'timeFormat' => 'H:mm:ss',
+            'datetimeFormat' => 'd.MM.yyyy H:mm',
         ],
         'shopping' => [
             'class' => 'app\components\ShoppingComponent',
@@ -83,7 +88,9 @@ $config = [
                 '<controller:profile>/<action:edit>/phone'=>'profile/phone',
                 '<controller:profile>/<action:edit>/password'=>'profile/password',
                 '<controller:profile>/<action:confirm>/phone'=>'profile/confirm-phone',
+                '<controller:profile>/<action:order>/view'=>'profile/view-order',
                 '<controller:(catalog|product)>/<action:[\wd-]+>/<id:\d+>' => '<controller>/<action>',
+                '<controller:(catalog|product)>/<action:[\wd-]+>/view/<id:\d+>' => '<controller>/<action>',
             ],
         ],
         'i18n' => [
