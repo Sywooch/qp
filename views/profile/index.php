@@ -20,7 +20,7 @@ $this->params['breadcrumbs'][] = $this->title;
                 'attribute' => 'Номер заказа',
                 'format' => 'raw',
                 'value' => function ($order) {
-                    /* @var $order app\models\OrderProduct */
+                    /* @var $order app\models\Order*/
                     return  '123123';
                 }
             ],
@@ -28,15 +28,15 @@ $this->params['breadcrumbs'][] = $this->title;
                 'attribute' => 'Сумма',
                 'format' => 'raw',
                 'value' => function ($order) {
-                    /* @var $order app\models\OrderProduct */
-                    return  Html::price('123');
+                    /* @var $order app\models\Order*/
+                    return  Html::price($order->getTotalPrice());
                 }
             ],
             [
                 'attribute' => 'Статус',
                 'format' => 'raw',
                 'value' => function ($order) {
-                    /* @var $order app\models\OrderProduct */
+                    /* @var $order app\models\Order*/
                     return  'Выполнен';
                 }
             ],

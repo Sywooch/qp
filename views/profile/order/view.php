@@ -1,6 +1,7 @@
 <?php
 use app\components\Html;
 /* @var $products app\models\OrderProduct*/
+/* @var $order app\models\Order*/
 
 $this->title = 'Просмотр заказа';
 $this->params['profileLayout'] = true;
@@ -9,6 +10,8 @@ $this->params['breadcrumbs'][] = [
 ];
 $this->params['breadcrumbs'][] = $this->title;
 ?>
+
+
 <h3>Заказ № 123123</h3>
 <div class="row">
     <div class="col-sm-6">
@@ -23,7 +26,7 @@ $this->params['breadcrumbs'][] = $this->title;
             </tr>
             <tr>
                 <td class="key">Сумма заказа</td>
-                <td class="value"><?=Html::price(1000)?></td>
+                <td class="value"><?=Html::price($order->getTotalPrice())?></td>
             </tr>
             <tr>
                 <td class="key">Дата зазаза</td>

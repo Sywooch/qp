@@ -41,8 +41,7 @@ class ProfileController extends \yii\web\Controller
     public function actionIndex()
     {
         $dataProvider = new ActiveDataProvider([
-            'query' => Yii::$app->user->identity->getOrders(),
-        ]);
+            'query' => Yii::$app->user->identity->getOrders()]);
         Yii::$app->db->cache(function ($db) use ($dataProvider) {
             $dataProvider->prepare();
         }, null, new TagDependency(['tags' => 'cache_table_' . Order::tableName()]));
@@ -56,11 +55,10 @@ class ProfileController extends \yii\web\Controller
         $products = Yii::$app->db->cache(function ($db) use ($order) {
             return $order->orderProducts;
         }, null, new TagDependency(['tags' => 'cache_table_' . OrderProduct::tableName()]));
-//        foreach($products as $p) {
-//            echo "Product: $p->product_name, price: $p->old_price, count: $p->products_count<br>";
-//        }
+
         return $this->render('order/view', [
             'products' => $products,
+            'order' => $order,
         ]);
     }
 
