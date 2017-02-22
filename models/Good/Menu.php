@@ -90,8 +90,7 @@ class Menu extends CachedActiveRecord
         if ($leaves = self::getDb()->cache(function ($db)
         {
             return $this->leaves()->all();
-        }, null, new TagDependency(['tags'=>'cache_table_' . static::tableName()])))
-        {
+        }, null, new TagDependency(['tags'=>'cache_table_' . static::tableName()]))) {
             $ret = 0;
             foreach($leaves as $leaf) {
                 $ret += self::getDb()->cache(function ($db) use($leaf)
@@ -105,6 +104,6 @@ class Menu extends CachedActiveRecord
         return self::getDb()->cache(function ($db)
         {
             return $this->getProducts()->count();
-        }, null, new TagDependency(['tags'=>'cache_table_' . static::tableName()]));
+        }, null, new TagDependency(['tags'=>'cache_table_' . Good::tableName()]));
     }
 }
