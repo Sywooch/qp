@@ -71,4 +71,10 @@ class Order extends CachedActiveRecord
         return $this->hasMany(OrderProduct::className(), ['order_id' => 'id']);
     }
 
+    public function getTotalPrice()
+    {
+        return array_reduce($this->orderProducts, function($carry, $item) {
+            return $carry + $item->products_count * $item->old_price;
+        });
+    }
 }
