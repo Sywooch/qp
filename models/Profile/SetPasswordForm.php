@@ -17,8 +17,8 @@ class SetPasswordForm extends Model
     public function attributeLabels()
     {
         return [
-            'password' => 'Пароль',
-            'repeat_password' => 'Повторите пароль',
+            'password' => 'Новый пароль',
+            'repeat_password' => 'Повторите новый пароль',
         ];
     }
 }
