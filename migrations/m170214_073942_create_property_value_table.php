@@ -33,8 +33,8 @@ class m170214_073942_create_property_value_table extends Migration
 
     public function safeDown()
     {
-        $this->dropForeignKey(  'fk-' . self::TABLE_NAME . '-property_id',  'property_dictionary');
-        $this->dropIndex(       'idx-' . self::TABLE_NAME . '-property_id',  'property_dictionary');
+        $this->dropForeignKey(  'fk-' . self::TABLE_NAME . '-property_id', self::TABLE_NAME);
+        $this->dropIndex(       'idx-' . self::TABLE_NAME . '-property_id', self::TABLE_NAME);
         $this->dropTable(self::TABLE_NAME);
     }
 }
