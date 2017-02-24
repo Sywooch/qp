@@ -15,6 +15,18 @@ use yii\filters\VerbFilter;
  */
 class OrderController extends Controller
 {
+    public function behaviors()
+    {
+        return [
+            'verbs' => [
+                'class' => VerbFilter::className(),
+                'actions' => [
+                    'delete' => ['POST'],
+                    'product-delete' => ['POST'],
+                ],
+            ],
+        ];
+    }
     /**
      * Lists all Order models.
      * @return mixed

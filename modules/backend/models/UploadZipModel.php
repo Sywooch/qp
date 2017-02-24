@@ -63,14 +63,15 @@ class UploadZipModel extends Model
                             else {
                                 Yii::$app->session->addFlash('warning', "Категория <i>$menuc->name </i> перенесена");
                             }
-                            $this->recursivelyAddCategory($xmlc, $menuc);
                         }
                         else {
                             Yii::$app->session->addFlash('error',
                                 "Возникла ошибка при добавлении категории <i>$menuc->name</i>. " .
                                 implode(', ', $menuc->getFirstErrors()));
+                            continue;
                         }
                     }
+                    $this->recursivelyAddCategory($xmlc, $menuc);
                 }
             }
         }
@@ -139,9 +140,9 @@ class UploadZipModel extends Model
                 };
             }
             else {
-                if (!$category = Menu::findByC1id((string)$good_xml->Группы->Ид)) {
+                if (!$category = Menu::findByC1id($c1id = (string)$good_xml->Группы->Ид)) {
                     Yii::$app->session->addFlash('error',
-                        "Неизвестная категория товаров с ГУИД <i>$good_xml->Группы->Ид</i>");
+                        "Неизвестная категория товаров с ГУИД <i>$c1id</i>");
                     continue;
                 }
 

@@ -1,12 +1,14 @@
-<div class="admin-default-index">
-    <h1><?= $this->context->action->uniqueId ?></h1>
-    <p>
-        This is the view content for action "<?= $this->context->action->id ?>".
-        The action belongs to the controller "<?= get_class($this->context) ?>"
-        in the "<?= $this->context->module->id ?>" module.
-    </p>
-    <p>
-        You may customize this page by editing the following file:<br>
-        <code><?= __FILE__ ?></code>
-    </p>
-</div>
+<?php
+use yii\helpers\Html;
+use yii\helpers\Url;
+use yii\widgets\ActiveForm;
+$this->title = 'Панель администратора'
+/* @var $this yii\web\View */
+/* @var $model app\modules\backend\models\UploadZipModel */
+/* @var $par app\models\Good\Menu */
+?>
+
+<?php $form = ActiveForm::begin(['options' => ['enctype' => 'multipart/form-data']]) ?>
+<?= $form->field($model, 'zipFile')->fileInput()->label('Обновить базу данных из архива.') ?>
+    <button>Отправить</button>
+<?php ActiveForm::end() ?>
