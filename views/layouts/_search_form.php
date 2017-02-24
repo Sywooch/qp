@@ -8,7 +8,7 @@ use yii\helpers\Url;
     <span class="input-group-addon">
         <?= Html::submitButton('<i class="fa fa-search"></i>', ['class' => 'search__btn']) ?>
     </span>
-    <?= Html::textInput('q', $text, ['class' => 'form-control  input-lg', 'placeholder' => 'Поиск...']) ?>
+    <?= Html::textInput('q', $text, ['class' => 'form-control  input-lg', 'placeholder' => 'Поиск...', 'id' => 'search-input']) ?>
 
 </div><!-- /input-group -->
 <?= Html::endForm() ?>
