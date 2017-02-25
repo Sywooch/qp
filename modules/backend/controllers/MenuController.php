@@ -3,19 +3,17 @@
 namespace app\modules\backend\controllers;
 
 use Yii;
-use yii\data\ActiveDataProvider;
 use yii\web\Controller;
-use yii\web\NotFoundHttpException;
 use app\models\Good\Menu;
 use yii\filters\VerbFilter;
-use app\modules\backend\models\UploadZipModel;
-use yii\web\UploadedFile;
 
 /**
  * UserController implements the CRUD actions for User model.
  */
 class MenuController extends Controller
 {
+    public $defaultAction = 'view';
+
     public function behaviors()
     {
         return [
@@ -28,8 +26,9 @@ class MenuController extends Controller
         ];
     }
 
-   public function actionView($id)
+   public function actionView($id = null)
     {
+        $id or $id = Menu::getRoot();
         $menu = new Menu;
         $par = Menu::findOneOr404($id);
 
@@ -50,16 +49,4 @@ class MenuController extends Controller
         return $this->redirect([ 'view', 'id' => $par_id ]);
     }
 
-    public function actionIndex()
-    {
-        $model = new UploadZipModel();
-
-        if (Yii::$app->request->isPost) {
-            $model->zipFile = UploadedFile::getInstance($model, 'zipFile');
-            if ($model->upload()) {
-                yii::$app->session->setFlash('success', 'Архив принят на обработку');
-            }
-        }
-        return $this->render('index', ['model' => $model, 'par' => Menu::getRoot()]);
-    }
 }

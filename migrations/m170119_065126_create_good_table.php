@@ -28,8 +28,7 @@ class m170119_065126_create_good_table extends Migration
             self::TABLE_NAME, 'category_id');
 
         $this->addForeignKey('fk-' . self::TABLE_NAME . '-category_id',
-            self::TABLE_NAME, 'category_id', 'menu', 'id');
-                                                        //, 'CASCADE');
+            self::TABLE_NAME, 'category_id', 'menu', 'id', 'SET NULL');
     }
 
     /**

@@ -60,6 +60,18 @@ class Good extends CachedActiveRecord implements CartPositionInterface
         ];
     }
 
+    /**
+     * @return bool
+     */
+    public function beforeDelete()
+    {
+        if (parent::beforeDelete()) {
+            unlink($this->getImgPath());
+            return true;
+        } else {
+            return false;
+        }
+    }
     public function getPrice()
     {
         return $this->price;

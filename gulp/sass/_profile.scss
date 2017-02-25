@@ -9,12 +9,9 @@
         }
       }
       li.active {
-        a {
+        a, a:hover {
           color: $black-2;
           background-color: $gray-2;
-          &:hover {
-            background-color: $gray-2;
-          }
         }
       }
     }

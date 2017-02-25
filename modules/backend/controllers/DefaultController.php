@@ -2,9 +2,12 @@
 
 namespace app\modules\backend\controllers;
 
+use app\modules\backend\models\UploadZipModel;
 use Yii;
 use yii\web\Controller;
+use yii\web\UploadedFile;
 use app\models\Profile\LoginForm;
+use app\models\Good\Menu;
 /**
  * Default controller for the `admin` module
  */
@@ -14,9 +17,18 @@ class DefaultController extends Controller
      * Renders the index view for the module
      * @return string
      */
+
     public function actionIndex()
     {
-        return $this->render('index');
+        $model = new UploadZipModel();
+
+        if (Yii::$app->request->isPost) {
+            $model->zipFile = UploadedFile::getInstance($model, 'zipFile');
+            if ($model->upload()) {
+                yii::$app->session->setFlash('success', 'Архив принят на обработку');
+            }
+        }
+        return $this->render('index', ['model' => $model, 'par' => Menu::getRoot()]);
     }
 
     /**

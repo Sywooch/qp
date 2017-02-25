@@ -3,8 +3,31 @@ var App = (function(){
 
     var stage = [];
     var currentStage = $('#app[data-stage]').data('stage') || 'product';
+
+    var debug = true;
+
+    $.widget( "custom.catcomplete", $.ui.autocomplete, {
+        _renderMenu: function( ul, items ) {
+            var that = this,
+                currentCategory = "";
+            $.each( items, function( index, item ) {
+                if ( item.category != currentCategory ) {
+                    ul.append( "<li class='ui-autocomplete-category'>" + item.category + "</li>" );
+                    currentCategory = item.category;
+                }
+                that._renderItemData( ul, item );
+            });
+        }
+    });
+
     //public API
     return {
+
+        /** @type {function(...*)} */
+        log: function() {
+            if(debug)
+                console.log.apply(console, arguments)
+        },
         init: function() {
 
             stage['cart'] = Cart;

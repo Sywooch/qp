@@ -4,7 +4,7 @@ use yii\helpers\Html;
 use yii\widgets\ActiveForm;
 
 /* @var $this yii\web\View */
-/* @var $model app\models\SetPasswordForm */
+/* @var $model app\models\Profile\SetPasswordForm */
 /* @var $form ActiveForm */
 
 $this->params['profileLayout'] = true;

@@ -22,7 +22,7 @@ class m170131_021955_create_order_table extends Migration
         ], 'ENGINE InnoDB');
 
         $this->addForeignKey('fk-' . self::TABLE_NAME . '-user-id',
-            self::TABLE_NAME, 'user_id', 'user', 'id');
+            self::TABLE_NAME, 'user_id', 'user', 'id', 'CASCADE');
     }
 
 
