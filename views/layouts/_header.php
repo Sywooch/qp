@@ -54,7 +54,8 @@ use yii\bootstrap\NavBar;
             \app\components\catalog\CatalogWidget::widget([
                     'visible' => isset($this->params['catalog']) && $this->params['catalog']
             ]),
-            ['label' => 'Доставка и оплата', 'url' => ['/site/about']],
+            ['label' => 'Доставка', 'url' => ['/site/delivery']],
+            ['label' => 'Оплата', 'url' => ['/site/payment']],
             ['label' => 'О компании', 'url' => ['/site/about']],
             ['label' => 'Связаться с нами', 'url' => ['/site/contact']],
         ],
