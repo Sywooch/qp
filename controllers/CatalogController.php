@@ -147,6 +147,17 @@ class CatalogController extends \yii\web\Controller
         ]);
     }
 
+    public function actionSearchData() {
+        $get = Yii::$app->request->post();
+        if (isset($get['_csrf'])) {
+            $data = [
+                'products' => Good::find()->select('id,name as label')->asArray()->all(),
+                'categories' => Menu::find()->select('id,name as label')->asArray()->all()
+            ];
+            echo json_encode($data);
+        }
+    }
+
     public function actionAddBookmark()
     {
         $get = Yii::$app->request->post();

@@ -2,51 +2,17 @@
 
     "use strict";
 
-    $.widget( "custom.catcomplete", $.ui.autocomplete, {
-        _renderMenu: function( ul, items ) {
-            var that = this,
-                currentCategory = "";
-            $.each( items, function( index, item ) {
-                if ( item.category != currentCategory ) {
-                    ul.append( "<li class='ui-autocomplete-category'>" + item.category + "</li>" );
-                    currentCategory = item.category;
-                }
-                that._renderItemData( ul, item );
-            });
-        }
-    });
-
     var $open = $('.btn-search-modal'),
         $inputMobile = $('#search-input-mobile'),
         $input = $('#search-input');
 
-    var dataTestProduct = [
-        { label: "Бананы", url: "test"},
-        { label: "Кофе Максим", url: "test"},
-        { label: "Бараны", url: "test"},
-        { label: "Китикет", url: "test"},
-        { label: "Булочка", url: "test"},
-        { label: "Бублик", url: "test"},
-        { label: "Тест продукта 1", url: "test"},
-        { label: "Тест продукта 2", url: "test"},
-        { label: "Тест продукта 3", url: "test"},
-        { label: "Тест продукта 4", url: "test"}
-    ];
+    var csrfToken = $('meta[name="csrf-token"]').attr("content");
 
-    var dataTestCategory = [
-        { label: "Овощи", url: "category"},
-        { label: "Фрукты", url: "category"},
-        { label: "Выпечка", url: "category"},
-        { label: "Алкоголь", url: "category"},
-        { label: "Выемка", url: "category"},
-        { label: "Тест категории 1", url: "category"},
-        { label: "Тест категории 2", url: "category"},
-        { label: "Тест категории 3", url: "category"},
-        { label: "Тест категории 4", url: "category"}
-    ];
+    var dataTestProduct;
+    var dataTestCategory;
 
     function lightwell(request, response) {
-        function fuzzysearch (needle, haystack) {
+        function hasMatch (needle, haystack) {
             var hlen = haystack.length;
             var nlen = needle.length;
             if (nlen > hlen) {
@@ -66,12 +32,6 @@
             }
             return true;
         }
-        function hasMatch(str) {
-            var d = Levenshtein.get(str.toLowerCase(), request.term.toLowerCase());
-            console.log(d);
-            return d > 2;
-            //return srt.toLowerCase().indexOf(request.term.toLowerCase())!==-1;
-        }
         var i, l, obj, matches = [];
 
         var hasProduct = true, hasCategory = true;
@@ -83,19 +43,19 @@
 
         for  (i = 0, l = dataTestProduct.length; i<l; i++) {
             obj = dataTestProduct[i];
-            if (fuzzysearch(request.term.toLowerCase(), obj.label.toLowerCase())) {
+            if (hasMatch(request.term.toLowerCase(), obj.label.toLowerCase())) {
                 if(hasProduct) {
                     matches.push({label: 0});
                     hasProduct = false;
                 }
-                if(matches.length > 10)
-                    break;
                 matches.push(obj);
+                if(matches.length > 9)
+                    break;
             }
         }
         for  (i = 0, l = dataTestCategory.length; i<l; i++) {
             obj = dataTestCategory[i];
-            if (fuzzysearch(request.term.toLowerCase(), obj.label.toLowerCase())) {
+            if (hasMatch(request.term.toLowerCase(), obj.label.toLowerCase())) {
                 if(hasCategory) {
                     matches.push({label: 1});
                     hasCategory = false;
@@ -109,6 +69,8 @@
     var Search = {
         init: function() {
             this.event();
+            this.getData();
+
             $input.autocomplete({
                 delay: 0,
                 source: lightwell,
@@ -123,7 +85,7 @@
                     }
                     $input.val( ui.item.label );
                     return false;
-                },
+                }
             })
             .data( "ui-autocomplete" )._renderItem = function( ul, item ) {
                 if(item.label == 0) {
@@ -140,6 +102,25 @@
                     .append( "<a href='" + item.url + "'>" + item.label + "</a>" )
                     .appendTo( ul );
             };
+        },
+        getData: function () {
+            $.ajax( {
+                url: "/catalog/search-data",
+                dataType: "json",
+                type: "POST",
+                data: {
+                    _csrf: csrfToken
+                },
+                success: function( data ) {
+                    dataTestProduct = data.products;
+                    dataTestCategory = data.categories;
+                    App.log('Данные для поиска полученны');
+                },
+                error: function () {
+                    App.log('Error #10');
+                    App.message('Произошла ошибка', false);
+                }
+            } );
         },
         event: function() {
             var self = this;

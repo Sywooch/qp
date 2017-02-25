@@ -4,6 +4,8 @@ var App = (function(){
     var stage = [];
     var currentStage = $('#app[data-stage]').data('stage') || 'product';
 
+    var debug = true;
+
     $.widget( "custom.catcomplete", $.ui.autocomplete, {
         _renderMenu: function( ul, items ) {
             var that = this,
@@ -20,6 +22,12 @@ var App = (function(){
 
     //public API
     return {
+
+        /** @type {function(...*)} */
+        log: function() {
+            if(debug)
+                console.log.apply(console, arguments)
+        },
         init: function() {
 
             stage['cart'] = Cart;
