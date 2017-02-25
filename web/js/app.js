@@ -1333,8 +1333,8 @@ var Product = (function($){
 
     var csrfToken = $('meta[name="csrf-token"]').attr("content");
 
-    var dataTestProduct;
-    var dataTestCategory;
+    var dataProducts;
+    var dataCategories;
 
     function lightwell(request, response) {
         function hasMatch (needle, haystack) {
@@ -1366,8 +1366,8 @@ var Product = (function($){
             return;
         }
 
-        for  (i = 0, l = dataTestProduct.length; i<l; i++) {
-            obj = dataTestProduct[i];
+        for  (i = 0, l = dataProducts.length; i<l; i++) {
+            obj = dataProducts[i];
             if (hasMatch(request.term.toLowerCase(), obj.label.toLowerCase())) {
                 if(hasProduct) {
                     matches.push({label: 0});
@@ -1378,8 +1378,8 @@ var Product = (function($){
                     break;
             }
         }
-        for  (i = 0, l = dataTestCategory.length; i<l; i++) {
-            obj = dataTestCategory[i];
+        for  (i = 0, l = dataCategories.length; i<l; i++) {
+            obj = dataCategories[i];
             if (hasMatch(request.term.toLowerCase(), obj.label.toLowerCase())) {
                 if(hasCategory) {
                     matches.push({label: 1});
@@ -1437,8 +1437,15 @@ var Product = (function($){
                     _csrf: csrfToken
                 },
                 success: function( data ) {
-                    dataTestProduct = data.products;
-                    dataTestCategory = data.categories;
+                    dataProducts = data.products;
+                    dataCategories = data.categories;
+                    var i;
+                    for(i = 0; i < dataProducts.length; i++) {
+                        dataProducts[i].url = '/product/view/' + dataProducts[i].id;
+                    }
+                    for(i = 0; i < dataCategories.length; i++) {
+                        dataCategories[i].url = '/catalog/view/' + dataCategories[i].id;
+                    }
                     App.log('Данные для поиска полученны');
                 },
                 error: function () {
