@@ -298,6 +298,14 @@ class SiteController extends Controller
         ]);
     }
 
+    public function actionDelivery() {
+        return $this->render('delivery');
+    }
+
+    public function actionPayment() {
+        return $this->render('payment');
+    }
+
     public function actionSearch($q = '')
     {
         /** @var \himiklab\yii2\search\Search $search */
