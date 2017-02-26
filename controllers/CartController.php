@@ -18,6 +18,8 @@ class CartController extends \yii\web\Controller
                 'class' => VerbFilter::className(),
                 'actions' => [
                     'delete' => ['POST'],
+                    'add' => ['POST'],
+                    'add-multiple' => ['POST'],
                 ],
             ],
         ];
@@ -37,7 +39,7 @@ class CartController extends \yii\web\Controller
     public function actionAdd()
     {
         $get = Yii::$app->request->post();
-        if (isset($get['_csrf'])) {
+        if (Yii::$app->request->isAjax) {
             Yii::$app->cart->put(Good::findOneOr404($get['product_id']), $get['product_count']);
         }
         return Yii::$app->shopping->render();
@@ -46,7 +48,7 @@ class CartController extends \yii\web\Controller
     public function actionAddMultiple()
     {
         $get = Yii::$app->request->post();
-        if (isset($get['_csrf'])) {
+        if (Yii::$app->request->isAjax) {
 
             /** @var $cart \yz\shoppingcart\ShoppingCart */
             $cart = Yii::$app->cart;
