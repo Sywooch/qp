@@ -149,10 +149,12 @@ class CatalogController extends \yii\web\Controller
 
     public function actionSearchData() {
         $get = Yii::$app->request->post();
+
+        $selector = function($p) { return [ 'id' => $p->id, 'label' => $p->name ]; };
         if (isset($get['_csrf'])) {
             $data = [
-                'products' => Good::find()->select('id,name as label')->asArray()->all(),
-                'categories' => Menu::find()->select('id,name as label')->asArray()->all()
+                'products' => array_map($selector, Good::cachedFindAll()),
+                'categories' => array_map($selector, Menu::cachedFindAll()),
             ];
             echo json_encode($data);
         }
