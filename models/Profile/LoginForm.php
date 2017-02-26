@@ -63,7 +63,8 @@ class LoginForm extends Model
         if (!$this->hasErrors()) {
             $user = $this->getUser();
             if (!$user) {
-                $this->addError($attribute, 'Пользователь с таким Email не зарегистрирован.');
+                $this->addError('email', 'Неверный логин или пароль.');
+                $this->addError('password', 'Неверный логин или пароль.');
             }
             else if ($user->status === User::STATUS_NOT_ACTIVE){
                 $this->addError($attribute, 'Аккаунт ожидает активации.');
@@ -75,7 +76,8 @@ class LoginForm extends Model
     {
         if (!$this->hasErrors()) {
             if (!$this->_user->validatePassword($this->password)) {
-                $this->addError($attribute, 'Неправильный пароль.');
+                $this->addError('email', 'Неверный логин или пароль.');
+                $this->addError('password', 'Неверный логин или пароль.');
             }
         }
     }
