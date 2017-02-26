@@ -15,15 +15,15 @@ $this->params['breadcrumbs'][] = $this->title;
     <?= GridView::widget([
         'dataProvider' => $ordersDataProvider,
         'columns' => [
-            'created_at:datetime',
             [
                 'attribute' => 'Номер заказа',
                 'format' => 'raw',
                 'value' => function ($order) {
                     /* @var $order app\models\Order*/
-                    return  '123123';
+                    return  Html::a('123123', ['/profile/order/view', 'id' => $order->id]);
                 }
             ],
+            'created_at:datetime',
             [
                 'attribute' => 'Сумма',
                 'format' => 'raw',
@@ -39,18 +39,7 @@ $this->params['breadcrumbs'][] = $this->title;
                     /* @var $order app\models\Order*/
                     return  'Выполнен';
                 }
-            ],
-            [
-                'class' => 'yii\grid\ActionColumn',
-                'template' => '{view}',
-                'buttons' => [
-                    'view' => function ($url,$model) {
-                        return Html::a(
-                            '<i class="fa fa-eye"></i>',
-                            ['/profile/order/view', 'id' => $model->id]);
-                    },
-                ],
-            ],
+            ]
         ],
     ]); ?>
 </div>
