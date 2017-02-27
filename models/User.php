@@ -334,6 +334,7 @@ class User extends CachedActiveRecord implements IdentityInterface
     }
 
     public function getOrders() {
-        return $this->hasMany(Order::className(), ['user_id' => 'id']);
+        return $this->hasMany(Order::className(), ['user_id' => 'id'])->
+            orderBy(['created_at' => SORT_DESC]);
     }
 }

@@ -1,6 +1,7 @@
 <?php
 
 use app\components\Html;
+use app\models\Bookmark;
 use yii\web\View;
 use yii\helpers\Url;
 use yii\caching\TagDependency;
@@ -30,6 +31,12 @@ $this->params['breadcrumbs'][] =  [
 ];
 $this->params['breadcrumbs'][] = $this->title;
 
+
+$bookmark = $product->bookmark ? $product->bookmark : new Bookmark([
+    'user_id' => Yii::$app->user->getId(),
+    'product_id' => $product->getId(),
+]);
+
 ?>
 <div class="product-view">
 
@@ -47,7 +54,7 @@ $this->params['breadcrumbs'][] = $this->title;
             <div class="price">
                 <?=Html::price($product->price)?>
             </div>
-            <div class="product__panel">
+            <div class="product__panel" data-toggle="buttons">
                 <div class="btn-group">
                     <input type="number" min="1" value="1"
                            name="product_count"
@@ -60,10 +67,14 @@ $this->params['breadcrumbs'][] = $this->title;
                         data-product-count="1">
                     <i class="fa fa-shopping-cart" aria-hidden="true"></i> В корзину
                 </button>
-                <button class="btn btn-icon btn-icon-left btn-bookmark"
-                        data-action="add"
-                        data-product-id="<?= $product->id ?>">
-                    <i class="fa fa-star-o" aria-hidden="true"></i> В избранное
+                <button class="btn btn-default bookmark <?=$bookmark->isNewRecord ? '' : 'active'?>"
+                        data-product-id="<?= $product->id ?>"
+                        data-placement="top"
+                        title="<?=$bookmark->isNewRecord ? 'В избранное' : 'В избранном'?>">
+                       <span class="bookmark-count">
+                           <?= $product->getBookmarksCount() ? $product->getBookmarksCount() : '' ?>
+                       </span>
+                    <input type="checkbox">
                 </button>
             </div>
 

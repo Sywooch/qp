@@ -39,12 +39,11 @@
             $btn.on('click', function () {
                 var id = $(this).data('productId');
                 action = false;
-                var fn = this;
-
+                var that = this;
                 self.getData('/catalog/delete-bookmark', {
                     id: id,
-                    remover: $(fn).parent().parent()
-                });
+                    remover: $(that).parent().parent()
+                }, $(this));
 
             });
         },
@@ -75,6 +74,7 @@
                         el.find('.bookmark-count').html("");
                     }
                     if(options.remover) {
+                        //Remove dom element from /profile/bookmark
                         options.remover.fadeOut(400, function () {
                             $(this).remove();
                         });

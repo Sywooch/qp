@@ -1,6 +1,6 @@
 <?php
 use app\components\Html;
-/* @var $products app\models\OrderProduct*/
+/* @var $products array of sapp\models\OrderProduct*/
 /* @var $order app\models\Order*/
 
 $this->title = 'Просмотр заказа';
@@ -17,8 +17,8 @@ $this->params['breadcrumbs'][] = $this->title;
     <div class="col-sm-6">
         <table class="table">
             <tr>
-                <td class="key">Дата зазаза</td>
-                <td class="value">2.02.2017 19:30</td>
+                <td class="key">Дата заказа</td>
+                <td class="value"><?=date('d.m.Y', $order->created_at)?></td>
             </tr>
             <tr>
                 <td class="key">Текущий статус</td>
@@ -26,11 +26,9 @@ $this->params['breadcrumbs'][] = $this->title;
             </tr>
             <tr>
                 <td class="key">Сумма заказа</td>
-                <td class="value"><?=Html::price($order->getTotalPrice())?></td>
-            </tr>
-            <tr>
-                <td class="key">Дата зазаза</td>
-                <td class="value">2.02.2017 19:30</td>
+                <td class="value"><?=Html::price(array_reduce($products, function($carry, $item) {
+                        return $carry + $item->products_count * $item->old_price;
+                    }))?></td>
             </tr>
         </table>
     </div>

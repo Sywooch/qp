@@ -37,6 +37,7 @@ class CatalogController extends \yii\web\Controller
                 'actions' => [
                     'add-bookmark' => ['POST'],
                     'delete-bookmark' => ['POST'],
+                    'search-data' => ['POST'],
                 ],
             ],
         ];
@@ -149,10 +150,12 @@ class CatalogController extends \yii\web\Controller
 
     public function actionSearchData() {
         $get = Yii::$app->request->post();
-        if (isset($get['_csrf'])) {
+
+        $selector = function($p) { return [ 'id' => $p->id, 'label' => $p->name ]; };
+        if (Yii::$app->request->isAjax) {
             $data = [
-                'products' => Good::find()->select('id,name as label')->asArray()->all(),
-                'categories' => Menu::find()->select('id,name as label')->asArray()->all()
+                'products' => array_map($selector, Good::cachedFindAll()),
+                'categories' => array_map($selector, Menu::cachedFindAll()),
             ];
             echo json_encode($data);
         }
@@ -161,7 +164,7 @@ class CatalogController extends \yii\web\Controller
     public function actionAddBookmark()
     {
         $get = Yii::$app->request->post();
-        if (isset($get['_csrf'])) {
+        if (Yii::$app->request->isAjax) {
             $model = new Bookmark([
                 'user_id' => Yii::$app->user->getId(),
                 'product_id' => $get['product_id']
@@ -178,7 +181,7 @@ class CatalogController extends \yii\web\Controller
     public function actionDeleteBookmark()
     {
         $get = Yii::$app->request->post();
-        if (isset($get['_csrf'])) {
+        if (Yii::$app->request->isAjax) {
             if (($model = Bookmark::cachedFindOne([
                     'user_id' => Yii::$app->user->id,
                     'product_id' => $get['product_id'],
