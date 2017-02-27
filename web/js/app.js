@@ -66,13 +66,13 @@
                     _csrf: csrfToken
                 },
                 success: function(result) {
+                    var count = parseInt(result) ? parseInt(result) : "";
                     if(action) {
                         App.message('Товар добавлен в избранное', true);
-                        el.find('.bookmark-count').html(result);
                     } else {
                         App.message('Товар удалён из избранного', true);
-                        el.find('.bookmark-count').html("");
                     }
+                    el.find('.bookmark-count').html(count);
                     if(options.remover) {
                         //Remove dom element from /profile/bookmark
                         options.remover.fadeOut(400, function () {

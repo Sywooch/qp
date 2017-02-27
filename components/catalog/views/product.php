@@ -27,22 +27,22 @@ $bookmark = $product->bookmark ? $product->bookmark : new Bookmark([
         </label>
         <div class="product-panel">
             <div class="btn-group"  data-toggle="buttons">
+                <button class="btn btn-default bookmark <?=$bookmark->isNewRecord ? '' : 'active'?>"
+                        data-product-id="<?= $product->id ?>"
+                        data-placement="top"
+                        title="<?=$bookmark->isNewRecord ? 'В избранное' : 'В избранном'?>">
+                       <span class="bookmark-count">
+                           <?= $product->getBookmarksCount() ? $product->getBookmarksCount() : '' ?>
+                       </span>
+                    <input type="checkbox">
+                </button>
                 <?=Html::stepper($product->id)?>
                 <button class="btn btn-icon btn-icon-left btn-success btn-compare"
                         data-product-id="<?= $product->id ?>"
                         data-product-count="1"
                         data-active="1">
                     <i class="fa fa-shopping-cart" aria-hidden="true"></i>
-                </button>
-
-                <button class="btn btn-default bookmark <?=$bookmark->isNewRecord ? '' : 'active'?>"
-                       data-product-id="<?= $product->id ?>"
-                       data-placement="top"
-                       title="<?=$bookmark->isNewRecord ? 'В избранное' : 'В избранном'?>">
-                       <span class="bookmark-count">
-                           <?= $product->getBookmarksCount() ? $product->getBookmarksCount() : '' ?>
-                       </span>
-                    <input type="checkbox">
+                    <i class="fa fa-plus" aria-hidden="true"></i>
                 </button>
             </div>
 

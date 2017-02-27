@@ -81,10 +81,14 @@
     }
   }
   .btn-group {
+    display: block;
     & > .btn {
-      float: right;
-      margin-left: 10px;
       border-radius: 4px !important;
+      &-compare {
+        float: right;
+        margin-right: 10px;
+        margin-top: 1px;
+      }
     }
   }
 }

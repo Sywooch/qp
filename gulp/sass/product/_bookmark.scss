@@ -5,24 +5,19 @@
   width: 30px;
   height: 35px;
   font-size: 1.6rem;
-  margin-left: 8px !important;
-  position: static !important;
   &.active {
     width: 44px;
   }
   &-count {
     position: relative;
-    left: 5px;
-    float: right;
+    font-size: 1.5rem;
+    color: $black-3;
   }
-  &:after {
+  &:before {
     font-family: FontAwesome;
     content: "\f006";
     color: #2d8e47;;
     border-radius: 20px;
-    padding: 9px;
-    position: relative;
-    left: -12px;
   }
   &.focus, &:hover, &.active:focus, & {
     border: none;
@@ -35,7 +30,7 @@
     }
   }
   &.active {
-    &:after {
+    &:before {
       content: "\f005";
     }
   }
