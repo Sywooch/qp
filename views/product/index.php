@@ -83,13 +83,9 @@ $this->params['breadcrumbs'][] = $this->title;
                 </div>
             </div>
             <div class="pjax-result">
-            <?php
-            foreach ($products as $product) {
-                echo ProductWidget::widget([
-                    'product' => $product,
-                ]);
-            }
-            ?>
+            <?=$this->render('_view', [
+                'products' => $products
+            ]); ?>
             </div>
         </div>
     </div>
