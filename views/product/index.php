@@ -74,8 +74,14 @@ $this->params['breadcrumbs'][] = $this->title;
         ]);
         ?>
         <div class="good-index">
-
-            <h1><?= Html::encode($this->title) ?></h1>
+            <div class="row">
+                <div class="col-sm-9">
+                    <h1><?= Html::encode($this->title) ?></h1>
+                </div>
+                <div class="col-sm-3 toolbar">
+                    <?=$this->render("_ordering") ?>
+                </div>
+            </div>
             <div class="pjax-result">
             <?php
             foreach ($products as $product) {
