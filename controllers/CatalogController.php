@@ -84,6 +84,9 @@ class CatalogController extends \yii\web\Controller
                         return (int)$min <= $prod->price && $prod->price <= (int)$max;
                     });
                 }
+                else if ($prop == 'o') {
+
+                }
                 else {
                     $products = array_filter($products, function ($prod) use ($prop, $values) {
                         $values = explode(',', $values);
@@ -92,12 +95,10 @@ class CatalogController extends \yii\web\Controller
                 }
             }
             if (isset($get['ajax'])) {
-                foreach ($products as $product) {
-                    echo \app\components\catalog\ProductWidget::widget([
-                        'product' => $product,
-                    ]);
-                }
-                return null;
+                $this->layout = "_null";
+                return $this->render('/product/_view', [
+                    'products' => $products
+                ]);
             }
         }
 

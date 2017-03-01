@@ -81,7 +81,7 @@ class Good extends CachedActiveRecord implements CartPositionInterface
     {
         return $this->id;
     }
-    
+
 
     const ITEM_MEASURE = 796;
     //  const KG_MEASURE = 42;
@@ -90,6 +90,18 @@ class Good extends CachedActiveRecord implements CartPositionInterface
      */
     static $MEASURE_TO_STRING = [
         self::ITEM_MEASURE => 'Штука',
+    ];
+
+    const ORDERING_PRICE_ACS = 1;
+    const ORDERING_PRICE_DESC = 2;
+    const ORDERING_NAME = 3;
+    const ORDERING_BOOKMARK = 4;
+
+    static $ORDERING_TO_STRING = [
+        self::ORDERING_PRICE_ACS    => 'По возрастанию цены',
+        self::ORDERING_PRICE_DESC   => 'По убованию цены',
+        self::ORDERING_NAME         => 'По наименованию',
+        self::ORDERING_BOOKMARK     => 'По рейтингу',
     ];
 
     public function getMeasureString() {

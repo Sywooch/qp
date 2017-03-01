@@ -39,12 +39,11 @@
             $btn.on('click', function () {
                 var id = $(this).data('productId');
                 action = false;
-                var fn = this;
-
+                var that = this;
                 self.getData('/catalog/delete-bookmark', {
                     id: id,
-                    remover: $(fn).parent().parent()
-                });
+                    remover: $(that).parent().parent()
+                }, $(this));
 
             });
         },
@@ -67,14 +66,15 @@
                     _csrf: csrfToken
                 },
                 success: function(result) {
+                    var count = parseInt(result) ? parseInt(result) : "";
                     if(action) {
                         App.message('Товар добавлен в избранное', true);
-                        el.find('.bookmark-count').html(result);
                     } else {
                         App.message('Товар удалён из избранного', true);
-                        el.find('.bookmark-count').html("");
                     }
+                    el.find('.bookmark-count').html(count);
                     if(options.remover) {
+                        //Remove dom element from /profile/bookmark
                         options.remover.fadeOut(400, function () {
                             $(this).remove();
                         });

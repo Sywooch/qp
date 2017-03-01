@@ -1,0 +1,62 @@
+/*
+ * Bookmark product
+ */
+.bookmark {
+  width: 30px;
+  height: 35px;
+  font-size: 1.6rem;
+  &.active {
+    width: 44px;
+  }
+  &-count {
+    position: relative;
+    font-size: 1.5rem;
+    color: $black-3;
+  }
+  &:before {
+    font-family: FontAwesome;
+    content: "\f006";
+    color: #2d8e47;;
+    border-radius: 20px;
+  }
+  &.focus, &:hover, &.active:focus, & {
+    border: none;
+    background-color: transparent !important;
+    box-shadow: none;
+    outline: none !important;
+  }
+  &.focus {
+    &:after {
+    }
+  }
+  &.active {
+    &:before {
+      content: "\f005";
+    }
+  }
+}
+.tooltip {
+  font-size: 14px;
+}
+@keyframes pulseOut {
+  0% {
+    box-shadow: 0 0 0 0 rgba(45,142,41, 0.8);
+  }
+  70% {
+    box-shadow: 0 0 0 10px rgba(45,142,41, 0);
+  }
+  100% {
+    box-shadow: 0 0 0 0 rgba(45,142,41, 0);
+  }
+}
+@keyframes pulseIn {
+  0% {
+    box-shadow: 0 0 0 15px rgba(45,142,41, 0);
+  }
+  70% {
+    box-shadow: 0 0 0 0 rgba(45,142,41, 0.8);
+  }
+  100% {
+    box-shadow: 0 0 0 0 rgba(45,142,41, 0);
+  }
+}
