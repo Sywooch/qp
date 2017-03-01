@@ -14,6 +14,12 @@ $this->params['breadcrumbs'][] = $this->title;
 <div class="product__table">
     <?= GridView::widget([
         'dataProvider' => $ordersDataProvider,
+
+        // TODO: order/view on click row
+        'rowOptions' => function ($model, $key, $index, $grid) {
+            return ['id' => $model['id'], 'onclick' => 'alert(this.id);'];
+        },
+
         'columns' => [
             [
                 'attribute' => 'Номер заказа',
