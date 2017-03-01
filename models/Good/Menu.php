@@ -3,6 +3,7 @@
 namespace app\models\Good;
 
 use app\models\CachedActiveRecord;
+use himiklab\yii2\search\behaviors\SearchBehavior;
 use Yii;
 use creocoder\nestedsets\NestedSetsBehavior;
 use yii\web\NotFoundHttpException;
@@ -29,6 +30,21 @@ class Menu extends CachedActiveRecord
 }
     public function behaviors() {
         return [
+            'search' => [
+                'class' => SearchBehavior::className(),
+                'searchScope' => function ($model) {
+                    /** @var \yii\db\ActiveQuery $model */
+                    $model->select(['id', 'name']);
+                },
+                'searchFields' => function ($model) {
+                    /** @var self $model */
+                    return [
+                        ['name' => 'id', 'value' => $model->id, 'type' => SearchBehavior::FIELD_UNINDEXED],
+                        ['name' => 'name', 'value' => $model->name],
+                    ];
+                }
+            ],
+
             'tree' => [
                 'class' => NestedSetsBehavior::className(),
                 // 'treeAttribute' => 'tree',

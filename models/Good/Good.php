@@ -3,10 +3,7 @@
 namespace app\models\Good;
 
 use app\models\CachedActiveRecord;
-use Behat\Gherkin\Keywords\CachedArrayKeywords;
-use yii\web\NotFoundHttpException;
-use yz\shoppingcart\CartPositionInterface;
-use yz\shoppingcart\CartPositionTrait;
+use yz\shoppingcart\CartPositionProviderInterface;
 use baibaratsky\yii\behaviors\model\SerializedAttributes;
 use app\models\Bookmark;
 use himiklab\yii2\search\behaviors\SearchBehavior;
@@ -25,32 +22,43 @@ use himiklab\yii2\search\behaviors\SearchBehavior;
  *
  * @property Menu $category
  */
-class Good extends CachedActiveRecord implements CartPositionInterface
-{
 
-    use CartPositionTrait;
+class Good extends CachedActiveRecord implements CartPositionProviderInterface
+{
+    public function getCartPosition($params = [])
+    {
+        return \Yii::createObject([
+            'class' => ProductCartPosition::className(),
+            'id' => $this->id,
+        ]);
+    }
 
     public function behaviors()
     {
         return [
-//            'search' => [
-//                'class' => SearchBehavior::className(),
-//                'searchScope' => function ($model) {
-//                    /** @var \yii\db\ActiveQuery $model */
-//                    $model->select(['id', 'name', 'properties', 'pic', 'price']);
-//                    //$model->andWhere(['indexed' => true]);
-//                },
-//                'searchFields' => function ($model) {
-//                    /** @var self $model */
-//                    return [
-//                        ['name' => 'id', 'value' => $model->id, 'type' => SearchBehavior::FIELD_UNINDEXED],
-//                        ['name' => 'name', 'value' => $model->name],
-//                        ['name' => 'properties', 'value' => serialize($model->properties)],
-//                        ['name' => 'pic', 'value' => $model->pic, SearchBehavior::FIELD_BINARY],
-//                        ['name' => 'price', 'value' => $model->price],
-//                    ];
-//                }
-//            ],
+            'search' => [
+                'class' => SearchBehavior::className(),
+                'searchScope' => function ($model) {
+                    /** @var \yii\db\ActiveQuery $model */
+                    $model->select(['id', 'name', 'properties', 'pic', 'price']);
+                    //$model->andWhere(['indexed' => true]);
+                },
+                'searchFields' => function ($model) {
+                    /** @var self $model */
+                    $prop = [];
+                    foreach ($model->properties as $k => $v) {
+                        $prop[GoodProperty::cachedFindOne($k)->name] = PropertyValue::cachedFindOne($v)->value;
+                    }
+
+                    return [
+                        ['name' => 'id', 'value' => $model->id, 'type' => SearchBehavior::FIELD_UNINDEXED],
+                        ['name' => 'name', 'value' => $model->name],
+                        ['name' => 'properties', 'value' => serialize($prop)],
+                        ['name' => 'pic', 'value' => $model->pic, SearchBehavior::FIELD_BINARY],
+                        ['name' => 'price', 'value' => $model->price],
+                    ];
+                }
+            ],
 
             'serializedAttributes' => [
                 'class' => SerializedAttributes::className(),
@@ -101,7 +109,7 @@ class Good extends CachedActiveRecord implements CartPositionInterface
         self::ORDERING_PRICE_ACS    => 'По возрастанию цены',
         self::ORDERING_PRICE_DESC   => 'По убованию цены',
         self::ORDERING_NAME         => 'По наименованию',
-        self::ORDERING_BOOKMARK     => 'По рейтингу',
+//        self::ORDERING_BOOKMARK     => 'По рейтингу',
     ];
 
     public function getMeasureString() {

@@ -166,7 +166,7 @@ class ProfileController extends \yii\web\Controller
         foreach($products as $p) {
             if ($prod_model = Good::findOneOr404(['c1id' => $p->product_c1id])) {
                 // TODO check is product available
-                $cart->put($prod_model , $p->products_count);
+                $cart->put($prod_model->getCartPosition(), $p->products_count);
             }
             else {
                 Yii::$app->session->addFlash('error', 'Товар ' . $p->product_name . ' недоступен');

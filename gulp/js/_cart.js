@@ -100,7 +100,6 @@ var Cart = (function($){
                     console.log('Error');
                     App.message('Произошла ошибка', false);
                 }
-
             });
         },
 

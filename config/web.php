@@ -14,6 +14,7 @@ $config = [
             'class' => 'himiklab\yii2\search\Search',
             'models' => [
                 'app\models\Good\Good',
+                'app\models\Good\Menu',
             ],
         ],
         'assetManager' => [
