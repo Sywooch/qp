@@ -66,13 +66,13 @@
                     _csrf: csrfToken
                 },
                 success: function(result) {
+                    var count = parseInt(result) ? parseInt(result) : "";
                     if(action) {
                         App.message('Товар добавлен в избранное', true);
-                        el.find('.bookmark-count').html(result);
                     } else {
                         App.message('Товар удалён из избранного', true);
-                        el.find('.bookmark-count').html("");
                     }
+                    el.find('.bookmark-count').html(count);
                     if(options.remover) {
                         //Remove dom element from /profile/bookmark
                         options.remover.fadeOut(400, function () {
@@ -283,56 +283,36 @@ var Cart = (function($){
 
     "use strict";
 
-    var debug = true;
-
-    function log(s) {
-        if(debug) {
-            console.log(s);
-        }
-    }
-
-    var Price = function () {
-        var $slider = $( ".slider-range" ),
-            $from =  $( "#price_from"),
-            $to =  $( "#price_to");
-
-        return {
-            init: function () {
-                var min = parseInt(arguments[0]/100 || $from.data('min')),
-                    max = parseInt(arguments[1]/100 || $to.data('max'));
-                var self = this;
-                self.setValue(min, max);
-                $slider.slider({
-                    range: true,
-                    min: $from.data('min'),
-                    max: $to.data('max'),
-                    values: [ min, max],
-                    slide: function( event, ui ) {
-                        self.setValue(ui.values[0], ui.values[1]);
-                        var h = $from.offset().top - $header.height();
-                        $filterApply.css({top: h}).fadeIn(250);
-                    }
-                });
-            },
-
-            setValue: function (min, max) {
-                $from.val(min);
-                $to.val(max);
-            },
-
-            isActive: function () {
-                return !!$from.val();
-            },
-
-            getInterval: function () {
-                return ($from.val() * 100) + "-" + ($to.val() * 100);
-            }
-
-        };
-    };
+    var $checkbox = $('.filter input:checkbox'),
+        $fullApply = $('.btn-apply'),
+        $header = $('header.header'),
+        $content = $('.pjax-result'),
+        $loader = $('.filter-loader'),
+        $sort = $('#sort'),
+        filterApply = 'filter-apply-btn',
+        $filterApply = $('.' + filterApply),
+        catalogID = $('.products-view').data("catalogId");
 
     var Data = function () {
-        this.m = []; // [{id: 1, values: [1,2,3...n]}, ...]
+        this.m = []; // filter for products [{id: 1, values: [1,2,3...n]}, ...]
+
+        this.price = {
+            key: 'p',
+            value: [0, 999999],
+            getUrl: function () {
+                return this.value == -1 ?
+                    "" : this.key + ":" + (this.value[0] * 100) + "-" + (this.value[1] * 100) + ";";
+            }
+        };
+
+        this.order = {
+            key: 'o',
+            value: -1,
+            getUrl: function () {
+                return  this.value == -1 ?
+                    "" : this.key + ":" + (this.value) + ";";
+            }
+        };
 
         /**
          * Add object to this.m
@@ -391,48 +371,97 @@ var Cart = (function($){
             return s;
         };
         /**
-         * Unserialize and get price
+         * Set price, order, products
          *
          * @param {string} s
-         * @returns {Object} price
-         * @returns {integer} price.from
-         * @returns {integer} price.to
          */
-        this.get = function(s) {
+        this.set = function(s) {
             var par = location.search.split('f=')[1];
             if(par)
                 s = par;
-            var d = s.split(';');
-            var price = {
-                from: 0, to:0
-            };
+            var d = s.split(';'),
+                item, _t;
             for(var i = 0 ; i < d.length - 1; i++) {
-                var item = d[i].split(':');
-                if(item[0] == 'p') {
-                    var t = item[1].split('-');
-                    price.from = t[0];
-                    price.to = t[1];
+                item = d[i].split(':');
+                if(item[0] == this.price.key) {
+                    this.setPrice(item);
+                } else if(item[0] == this.order.key) {
+                    this.setOrder(item[1]);
                 } else {
-                    var t = item[1].split(',');
-                    for(var k = 0 ; k < t.length; k++) {
-                        this.add({id: item[0], value: t[k]});
+                    _t = item[1].split(',');
+                    for(var k = 0 ; k < _t.length; k++) {
+                        this.add({id: item[0], value: _t[k]});
                     }
                 }
             }
-            return price;
-        }
+        };
+        /**
+         * @param {array} item - ["p", "100-250"]
+         */
+        this.setPrice = function (item) {
+            var _t = item[1].split('-');
+            this.price.value[0] = _t[0];
+            this.price.value[1] = _t[1];
+        };
+        /**
+         * @param {number} order
+         */
+        this.setOrder = function (order) {
+            this.order.value = order;
+        };
+
+        this.getUrl = function () {
+            var url = "f=";
+            url += this.price.getUrl();
+            url += data.serialize();
+            url += this.order.getUrl();
+            return url;
+        };
     };
 
-    var $checkbox = $('.filter input:checkbox'),
-        $fullApply = $('.btn-apply'),
-        $header = $('header.header'),
-        $content = $('.pjax-result'),
-        $loader = $('.filter-loader'),
-        filterApply = 'filter-apply-btn',
-        $filterApply = $('.' + filterApply);
+    var data = new Data();
 
-    var data = new Data(),
-        catalogID = $('.products-view').data("catalogId");
+    var Price = function () {
+        var $slider = $( ".slider-range" ),
+            $from =  $( "#price_from"),
+            $to =  $( "#price_to");
+
+        return {
+            init: function () {
+                var min = parseInt(arguments[0]/100 || $from.data('min')),
+                    max = parseInt(arguments[1]/100 || $to.data('max'));
+                var self = this;
+                self.setValue(min, max);
+                $slider.slider({
+                    range: true,
+                    min: $from.data('min'),
+                    max: $to.data('max'),
+                    values: [ min, max ],
+                    slide: function( event, ui ) {
+                        self.setValue(ui.values[0], ui.values[1]);
+                        var h = $from.offset().top - $header.height();
+                        $filterApply.css({top: h}).fadeIn(250);
+                    }
+                });
+            },
+
+            setValue: function (min, max) {
+                $from.val(min);
+                $to.val(max);
+                data.price.value[0] = min;
+                data.price.value[1] = max;
+            },
+
+            isActive: function () {
+                return !!$from.val();
+            },
+
+            getInterval: function () {
+                return ($from.val() * 100) + "-" + ($to.val() * 100);
+            }
+
+        };
+    };
 
     function test1() {
         var test = [{id: 1, value: 2},{id: 2, value: 2},{id: 3, value: 2},{id: 1, value: 4},{id: 1, value: 5}];
@@ -446,8 +475,8 @@ var Cart = (function($){
 
     function test2() {
         var ddd = new Data();
-       // ddd.get("p:16-500;954:1945166136,903495414;358:1829271172,796428635;");
-        ddd.get("?p:90-445;864:353509045,69753746;");
+       // ddd.set("p:16-500;954:1945166136,903495414;358:1829271172,796428635;");
+        ddd.set("?p:90-445;864:353509045,69753746;");
         log(ddd);
         log(ddd.serialize());
     }
@@ -479,15 +508,26 @@ var Cart = (function($){
             $filterApply.on('click', function () {
                 self.getData();
             });
+            $sort.on('change', function () {
+                self.sort($(this).val());
+            });
+        },
+        /*
+         * @param {number} value
+         */
+        sort: function (value) {
+            App.log("Select order: " + value);
+            data.setOrder(value);
+            this.getData();
         },
 
         /*
          * Setup filter
          */
         setFilter: function () {
-            var price = data.get(window.location.search) || {from: 0, to: 0};
-            if(data.m.length > 0 || price.to > 0) {
-                Price().init(price.from, price.to);
+            data.set(window.location.search);
+            if(data.m.length > 0 || data.price.value[0] > 0) {
+                Price().init(data.price.value[0], data.price.value[1]);
                 $checkbox.each(function () {
                     var cur = $(this),
                         curVal = cur.val(),
@@ -500,24 +540,15 @@ var Cart = (function($){
                                 }
                             }
                         }
-
                     }
                 });
             } else {
                 Price().init();
             }
         },
-        getUrl: function () {
-            var url = "f=";
-            if(Price().isActive()) {
-                url += "p:" + Price().getInterval() + ";";
-            }
-            url += data.serialize();
-            return url;
-        },
 
         getData: function () {
-            var url = '/catalog/view/'+catalogID+'?' + this.getUrl();
+            var url = '/catalog/view/'+catalogID+'?' + data.getUrl();
             $loader.css('opacity', 1);
             $.ajax({
                 url:     url + '&ajax=1',
@@ -529,7 +560,7 @@ var Cart = (function($){
                     }, 150);
                 },
                 error: function () {
-                    console.log('Error');
+                    App.log('Error');
                     App.message('Произошла ошибка', false);
                 }
             });

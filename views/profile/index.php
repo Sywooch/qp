@@ -14,13 +14,19 @@ $this->params['breadcrumbs'][] = $this->title;
 <div class="product__table">
     <?= GridView::widget([
         'dataProvider' => $ordersDataProvider,
+
+        // TODO: order/view on click row
+        'rowOptions' => function ($model, $key, $index, $grid) {
+            return ['id' => $model['id'], 'onclick' => 'alert(this.id);'];
+        },
+
         'columns' => [
             [
                 'attribute' => 'Номер заказа',
                 'format' => 'raw',
                 'value' => function ($order) {
                     /* @var $order app\models\Order*/
-                    return  Html::a('123123', ['/profile/order/view', 'id' => $order->id]);
+                    return  Html::a($order->public_id, ['/profile/order/view', 'id' => $order->id]);
                 }
             ],
             'created_at:datetime',
@@ -39,7 +45,18 @@ $this->params['breadcrumbs'][] = $this->title;
                     /* @var $order app\models\Order*/
                     return  'Выполнен';
                 }
-            ]
+            ],
+            [
+                'class' => 'yii\grid\ActionColumn',
+                'template' => '{order-repeat}',
+                'buttons' => [
+                    'order-repeat' => function ($url,$model) {
+                        return Html::a(
+                            '<i class="fa fa-refresh"></i>',
+                            $url, ['title' => 'Повторить заказ']);
+                    },
+                ],
+            ],
         ],
     ]); ?>
 </div>

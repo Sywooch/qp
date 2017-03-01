@@ -11,6 +11,7 @@ use yii\web\NotFoundHttpException;
  *
  * @property integer $id
  * @property integer $user_id
+ * @property integer public_id
  * @property integer $created_at
  * @property integer $updated_at
  *
@@ -35,7 +36,10 @@ class Order extends CachedActiveRecord
         return [
             [['user_id'], 'required'],
             [['user_id'], 'integer'],
-            [['user_id'], 'exist', 'skipOnError' => true, 'targetClass' => User::className(), 'targetAttribute' => ['user_id' => 'id']],
+            [['public_id'], 'string'],
+            [['user_id'], 'exist',
+                'skipOnError' => true, 'targetClass' => User::className(),
+                'targetAttribute' => ['user_id' => 'id']],
         ];
     }
 
@@ -49,7 +53,7 @@ class Order extends CachedActiveRecord
     public function attributeLabels()
     {
         return [
-            'id' => 'ID',
+            'public_id' => 'ID',
             'user_id' => 'ID покупателя',
             'created_at' => 'Создан',
             'updated_at' => 'Изменён',

@@ -27,6 +27,7 @@ use yii\web\NotFoundHttpException;
  * @property integer $updated_at
  * @property string $password write-only password
  * @property string $role
+ * @property integer $order_counter
  */
 class User extends CachedActiveRecord implements IdentityInterface
 {
@@ -47,6 +48,7 @@ class User extends CachedActiveRecord implements IdentityInterface
         return [
             [['email', 'name'], 'filter', 'filter' => 'trim'],
             ['email', 'email'],
+            [['order_counter'], 'integer'],
             ['status', 'default', 'value' => User::STATUS_NOT_ACTIVE],
             ['status', 'in', 'range' => array_keys(self::$STATUS_TO_STRING)],
             ['role', 'in', 'range' => array_keys(Yii::$app->authManager->getRoles())],

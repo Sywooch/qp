@@ -12,7 +12,7 @@ $this->params['breadcrumbs'][] = $this->title;
 ?>
 
 
-<h3>Заказ № 123123</h3>
+<h3>Заказ № <?=$order->public_id?> </h3>
 <div class="row">
     <div class="col-sm-6">
         <table class="table">
