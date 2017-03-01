@@ -75,8 +75,15 @@ class CartController extends \yii\web\Controller
 
     public function actionOrder()
     {
-        $order = new Order([ 'user_id' => Yii::$app->user->id ]);
+        /** @var $user \app\models\User */
+        $user = Yii::$app->user->identity;
+        $order = new Order([
+            'user_id' => $user->id,
+            'public_id' => $user->id . '-' . $user->order_counter
+        ]);
         if ($order->save()) {
+            $user->order_counter++;
+            $user->save();
             /** @var $cart \yz\shoppingcart\ShoppingCart */
             $cart = Yii::$app->cart;
             foreach($cart->getPositions() as $product) {

@@ -20,7 +20,7 @@ $this->params['breadcrumbs'][] = $this->title;
                 'format' => 'raw',
                 'value' => function ($order) {
                     /* @var $order app\models\Order*/
-                    return  Html::a('123123', ['/profile/order/view', 'id' => $order->id]);
+                    return  Html::a($order->public_id, ['/profile/order/view', 'id' => $order->id]);
                 }
             ],
             'created_at:datetime',
