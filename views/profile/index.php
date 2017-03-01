@@ -39,7 +39,18 @@ $this->params['breadcrumbs'][] = $this->title;
                     /* @var $order app\models\Order*/
                     return  'Выполнен';
                 }
-            ]
+            ],
+            [
+                'class' => 'yii\grid\ActionColumn',
+                'template' => '{order-repeat}',
+                'buttons' => [
+                    'order-repeat' => function ($url,$model) {
+                        return Html::a(
+                            '<i class="fa fa-refresh"></i>',
+                            $url, ['title' => 'Повторить заказ']);
+                    },
+                ],
+            ],
         ],
     ]); ?>
 </div>

@@ -154,4 +154,25 @@ class ProfileController extends \yii\web\Controller
             'model' => $model,
         ]);
     }
+
+    public function actionOrderRepeat($id)
+    {
+        $order = Order::cachedFindOne($id);
+        $products = Yii::$app->db->cache(function ($db) use ($order) {
+            return $order->orderProducts;
+        }, null, new TagDependency(['tags' => 'cache_table_' . OrderProduct::tableName()]));
+
+        $cart = Yii::$app->cart;
+        foreach($products as $p) {
+            if ($prod_model = Good::findOneOr404(['c1id' => $p->product_c1id])) {
+                // TODO check is product available
+                $cart->put($prod_model , $p->products_count);
+            }
+            else {
+                Yii::$app->session->addFlash('error', 'Товар ' . $p->product_name . ' недоступен');
+            }
+
+        }
+        return $this->redirect('/cart');
+    }
 }
