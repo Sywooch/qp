@@ -58,62 +58,43 @@ class CatalogController extends \yii\web\Controller
         return $this->actionProducts($catalog->id);
     }
 
-    public function actionProducts($cid)
-    {
-        $products = Yii::$app->db->cache(function ($db) use($cid)
-        {
-            return Good::find()->joinWith('bookmark')->where([ 'category_id' => $cid ])->all();
-        }, null, new TagDependency([
-            'tags'=> [
-                'cache_table_' . Good::tableName(),
-                'cache_table_' . Bookmark::tableName(),
-            ]]));
-        $products_copy = $products;
+    public function applyFilters($filters, $products) {
+        $filters = explode(';', $filters);
+        $filters = array_filter($filters, function ($f) { return $f !== ''; });
 
-        $get = Yii::$app->request->get();
-        if(isset($get['f'])) {
-            $fs = $get['f'];
-            $fs = explode(';', $fs);
-            $fs = array_filter($fs, function ($f) { return $f !== ''; });
-
-            foreach($fs as $f) {
-                list($prop, $values) = explode(':', $f);
-                if ($prop == 'p') {
-                    list($min, $max) = explode('-', $values);
-                    $products = array_filter($products, function ($prod) use ($min, $max) {
-                        return (int)$min <= $prod->price && $prod->price <= (int)$max;
-                    });
-                }
-                else if ($prop == 'o') {
-
-                }
-                else {
-                    $products = array_filter($products, function ($prod) use ($prop, $values) {
-                        $values = explode(',', $values);
-                        return isset($prod->properties[$prop]) and in_array($prod->properties[$prop], $values);
-                    });
-                }
+        foreach($filters as $f) {
+            list($prop, $values) = explode(':', $f);
+            if ($prop == 'p') {
+                list($min, $max) = explode('-', $values);
+                $products = array_filter($products, function ($prod) use ($min, $max) {
+                    return (int)$min <= $prod->price && $prod->price <= (int)$max;
+                });
             }
-            if (isset($get['ajax'])) {
-                $this->layout = "_null";
-                return $this->render('/product/_view', [
-                    'products' => $products
-                ]);
+            else if ($prop == 'o') {
+                continue;
+            }
+            else {
+                $products = array_filter($products, function ($prod) use ($prop, $values) {
+                    $values = explode(',', $values);
+                    return isset($prod->properties[$prop]) and in_array($prod->properties[$prop], $values);
+                });
             }
         }
+        return $products;
+    }
 
+    public function getProductFilters($products) {
         $filters = [];
         $prices = [];
         if ($products) {
-
-            $fst_prod = array_shift($products_copy);
+            $fst_prod = array_shift($products);
             $common_props = $fst_prod->properties;
             foreach ($fst_prod->properties as $name => $pr) {
                 $common_props[$name] = [ $common_props[$name] ];
                 $prices = [$fst_prod->price];
             }
 
-            foreach ($products_copy as $prod) {
+            foreach ($products as $prod) {
                 foreach ($common_props as $name => &$pr) {
                     if (isset($prod->properties[$name])) {
                         array_push($pr, $prod->properties[$name]);
@@ -130,19 +111,60 @@ class CatalogController extends \yii\web\Controller
                     'prop_id' => $prop,
                     'prop_name' => $prop_model->name,
                     'values' => array_map(function ($x) {
-                       return [
-                           'value_id' => $x,
-                           'value_name' => PropertyValue::cachedFindOne($x)->value
-                       ];
+                        return [
+                            'value_id' => $x,
+                            'value_name' => PropertyValue::cachedFindOne($x)->value
+                        ];
                     }, $value)
                 ];
             }
         }
+        return [$filters, $prices];
+    }
 
+    public function actionProducts($cid)
+    {
+        $get = Yii::$app->request->get();
+        $ordering = Good::ORDERING_PRICE_ACS;
+        if (isset($get['f'])) {
+            list($rest, $ordering) = explode('o', $get['f']);
+            $ordering = substr($ordering, 1);
+            $ordering = explode(';', $ordering)[0];
+        }
+
+        $products = Yii::$app->db->cache(function ($db) use($cid, $ordering)
+        {
+            static $ordering_to_db_query = [
+                Good::ORDERING_PRICE_ACS => ['price' => SORT_ASC],
+                Good::ORDERING_PRICE_DESC => ['price' => SORT_DESC],
+                Good::ORDERING_NAME => ['name' => SORT_ASC],
+            ];
+            return Good::find()->joinWith('bookmark')->orderBy($ordering_to_db_query[$ordering])
+                ->where([ 'category_id' => $cid ])->all();
+        }, null, new TagDependency([
+            'tags'=> [
+                'cache_table_' . Good::tableName(),
+                'cache_table_' . Bookmark::tableName(),
+            ]]));
+
+        if(isset($get['f'])) {
+            $filtered_products = $this->applyFilters($get['f'], $products);
+            if (isset($get['ajax'])) {
+                $this->layout = "_null";
+                return $this->render('/product/_view', [
+                    'products' => $filtered_products
+                ]);
+            }
+        }
+        else {
+            $filtered_products = $products;
+        }
+
+        list($filters, $prices) = $this->getProductFilters($products);
         $category = Menu::findOneOr404($cid);
 
         return $this->render('/product/index', [
-            'products' => $products,
+            'products' => $filtered_products,
             'category' => $category,
             'filters' => $filters,
             'prices' => $prices,

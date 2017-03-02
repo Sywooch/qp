@@ -8,6 +8,7 @@ $this->params['breadcrumbs'][] = $this->title;
 
 app\modules\search\SearchAssets::register($this);
 $this->registerJs("jQuery('.search').highlight('{$query}');");
+$query = explode('~', $query)[0];
 ?>
 <h1>Результат поиска по запросу: "<?=$query?>"</h1>
 <div class="row">
@@ -17,6 +18,7 @@ $this->registerJs("jQuery('.search').highlight('{$query}');");
         foreach ($hits as $hit):
             $arr = [];
             $doc = $hit->getDocument();
+
             foreach($doc->getFieldNames() as $key) {
                 $arr[$key] = $doc->getField($key)->value;
             }

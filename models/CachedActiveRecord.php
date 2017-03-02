@@ -61,13 +61,10 @@ class CachedActiveRecord extends ActiveRecord
         }, null, new TagDependency(['tags'=>'cache_table_' . static::tableName()]));
     }
 
-    public static function cachedFindAll($cond = null) {
+    public static function cachedFindAll($cond = []) {
         return static::getDb()->cache(function ($db) use($cond)
         {
-            if ($cond == null) {
-                return static::find()->all();
-            }
-            return static::findAll($cond);
+            return static::find()->where($cond)->all();
         }, null, new TagDependency(['tags'=>'cache_table_' . static::tableName()]));
     }
 

@@ -22,27 +22,34 @@ $this->title = 'Корзина';
                 ], [
                     'format' => 'html',
                     'contentOptions' => ['class' => 'cell-img'],
-                    'value' => function ($product) {
-                        /* @var $product app\models\Good\Good */
-                        return  Html::img([ $product->getImgPath() ],
+                    'value' => function ($cart_position) {
+                        /* @var $cart_position app\models\Good\ProductCartPosition */
+                        return  Html::img([ $cart_position->getProduct()->getImgPath() ],
                             [ 'height'=>100, 'width'=>100, 'class'=>'img-responsive' ]
                         );
                     }
                 ],
-                'name',
+                [
+                    'attribute' => 'Название',
+                    'format' => 'raw',
+                    'value' => function ($cart_position) {
+                        /* @var $cart_position app\models\Good\ProductCartPosition */
+                        return  $cart_position->getProduct()->name;
+                    }
+                ],
                 [
                     'attribute' => 'Количество',
                     'format' => 'raw',
-                    'value' => function ($product) {
-                        /* @var $product app\models\Good\Good */
-                        return  Html::stepper($product->id, $product->getQuantity());
+                    'value' => function ($cart_position) {
+                        /* @var $cart_position app\models\Good\ProductCartPosition */
+                        return  Html::stepper($cart_position->id, $cart_position->getQuantity());
                     }
                 ], [
                     'attribute' => 'Цена',
                     'format' => 'raw',
-                    'value' => function ($product) {
-                        /* @var $product app\models\Good\Good */
-                        return $this->render('/order/_itemPrice', ['product' => $product]);
+                    'value' => function ($cart_position) {
+                        /* @var $cart_position app\models\Good\ProductCartPosition */
+                        return $this->render('/order/_itemPrice', ['cart_position' => $cart_position]);
                     }
                 ], [
                     'class' => 'yii\grid\ActionColumn',
@@ -53,9 +60,9 @@ $this->title = 'Корзина';
                         'delete' => function ($url,$model) {
                             return Html::a(
                                 '<i class="fa fa-close"></i>',
-                                $url, ['class' => 'remove', 'data-method' => 'post', 'title' => 'Удалить', 'aria-label' => 'Удалить']);
+                                $url, ['class' => 'remove', 'data-method' => 'post',
+                                    'title' => 'Удалить', 'aria-label' => 'Удалить']);
                         },
-
                     ],
                 ],
             ]

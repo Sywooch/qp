@@ -29,7 +29,9 @@ class CartController extends \yii\web\Controller
         /** @var $cart \yz\shoppingcart\ShoppingCart */
         $cart = Yii::$app->cart;
         $array = $cart->getPositions();
-        $dataProvider = new ArrayDataProvider([ 'allModels' => $array ]);
+        $dataProvider = new ArrayDataProvider([
+            'allModels' => $array
+        ]);
         return $this->render('/cart', [
             'dataProvider' => $dataProvider,
             'cart' => $cart
@@ -40,7 +42,8 @@ class CartController extends \yii\web\Controller
     {
         $get = Yii::$app->request->post();
         if (Yii::$app->request->isAjax) {
-            Yii::$app->cart->put(Good::findOneOr404($get['product_id']), $get['product_count']);
+            Yii::$app->cart->put(Good::findOneOr404($get['product_id'])->getCartPosition(),
+                $get['product_count']);
         }
         return Yii::$app->shopping->render();
     }
@@ -53,7 +56,7 @@ class CartController extends \yii\web\Controller
             /** @var $cart \yz\shoppingcart\ShoppingCart */
             $cart = Yii::$app->cart;
             foreach ($get['products'] as $item) {
-                $cart->update(Good::findOneOr404($item['id']), $item['count']);
+                $cart->update(Good::findOneOr404($item['id'])->getCartPosition(), $item['count']);
             }
         }
         return Yii::$app->shopping->render();
@@ -89,10 +92,10 @@ class CartController extends \yii\web\Controller
             foreach($cart->getPositions() as $product) {
                 $op = new OrderProduct([
                     'products_count' => $product->getQuantity(),
-                    'product_c1id' => $product->c1id,
+                    'product_c1id' => $product->getProduct()->c1id,
                     'order_id' => $order->id,
-                    'product_name' => $product->name,
-                    'old_price' => $product->price,
+                    'product_name' => $product->getProduct()->name,
+                    'old_price' => $product->getProduct()->price,
                 ]);
                 if (!$op->save()) {
                     Yii::error('Ошибка при оформлении заказа. ' .
