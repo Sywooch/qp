@@ -309,7 +309,7 @@ class SiteController extends Controller
     public function actionSearch($q = '')
     {
         /** @var \himiklab\yii2\search\Search $search */
-        $searchData = Yii::$app->search->find($q); // Search by full index.
+        $searchData = Yii::$app->search->find($q . '~0.1'); // Search by full index.
         //$searchData = $search->find($q, ['model' => 'page']); // Search by index provided only by model `page`.
 
         $dataProvider = new ArrayDataProvider([
