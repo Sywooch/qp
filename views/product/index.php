@@ -45,9 +45,9 @@ $this->params['breadcrumbs'][] = $this->title;
                             <span class="filter__item-title">Цена, руб.</span>
                             <div class="text-subline"></div>
                             <div class="range-controls form-inline">
-                                <input type="text" id="price_from" class="form-control" data-id="price_from" data-min="<?=Html::rubles($prices[0])?>" data-type="from" placeholder="<?=Html::rubles($prices[0])?>">
+                                <input type="text" id="price_from" class="form-control" data-id="price_from" data-min="<?=Html::rubles(min($prices[0], $prices[1]))?>" data-type="from" placeholder="<?=Html::rubles(min($prices[0], $prices[1]))?>">
                                 <span>—</span>
-                                <input type="text" id="price_to" class="form-control" data-id="price_to" data-max="<?=Html::rubles($prices[1])?>" data-type="to" placeholder="<?=Html::rubles($prices[1])?>">
+                                <input type="text" id="price_to" class="form-control" data-id="price_to" data-max="<?=Html::rubles(max($prices[0], $prices[1]))?>" data-type="to" placeholder="<?=Html::rubles(max($prices[0], $prices[1]))?>">
                             </div>
                             <div class="slider-range"></div>
                         </div>
@@ -63,7 +63,7 @@ $this->params['breadcrumbs'][] = $this->title;
                     <div class="filter__item">
                         <div class="filter-apply-btn btn btn-success animated">Показать</div>
                         <button class="btn btn-success btn-apply">Показать</button>
-                        <button class="btn btn-default qp-collapse-handler visible-xs visible-sm" data-toggle="filter-box">Скрыть фильтры</button>
+                        <button class="btn btn-default btn-close qp-collapse-handler visible-xs visible-sm" data-toggle="filter-box">Скрыть фильтры</button>
                     </div>
                 <?php endif;?>
             </div>

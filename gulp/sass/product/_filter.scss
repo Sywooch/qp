@@ -14,10 +14,6 @@
     &-title {
       font-size: 16px;
     }
-    .btn {
-      width: 100%;
-      margin-top: 10px;
-    }
   }
 
   &-loader {
@@ -114,8 +110,9 @@
   }
   padding: 10px 0 20px 0;
 }
-.btn-apply {
+.btn-apply, .btn-close{
   width: 100%;
+  margin-top: 10px;
 }
 
 @media (max-width: $screen-xs-max) {
