@@ -34,9 +34,10 @@ class Order extends CachedActiveRecord
     public function rules()
     {
         return [
+            ['password', 'filter', 'filter' => 'trim'],
             [['user_id'], 'required'],
             [['user_id'], 'integer'],
-            [['public_id'], 'string'],
+            [['public_id', 'password'], 'string'],
             [['user_id'], 'exist',
                 'skipOnError' => true, 'targetClass' => User::className(),
                 'targetAttribute' => ['user_id' => 'id']],
@@ -80,5 +81,13 @@ class Order extends CachedActiveRecord
         return array_reduce($this->orderProducts, function($carry, $item) {
             return $carry + $item->products_count * $item->old_price;
         });
+    }
+
+    public function generatePassword() {
+        $this->password = sprintf("%04d", rand(1,9999));
+    }
+
+    public function checkPassword($password) {
+        return false; // TODO: $password === $this->password;
     }
 }
