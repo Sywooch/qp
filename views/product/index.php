@@ -32,53 +32,57 @@ foreach(Yii::$app->db->cache(function ($db) use($category)
 $this->params['breadcrumbs'][] = $this->title;
 ?>
 <div class="row products-view" data-catalog-id="<?=$category->id?>">
-    <div class="col-sm-3">
+    <div class="col-sm-4 col-md-3">
         <div class="filter">
             <?=\app\components\catalog\CatalogMateWidget::widget([
-                    'catalog' => $category
+                'catalog' => $category
             ])?>
-            <h3>Фильтры <span class="filter-loader"></span></h3>
+            <h3 class="qp-collapse-handler qp-collapse-arrow" data-toggle="filter-box">Фильтры <span class="filter-loader"></span></h3>
+            <div class="qp-collapse" id="filter-box">
+                <?php if(count($filters)) : ?>
+                    <?php if(count($prices) > 1) : ?>
+                        <div class="filter__item">
+                            <span class="filter__item-title">Цена, руб.</span>
+                            <div class="text-subline"></div>
+                            <div class="range-controls form-inline">
+                                <input type="text" id="price_from" class="form-control" data-id="price_from" data-min="<?=Html::rubles(min($prices[0], $prices[1]))?>" data-type="from" placeholder="<?=Html::rubles(min($prices[0], $prices[1]))?>">
+                                <span>—</span>
+                                <input type="text" id="price_to" class="form-control" data-id="price_to" data-max="<?=Html::rubles(max($prices[0], $prices[1]))?>" data-type="to" placeholder="<?=Html::rubles(max($prices[0], $prices[1]))?>">
+                            </div>
+                            <div class="slider-range"></div>
+                        </div>
+                    <?php endif; ?>
 
-            <?php if(count($filters)) : ?>
-                <?php if(count($prices) > 1) : ?>
-                <div class="filter__item">
-                    <span class="filter__item-title">Цена, руб.</span>
-                    <div class="text-subline"></div>
-                    <div class="range-controls form-inline">
-                        <input type="text" id="price_from" class="form-control" data-id="price_from" data-min="<?=Html::rubles($prices[0])?>" data-type="from" placeholder="<?=Html::rubles($prices[0])?>">
-                        <span>—</span>
-                        <input type="text" id="price_to" class="form-control" data-id="price_to" data-max="<?=Html::rubles($prices[1])?>" data-type="to" placeholder="<?=Html::rubles($prices[1])?>">
+                    <?php
+                    foreach ($filters as $filter) {
+                        echo $this->render('_filter', [
+                            'filter' => $filter,
+                        ]);
+                    }
+                    ?>
+                    <div class="filter__item">
+                        <div class="filter-apply-btn btn btn-success animated">Показать</div>
+                        <button class="btn btn-success btn-apply">Показать</button>
+                        <button class="btn btn-default btn-close qp-collapse-handler visible-xs visible-sm" data-toggle="filter-box">Скрыть фильтры</button>
                     </div>
-                    <div class="slider-range"></div>
-                </div>
-                <?php endif; ?>
-
-            <?php
-            foreach ($filters as $filter) {
-                echo $this->render('_filter', [
-                    'filter' => $filter,
-                ]);
-            }
-            ?>
-            <div class="filter__item">
-                <div class="filter-apply-btn btn btn-success animated">Показать</div>
-                <button class="btn btn-success btn-apply">Показать</button>
+                <?php endif;?>
             </div>
-            <?php endif;?>
         </div>
     </div>
-    <div class="col-sm-9">
-        <?php
-        echo Breadcrumbs::widget([
-            'links' => isset($this->params['breadcrumbs']) ? $this->params['breadcrumbs'] : [],
-        ]);
-        ?>
+    <div class="col-sm-8 col-md-9">
+        <div class="breadcrumbs hidden-xs hidden-sm">
+            <?php
+            echo Breadcrumbs::widget([
+                'links' => isset($this->params['breadcrumbs']) ? $this->params['breadcrumbs'] : [],
+            ]);
+            ?>
+        </div>
         <div class="good-index">
             <div class="row">
-                <div class="col-sm-9">
+                <div class="col-xs-7 col-sm-9">
                     <h1><?= Html::encode($this->title) ?></h1>
                 </div>
-                <div class="col-sm-3 toolbar">
+                <div class="col-xs-5 col-sm-3 toolbar">
                     <?=$this->render("_ordering") ?>
                 </div>
             </div>

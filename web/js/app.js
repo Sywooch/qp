@@ -193,7 +193,6 @@ var Cart = (function($){
                     console.log('Error');
                     App.message('Произошла ошибка', false);
                 }
-
             });
         },
 
@@ -283,6 +282,44 @@ var Cart = (function($){
 
     "use strict";
 
+    var $handler = $('.qp-collapse-handler');
+
+
+    var Collapse = {
+        init: function() {
+            this.event();
+        },
+        event: function() {
+            var self = this;
+            $handler.on('click', function () {
+                self.shown($(this), $('#' + $(this).data('toggle')));
+            });
+        },
+
+        shown: function (handler, el) {
+            if(window.innerWidth < 769) {
+                if(el.hasClass('shown')){
+                    el.removeClass('shown');
+                    el.addClass('closed');
+                    el.fadeOut(200);
+                    handler.removeClass('active');
+                } else {
+                    el.addClass('shown');
+                    el.removeClass('closed');
+                    el.fadeIn(100);
+                    handler.addClass('active');
+                }
+            }
+        },
+    };
+
+    Collapse.init();
+
+})(jQuery);
+(function($){
+
+    "use strict";
+
     var $checkbox = $('.filter input:checkbox'),
         $fullApply = $('.btn-apply'),
         $header = $('header.header'),
@@ -300,8 +337,8 @@ var Cart = (function($){
             key: 'p',
             value: [0, 999999],
             getUrl: function () {
-                return this.value == -1 ?
-                    "" : this.key + ":" + (this.value[0] * 100) + "-" + (this.value[1] * 100) + ";";
+                return !!(this.value[0] && this.value[1]) ?
+                    this.key + ":" + (this.value[0] * 100) + "-" + (this.value[1] * 100) + ";" : "";
             }
         };
 
