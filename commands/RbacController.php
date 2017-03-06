@@ -21,18 +21,18 @@ class RbacController extends Controller
         $user = $auth->createRole('user');
         $auth->add($user);
 
-        $moder = $auth->createRole('moder');
-        $auth->add($moder);
-        $auth->addChild($moder, $user);
+        $manager = $auth->createRole('manager');
+        $auth->add($manager);
+        $auth->addChild($manager, $user);
 
         $admin = $auth->createRole('admin');
         $auth->add($admin);
-        $auth->addChild($admin, $moder);
+        $auth->addChild($admin, $manager);
 
 
         // Assign roles to users. 1 and 2 are IDs returned by IdentityInterface::getId()
         // usually implemented in your User model.
-        $auth->assign($moder, 2);
+        $auth->assign($manager, 2);
         $auth->assign($admin, 1);
     }
 }
