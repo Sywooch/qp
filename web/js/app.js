@@ -582,6 +582,9 @@ var Cart = (function($){
             } else {
                 Price().init();
             }
+            if(data.order.value >= 0) {
+                $sort.val(data.order.value);
+            }
         },
 
         getData: function () {

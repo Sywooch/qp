@@ -22,9 +22,9 @@ $this->params['breadcrumbs'][] = $this->title;
             'id',
             'email:email',
             'body',
-            ['attribute' => 'status', 'value' => function($model) {
+            ['attribute' => 'status', 'format' => 'raw', 'value' => function($model) {
                 /* @var $model app\models\ContactForm */
-                return $model->getStatusString();
+                return '<span class="' .$model->getStatusLabel(). '">' . $model->getStatusString() . '</span>';
             }],
             'created_at:datetime',
             'updated_at:datetime',

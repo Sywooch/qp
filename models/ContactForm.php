@@ -27,8 +27,18 @@ class ContactForm extends CachedActiveRecord
         self::STATUS_INVISIBLE => 'Скрытый',
     ];
 
+    static $STATUS_TO_LABEL = [
+        self::STATUS_UNMODERATED => 'label label-info',
+        self::STATUS_VISIBLE => 'label label-success',
+        self::STATUS_INVISIBLE => 'label label-warning',
+    ];
+
     public function getStatusString() {
         return self::$STATUS_TO_STRING[$this->status];
+    }
+
+    public function getStatusLabel() {
+        return self::$STATUS_TO_LABEL[$this->status];
     }
 
     public static function tableName() {
