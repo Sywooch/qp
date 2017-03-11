@@ -1,11 +1,29 @@
 <?php
 
+use app\components\Html;
 use app\components\LoginWidget;
 use yii\bootstrap\Nav;
 use yii\bootstrap\NavBar;
 ?>
 
 <header class="header">
+    <div class="header__top">
+        <div class="container">
+            <ul class="header__top-navbar">
+                <?php
+                echo Nav::widget([
+                    'options' => ['class' => 'nav'],
+                    'items' => [
+                        ['label' => 'Доставка', 'url' => ['/site/delivery']],
+                        ['label' => 'Оплата', 'url' => ['/site/payment']],
+                        ['label' => 'О компании', 'url' => ['/site/about']],
+                        ['label' => 'Отзывы', 'url' => ['/site/contact']],
+                    ],
+                ]);
+                ?>
+            </ul>
+        </div>
+    </div>
     <div class="header__middle">
         <div class="container">
             <div class="row">
@@ -54,10 +72,8 @@ use yii\bootstrap\NavBar;
             \app\components\catalog\CatalogWidget::widget([
                     'visible' => isset($this->params['catalog']) && $this->params['catalog']
             ]),
-            ['label' => 'Доставка', 'url' => ['/site/delivery']],
-            ['label' => 'Оплата', 'url' => ['/site/payment']],
-            ['label' => 'О компании', 'url' => ['/site/about']],
-            ['label' => 'Связаться с нами', 'url' => ['/site/contact']],
+            ['label' => 'Акции', 'url' => ['/']],
+            ['label' => 'Скидки', 'url' => ['/']],
         ],
     ]);
     ?>
