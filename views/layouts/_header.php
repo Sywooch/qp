@@ -13,9 +13,9 @@ use yii\bootstrap\NavBar;
             echo Nav::widget([
                 'options' => ['class' => 'nav header__top-navbar'],
                 'items' => [
-                    ['label' => 'Доставка', 'url' => ['/site/delivery']],
-                    ['label' => 'Оплата', 'url' => ['/site/payment']],
-                    ['label' => 'О компании', 'url' => ['/site/about']],
+                    ['label' => 'Доставка', 'url' => ['/p/delivery']],
+                    ['label' => 'Оплата', 'url' => ['/p/payment']],
+                    ['label' => 'О компании', 'url' => ['/p/about']],
                     ['label' => 'Контакты', 'url' => ['/site/contact']],
                     ['label' => 'Отзывы', 'url' => ['/site/reviews']],
                 ],
