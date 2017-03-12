@@ -5,12 +5,14 @@ use yii\helpers\Url;
 $menuShop = [
     ['label' => 'О компании', 'url' => ['/site/about']],
     ['label' => 'Каталог', 'url' => ['/site/about']],
-    ['label' => 'Контакты', 'url' => ['/site/about']]
+    ['label' => 'Контакты', 'url' => ['/site/about']],
+    ['label' => 'Отзывы', 'url' => ['/site/reviews']],
 ];
 $menuUser = [
     ['label' => 'Доставка', 'url' => ['/site/about']],
     ['label' => 'Оплата', 'url' => ['/site/about']],
-    ['label' => 'Помощь', 'url' => ['/site/about']]
+    ['label' => 'Помощь', 'url' => ['/site/about']],
+    ['label' => 'Возврат товара', 'url' => ['/site/about']],
 ];
 ?>
 

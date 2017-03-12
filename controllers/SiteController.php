@@ -256,6 +256,35 @@ class SiteController extends Controller
         ]);
     }
 
+    /**
+     * Displays review page.
+     *
+     * @return string
+     */
+    public function actionReviews()
+    {
+        $model = new ContactForm(['scenario' => ContactForm::SCENARIO_USER_FEEDBACK]);
+        if (Yii::$app->user->can('user')) {
+            $model->email = Yii::$app->user->identity->email;
+        }
+        if ($model->load(Yii::$app->request->post())) {
+            if ($model->contact(Yii::$app->params['adminEmail']) && $model->save(false)) {
+                Yii::$app->session->setFlash('contactFormSubmitted');
+            } else {
+                Yii::$app->session->setFlash('error', 'Возникла ошибка
+                при сохранении и отправке сообения. ' . implode(' ', $model->getFirstErrors()));
+            }
+            return $this->refresh();
+        }
+
+        return $this->render('review/index', [
+            'model' => $model,
+            'feedbacks' => ContactForm::cachedFindAll([
+                'status' => ContactForm::STATUS_VISIBLE
+            ]),
+        ]);
+    }
+
     public function actionProfile()
     {
         $user = Yii::$app->user->identity;

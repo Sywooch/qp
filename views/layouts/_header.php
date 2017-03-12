@@ -9,19 +9,18 @@ use yii\bootstrap\NavBar;
 <header class="header">
     <div class="header__top">
         <div class="container">
-            <ul class="header__top-navbar">
-                <?php
-                echo Nav::widget([
-                    'options' => ['class' => 'nav'],
-                    'items' => [
-                        ['label' => 'Доставка', 'url' => ['/site/delivery']],
-                        ['label' => 'Оплата', 'url' => ['/site/payment']],
-                        ['label' => 'О компании', 'url' => ['/site/about']],
-                        ['label' => 'Отзывы', 'url' => ['/site/contact']],
-                    ],
-                ]);
-                ?>
-            </ul>
+            <?php
+            echo Nav::widget([
+                'options' => ['class' => 'nav header__top-navbar'],
+                'items' => [
+                    ['label' => 'Доставка', 'url' => ['/site/delivery']],
+                    ['label' => 'Оплата', 'url' => ['/site/payment']],
+                    ['label' => 'О компании', 'url' => ['/site/about']],
+                    ['label' => 'Контакты', 'url' => ['/site/contact']],
+                    ['label' => 'Отзывы', 'url' => ['/site/reviews']],
+                ],
+            ]);
+            ?>
         </div>
     </div>
     <div class="header__middle">
