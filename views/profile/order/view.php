@@ -1,5 +1,7 @@
 <?php
 use app\components\Html;
+use app\models\Order;
+
 /* @var $products array of sapp\models\OrderProduct*/
 /* @var $order app\models\Order*/
 
@@ -22,8 +24,14 @@ $this->params['breadcrumbs'][] = $this->title;
             </tr>
             <tr>
                 <td class="key">Текущий статус</td>
-                <td class="value">Выполнен</td>
+                <td class="value"><?=$order->status_str?></td>
             </tr>
+            <?php if($order->status == \app\models\Order::STATUS_PAID) : ?>
+            <tr>
+                <td class="key">Секретный ключ(не сообщайте его никому, кроме менеджера при выдаче заказа)</td>
+                <td class="value"><?=$order->password?></td>
+            </tr>
+            <?php endif; ?>
             <tr>
                 <td class="key">Сумма заказа</td>
                 <td class="value"><?=Html::price(array_reduce($products, function($carry, $item) {
@@ -44,3 +52,26 @@ $this->params['breadcrumbs'][] = $this->title;
     }
     ?>
 </table>
+
+<?php if($order->canPaid()) : ?>
+<div>
+    <?= Html::a('Оплатить', ['pay', 'id' => $order->id], [
+        'class' => 'btn btn-success btn-lg ',
+        'data' => [
+            'method' => 'post',
+        ],
+
+    ]) ?>
+</div>
+<?php endif; ?>
+<?php if($order->canCanceled()) : ?>
+<div>
+    <?= Html::a('Отменить заказ', ['cancel', 'id' => $order->id], [
+        'class' => 'btn btn-warning btn-lg ',
+        'data' => [
+            'method' => 'post',
+        ],
+
+    ]) ?>
+</div>
+<?php endif; ?>

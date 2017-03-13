@@ -6,9 +6,23 @@ use yii\grid\GridView;
 /* @var $this yii\web\View */
 /* @var $dataProvider yii\data\ActiveDataProvider */
 
-$this->title = 'Orders';
+$this->title = 'Панель менеджера';
 $this->params['breadcrumbs'][] = $this->title;
 ?>
+
+<div class="manager-password">
+
+    <form method="post">
+        <input type="hidden" name="_csrf" value="<?=Yii::$app->request->getCsrfToken()?>" />
+        Секретный ключ заказа:<br>
+        <input type="text" name="password">
+        <br>
+        <input type="submit" value="Отправить">
+    </form>
+
+</div><!-- manager-password -->
+
+
 <div class="product__table">
     <?= GridView::widget([
         'dataProvider' => $dataProvider,
@@ -31,25 +45,7 @@ $this->params['breadcrumbs'][] = $this->title;
                     return  Html::price($order->getTotalPrice());
                 }
             ],
-            [
-                'attribute' => 'Статус',
-                'format' => 'raw',
-                'value' => function ($order) {
-                    /* @var $order app\models\Order*/
-                    return  'Выполнен';
-                }
-            ],
-            [
-                'class' => 'yii\grid\ActionColumn',
-                'template' => '{order-password}',
-                'buttons' => [
-                    'order-password' => function ($url, $model) {
-                        return Html::a(
-                            '<i class="fa fa-vcard-o"></i>',
-                            $url, ['title' => 'Ввести пароль']);
-                    },
-                ],
-            ],
+            'status',
         ],
     ]); ?>
 </div>

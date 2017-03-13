@@ -71,6 +71,36 @@ class ProfileController extends \yii\web\Controller
         ]);
     }
 
+    public function actionPay($id) {
+        $order = Order::findOneOr404([
+            'id' => $id,
+            'user_id' => Yii::$app->user->id,
+        ]);
+         if ($order->canPaid() && $order->pay()) {
+            Yii::$app->session->setFlash('success', 'Заказ оплачен.');
+        }
+        else {
+            Yii::$app->session->setFlash('error', 'Ошибка при оплате заказа.');
+        }
+
+        return $this->redirect('index');
+    }
+
+    public function actionCancel($id) {
+        $order = Order::findOneOr404([
+            'id' => $id,
+            'user_id' => Yii::$app->user->id,
+        ]);
+        if ($order->canCanceled() && $order->cancel()) {
+            Yii::$app->session->setFlash('warning', 'Заказ отменён.');
+        }
+        else {
+            Yii::$app->session->setFlash('error', 'Ошибка при отмене заказа.');
+        }
+
+        return $this->redirect('index');
+    }
+
     public function actionBookmark()
     {
         $dataProvider = new ActiveDataProvider([

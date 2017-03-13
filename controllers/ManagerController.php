@@ -36,16 +36,26 @@ class ManagerController extends Controller
         Yii::$app->db->cache(function ($db) use ($dataProvider) {
             $dataProvider->prepare();
         }, null, new TagDependency(['tags' => 'cache_table_' . Order::tableName()]));
+
+        if ($pass = Yii::$app->request->post('password')) {
+            if ($order = Order::findOneOr404([
+                    'password' => $pass,
+                    'status' => Order::STATUS_PAID,
+                ])
+                ) {
+                Yii::$app->session->setFlash('success', 'Заказ ' . $order->public_id  . ' выдан.');
+                return $this->redirect([ 'view-order', 'id' => $order->id ]);
+            }
+            Yii::$app->session->setFlash('error', 'Неверный код подтверждения.');
+        }
+
         return $this->render('index', [
             'dataProvider' => $dataProvider,
         ]);
     }
 
     public function actionViewOrder($id) {
-        $order = Order::cachedFindOne($id);
-        if (!$order) {
-            throw new NotFoundHttpException();
-        }
+        $order = Order::findOneOr404($id);
         $products = Yii::$app->db->cache(function ($db) use ($order) {
             return $order->orderProducts;
         }, null, new TagDependency(['tags' => 'cache_table_' . OrderProduct::tableName()]));
@@ -54,18 +64,5 @@ class ManagerController extends Controller
             'products' => $products,
             'order' => $order,
         ]);
-    }
-
-    public function actionOrderPassword($id)
-    {
-        if ($pass = Yii::$app->request->post('password')) {
-            $order = Order::findOneOr404($id);
-            if ($order->checkPassword($pass)) {
-                Yii::$app->session->setFlash('success', 'Заказ изменил свой статус на <i>выдан</i>.');
-                return $this->redirect('index');
-            }
-            Yii::$app->session->setFlash('error', 'Неверный код подтверждения.');
-        }
-        return $this->render('order_password', ['id' => $id]);
     }
 }

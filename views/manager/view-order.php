@@ -21,7 +21,7 @@ $this->params['breadcrumbs'][] = $this->title;
             </tr>
             <tr>
                 <td class="key">Текущий статус</td>
-                <td class="value">Выполнен</td>
+                <td class="value"><?=$order->status_str?></td>
             </tr>
             <tr>
                 <td class="key">Сумма заказа</td>

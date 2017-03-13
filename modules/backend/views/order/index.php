@@ -21,6 +21,7 @@ $this->params['breadcrumbs'][] = $this->title;
         'dataProvider' => $dataProvider,
         'columns' => [
             'id',
+            'public_id',
             [
                 'attribute' => 'user_id',
                 'label' => 'ID пользователя',
@@ -41,7 +42,7 @@ $this->params['breadcrumbs'][] = $this->title;
             ],
             'created_at:datetime',
             'updated_at:datetime',
-
+            'status_str',
             [
                 'class' => 'yii\grid\ActionColumn',
                 'template' => '{update} {delete}',

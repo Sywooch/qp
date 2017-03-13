@@ -32,14 +32,7 @@ $this->params['breadcrumbs'][] = $this->title;
                     return  Html::price($order->getTotalPrice());
                 }
             ],
-            [
-                'attribute' => 'Статус',
-                'format' => 'raw',
-                'value' => function ($order) {
-                    /* @var $order app\models\Order*/
-                    return  'Выполнен';
-                }
-            ],
+            'status_str',
             [
                 'class' => 'yii\grid\ActionColumn',
                 'template' => '{order-repeat}',
