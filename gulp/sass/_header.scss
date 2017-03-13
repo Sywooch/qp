@@ -4,16 +4,63 @@ $line-height-header: 50px;
  */
 .header {
 
+  // top header
+  &__top {
+    $_height: 32px;
+    background-color: $gray-2;
+    height: $_height;
+    &-navbar {
+      line-height: $_height;
+      min-height: $_height;
+      list-style: none;
+      padding: 0 20px;
+      li:first-child {
+        & > a, & {
+          padding-left: 0;
+        }
+      }
+      li {
+        display: inline-block;
+        & > a {
+          border-radius: 3px;
+          color: $black-3;
+          font-size: 12px;
+          padding: 0 15px;
+          text-decoration: none;
+        }
+        &.active > a, & > a:hover, & > a:focus {
+          color: $black-2;
+          background: transparent;
+        }
+        &.right {
+          float: right;
+        }
+        @media (max-width: $screen-xs-min) {
+          padding: 0 3px;
+        }
+      }
+
+    }
+
+    .navbar-nav {
+      position: relative;
+      width: 100%;
+    }
+  }
+  // End top header
+
+  // Middle header
   &__middle {
     @media (max-width: $screen-xs-min) {
       height: $line-height-header;
     }
     @media (min-width: $screen-md-min) {
-      padding-top: 5px;
-      height: 100px;
+      padding-top: 10px;
+      height: 105px;
       position: relative;
     }
   }
+  // End middle header
 
   &__logo {
     a {
