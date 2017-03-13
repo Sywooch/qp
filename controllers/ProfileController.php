@@ -16,6 +16,7 @@ use yii\data\ActiveDataProvider;
 use Yii;
 use yii\filters\AccessControl;
 use yii\caching\TagDependency;
+use yii\filters\VerbFilter;
 use yii\web\NotFoundHttpException;
 
 class ProfileController extends \yii\web\Controller
@@ -36,6 +37,13 @@ class ProfileController extends \yii\web\Controller
                     ],
                 ],
             ],
+            'verbs' => [
+                'class' => VerbFilter::className(),
+                'actions' => [
+                    'pay' => ['POST'],
+                    'cancel' => ['POST'],
+                ],
+            ],
         ];
     }
 
@@ -52,10 +60,7 @@ class ProfileController extends \yii\web\Controller
     }
 
     public function actionViewOrder($id) {
-        $order = Order::cachedFindOne(['id' => $id, 'user_id' => Yii::$app->user->id ]);
-        if (!$order) {
-            throw new NotFoundHttpException('Заказ не найден.');
-        }
+        $order = Order::findOneOr404(['id' => $id, 'user_id' => Yii::$app->user->id ]);
         $products = Yii::$app->db->cache(function ($db) use ($order) {
             return $order->orderProducts;
         }, null, new TagDependency(['tags' => 'cache_table_' . OrderProduct::tableName()]));
