@@ -79,6 +79,11 @@ class CartController extends \yii\web\Controller
     public function actionOrder()
     {
         /** @var $user \app\models\User */
+        /** @var $cart \yz\shoppingcart\ShoppingCart */
+        $cart = Yii::$app->cart;
+        if ($cart->isEmpty) {
+            return $this->redirect('index');
+        }
         $user = Yii::$app->user->identity;
         $order = new Order([
             'user_id' => $user->id,
@@ -87,8 +92,6 @@ class CartController extends \yii\web\Controller
         if ($order->save()) {
             $user->order_counter++;
             $user->save();
-            /** @var $cart \yz\shoppingcart\ShoppingCart */
-            $cart = Yii::$app->cart;
             foreach($cart->getPositions() as $product) {
                 $op = new OrderProduct([
                     'products_count' => $product->getQuantity(),
@@ -103,9 +106,9 @@ class CartController extends \yii\web\Controller
                 }
             }
             $cart->removeAll();
-            return $this->render('/order', [ 'order' => $order ]);
+            Yii::$app->session->setFlash('success', 'Заказ ' . $order->public_id . ' успешно оформлен.');
+            return $this->redirect('/profile/');
         }
-
         Yii::error('Ошибка при оформлении заказа. ' .
             implode(', ', $order->getFirstErrors()));
     }
