@@ -31,6 +31,19 @@ class DefaultController extends Controller
         return $this->render('index', ['model' => $model, 'par' => Menu::getRoot()]);
     }
 
+    public function actionProviderOrder()
+    {
+        $date = date('Y-m-d');
+        $arch = "provider-order/$date.zip";
+        if (file_exists($arch)) {
+            set_time_limit(5*60);
+            Yii::$app->response->sendFile($arch);
+        }
+        else {
+            Yii::$app->session->setFlash('error', "Архив за $date не найден");
+            return $this->refresh();
+        }
+    }
     /**
      * Login action.
      *

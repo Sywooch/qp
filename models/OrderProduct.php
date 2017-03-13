@@ -17,6 +17,7 @@ use yii\web\NotFoundHttpException;
  */
 class OrderProduct extends CachedActiveRecord
 {
+    public $count_by_c1id;
     /**
      * @inheritdoc
      */
@@ -45,5 +46,10 @@ class OrderProduct extends CachedActiveRecord
     public function getOrder()
     {
         return $this->hasOne(Order::className(), ['id' => 'order_id']);
+    }
+
+    public function getProvider()
+    {
+        return $this->count_by_c1id == 1 ? 'QQQQ' : 'EEEE';     //TODO: $this->provider;
     }
 }
