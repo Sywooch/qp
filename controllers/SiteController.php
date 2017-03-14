@@ -294,16 +294,6 @@ class SiteController extends Controller
         ]);
     }
 
-    /**
-     * Displays about page.
-     *
-     * @return string
-     */
-    public function actionAbout()
-    {
-        return $this->render('about');
-    }
-
     public function actionResetPassword()
     {
         $model= new ResetPasswordForm();
@@ -325,14 +315,6 @@ class SiteController extends Controller
         return $this->render('reset_password', [
             'model' => $model,
         ]);
-    }
-
-    public function actionDelivery() {
-        return $this->render('delivery');
-    }
-
-    public function actionPayment() {
-        return $this->render('payment');
     }
 
     public function actionSearch($q = '')
