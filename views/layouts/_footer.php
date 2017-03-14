@@ -81,8 +81,11 @@ $menuUser = [
 
             </div>
         </div>
-        <div class="footer__bottom">
-            <p class="text-center">&copy; qpvl <?= date('Y') ?></p>
+        <div class="footer__bottom row">
+            <div class="col-sm-3"><p>&copy; qpvl <?= date('Y') ?></p></div>
+            <div class="col-sm-3">
+                <?=Html::a('Пользовательское соглашение', ['/p/rules'])?>
+            </div>
         </div>
     </div>
 </footer>
