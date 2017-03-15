@@ -18,6 +18,9 @@ class LoginWidget extends Widget
                 ['label' => 'Избранное', 'url' => '/profile/bookmark'],
             ];
 
+            if (\Yii::$app->user->can('manager')) {
+                array_push($items, ['label' => 'Панель менеджера', 'url' => '/manager']);
+            }
             if (\Yii::$app->user->can('admin')) {
                 array_push($items, ['label' => 'Зазеркалье', 'url' => '/backend']);
             }
