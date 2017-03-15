@@ -65,7 +65,7 @@ $bookmark = $product->bookmark ? $product->bookmark : new Bookmark([
                 <button class="btn btn-icon btn-icon-left btn-success btn-compare"
                         data-product-id="<?= $product->id ?>"
                         data-product-count="1">
-                    <i class="fa fa-shopping-cart" aria-hidden="true"></i> В корзину
+                    <i class="fa fa-shopping-cart" aria-hidden="true"></i> Купить
                 </button>
                 <button class="btn btn-default bookmark <?=$bookmark->isNewRecord ? '' : 'active'?>"
                         data-product-id="<?= $product->id ?>"
@@ -83,7 +83,7 @@ $bookmark = $product->bookmark ? $product->bookmark : new Bookmark([
                 <ul class="nav nav-tabs" role="tablist">
                     <li role="presentation" class="active"><a href="#tab-description" aria-controls="home" role="tab" data-toggle="tab">Описание</a></li>
                     <li role="presentation"><a href="#tab-param" aria-controls="profile" role="tab" data-toggle="tab">Характеристики</a></li>
-                    <li role="presentation"><a href="#tab-delivery" aria-controls="messages" role="tab" data-toggle="tab">Доставка и оплата</a></li>
+                    <li role="presentation" class="hidden-xs"><a href="#tab-delivery" aria-controls="messages" role="tab" data-toggle="tab">Доставка и оплата</a></li>
                 </ul>
 
                 <!-- Tab panes -->
@@ -101,7 +101,7 @@ $bookmark = $product->bookmark ? $product->bookmark : new Bookmark([
                             ?>
                         </ul>
                     </div>
-                    <div role="tabpanel" class="tab-pane" id="tab-delivery">
+                    <div role="tabpanel" class="tab-pane hidden-xs" id="tab-delivery">
                         <p>
                             Мы осуществляем доставку по Владивостоку и о. Русский.<br/>
                         <b>Стоимость доставки зависит от общей стоимости товаров в корзине:</b><br/>
@@ -123,7 +123,7 @@ $bookmark = $product->bookmark ? $product->bookmark : new Bookmark([
 
         </div>
     </div>
-    <div class="product__delivery">
+    <div class="product__delivery hidden-xs">
         <table cellspacing="0" cellpadding="0" border="0">
             <tr>
                 <td class="product__delivery-status available"><i class="fa fa-check fa-lg"></i> Товар в наличии</td>
