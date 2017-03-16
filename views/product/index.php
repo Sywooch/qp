@@ -66,8 +66,8 @@ $this->params['breadcrumbs'][] = $this->title;
                     ?>
                     <div class="filter__item">
                         <div class="filter-apply-btn btn btn-success animated">Показать</div>
-                        <button class="btn btn-success btn-apply">Показать</button>
-                        <button class="btn btn-default btn-close qp-collapse-handler visible-xs visible-sm" data-toggle="filter-box">Скрыть фильтры</button>
+                        <button class="btn btn-success btn-apply qp-collapse-handler" data-toggle="filter-box">Применить</button>
+                        <?=Html::a('Сбросить', ['catalog/view', 'id' => $category->id], ['class' => 'btn btn-default btn-refresh'])?>
                     </div>
                 <?php endif;?>
             </div>

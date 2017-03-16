@@ -36,5 +36,5 @@ robot.txt
 *.orig
 
 node_modules
-web/css/awesome
+web/css/awesome/
 builder

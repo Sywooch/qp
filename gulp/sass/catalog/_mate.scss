@@ -25,6 +25,20 @@
         background-color: $gray-2;
       }
     }
+    @media (max-width: $screen-xs-max) {
+      li {
+        display: inline-block;
+        a {
+          background-color: $gray-3;
+        }
+      }
+      li.active {
+        a {
+          color: $black-2;
+          font-weight: bold;
+        }
+      }
+    }
   }
   .counter {
     background-color: transparent;
