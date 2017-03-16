@@ -1,0 +1,36 @@
+.catalog {
+  .mate {
+    &__nav {
+      li {
+        float: left;
+        position: relative;
+        box-sizing: border-box;
+        overflow: hidden;
+        white-space: nowrap;
+        text-overflow: ellipsis;
+        @media (max-width: $screen-xs) {
+            width: 100%;
+        }
+        @media (min-width: $screen-xs) and (max-width: $screen-sm) {
+          width: 48%;
+          margin: 3px;
+        }
+        @media (min-width: $screen-sm) and (max-width: $screen-md) {
+          width: 33%;
+        }
+        @media (min-width: $screen-md) {
+          width: 24%;
+        }
+      }
+    }
+    &__header {
+      &-title {
+        text-transform: none;
+        font-size: 2.5rem;
+      }
+    }
+    .word {
+      display: inline-block;
+    }
+  }
+}

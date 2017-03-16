@@ -1,17 +1,21 @@
 <?php
 /** @var integer $parentID */
 /* @var app\models\Good\Menu $parent */
+/* @var app\models\Good\Menu $gran */
 use app\components\Html;
 use yii\bootstrap\Nav;
 
 ?>
 <div class="mate">
     <div class="mate__header">
-        <div class="mate__header-back">
-            <?= Html::a("<i class='fa fa-arrow-left'></i> " . $parent->name, ['catalog/view', 'id' => $parent->id], ['class' => 'btn btn-default'])?>
-        </div>
+        <?php if($parent->id != $gran->id) : ?>
+            <div class="mate__header-back">
+                <?= Html::a("<i class='fa fa-arrow-left'></i> " . $gran->name, ['catalog/view', 'id' => $gran->id], ['class' => 'btn btn-default'])?>
+            </div>
+        <?php endif; ?>
+
         <span class="mate__header-title">
-            Подразделы:
+            <?=$parent->name?>:
         </span>
         <div class="text-subline"></div>
     </div>
