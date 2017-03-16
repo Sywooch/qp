@@ -14,7 +14,7 @@ $bookmark = $product->bookmark ? $product->bookmark : new Bookmark([
     'product_id' => $product->getId(),
 ]);
 ?>
-<div class='col-md-4 col-sm-6 col-xs-12'>
+<div class='col-md-4 col-sm-4 col-xs-12'>
     <div class="product card">
         <?=Html::a($img, $url, ['class' => 'thumbnail'])?>
         <div class="caption">
