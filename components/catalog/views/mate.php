@@ -5,7 +5,7 @@ use app\components\Html;
 use yii\bootstrap\Nav;
 
 ?>
-<div class="mate hidden-xs hidden-sm">
+<div class="mate hidden-xs">
     <div class="mate__header">
         <div class="mate__header-back">
             <?= Html::a("<i class='fa fa-arrow-left'></i> Назад", ['catalog/view', 'id' => $parent->id], ['class' => 'btn btn-default'])?>

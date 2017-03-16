@@ -37,7 +37,11 @@ $this->params['breadcrumbs'][] = $this->title;
             <?=\app\components\catalog\CatalogMateWidget::widget([
                 'catalog' => $category
             ])?>
-            <h3 class="qp-collapse-handler qp-collapse-arrow" data-toggle="filter-box">Фильтры <span class="filter-loader"></span></h3>
+            <h3 class="qp-collapse-handler" data-toggle="filter-box">
+                Фильтры
+                <span class="arrow"></span>
+                <span class="filter-loader"></span>
+            </h3>
             <div class="qp-collapse" id="filter-box">
                 <?php if(count($filters)) : ?>
                     <?php if(count($prices) > 1) : ?>
@@ -86,7 +90,7 @@ $this->params['breadcrumbs'][] = $this->title;
                     <?=$this->render("_ordering") ?>
                 </div>
             </div>
-            <div class="pjax-result">
+            <div class="pjax-result row">
             <?=$this->render('_view', [
                 'products' => $products
             ]); ?>
