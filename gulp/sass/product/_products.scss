@@ -15,6 +15,9 @@
       height: 141px;
     }
   }
+  .caption {
+    padding: 0;
+  }
   a {
     color: $colorblack;
     font-size: 1.6rem;
@@ -90,5 +93,75 @@
         margin-top: 1px;
       }
     }
+  }
+}
+
+/*
+ * Products mobile
+ */
+@media (max-width: $screen-xs-max) {
+  .product {
+
+    .thumbnail {
+      min-height: 100px;
+      max-height: 140px;
+      float: left;
+      width: auto;
+    }
+    .caption {
+      margin-left: 140px;
+    }
+    &-title {
+      text-align: left;
+      padding-top: 10px;
+      height: auto;
+      line-height: 1.5rem;
+      a {
+        font-size: 1.8rem;
+      }
+    }
+    &-price {
+      float: right;
+      text-align: left;
+    }
+    &-panel {
+      background-color: transparent;
+      float: right;
+      width: 100%;
+      height: 50px;
+      .bookmark {
+      }
+    }
+    .btn-compare {
+      width: 120px;
+      span {
+        display: inline-block !important;
+      }
+    }
+  }
+}
+@media (max-width: $screen-xs) {
+  .product {
+    padding-bottom: 15px;
+    .thumbnail {
+      padding: 5px;
+    }
+    &-title {
+      a {
+        font-size: 1.6rem;
+      }
+    }
+    &-counter {
+      float: right;
+      margin-right: 10px;
+    }
+    .btn-group {
+      & > .btn-compare {
+        width: 100%;
+        display: block;
+        margin-top: 8px;
+      }
+    }
+
   }
 }
