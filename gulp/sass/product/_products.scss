@@ -63,6 +63,10 @@
       cursor: pointer;
       color: #9b9b9b;
       transition: .3s all ease;
+      &:active {
+        box-shadow: none;
+        transform: scale(0.8);
+      }
       &-up {
         right: -5px;
         text-align: left;
