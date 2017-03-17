@@ -32,7 +32,7 @@ class SiteController extends Controller
         return [
             'access' => [
                 'class' => AccessControl::className(),
-                'only' => ['logout', 'login', 'reg', 'profile'],
+                'only' => ['profile'],
                 'denyCallback' => function($role, $action) {
                     Yii::$app->session->setFlash('warning',
                         ($action->id == 'logout' || $action->id == 'profile') ?
@@ -43,19 +43,9 @@ class SiteController extends Controller
                 },
                 'rules' => [
                     [
-                        'actions' => ['logout', 'profile'],
+                        'actions' => ['profile'],
                         'allow' => true,
                         'roles' => ['user'],
-                    ],
-                    [
-                        'actions' => ['login', 'reg'],
-                        'allow' => false,
-                        'roles' => ['user'],
-                    ],
-                    [
-                        'actions' => ['login', 'reg'],
-                        'allow' => true,
-                        'roles' => ['guest'],
                     ],
                 ],
             ],
@@ -124,6 +114,11 @@ class SiteController extends Controller
 
     public function actionReg()
     {
+        if (Yii::$app->user->can('user')) {
+            return $this->goHome();
+        }
+        Yii::$app->user->logout();
+
         $model = new RegForm();
         if ($model->load(Yii::$app->request->post()) && $model->validate()) {
             if($user = $model->reg()) {
@@ -153,10 +148,11 @@ class SiteController extends Controller
      */
     public function actionLogin()
     {
-/*        if (!Yii::$app->user->isGuest) {
+        if (Yii::$app->user->can('user')) {
             return $this->goHome();
         }
-*/
+        Yii::$app->user->logout();
+
         $serviceName = Yii::$app->getRequest()->getQueryParam('service');
         if (isset($serviceName)) {
             /** @var $eauth \nodge\eauth\ServiceBase */
@@ -166,8 +162,6 @@ class SiteController extends Controller
 
             try {
                 if ($eauth->authenticate()) {
-//                  var_dump($eauth->getIsAuthenticated(), $eauth->getAttributes()); exit;
-
                     $identity = User::findByEAuth($eauth);
                     Yii::$app->user->login($identity, 0);
 

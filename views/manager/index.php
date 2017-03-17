@@ -32,8 +32,7 @@ $this->params['breadcrumbs'][] = $this->title;
                 'format' => 'raw',
                 'value' => function ($order) {
                     /* @var $order app\models\Order*/
-                    return
-                        Html::a($order->public_id, ['view-order', 'id' => $order->id]);
+                    return Html::a($order->public_id, ['view-order', 'id' => $order->id]);
                 }
             ],
             'created_at:datetime',
@@ -42,10 +41,10 @@ $this->params['breadcrumbs'][] = $this->title;
                 'format' => 'raw',
                 'value' => function ($order) {
                     /* @var $order app\models\Order*/
-                    return  Html::price($order->getTotalPrice());
+                    return Html::price($order->getTotalPrice());
                 }
             ],
-            'status',
+            'status_str',
         ],
     ]); ?>
 </div>

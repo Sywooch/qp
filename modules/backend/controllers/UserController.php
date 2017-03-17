@@ -79,13 +79,21 @@ class UserController extends Controller
     {
         $model = User::findOneOr404($id);
 
-        if ($model->load(Yii::$app->request->post()) && $model->save()) {
-            return $this->redirect(['index']);
-        } else {
-            return $this->render('update', [
-                'model' => $model,
-            ]);
+        if ($model->load(Yii::$app->request->post()) ) {
+            if (Yii::$app->user->id == $id && $model->role != 'admin') {
+                    Yii::$app->session->setFlash('error',
+                        'Невозможно снять статус администратора с текущего пользователя'
+                    );
+            }
+            else {
+                if ($model->save()){
+                    return $this->redirect(['index']);
+                }
+            }
         }
+        return $this->render('update', [
+            'model' => $model,
+        ]);
     }
 
     /**
