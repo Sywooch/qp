@@ -110,11 +110,24 @@
   }
   padding: 10px 0 20px 0;
 }
-.btn-apply, .btn-close{
+
+.btn-apply, .btn-close, .btn-refresh{
   width: 100%;
   margin-top: 10px;
 }
 
+@media (min-width: $screen-xs-max) {
+  .qp-collapse {
+    animation-duration: 0.5s;
+    display: block !important;
+    &.closed, &.shown {
+      animation-name: bounceInDown;
+    }
+  }
+  .qp-collapse-arrow {
+    display: none;
+  }
+}
 @media (max-width: $screen-xs-max) {
   .filter {
     padding: 0;
@@ -132,35 +145,41 @@
       display: block;
       animation-name: bounceOutUp;
     }
-  }
-  .qp-collapse-arrow {
-    cursor: pointer;
-    &.active {
-      &:before {
-        transform: rotate(45deg);
+    &-handler {
+      cursor: pointer;
+      .arrow {
+        cursor: pointer;
+        float: right;
+        margin-right: 15px;
+        &:before, &:after {
+          background: $black-2;
+          content: '';
+          margin-top: -1px;
+          display: inline-block;
+          height: 2px;
+          width: 10px;
+          transition: all 0.3s 0.1s;
+          position: relative;
+          top: -5px;
+        }
+        &:before {
+          transform: rotate(45deg);
+          right: -4px;
+        }
+        &:after {
+          transform: rotate(-45deg);
+        }
       }
-      &:after {
-        transform: rotate(-45deg);
+      &.activated {
+        .arrow {
+          &:before {
+            transform: rotate(-45deg);
+          }
+          &:after {
+            transform: rotate(45deg);
+          }
+        }
       }
-    }
-    &:before, &:after {
-      background: $black-2;
-      content: '';
-      margin-top: -1px;
-      display: inline-block;
-      height: 2px;
-      width: 10px;
-      position: absolute;
-      transition: all 0.3s 0.1s;
-      top: 20px;
-    }
-    &:before {
-      transform: rotate(-45deg);
-      right: 42px;
-    }
-    &:after {
-      transform: rotate(45deg);
-      right: 35px;
     }
   }
 }

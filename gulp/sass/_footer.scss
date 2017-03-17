@@ -39,7 +39,9 @@
     padding: 0;
   }
   &__bottom {
-    margin-top: 20px;
+    padding: 15px 0;
+    margin-top: 15px;
+    border-top: 3px solid $gray-1;
   }
 }
 .subscribe__btn {

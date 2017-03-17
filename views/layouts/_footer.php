@@ -47,7 +47,7 @@ $menuUser = [
                     </div>
                 </div>
             </div>
-            <div class="col-md-6">
+            <div class="col-md-6 hidden-xs">
                 <div class="row">
                     <div class="col-md-6">
                         <span class="footer-title">Время работы</span>
@@ -81,11 +81,16 @@ $menuUser = [
 
             </div>
         </div>
-        <div class="footer__bottom row">
-            <div class="col-sm-3"><p>&copy; qpvl <?= date('Y') ?></p></div>
-            <div class="col-sm-3">
-                <?=Html::a('Пользовательское соглашение', ['/p/rules'])?>
+    </div>
+    <div class="footer__bottom">
+        <div class="container">
+            <div class="row">
+                <div class="col-sm-3"><p>&copy; qpvl <?= date('Y') ?></p></div>
+                <div class="col-sm-3">
+                    <?=Html::a('Пользовательское соглашение', ['/p/rules'])?>
+                </div>
             </div>
+
         </div>
     </div>
 </footer>

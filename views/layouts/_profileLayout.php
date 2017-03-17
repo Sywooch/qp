@@ -10,23 +10,37 @@ use yii\widgets\Breadcrumbs;
     <div class="container">
         <div class="row">
             <div class="col-sm-3">
+                <div class="visible-xs">
+                    <?=Breadcrumbs::widget([
+                        'links' => isset($this->params['breadcrumbs']) ? $this->params['breadcrumbs'] : [],
+                    ])?>
+                </div>
                 <div class="profile-nav">
-                    <?php
-                    echo Nav::widget([
-                        'options' => ['class' => 'nav nav-pills nav-stacked'],
-                        'items' => [
-                            ['label' => 'История покупок', 'url' => ['/profile/index']],
-                            ['label' => 'Избранное', 'url' => ['/profile/bookmark']],
-                            ['label' => 'Настройки профиля', 'url' => ['/profile/edit']],
-                        ],
-                    ]);
-                    ?>
+                    <div class="title qp-collapse-handler" data-toggle="profile-box">
+                        <h3>Личный кабинет <span class="arrow"></span></h3>
+                        <div class="text-subline"></div>
+                    </div>
+                    <div class="qp-collapse" id="profile-box">
+                        <?php
+                        echo Nav::widget([
+                            'options' => ['class' => 'nav nav-pills nav-stacked'],
+                            'items' => [
+                                ['label' => 'История покупок', 'url' => ['/profile/index']],
+                                ['label' => 'Избранное', 'url' => ['/profile/bookmark']],
+                                ['label' => 'Настройки профиля', 'url' => ['/profile/edit']],
+                            ],
+                        ]);
+                        ?>
+                    </div>
+
                 </div>
             </div>
             <div class="col-sm-9">
-                <?=Breadcrumbs::widget([
-                    'links' => isset($this->params['breadcrumbs']) ? $this->params['breadcrumbs'] : [],
-                ])?>
+                <div class="hidden-xs">
+                    <?=Breadcrumbs::widget([
+                        'links' => isset($this->params['breadcrumbs']) ? $this->params['breadcrumbs'] : [],
+                    ])?>
+                </div>
                 <?= $content ?>
             </div>
         </div>

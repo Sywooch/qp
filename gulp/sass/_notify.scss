@@ -89,13 +89,15 @@
     opacity: 0;
     transform: translate3d(0, -3000px, 0);
   }
-
+  38% {
+    opacity: 0;
+  }
   60% {
-    opacity: 1;
     transform: translate3d(0, 25px, 0);
   }
 
   75% {
+    opacity: 1;
     transform: translate3d(0, 10px, 0);
   }
 
@@ -161,4 +163,34 @@
 
 .bounceOutUp {
   animation-name: bounceOutUp;
+}
+
+@media (max-width: $screen-sm-max) {
+  .alert {
+    .close {
+      top: 10px !important;
+      font-size: 3rem;
+      font-weight: 100;
+    }
+  }
+}
+
+
+@keyframes slideInDown {
+  from {
+    transform: translate3d(0, -100%, 0);
+    visibility: visible;
+    opacity: 0;
+  }
+  60% {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+    transform: translate3d(0, 0, 0);
+  }
+}
+
+.slideInDown {
+  animation-name: slideInDown;
 }
