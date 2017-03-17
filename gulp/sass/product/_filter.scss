@@ -149,6 +149,8 @@
       cursor: pointer;
       .arrow {
         cursor: pointer;
+        float: right;
+        margin-right: 15px;
         &:before, &:after {
           background: $black-2;
           content: '';

@@ -13,8 +13,7 @@ $this->params['breadcrumbs'][] = [
 ];
 $this->params['breadcrumbs'][] = $this->title;
 ?>
-<h1>Личный кабинет</h1>
-<h3>Избранное</h3>
+<h1>Избранное</h1>
 
 <div class="product__table">
     <?= GridView::widget([
