@@ -36,9 +36,6 @@ $config = [
             'timeFormat' => 'H:mm:ss',
             'datetimeFormat' => 'd.MM.yyyy H:mm',
         ],
-        'shopping' => [
-            'class' => 'app\components\ShoppingComponent',
-        ],
         'request' => [
             // !!! insert a secret key in the following (if it is empty) - this is required by cookie validation
             'cookieValidationKey' => 'KSZvMmDXsxtwTR6LUwK4H8rDz_V6wIar',

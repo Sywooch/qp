@@ -8,6 +8,7 @@ use yii\data\ArrayDataProvider;
 use yii\filters\VerbFilter;
 use app\models\Order;
 use app\models\OrderProduct;
+use app\components\CartWidget;
 
 class CartController extends \yii\web\Controller
 {
@@ -45,7 +46,7 @@ class CartController extends \yii\web\Controller
             Yii::$app->cart->put(Good::findOneOr404($get['product_id'])->getCartPosition(),
                 $get['product_count']);
         }
-        return Yii::$app->shopping->render();
+        return CartWidget::widget();
     }
 
     public function actionAddMultiple()
@@ -59,7 +60,7 @@ class CartController extends \yii\web\Controller
                 $cart->update(Good::findOneOr404($item['id'])->getCartPosition(), $item['count']);
             }
         }
-        return Yii::$app->shopping->render();
+        return CartWidget::widget();
     }
 
     public function actionDelete($id)

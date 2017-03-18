@@ -14,9 +14,15 @@ class LoginWidget extends Widget
     {
         parent::init();
 
+        $cart = "<li class=\"shopping\">".\app\components\CartWidget::widget()."</li>";
+
         if(\Yii::$app->user->isGuest) {
             echo  '<li>' . Html::a('Вход', ['/site/login'] ) . '</li>';
             echo  '<li>' . Html::a('Регистрация', ['/site/reg'] ) . '</li>';
+            if($this->mobile) {
+                echo  '<li>' . Html::a('Главная', ['/'] ) . '</li>';
+                echo $cart;
+            }
         } else {
             $items = [
                 ['label' => 'Личный кабинет', 'url' => '/profile/index'],
@@ -33,7 +39,10 @@ class LoginWidget extends Widget
             if($this->mobile) {
                 echo  '<li><span class="header">'. \Yii::$app->user->identity->email .'</span></li>';
                 echo Nav::widget([
-                    'items' => $items
+                    'encodeLabels' => false,
+                    'items' => array_merge([
+                        ['label' => 'Главная', 'url' => ['/']],
+                    ], $items, [ $cart])
                 ]);
             } else {
                 $items = array_merge($items, [

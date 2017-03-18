@@ -57,7 +57,10 @@ $sidenav-line-height: $sidenav-item-height !default;
       background-color: $gray-1;
     }
   }
-
+  .badge {
+    margin-top: 16px;
+    float: right;
+  }
   li {
     float: none;
     line-height: $sidenav-line-height;
@@ -87,7 +90,6 @@ $sidenav-line-height: $sidenav-item-height !default;
       float: left;
       height: $sidenav-item-height;
       line-height: $sidenav-line-height;
-      margin: 0 ($sidenav-padding * 2) 0 0;
       width: $sidenav-item-height / 2;
       color: rgba(0,0,0,.54);
     }

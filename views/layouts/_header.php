@@ -91,7 +91,7 @@ $itemMenu = [
                         'options' => ['class' => 'navbar-nav nav header__personal'],
                         'items' => [
                             LoginWidget::widget(),
-                            "<li class=\"shopping\">".Yii::$app->shopping->render()."</li>",
+                            "<li class=\"shopping\">".\app\components\CartWidget::widget()."</li>",
                         ],
                     ]);
                     ?>
@@ -113,7 +113,10 @@ echo Nav::widget([
     'options' => ['class' => 'side-nav', 'id' => 'slide-out'],
     'items' => array_merge(
         [ LoginWidget::widget(['mobile' => true]) ],
-        ['<li><div class=\'divider\'></div></li>' ],
+        [
+            '<li><div class=\'divider\'></div></li>',
+        ],
+
         $itemMenu['bottom'],
         ['<li><div class=\'divider\'></div></li>' ],
         $itemMenu['top'],
