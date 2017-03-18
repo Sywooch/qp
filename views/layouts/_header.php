@@ -4,21 +4,25 @@ use app\components\Html;
 use app\components\LoginWidget;
 use yii\bootstrap\Nav;
 use yii\bootstrap\NavBar;
+
+$itemMenu = [
+    'top' => [
+        ['label' => 'Доставка', 'url' => ['/p/delivery']],
+        ['label' => 'Оплата', 'url' => ['/p/payment']],
+        ['label' => 'О компании', 'url' => ['/p/about']],
+        ['label' => 'Контакты', 'url' => ['/site/contact']],
+        ['label' => 'Отзывы', 'url' => ['/site/reviews']],
+    ]
+];
 ?>
 
 <header class="header">
-    <div class="header__top">
+    <div class="header__top hidden-xs">
         <div class="container">
             <?php
             echo Nav::widget([
                 'options' => ['class' => 'nav header__top-navbar'],
-                'items' => [
-                    ['label' => 'Доставка', 'url' => ['/p/delivery']],
-                    ['label' => 'Оплата', 'url' => ['/p/payment']],
-                    ['label' => 'О компании', 'url' => ['/p/about']],
-                    ['label' => 'Контакты', 'url' => ['/site/contact']],
-                    ['label' => 'Отзывы', 'url' => ['/site/reviews']],
-                ],
+                'items' => $itemMenu['top'],
             ]);
             ?>
         </div>
@@ -59,38 +63,70 @@ use yii\bootstrap\NavBar;
         </div>
     </div>
     <div class="header__bottom">
-    <?php
-    NavBar::begin([
-        'options' => [
-            'class' => 'header__navbar navbar',
-        ],
-    ]);
-    echo Nav::widget([
-        'options' => ['class' => 'navbar-nav nav'],
-        'items' => [
-            \app\components\catalog\CatalogWidget::widget([
-                    'visible' => isset($this->params['catalog']) && $this->params['catalog']
-            ]),
-            ['label' => 'Акции', 'url' => ['/']],
-            ['label' => 'Скидки', 'url' => ['/']],
-        ],
-    ]);
-    ?>
-
-    <?php
-    echo Nav::widget([
-        'options' => ['class' => 'navbar-nav nav header__personal'],
-        'items' => [
-            LoginWidget::widget(),
-            "<li class=\"shopping\">".Yii::$app->shopping->render()."</li>",
-        ],
-    ]);
-
-    NavBar::end();
-    ?>
+        <div class="header__navbar navbar">
+            <div class="container">
+                <button type="button" class="navbar-toggle button-collapse" data-toggle="collapse" data-activates="slide-out">
+                    <span class="sr-only">Toggle navigation</span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                </button>
+                <div class="hidden-xs hidden-sm">
+                    <?php
+                    echo Nav::widget([
+                        'options' => ['class' => 'navbar-nav nav'],
+                        'items' => [
+                            \app\components\catalog\CatalogWidget::widget([
+                                'visible' => isset($this->params['catalog']) && $this->params['catalog']
+                            ]),
+                            ['label' => 'Акции', 'url' => ['/']],
+                            ['label' => 'Скидки', 'url' => ['/']],
+                        ],
+                    ]);
+                    ?>
+                    <?php
+                    echo Nav::widget([
+                        'options' => ['class' => 'navbar-nav nav header__personal'],
+                        'items' => [
+                            LoginWidget::widget(),
+                            "<li class=\"shopping\">".Yii::$app->shopping->render()."</li>",
+                        ],
+                    ]);
+                    ?>
+                </div>
+            </div>
+        </div>
     </div>
 
 </header>
+
+<?php
+foreach ($itemMenu['top'] as &$item) {
+    if($item['url'][0] == '/'.Yii::$app->getRequest()->pathInfo) {
+        $item['options'] = ['class' => 'active'];
+    }
+}
+
+echo Nav::widget([
+    'options' => ['class' => 'side-nav', 'id' => 'slide-out'],
+    'items' => array_merge([
+            LoginWidget::widget(['mobile' => true]),
+        ], [
+                '<li><div class=\'divider\'></div></li>'
+        ], $itemMenu['top'],
+        !\Yii::$app->user->isGuest ? [
+            '<li role="separator" class="divider"></li>',
+            '<li>'
+            . Html::beginForm(['/site/logout'], 'post')
+            . Html::submitButton(
+                'Выйти',
+                ['class' => 'btn btn-link logout']
+            )
+            . Html::endForm()
+            . '</li>'
+        ] : []),
+]);
+?>
 
 <div class="modal fade bs-search-modal-lg" id="searchModal" tabindex="-1" role="dialog" aria-labelledby="searchLabel">
     <div class="modal-dialog modal-lg" role="document">

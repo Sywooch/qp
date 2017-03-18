@@ -94,3 +94,5 @@ $menuUser = [
         </div>
     </div>
 </footer>
+
+<div class="drag-target" data-sidenav="nav-mobile" style="left: 0px; touch-action: pan-y; -webkit-user-drag: none; -webkit-tap-highlight-color: rgba(0, 0, 0, 0);"></div>

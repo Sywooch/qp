@@ -33,6 +33,8 @@ var App = (function(){
             stage['cart'] = Cart;
             stage['product'] = Product;
 
+            $('.button-collapse').sideNav({'edge': 'left'});
+
             this.reinit();
         },
 
@@ -83,5 +85,5 @@ var App = (function(){
 App.init();
 
 $(document).ready(function () {
-    $('[data-toggle="tooltip"]').tooltip();
+    //$('[data-toggle="tooltip"]').tooltip();
 });
