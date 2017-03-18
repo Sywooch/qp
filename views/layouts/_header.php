@@ -12,6 +12,10 @@ $itemMenu = [
         ['label' => 'О компании', 'url' => ['/p/about']],
         ['label' => 'Контакты', 'url' => ['/site/contact']],
         ['label' => 'Отзывы', 'url' => ['/site/reviews']],
+    ],
+    'bottom' => [
+        ['label' => 'Акции', 'url' => ['/']],
+        ['label' => 'Скидки', 'url' => ['/']],
     ]
 ];
 ?>
@@ -75,13 +79,11 @@ $itemMenu = [
                     <?php
                     echo Nav::widget([
                         'options' => ['class' => 'navbar-nav nav'],
-                        'items' => [
+                        'items' => array_merge([
                             \app\components\catalog\CatalogWidget::widget([
                                 'visible' => isset($this->params['catalog']) && $this->params['catalog']
                             ]),
-                            ['label' => 'Акции', 'url' => ['/']],
-                            ['label' => 'Скидки', 'url' => ['/']],
-                        ],
+                        ], $itemMenu['bottom'] ),
                     ]);
                     ?>
                     <?php
@@ -109,11 +111,13 @@ foreach ($itemMenu['top'] as &$item) {
 
 echo Nav::widget([
     'options' => ['class' => 'side-nav', 'id' => 'slide-out'],
-    'items' => array_merge([
-            LoginWidget::widget(['mobile' => true]),
-        ], [
-                '<li><div class=\'divider\'></div></li>'
-        ], $itemMenu['top'],
+    'items' => array_merge(
+        [ LoginWidget::widget(['mobile' => true]) ],
+        ['<li><div class=\'divider\'></div></li>' ],
+        $itemMenu['bottom'],
+        ['<li><div class=\'divider\'></div></li>' ],
+        $itemMenu['top'],
+
         !\Yii::$app->user->isGuest ? [
             '<li role="separator" class="divider"></li>',
             '<li>'
