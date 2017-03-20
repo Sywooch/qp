@@ -6,7 +6,7 @@
   }
 }
 .categories {
-  padding-left: 30px;
+  padding-right: 2px;
   &-list {
     @include shadow();
     list-style: none;
@@ -78,9 +78,8 @@
   .categories {
     cursor: pointer;
     background-color: $cgreen;
-    margin-top: -20px;
-    padding-top: 10px;
-    padding-bottom: 10px;
+    padding: 10px 15px;
+    margin: -20px -15px 0 -15px;
     .sidebar-title {
       color: $colorwhite;
       text-transform: none;

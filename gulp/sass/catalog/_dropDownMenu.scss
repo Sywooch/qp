@@ -20,7 +20,7 @@
   & > a {
     background-color: $cgreen;
     color: $white-1 !important;
-    width: 250px;
+    width: 260px;
     &:before, &:after {
       background: #fff;
       content: '';
@@ -134,6 +134,14 @@
       & > ul {
         display: block;
       }
+    }
+  }
+}
+
+@media (min-width: $screen-md) and (max-width: $screen-lg) {
+  .catalog {
+    a {
+      width: 212px;
     }
   }
 }

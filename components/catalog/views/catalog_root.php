@@ -27,24 +27,20 @@ function traversal($node) {
 }
 
 ?>
-<aside class="sidebar">
-    <div class="row">
-        <div class="col-md-12 categories transform transform-top">
-            <span class="sidebar-title hidden-md hidden-lg">
-                Каталог
-            </span>
-            <div class="text-subline hidden-md hidden-lg"></div>
-            <ul class="categories-list transform-body">
-                <?php
-                foreach(Yii::$app->db->cache(function ($db) use($root)
-                {
-                    return $root->children(1)->all();
-                }, null, new TagDependency(['tags' => 'cache_table_' . Menu::tableName()]))  as $ch) {
-                    traversal($ch);
-                }
+<div class="categories transform transform-top">
+    <span class="sidebar-title hidden-md hidden-lg">
+        Каталог
+    </span>
+    <div class="text-subline hidden-md hidden-lg"></div>
+    <ul class="categories-list transform-body">
+        <?php
+        foreach(Yii::$app->db->cache(function ($db) use($root)
+        {
+            return $root->children(1)->all();
+        }, null, new TagDependency(['tags' => 'cache_table_' . Menu::tableName()]))  as $ch) {
+            traversal($ch);
+        }
 
-                ?>
-            </ul>
-        </div>
-    </div>
-</aside>
+        ?>
+    </ul>
+</div>

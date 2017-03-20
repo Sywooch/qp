@@ -35,14 +35,11 @@ $itemMenu = [
         <div class="container">
             <div class="row">
                 <div class="col-md-3 col-xs-6 col-xs-offset-3 col-md-offset-0">
-                    <div class="row">
-                        <div class="col-xs-12 header__logo">
-                            <a class="navbar-brand" href="/">Купи</a>
-                        </div>
-                        <div class="col-xs-12 header__slogan">
-                            Интернет-супермаркет
-                        </div>
-
+                    <div class="header__logo">
+                        <a class="navbar-brand" href="/">Купи</a>
+                    </div>
+                    <div class="header__slogan">
+                        Интернет-супермаркет
                     </div>
                 </div>
                 <div class="col-xs-3 visible-xs visible-sm mobile-nav-controls">
