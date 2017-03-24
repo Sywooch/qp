@@ -12,3 +12,8 @@ $this->title = 'Панель администратора'
 <?= $form->field($model, 'zipFile')->fileInput()->label('Обновить базу данных из архива.') ?>
     <button>Отправить</button>
 <?php ActiveForm::end() ?>
+
+
+<?php $form = ActiveForm::begin(['action' => ['provider-order']]) ?>
+    <button>Выгрузить заказы</button>
+<?php ActiveForm::end() ?>

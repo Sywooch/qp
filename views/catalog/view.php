@@ -19,15 +19,16 @@ foreach(Yii::$app->db->cache(function ($db) use($catalog)
 }
 $this->params['breadcrumbs'][] = $this->title;
 ?>
-<h1><?=$this->title?></h1>
-
-<div class="row">
+<div class="catalog">
+    <?=\app\components\catalog\CatalogMateWidget::widget([
+        'catalog' => $catalog->children(1)->one()
+    ])?>
     <?php
-    foreach(Yii::$app->db->cache(function ($db) use($catalog)
-    {
-        return $catalog->children(1)->all();
-    }, null, new TagDependency(['tags' => 'cache_table_' . Menu::tableName()])) as $ch) {
-        echo CategoryWidget::widget([ 'item' => $ch ]);
-    }
+//    foreach(Yii::$app->db->cache(function ($db) use($catalog)
+//    {
+//        return $catalog->children(1)->all();
+//    }, null, new TagDependency(['tags' => 'cache_table_' . Menu::tableName()])) as $ch) {
+//        echo CategoryWidget::widget([ 'item' => $ch ]);
+//    }
     ?>
 </div>

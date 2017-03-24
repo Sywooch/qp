@@ -1,5 +1,6 @@
 <?php
 
+use app\models\Order;
 use yii\helpers\Html;
 use yii\widgets\ActiveForm;
 
@@ -13,6 +14,10 @@ use yii\widgets\ActiveForm;
     <?php $form = ActiveForm::begin(); ?>
 
     <?= $form->field($model, 'user_id')->textInput() ?>
+    <?= $form->field($model, 'public_id')->textInput() ?>
+    <?= $form->field($model, 'status')->dropDownList(
+        Order::$STATUS_TO_STRING
+    ) ?>
 
     <div class="form-group">
         <?= Html::submitButton($model->isNewRecord ? 'Добавить' : 'Изменить',

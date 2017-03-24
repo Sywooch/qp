@@ -8,8 +8,7 @@ $this->params['profileLayout'] = true;
 $this->title = 'История покупок';
 $this->params['breadcrumbs'][] = $this->title;
 ?>
-<h1>Личный кабинет</h1>
-<h3>История покупок</h3>
+<h1>История покупок</h1>
 
 <div class="product__table">
     <?= GridView::widget([
@@ -32,14 +31,7 @@ $this->params['breadcrumbs'][] = $this->title;
                     return  Html::price($order->getTotalPrice());
                 }
             ],
-            [
-                'attribute' => 'Статус',
-                'format' => 'raw',
-                'value' => function ($order) {
-                    /* @var $order app\models\Order*/
-                    return  'Выполнен';
-                }
-            ],
+            'status_str',
             [
                 'class' => 'yii\grid\ActionColumn',
                 'template' => '{order-repeat}',

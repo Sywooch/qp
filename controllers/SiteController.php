@@ -32,7 +32,7 @@ class SiteController extends Controller
         return [
             'access' => [
                 'class' => AccessControl::className(),
-                'only' => ['logout', 'login', 'reg', 'profile'],
+                'only' => ['profile'],
                 'denyCallback' => function($role, $action) {
                     Yii::$app->session->setFlash('warning',
                         ($action->id == 'logout' || $action->id == 'profile') ?
@@ -43,19 +43,9 @@ class SiteController extends Controller
                 },
                 'rules' => [
                     [
-                        'actions' => ['logout', 'profile'],
+                        'actions' => ['profile'],
                         'allow' => true,
                         'roles' => ['user'],
-                    ],
-                    [
-                        'actions' => ['login', 'reg'],
-                        'allow' => false,
-                        'roles' => ['user'],
-                    ],
-                    [
-                        'actions' => ['login', 'reg'],
-                        'allow' => true,
-                        'roles' => ['guest'],
                     ],
                 ],
             ],
@@ -124,6 +114,11 @@ class SiteController extends Controller
 
     public function actionReg()
     {
+        if (Yii::$app->user->can('user')) {
+            return $this->goHome();
+        }
+        Yii::$app->user->logout();
+
         $model = new RegForm();
         if ($model->load(Yii::$app->request->post()) && $model->validate()) {
             if($user = $model->reg()) {
@@ -153,10 +148,11 @@ class SiteController extends Controller
      */
     public function actionLogin()
     {
-/*        if (!Yii::$app->user->isGuest) {
+        if (Yii::$app->user->can('user')) {
             return $this->goHome();
         }
-*/
+        Yii::$app->user->logout();
+
         $serviceName = Yii::$app->getRequest()->getQueryParam('service');
         if (isset($serviceName)) {
             /** @var $eauth \nodge\eauth\ServiceBase */
@@ -166,8 +162,6 @@ class SiteController extends Controller
 
             try {
                 if ($eauth->authenticate()) {
-//                  var_dump($eauth->getIsAuthenticated(), $eauth->getAttributes()); exit;
-
                     $identity = User::findByEAuth($eauth);
                     Yii::$app->user->login($identity, 0);
 
@@ -256,6 +250,35 @@ class SiteController extends Controller
         ]);
     }
 
+    /**
+     * Displays review page.
+     *
+     * @return string
+     */
+    public function actionReviews()
+    {
+        $model = new ContactForm(['scenario' => ContactForm::SCENARIO_USER_FEEDBACK]);
+        if (Yii::$app->user->can('user')) {
+            $model->email = Yii::$app->user->identity->email;
+        }
+        if ($model->load(Yii::$app->request->post())) {
+            if ($model->contact(Yii::$app->params['adminEmail']) && $model->save(false)) {
+                Yii::$app->session->setFlash('contactFormSubmitted');
+            } else {
+                Yii::$app->session->setFlash('error', 'Возникла ошибка
+                при сохранении и отправке сообения. ' . implode(' ', $model->getFirstErrors()));
+            }
+            return $this->refresh();
+        }
+
+        return $this->render('review/index', [
+            'model' => $model,
+            'feedbacks' => ContactForm::cachedFindAll([
+                'status' => ContactForm::STATUS_VISIBLE
+            ]),
+        ]);
+    }
+
     public function actionProfile()
     {
         $user = Yii::$app->user->identity;
@@ -263,16 +286,6 @@ class SiteController extends Controller
             'email' => $user->email,
             'phone' => $user->getPhone(),
         ]);
-    }
-
-    /**
-     * Displays about page.
-     *
-     * @return string
-     */
-    public function actionAbout()
-    {
-        return $this->render('about');
     }
 
     public function actionResetPassword()
@@ -296,14 +309,6 @@ class SiteController extends Controller
         return $this->render('reset_password', [
             'model' => $model,
         ]);
-    }
-
-    public function actionDelivery() {
-        return $this->render('delivery');
-    }
-
-    public function actionPayment() {
-        return $this->render('payment');
     }
 
     public function actionSearch($q = '')

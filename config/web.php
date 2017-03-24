@@ -36,9 +36,6 @@ $config = [
             'timeFormat' => 'H:mm:ss',
             'datetimeFormat' => 'd.MM.yyyy H:mm',
         ],
-        'shopping' => [
-            'class' => 'app\components\ShoppingComponent',
-        ],
         'request' => [
             // !!! insert a secret key in the following (if it is empty) - this is required by cookie validation
             'cookieValidationKey' => 'KSZvMmDXsxtwTR6LUwK4H8rDz_V6wIar',
@@ -84,7 +81,8 @@ $config = [
             'showScriptName' => false,
             'rules' => [
                 '' => 'site/index',
-                '<action:(about|contact|login|reg)>'=>'site/<action>',
+                '<action:(reviews|contact|login|reg)>'=>'site/<action>',
+                'p/<view:[a-zA-Z0-9-]+>' => 'page/index',
                 '<module:backend><controller:default><action:(login|index)>'=>'<module>/default/<action>',
                 '<controller:profile>/<action:edit>/phone'=>'profile/phone',
                 '<controller:profile>/<action:edit>/password'=>'profile/password',

@@ -52,6 +52,10 @@ class User extends CachedActiveRecord implements IdentityInterface
             ['status', 'default', 'value' => User::STATUS_NOT_ACTIVE],
             ['status', 'in', 'range' => array_keys(self::$STATUS_TO_STRING)],
             ['role', 'in', 'range' => array_keys(Yii::$app->authManager->getRoles())],
+            ['phone', 'match',
+                'pattern' => '/\+7 [0-9]{3} [0-9]{3}-[0-9]{2}-[0-9]{2}/',
+                'message' => 'Необходимо ввести номер телефона.',
+            ]
         ];
     }
 
@@ -270,6 +274,16 @@ class User extends CachedActiveRecord implements IdentityInterface
     public function validatePhoneKey($key)
     {
         if ($this->phone_validation_key == $key) {
+            $same_phone_users = User::cachedFindAll([
+                'phone' => $this->phone,
+            ]);
+            foreach($same_phone_users as $spu) {
+                if ($spu->id != $this->id) {
+                    $spu->phone = null;
+                    $spu->save();
+                }
+            }
+
             $this->phone_validation_key = null;
             if (!$this->save()) {
                 Yii::error('Произошла ошибка при подтверждении номера телефона');

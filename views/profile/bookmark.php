@@ -13,8 +13,7 @@ $this->params['breadcrumbs'][] = [
 ];
 $this->params['breadcrumbs'][] = $this->title;
 ?>
-<h1>Личный кабинет</h1>
-<h3>Избранное</h3>
+<h1>Избранное</h1>
 
 <div class="product__table">
     <?= GridView::widget([
@@ -40,11 +39,18 @@ $this->params['breadcrumbs'][] = $this->title;
                     return  Html::a($model->product->name, ['/product/view', 'id' => $model->product->id]);
                 }
             ],
-            [   'format' => 'html',
+            [   'format' => 'raw',
                 'contentOptions' => ['class' => 'cell-price'],
                 'value' => function ($model) {
                     /* @var $model app\models\Bookmark */
-                    return  Html::price($model->product->price);
+                    return  Html::price($model->product->price).
+                        '<br><button class="btn btn-icon btn-icon-left btn-success btn-compare"
+                            data-product-id="' . $model->product->id . '"
+                            data-product-count="1"
+                            data-active="1">
+                        <i class="fa fa-shopping-cart" aria-hidden="true"></i>
+                        <span>Купить</span>
+                    </button>';
                 }
             ],
             [

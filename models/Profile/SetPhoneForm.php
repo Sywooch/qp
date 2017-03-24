@@ -11,7 +11,10 @@ class SetPhoneForm extends Model
     {
         return [
             [['phone'], 'required'],
-            [['phone'], 'udokmeci\yii2PhoneValidator\PhoneValidator'],
+            ['phone', 'match',
+                'pattern' => '/\+7 [0-9]{3} [0-9]{3}-[0-9]{2}-[0-9]{2}/',
+                'message' => 'Необходимо ввести номер телефона.',
+            ]
         ];
     }
     public function attributeLabels()

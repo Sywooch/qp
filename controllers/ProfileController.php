@@ -16,6 +16,8 @@ use yii\data\ActiveDataProvider;
 use Yii;
 use yii\filters\AccessControl;
 use yii\caching\TagDependency;
+use yii\filters\VerbFilter;
+use yii\web\NotFoundHttpException;
 
 class ProfileController extends \yii\web\Controller
 {
@@ -35,6 +37,13 @@ class ProfileController extends \yii\web\Controller
                     ],
                 ],
             ],
+            'verbs' => [
+                'class' => VerbFilter::className(),
+                'actions' => [
+                    'pay' => ['POST'],
+                    'cancel' => ['POST'],
+                ],
+            ],
         ];
     }
 
@@ -51,7 +60,7 @@ class ProfileController extends \yii\web\Controller
     }
 
     public function actionViewOrder($id) {
-        $order = Order::cachedFindOne($id);
+        $order = Order::findOneOr404(['id' => $id, 'user_id' => Yii::$app->user->id ]);
         $products = Yii::$app->db->cache(function ($db) use ($order) {
             return $order->orderProducts;
         }, null, new TagDependency(['tags' => 'cache_table_' . OrderProduct::tableName()]));
@@ -60,6 +69,36 @@ class ProfileController extends \yii\web\Controller
             'products' => $products,
             'order' => $order,
         ]);
+    }
+
+    public function actionPay($id) {
+        $order = Order::findOneOr404([
+            'id' => $id,
+            'user_id' => Yii::$app->user->id,
+        ]);
+         if ($order->canPaid() && $order->pay()) {
+            Yii::$app->session->setFlash('success', 'Заказ оплачен.');
+        }
+        else {
+            Yii::$app->session->setFlash('error', 'Ошибка при оплате заказа.');
+        }
+
+        return $this->redirect('index');
+    }
+
+    public function actionCancel($id) {
+        $order = Order::findOneOr404([
+            'id' => $id,
+            'user_id' => Yii::$app->user->id,
+        ]);
+        if ($order->canCanceled() && $order->cancel()) {
+            Yii::$app->session->setFlash('warning', 'Заказ отменён.');
+        }
+        else {
+            Yii::$app->session->setFlash('error', 'Ошибка при отмене заказа.');
+        }
+
+        return $this->redirect('index');
     }
 
     public function actionBookmark()
@@ -117,7 +156,6 @@ class ProfileController extends \yii\web\Controller
                 'model' => $model,
             ]);
         }
-
     }
 
     public function actionPhone()

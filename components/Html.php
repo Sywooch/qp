@@ -57,4 +57,16 @@ class Html extends \yii\helpers\Html
             'декабря'];
         return (int)$date[0].' '.$m[(int)$date[1] - 1];
     }
+
+    /**
+     * Render ending of a word depending on the number
+     *
+     * @param $n integer
+     * @param $words array
+     * @return string
+     */
+    public static function ending($n, $words) {
+        $cases = array(2, 0, 1, 1, 1, 2);
+        return '<span class="word">'. $words[($n % 100 > 4 && $n % 100 < 20) ? 2 : $cases[min($n % 10, 5)]] . '</span>';
+    }
 }

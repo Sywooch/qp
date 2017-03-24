@@ -6,7 +6,7 @@
   }
 }
 .categories {
-  padding-left: 30px;
+  padding-right: 2px;
   &-list {
     @include shadow();
     list-style: none;
@@ -78,9 +78,8 @@
   .categories {
     cursor: pointer;
     background-color: $cgreen;
-    margin-top: -20px;
-    padding-top: 10px;
-    padding-bottom: 10px;
+    padding: 10px 15px;
+    margin: -20px -15px 0 -15px;
     .sidebar-title {
       color: $colorwhite;
       text-transform: none;
@@ -97,7 +96,7 @@
       min-width: 320px;
       left: 0;
       top: 50px;
-      z-index: 2;
+      z-index: 3;
       overflow: hidden;
       box-shadow: 0 1px 5px rgba(0,0,0,.12),0 1px 2px rgba(0,0,0,.24);
       margin-top: 0;

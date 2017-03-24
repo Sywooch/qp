@@ -1,4 +1,14 @@
-.sorter {
-  position: absolute;
-  right: 0;
+@media #{$extra-large-and-up} {
+  .sorter {
+    position: absolute;
+    right: 30px;
+  }
+}
+// Fixed sideNav hide on smaller
+@media #{$medium-and-down} {
+  .sorter {
+    position: relative;
+    right: 0;
+    margin-top: 10px;
+  }
 }

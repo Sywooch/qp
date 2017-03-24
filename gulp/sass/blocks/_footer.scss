@@ -1,0 +1,49 @@
+.footer {
+  margin-top: 40px;
+  border-top: 40px solid #F3F4F9;
+  padding-top: 30px;
+  &-title {
+    color: $black-1;
+    line-height: 2;
+    margin-top: 0;
+    margin-bottom: 0;
+    font-size: 15px;
+    font-weight: 700;
+    text-transform: uppercase;
+  }
+  a {
+    color: $black-2;
+  }
+  &-nav {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    li {
+        padding: 5px 0;
+    }
+  }
+  &-phone {
+    font-size: 28px;
+    padding-top: 16px;
+  }
+  &-hours {
+
+  }
+  &-subscribe-text {
+    margin-top: 10px;
+  }
+  .input-group-addon {
+    padding: 0;
+  }
+  .form {
+    padding: 0;
+  }
+  &__bottom {
+    padding: 15px 0;
+    margin-top: 15px;
+    border-top: 3px solid $gray-1;
+  }
+}
+.subscribe__btn {
+  height: 32px;
+}

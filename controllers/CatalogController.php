@@ -126,7 +126,7 @@ class CatalogController extends \yii\web\Controller
     {
         $get = Yii::$app->request->get();
         $ordering = Good::ORDERING_PRICE_ACS;
-        if (isset($get['f'])) {
+        if (isset($get['f']) && strpos($get['f'], 'o')) {
             list($rest, $ordering) = explode('o', $get['f']);
             $ordering = substr($ordering, 1);
             $ordering = explode(';', $ordering)[0];

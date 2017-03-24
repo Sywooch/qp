@@ -17,9 +17,11 @@ use yii\widgets\Breadcrumbs;
         <!-- Main-->
         <div class="page">
             <div class="page-container">
-                <?=Breadcrumbs::widget([
-                    'links' => isset($this->params['breadcrumbs']) ? $this->params['breadcrumbs'] : [],
-                ])?>
+                <div class="hidden-xs">
+                    <?=Breadcrumbs::widget([
+                        'links' => isset($this->params['breadcrumbs']) ? $this->params['breadcrumbs'] : [],
+                    ])?>
+                </div>
                 <?=$content?>
             </div>
         </div>

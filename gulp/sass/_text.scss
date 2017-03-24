@@ -10,3 +10,19 @@
   border-left: 3px solid $blue-1;
   border-radius: 4px;
 }
+@media (max-width: $screen-xs-max) {
+  .page-container {
+    h1 {
+      font-size: 2rem;
+      margin-top: 20px !important;
+    }
+  }
+
+}
+@media (min-width: $screen-xs-max) and (max-width: $screen-sm-max) {
+  .page-container {
+    h1 {
+      font-size: 3rem;
+    }
+  }
+}

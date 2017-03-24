@@ -5,12 +5,14 @@ use yii\helpers\Url;
 $menuShop = [
     ['label' => 'О компании', 'url' => ['/site/about']],
     ['label' => 'Каталог', 'url' => ['/site/about']],
-    ['label' => 'Контакты', 'url' => ['/site/about']]
+    ['label' => 'Контакты', 'url' => ['/site/about']],
+    ['label' => 'Отзывы', 'url' => ['/site/reviews']],
 ];
 $menuUser = [
     ['label' => 'Доставка', 'url' => ['/site/about']],
     ['label' => 'Оплата', 'url' => ['/site/about']],
-    ['label' => 'Помощь', 'url' => ['/site/about']]
+    ['label' => 'Помощь', 'url' => ['/site/about']],
+    ['label' => 'Возврат товара', 'url' => ['/site/about']],
 ];
 ?>
 
@@ -45,7 +47,7 @@ $menuUser = [
                     </div>
                 </div>
             </div>
-            <div class="col-md-6">
+            <div class="col-md-6 hidden-xs">
                 <div class="row">
                     <div class="col-md-6">
                         <span class="footer-title">Время работы</span>
@@ -79,8 +81,18 @@ $menuUser = [
 
             </div>
         </div>
-        <div class="footer__bottom">
-            <p class="text-center">&copy; qpvl <?= date('Y') ?></p>
+    </div>
+    <div class="footer__bottom">
+        <div class="container">
+            <div class="row">
+                <div class="col-sm-3"><p>&copy; qpvl <?= date('Y') ?></p></div>
+                <div class="col-sm-3">
+                    <?=Html::a('Пользовательское соглашение', ['/p/rules'])?>
+                </div>
+            </div>
+
         </div>
     </div>
 </footer>
+
+<div class="drag-target" data-sidenav="nav-mobile" style="left: 0px; touch-action: pan-y; -webkit-user-drag: none; -webkit-tap-highlight-color: rgba(0, 0, 0, 0);"></div>

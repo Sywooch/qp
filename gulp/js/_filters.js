@@ -19,8 +19,8 @@
             key: 'p',
             value: [0, 999999],
             getUrl: function () {
-                return this.value == -1 ?
-                    "" : this.key + ":" + (this.value[0] * 100) + "-" + (this.value[1] * 100) + ";";
+                return !!(this.value[0] && this.value[1]) ?
+                    this.key + ":" + (this.value[0] * 100) + "-" + (this.value[1] * 100) + ";" : "";
             }
         };
 
@@ -263,6 +263,9 @@
                 });
             } else {
                 Price().init();
+            }
+            if(data.order.value >= 0) {
+                $sort.val(data.order.value);
             }
         },
 

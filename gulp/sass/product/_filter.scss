@@ -1,8 +1,8 @@
 .filter {
-  padding-left: 15px;
+  background: $white-1;
   h3 {
     text-align: center;
-    background-color: $gray-3;
+    border: 1px solid $gray-2;
     padding: 10px;
     margin-bottom: 0;
   }
@@ -10,7 +10,6 @@
     border: 1px solid $gray-1;
     border-top: none;
     padding: 10px;
-
     &-title {
       font-size: 16px;
     }
@@ -110,6 +109,86 @@
   }
   padding: 10px 0 20px 0;
 }
-.btn-apply {
+
+.btn-apply, .btn-close, .btn-refresh{
   width: 100%;
+  margin-top: 10px;
+}
+
+@media (min-width: $screen-xs-max) {
+  .qp-collapse {
+    animation-duration: 0.5s;
+    display: block !important;
+    &.closed, &.shown {
+      animation-name: bounceInDown;
+    }
+  }
+  .qp-collapse-arrow {
+    display: none;
+  }
+}
+@media (max-width: $screen-xs-max) {
+  .filter {
+    padding: 0;
+    &-apply-btn {
+      display: none !important;
+    }
+  }
+  .qp-collapse {
+    padding: 0;
+    animation-duration: 0.5s;
+    display: none;
+    &.fixed {
+      position: absolute;
+      z-index: 3;
+      right: 15px;
+      left: 15px;
+      background-color: $white-1;
+    }
+    &.shown {
+      z-index: 3;
+      display: block;
+      animation-name: bounceInDown;
+    }
+    &.closed {
+      display: block;
+      animation-name: bounceOutUp;
+    }
+    &-handler {
+      cursor: pointer;
+      .arrow {
+        cursor: pointer;
+        float: right;
+        margin-right: 15px;
+        &:before, &:after {
+          background: $black-2;
+          content: '';
+          margin-top: -1px;
+          display: inline-block;
+          height: 2px;
+          width: 10px;
+          transition: all 0.3s 0.1s;
+          position: relative;
+          top: -5px;
+        }
+        &:before {
+          transform: rotate(45deg);
+          right: -4px;
+        }
+        &:after {
+          transform: rotate(-45deg);
+        }
+      }
+      &.activated {
+        .arrow {
+          &:before {
+            transform: rotate(-45deg);
+          }
+          &:after {
+            transform: rotate(45deg);
+          }
+        }
+      }
+    }
+  }
 }
