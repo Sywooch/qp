@@ -42,7 +42,7 @@ $this->params['breadcrumbs'][] = $this->title;
                 <span class="arrow"></span>
                 <span class="filter-loader"></span>
             </h3>
-            <div class="qp-collapse" id="filter-box">
+            <div class="qp-collapse fixed" id="filter-box">
                 <?php if(count($filters)) : ?>
                     <?php if(count($prices) > 1) : ?>
                         <div class="filter__item">
@@ -83,10 +83,10 @@ $this->params['breadcrumbs'][] = $this->title;
         </div>
         <div class="good-index">
             <div class="row">
-                <div class="col-xs-7 col-sm-9">
+                <div class="col-xs-7 col-sm-9 hidden-xs">
                     <h1><?= Html::encode($this->title) ?></h1>
                 </div>
-                <div class="col-xs-5 col-sm-3 toolbar">
+                <div class="col-xs-12 col-sm-3 toolbar">
                     <?=$this->render("_ordering") ?>
                 </div>
             </div>

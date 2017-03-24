@@ -2,7 +2,7 @@
   background: $white-1;
   h3 {
     text-align: center;
-    background-color: $gray-3;
+    background-color: $gray-2;
     padding: 10px;
     margin-bottom: 0;
   }
@@ -135,6 +135,13 @@
     padding: 0;
     animation-duration: 0.5s;
     display: none;
+    &.fixed {
+      position: absolute;
+      z-index: 3;
+      right: 15px;
+      left: 15px;
+      background-color: $white-1;
+    }
     &.shown {
       z-index: 3;
       display: block;
