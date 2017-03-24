@@ -5,17 +5,16 @@
 @import "awesom/font-awesome";
 @import "mixin";
 @import "variable";
-@import "header";
-@import "footer";
+
 @import "form";
 @import "join";
 @import "tabs";
-@import "profile";
+@import "blocks/_profile";
 @import "category";
 @import "cart";
 @import "text";
 
-@import "search";
+
 
 @import "product/products";
 @import "product/product";
@@ -36,7 +35,10 @@
 @import "site/delivery";
 @import "site/review";
 
-@import "components/sideNav";
+@import "blocks/sideNav";
+@import "blocks/header";
+@import "blocks/footer";
+@import "blocks/search";
 
 body {
   background: #fff;

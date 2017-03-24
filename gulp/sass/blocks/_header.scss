@@ -169,8 +169,8 @@ $line-height-header: 50px;
 
     &__slogan {
       font-size: 1rem;
-      position: absolute;
-      top: 32px;
+      position: relative;
+      top: -10px;
       line-height: 1rem;
       height: 1rem;
     }

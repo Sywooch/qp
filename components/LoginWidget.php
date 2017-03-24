@@ -25,7 +25,8 @@ class LoginWidget extends Widget
             }
         } else {
             $items = [
-                ['label' => 'Личный кабинет', 'url' => '/profile/index'],
+                '<li><div class=\'divider\'></div></li>',
+                ['label' => 'Личный кабинет <span class="side-nav__mail">'. \Yii::$app->user->identity->email .'</span>', 'url' => '/profile/index'],
                 ['label' => 'Избранное', 'url' => '/profile/bookmark'],
             ];
 
@@ -37,12 +38,12 @@ class LoginWidget extends Widget
             }
 
             if($this->mobile) {
-                echo  '<li><span class="header">'. \Yii::$app->user->identity->email .'</span></li>';
+                echo  '<li></li>';
                 echo Nav::widget([
                     'encodeLabels' => false,
                     'items' => array_merge([
                         ['label' => 'Главная', 'url' => ['/']],
-                    ], $items, [ $cart])
+                    ], [ $cart], $items)
                 ]);
             } else {
                 $items = array_merge($items, [

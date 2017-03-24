@@ -20,7 +20,6 @@ $sidenav-line-height: $sidenav-item-height !default;
   top: 0;
   margin: 0;
   transform: translateX(-100%);
-  height: 100%;
   height: calc(100% + 60px);
   height: -moz-calc(100%); //Temporary Firefox Fix
   padding-bottom: 60px;
@@ -29,7 +28,26 @@ $sidenav-line-height: $sidenav-item-height !default;
   overflow-y: auto;
   will-change: transform;
   backface-visibility: hidden;
-  transform: translateX(-105%);
+
+  &__contancts {
+    padding: 0 32px;
+    &-phone {
+      font-size: 2rem;
+    }
+    &-desc {
+
+    }
+  }
+
+  &__mail {
+    display: block;
+    line-height: 0;
+    position: relative;
+    top: -8px;
+    font-size: 12px;
+    color: #6b6b6b;
+
+  }
 
   // Right Align
   &.right-aligned {
