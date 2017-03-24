@@ -2,7 +2,7 @@
   background: $white-1;
   h3 {
     text-align: center;
-    background-color: $gray-2;
+    border: 1px solid $gray-2;
     padding: 10px;
     margin-bottom: 0;
   }
@@ -130,6 +130,9 @@
 @media (max-width: $screen-xs-max) {
   .filter {
     padding: 0;
+    &-apply-btn {
+      display: none !important;
+    }
   }
   .qp-collapse {
     padding: 0;
