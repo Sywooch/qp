@@ -3,6 +3,7 @@
 namespace app\models;
 
 
+use app\models\Profile\Message;
 use Yii;
 use yii\base\NotSupportedException;
 use yii\behaviors\TimestampBehavior;
@@ -73,6 +74,7 @@ class User extends CachedActiveRecord implements IdentityInterface
     public function getStatusString() {
         return self::$STATUS_TO_STRING[$this->status];
     }
+
     public function getRole() {
         if ($roles = Yii::$app->authManager->getRolesByUser($this->getId())) {
             return array_keys($roles)[0];
@@ -226,7 +228,7 @@ class User extends CachedActiveRecord implements IdentityInterface
     public function fill($email, $password) {
         $this->setPassword($password);
         $this->email = $email;
-        $this->name = 'qwe';
+        $this->name = 'dummy';
         $this->generatePasswordResetToken();
         $this->status = self::STATUS_NOT_ACTIVE;
     }
@@ -352,5 +354,17 @@ class User extends CachedActiveRecord implements IdentityInterface
     public function getOrders() {
         return $this->hasMany(Order::className(), ['user_id' => 'id'])->
             orderBy(['created_at' => SORT_DESC]);
+    }
+
+    public function getMessages() {
+        return $this->hasMany(Message::className(), ['user_id' => 'id'])->
+        orderBy(['created_at' => SORT_DESC]);
+    }
+
+    public function sendMessage($text) {
+        $mess = new Message();
+        $mess->user_id = $this->id;
+        $mess->text = $text;
+        return $mess->save() ? false : $mess;
     }
 }

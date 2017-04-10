@@ -108,6 +108,7 @@ class CartController extends \yii\web\Controller
             }
             $cart->removeAll();
             Yii::$app->session->setFlash('success', 'Заказ ' . $order->public_id . ' успешно оформлен.');
+            Yii::$app->user->identity->sendMessage('Заказ ' . $order->public_id . ' успешно оформлен.');
             return $this->redirect('/profile/');
         }
         Yii::error('Ошибка при оформлении заказа. ' .

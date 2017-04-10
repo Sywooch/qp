@@ -3,7 +3,7 @@
 namespace app\controllers;
 
 use app\models\OrderProduct;
-use app\models\Profile\ResetPasswordForm;
+use app\models\Profile\Message;
 use app\models\Profile\SetPasswordForm;
 use app\models\Profile\SetPhoneForm;
 use app\models\User;
@@ -137,7 +137,8 @@ class ProfileController extends \yii\web\Controller
                 Yii::error('Возникла ошибка при смене пароля.');
             }
             Yii::$app->session->setFlash('success', 'Пароль успешно изменён.');
-            return $this->goBack();
+            $user->sendMessage('Пароль изменён');
+            return $this->redirect('/profile/edit');
         }
         else {
             if ($key = Yii::$app->request->get('key')) {
@@ -186,6 +187,7 @@ class ProfileController extends \yii\web\Controller
 
         if ($model->load(Yii::$app->request->post()) && $model->validate()) {
             Yii::$app->session->setFlash('success', 'Телефонный номер успешно изменён.');
+            $user->sendMessage('Телефонный номер изменён на ' . $user->phone);
             return $this->redirect('/profile/edit');
         }
         return $this->render('confirm/phone', [
@@ -212,5 +214,24 @@ class ProfileController extends \yii\web\Controller
 
         }
         return $this->redirect('/cart');
+    }
+
+    public function actionMessage()
+    {
+        $dataProvider = new ActiveDataProvider([
+            'query' => Yii::$app->user->identity->getMessages()]);
+        Yii::$app->db->cache(function ($db) use ($dataProvider) {
+            $dataProvider->prepare();
+        }, null, new TagDependency(['tags' => 'cache_table_' . Message::tableName()]));
+        return $this->render('message', [
+            'ordersDataProvider' => $dataProvider,
+        ]);
+    }
+
+    public function actionViewMessage($id)
+    {
+        return $this->render('view_message', [
+            'message' => Message::cachedFindOne($id),
+        ]);
     }
 }

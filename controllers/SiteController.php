@@ -2,6 +2,7 @@
 
 namespace app\controllers;
 
+use app\models\Profile\Message;
 use app\models\Good\Good;
 use app\models\Good\Menu;
 use app\models\Order;
@@ -213,6 +214,7 @@ class SiteController extends Controller
             throw new BadRequestHttpException($e->getMessage());
         }
         if($activation->getUser()->activateAccount()):
+            $activation->getUser()->sendMessage('Добро пожаловать!');
             Yii::$app->session->setFlash('success', 'Активация прошла успешно.');
         else:
             Yii::$app->session->setFlash('error', 'Ошибка активации.');
@@ -260,6 +262,7 @@ class SiteController extends Controller
         $model = new ContactForm(['scenario' => ContactForm::SCENARIO_USER_FEEDBACK]);
         if (Yii::$app->user->can('user')) {
             $model->email = Yii::$app->user->identity->email;
+            $model->name = Yii::$app->user->identity->name;
         }
         if ($model->load(Yii::$app->request->post())) {
             if ($model->contact(Yii::$app->params['adminEmail']) && $model->save(false)) {

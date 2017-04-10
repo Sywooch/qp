@@ -26,6 +26,7 @@ use yii\widgets\Breadcrumbs;
                             'options' => ['class' => 'nav nav-pills nav-stacked'],
                             'items' => [
                                 ['label' => 'История покупок', 'url' => ['/profile/index']],
+                                ['label' => 'Сообщения', 'url' => ['/profile/message']],
                                 ['label' => 'Избранное', 'url' => ['/profile/bookmark']],
                                 ['label' => 'Настройки профиля', 'url' => ['/profile/edit']],
                             ],
