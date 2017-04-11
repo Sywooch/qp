@@ -1,5 +1,7 @@
 <?php
 use app\components\Html;
+use app\models\Bookmark;
+use app\models\ContactForm;
 use yii\bootstrap\ActiveForm;
 use yii\captcha\Captcha;
 
@@ -25,6 +27,7 @@ use yii\captcha\Captcha;
 
                 <?= $form->field($model, 'email')->textInput() ?>
                 <?= $form->field($model, 'name')->textInput() ?>
+                <?= $form->field($model, 'rating')->dropDownList(ContactForm::$RATING_TO_STRING); ?>
                 <?= $form->field($model, 'body')->textarea(['rows' => 6]) ?>
                 <?= $form->field($model, 'verifyCode')->widget(Captcha::className(), [
                     'template' => '<div class="row"><div class="col-lg-3">{image}</div><div class="col-lg-6">{input}</div></div>',

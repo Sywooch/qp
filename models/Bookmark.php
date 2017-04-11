@@ -30,7 +30,8 @@ class Bookmark extends CachedActiveRecord
     public function rules()
     {
         return [
-            [['user_id', 'product_id'], 'required', 'message' => 'Необходимо авторизоваться.'],
+            [['user_id'], 'required', 'message' => 'Необходимо авторизоваться.'],
+            [['product_id'], 'required'],
             [['user_id', 'product_id'], 'integer'],
             [['user_id', 'product_id'], 'unique', 'targetAttribute' => ['user_id', 'product_id'],
                 'message' => 'The combination of User ID and Product ID has already been taken.'],
@@ -40,6 +41,7 @@ class Bookmark extends CachedActiveRecord
                 'targetAttribute' => ['user_id' => 'id']],
         ];
     }
+
 
     /**
      * @inheritdoc

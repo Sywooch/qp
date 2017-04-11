@@ -15,6 +15,7 @@ use yii\behaviors\TimestampBehavior;
  * @property integer $created_at
  * @property integer $updated_at
  * @property integer $status
+ * @property integer $rating
  *
  */
 class ContactForm extends CachedActiveRecord
@@ -49,6 +50,14 @@ class ContactForm extends CachedActiveRecord
         return self::$STATUS_TO_LABEL[$this->status];
     }
 
+    static $RATING_TO_STRING = [
+        'Отрицательный', 'Нейтральный', 'Положительный'
+    ];
+
+    public function getRatingString() {
+        return self::$RATING_TO_STRING[$this->rating];
+    }
+
     public static function tableName() {
         return 'feedback';
     }
@@ -63,11 +72,13 @@ class ContactForm extends CachedActiveRecord
             [['email', 'name', 'body'], 'required'],
             [['body'], 'string', 'max' => self::MAX_BODY_SIZE],
             [['name'], 'string', 'max' => 25],
+            [['rating'], 'integer'],
             // email has to be a valid email address
             ['email', 'email'],
             // verifyCode needs to be entered correctly
             ['verifyCode', 'captcha', 'on' => self::SCENARIO_USER_FEEDBACK ],
-            ['status', 'default', 'value' => self::STATUS_UNMODERATED]
+            ['status', 'default', 'value' => self::STATUS_UNMODERATED],
+            ['rating', 'default', 'value' => 1],
         ];
     }
 
@@ -87,6 +98,7 @@ class ContactForm extends CachedActiveRecord
             'verifyCode' => 'Я не робот (Клик, чтобы изменить)',
             'body' => 'Сообщение',
             'name' => 'Ваше имя',
+            'rating' => 'Оценка',
             'status' => 'Статус',
             'created_at' => 'Создан',
             'updated_at' => 'Изменён',

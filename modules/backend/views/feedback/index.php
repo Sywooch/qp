@@ -21,6 +21,11 @@ $this->params['breadcrumbs'][] = $this->title;
         'columns' => [
             'id',
             'email:email',
+            'name',
+            ['attribute' => 'rating', 'value' => function($model) {
+                /* @var $model app\models\ContactForm */
+                return $model->getRatingString();
+            }],
             'body',
             ['attribute' => 'status', 'format' => 'raw', 'value' => function($model) {
                 /* @var $model app\models\ContactForm */

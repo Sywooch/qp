@@ -13,7 +13,8 @@ use app\models\ContactForm;
     <?php $form = ActiveForm::begin(); ?>
 
     <?= $form->field($model, 'email')->textInput(['maxlength' => true]) ?>
-
+    <?= $form->field($model, 'name')->textInput(['maxlength' => true]) ?>
+    <?= $form->field($model, 'rating')->dropDownList(ContactForm::$RATING_TO_STRING) ?>
     <?= $form->field($model, 'body')->textInput(['maxlength' => true]) ?>
 
     <?= $form->field($model, 'status')->dropDownList(ContactForm::$STATUS_TO_STRING) ?>
