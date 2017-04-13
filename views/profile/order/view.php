@@ -26,9 +26,9 @@ $this->params['breadcrumbs'][] = $this->title;
                 <td class="key">Текущий статус</td>
                 <td class="value"><?=$order->status_str?></td>
             </tr>
-            <?php if($order->status == \app\models\Order::STATUS_PAID) : ?>
+            <?php if($order->haveSecretKey()) : ?>
             <tr>
-                <td class="key">Секретный ключ(не сообщайте его никому, кроме менеджера при выдаче заказа)</td>
+                <td class="key">Секретный ключ (не сообщайте его никому, кроме менеджера при выдаче заказа)</td>
                 <td class="value"><?=$order->password?></td>
             </tr>
             <?php endif; ?>
@@ -44,11 +44,12 @@ $this->params['breadcrumbs'][] = $this->title;
 
 <h3>Состав заказа</h3>
 <table class="table">
-    <tr><th>Товар</th><th>Цена</th><th>Количество</th></tr>
+    <tr><th>Товар</th><th>Цена</th><th>Количество: Подтверждено/Заказано</th></tr>
     <?php
     foreach($products as $p) {
         $price = Html::price($p->old_price);
-        echo "<tr><td>$p->product_name</td><td>$price</td><td>$p->products_count</td></tr>";
+        echo "<tr><td>$p->product_name</td><td>$price</td><td>" .
+            ($p->confirmed_count === null ? '-' : $p->confirmed_count) . "/ $p->products_count</td></tr>";
     }
     ?>
 </table>

@@ -28,6 +28,8 @@ $this->params['breadcrumbs'][] = "Редактирование заказа №$
             'id',
             'product_c1id',
             'products_count',
+            'confirmed_count',
+            'provider_order_id',
 
             [
                 'class' => 'yii\grid\ActionColumn',

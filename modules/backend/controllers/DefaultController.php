@@ -2,8 +2,10 @@
 
 namespace app\modules\backend\controllers;
 
+use app\modules\backend\models\UploadProvider;
 use app\modules\backend\models\UploadZipModel;
 use Yii;
+use yii\filters\VerbFilter;
 use yii\web\Controller;
 use yii\web\UploadedFile;
 use app\models\Profile\LoginForm;
@@ -13,6 +15,18 @@ use app\models\Good\Menu;
  */
 class DefaultController extends Controller
 {
+    public function behaviors()
+    {
+        return [
+            'verbs' => [
+                'class' => VerbFilter::className(),
+                'actions' => [
+                    'upload-provider' => ['POST'],
+                    'download-provider' => ['POST'],
+                ],
+            ],
+        ];
+    }
     /**
      * Renders the index view for the module
      * @return string
@@ -21,6 +35,7 @@ class DefaultController extends Controller
     public function actionIndex()
     {
         $model = new UploadZipModel();
+        $provider = new UploadProvider();
 
         if (Yii::$app->request->isPost) {
             $model->zipFile = UploadedFile::getInstance($model, 'zipFile');
@@ -28,10 +43,13 @@ class DefaultController extends Controller
                 yii::$app->session->setFlash('success', 'Архив принят на обработку');
             }
         }
-        return $this->render('index', ['model' => $model, 'par' => Menu::getRoot()]);
+        return $this->render('index', [
+            'model' => $model,
+            'provider' => $provider
+        ]);
     }
 
-    public function actionProviderOrder()
+    public function actionDownloadProvider()
     {
         $date = date('Y-m-d');
         $arch = "provider-order/$date.zip";
@@ -43,6 +61,14 @@ class DefaultController extends Controller
             Yii::$app->session->setFlash('error', "Архив за $date не найден");
             return $this->refresh();
         }
+    }
+
+    public function actionUploadProvider()
+    {
+        $provider = new UploadProvider();
+        $provider->file = UploadedFile::getInstance($provider, 'file');
+        $provider->upload();
+        return $this->redirect('index');
     }
     /**
      * Login action.

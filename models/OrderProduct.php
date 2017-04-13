@@ -17,6 +17,7 @@ use yii\web\NotFoundHttpException;
  */
 class OrderProduct extends CachedActiveRecord
 {
+    // SUM(products_count) AS count_by_c1id, groupBy('product_c1id, product_name, old_price')
     public $count_by_c1id;
     /**
      * @inheritdoc
@@ -33,13 +34,23 @@ class OrderProduct extends CachedActiveRecord
     {
         return [
             [['order_id', 'product_c1id'], 'required'],
-            [['order_id', 'products_count', 'old_price'], 'integer'],
+            [['order_id', 'products_count', 'old_price', 'provider_order_id', 'confirmed_count'], 'integer'],
             [['product_c1id', 'product_name'], 'string', 'max' => 255],
             [['order_id'], 'exist', 'skipOnError' => true, 'targetClass' => Order::className(),
                 'targetAttribute' => ['order_id' => 'id']],
         ];
     }
 
+    public function attributeLabels()
+    {
+        return [
+            'product_c1id' => '1с идентификатор товара',
+            'products_count' => 'Заказанное количество товара',
+            'confirmed_count' => 'Подтверждённое количество товара',
+            'provider_order_id' => 'Номер заказа поставщику',
+            'old_price' => 'Цена на момент заказа',
+        ];
+    }
     /**
      * @return \yii\db\ActiveQuery
      */
@@ -48,8 +59,13 @@ class OrderProduct extends CachedActiveRecord
         return $this->hasOne(Order::className(), ['id' => 'order_id']);
     }
 
+    // TODO: replace these dummy
     public function getProvider()
     {
-        return $this->count_by_c1id == 1 ? 'QQQQ' : 'EEEE';     //TODO: $this->provider;
+        return $this->old_price > 15000 ? 'ExpensiveProvider' : 'CheapProvider';     //TODO: $this->provider;
+    }
+    public function getVendor()
+    {
+        return $this->product_c1id;
     }
 }

@@ -17,6 +17,9 @@ use yii\widgets\ActiveForm;
     <?= $form->field($model, 'product_c1id')->textInput(['maxlength' => true]) ?>
 
     <?= $form->field($model, 'products_count')->textInput() ?>
+    <?= $form->field($model, 'confirmed_count')->textInput() ?>
+
+    <?= $form->field($model, 'provider_order_id')->textInput() ?>
 
     <div class="form-group">
         <?= Html::submitButton($model->isNewRecord ? 'Добавить' : 'Изменить',
