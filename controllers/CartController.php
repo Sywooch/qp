@@ -104,12 +104,13 @@ class CartController extends \yii\web\Controller
                 if (!$op->save()) {
                     Yii::error('Ошибка при оформлении заказа. ' .
                         implode(', ', $op->getFirstErrors()));
+                    return $this->redirect('/profile');
                 }
             }
             $cart->removeAll();
             Yii::$app->session->setFlash('success', 'Заказ ' . $order->public_id . ' успешно оформлен.');
             Yii::$app->user->identity->sendMessage('Заказ ' . $order->public_id . ' успешно оформлен.');
-            return $this->redirect('/profile/');
+            return $this->redirect(['/profile/order/view', 'id' => $order->id ]);
         }
         Yii::error('Ошибка при оформлении заказа. ' .
             implode(', ', $order->getFirstErrors()));

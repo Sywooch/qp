@@ -14,7 +14,7 @@ use Yii;
 class UploadZipModel extends Model
 {
     /**
-     * @var UploadedFile
+     * @var $zipFile UploadedFile
      */
     public $zipFile;
 

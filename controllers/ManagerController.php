@@ -32,21 +32,30 @@ class ManagerController extends Controller
     {
         $dataProvider = new ActiveDataProvider([
             'query' => Order::find()->joinWith('user'),
+            'sort' => [
+                'defaultOrder' => [
+                    'id' => SORT_DESC
+                ]
+            ]
         ]);
         Yii::$app->db->cache(function ($db) use ($dataProvider) {
             $dataProvider->prepare();
         }, null, new TagDependency(['tags' => 'cache_table_' . Order::tableName()]));
 
         if ($pass = Yii::$app->request->post('password')) {
-            if ($order = Order::findOneOr404([
+            $order = Order::findOneOr404([
                     'password' => $pass,
-                    'status' => Order::STATUS_PAID,
-                ])
-                ) {
+            ]);
+            if ($order->status != Order::STATUS_DELIVERED) {
+                Yii::$app->session->setFlash('error', 'Заказ ' . $order->public_id  . ' не готов к выдаче.');
+                return $this->redirect([ 'view-order', 'id' => $order->id ]);
+            }
+            else {
+                $order->status = Order::STATUS_DONE;
+                $order->save();
                 Yii::$app->session->setFlash('success', 'Заказ ' . $order->public_id  . ' выдан.');
                 return $this->redirect([ 'view-order', 'id' => $order->id ]);
             }
-            Yii::$app->session->setFlash('error', 'Неверный код подтверждения.');
         }
 
         return $this->render('index', [

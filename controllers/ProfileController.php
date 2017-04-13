@@ -77,13 +77,13 @@ class ProfileController extends \yii\web\Controller
             'user_id' => Yii::$app->user->id,
         ]);
          if ($order->canPaid() && $order->pay()) {
-            Yii::$app->session->setFlash('success', 'Заказ оплачен.');
+            Yii::$app->session->setFlash('success', 'Заказ ' . $order->public_id . ' оплачен.');
         }
         else {
             Yii::$app->session->setFlash('error', 'Ошибка при оплате заказа.');
         }
 
-        return $this->redirect('index');
+        return $this->redirect(['profile/order/view', 'id' => $order->id]);
     }
 
     public function actionCancel($id) {
@@ -92,7 +92,7 @@ class ProfileController extends \yii\web\Controller
             'user_id' => Yii::$app->user->id,
         ]);
         if ($order->canCanceled() && $order->cancel()) {
-            Yii::$app->session->setFlash('warning', 'Заказ отменён.');
+            Yii::$app->session->setFlash('warning', 'Заказ ' . $order->public_id . ' отменён.');
         }
         else {
             Yii::$app->session->setFlash('error', 'Ошибка при отмене заказа.');

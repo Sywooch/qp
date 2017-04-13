@@ -24,9 +24,11 @@ class Order extends CachedActiveRecord
     const STATUS_CONFIRMED = 20;
     const STATUS_PARTIAL_CONFIRMED = 21;
     const STATUS_UNCONFIRMED = 22;
+    // Orders between this states have secret key
     const STATUS_PAID = 30;
     const STATUS_ORDERED = 35;
     const STATUS_DELIVERED = 40;
+    // Orders between this states have secret key
     const STATUS_DONE = 50;
     const STATUS_UNPAID = 51;
     const STATUS_CANCELED = 52;
@@ -39,7 +41,7 @@ class Order extends CachedActiveRecord
         self::STATUS_UNCONFIRMED        => 'Полностью неподтверждён',
         self::STATUS_PAID               => 'Оплачен',
         self::STATUS_ORDERED            => 'Оплачен (Отправлен поставщику)',
-        self::STATUS_DELIVERED          => 'На пункте выдаче',
+        self::STATUS_DELIVERED          => 'На пункте выдачи',
         self::STATUS_DONE               => 'Выполнен',
         self::STATUS_UNPAID             => 'Оплата просрочена',
         self::STATUS_CANCELED           => 'Отменён',
@@ -142,5 +144,9 @@ class Order extends CachedActiveRecord
 
     public function canCanceled() {
         return Order::STATUS_NEW <= $this->status  && $this->status <=  Order::STATUS_PARTIAL_CONFIRMED;
+    }
+
+    public function haveSecretKey() {
+        return $this->status >= self::STATUS_PAID && $this->status < self::STATUS_DONE;
     }
 }
