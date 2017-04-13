@@ -19,28 +19,38 @@ require_once dirname(__FILE__) . '/../Classes/PHPExcel.php';
 class ProviderController extends Controller
 {
     private $_dir_name;
+    private $_provider_order;
 
     public function initExcel($is_preorder, $pr) {
         $time = time();
         if ($is_preorder) {
-            $provider_order = new ProviderOrder([
+            $this->_provider_order = new ProviderOrder([
                 'pre_order_at' => $time,
                 'provider' => $pr
             ]);
         }
         else {
-            $provider_order = ProviderOrder::cachedFindOne([
+            $this->_provider_order = ProviderOrder::cachedFindOne([
                 'order_at' => null,
                 'provider' => $pr
             ]);
-            $provider_order->order_at = $time;
+            if ($this->_provider_order ) {
+                $this->_provider_order ->order_at = $time;
+            }
+            else {
+                print("ERROR: Can't find pre-order for provider $pr\n");
+                $this->_provider_order = new ProviderOrder([
+                    'order_at' => $time,
+                    'provider' => $pr
+                ]);
+            }
         }
-        $provider_order->save();
+        $this->_provider_order->save();
 
         $objPHPExcel = new PHPExcel();
         $objPHPExcel->setActiveSheetIndex(0)
-            ->setCellValue('C1', 'Бланк' . ($is_preorder ? 'предварительного' : '') . ' заказа поставщику №')
-            ->setCellValue('D1', $provider_order->id)
+            ->setCellValue('C1', 'Бланк' . ($is_preorder ? ' предварительного' : '') . ' заказа поставщику №')
+            ->setCellValue('D1', $this->_provider_order->id)
 
             ->setCellValue('C2', 'Дата')
             ->setCellValue('D2', PHPExcel_Shared_Date::PHPToExcel( $time ))
@@ -58,7 +68,7 @@ class ProviderController extends Controller
         if (!$is_preorder) {
             $objPHPExcel->setActiveSheetIndex(0)
                 ->setCellValue('C3', 'к предварительному заказу №')
-                ->setCellValue('D3', $provider_order->id)
+                ->setCellValue('D3', $this->_provider_order->id)
                 ->setCellValue('C4', 'От')
                 ->setCellValue('D4', PHPExcel_Shared_Date::PHPToExcel( $time ));
         }
@@ -72,20 +82,32 @@ class ProviderController extends Controller
         return $objPHPExcel;
     }
 
-    public function addOrders($orders, $excel, $provider)
+    public function addOrders($orders, $excel, $provider, $is_preorder)
     {
         /** @var $excel PHPExcel */
-        foreach ($orders as $num => $order) {
+        $excel_num = 6;
+        foreach ($orders as $num => $order_product) {
+            if ($is_preorder) {
+                foreach (OrderProduct::find()->joinWith('order')->where([
+                    'order.status' => Order::STATUS_NEW,
+                    // CHANGE to VENDOR
+                    'order_product.product_c1id' => $order_product->vendor
+                ])->all() as $op) {
+                    $op->provider_order_id = $this->_provider_order->id;
+                    $op->save();
+                }
+            }
+            /** @var $order_product OrderProduct */
             $excel_num = $num + 6;
             $excel->setActiveSheetIndex(0)
                 ->setCellValue('A' . $excel_num, $num + 1)
-                ->setCellValue('B' . $excel_num, $order->product_name)
-                // TODO: add this field
-//                ->setCellValue('C' . $excel_num, $product_name)
+                ->setCellValue('B' . $excel_num, $order_product->product_name)
+                // TODO: add this fields
+                ->setCellValue('C' . $excel_num, $order_product->vendor)
 //                ->setCellValue('D' . $excel_num, $product_name)
 //                ->setCellValue('E' . $excel_num, $product_name)
-                ->setCellValue('F' . $excel_num, $order->old_price / 100)
-                ->setCellValue('G' . $excel_num, $order->count_by_c1id)
+                ->setCellValue('F' . $excel_num, $order_product->old_price / 100)
+                ->setCellValue('G' . $excel_num, $order_product->count_by_c1id)
                 ->setCellValue('H' . $excel_num, "=G$excel_num*F$excel_num")
                 ->setCellValue('I' . $excel_num, $provider);
         }
@@ -101,14 +123,9 @@ class ProviderController extends Controller
             [Order::STATUS_NEW, Order::STATUS_PROVIDER_CHECKING, 'preorder'] :
             [Order::STATUS_PAID, Order::STATUS_ORDERED, 'order'];
 
-        foreach (Order::cachedFindAll(['status' => $status_before]) as $order) {
-            $order->status = $status_after;
-            $order->save();
-        }
-
         $order_products = OrderProduct::find()->joinWith('order')
             ->select(['product_c1id, product_name, old_price, SUM(products_count) AS count_by_c1id'])
-            ->where(['order.status' => $status_after])
+            ->where(['order.status' => $status_before])
             ->groupBy('product_c1id, product_name, old_price')
             ->all();
 
@@ -124,12 +141,20 @@ class ProviderController extends Controller
 
         foreach($providers as $pr => $orders) {
             $excel = $this->initExcel($is_preorder, $pr);
-            $this->addOrders($orders, $excel, $pr);
+            $this->addOrders($orders, $excel, $pr, $is_preorder);
+
+            if ($is_preorder) {
+            }
 
             $objWriter = PHPExcel_IOFactory::createWriter($excel, 'Excel2007');
             $dir_name = $this->_dir_name . "/$pr";
             is_dir($dir_name) or mkdir($dir_name);
             $objWriter->save($dir_name . "/$excel_name.xlsx");
+        }
+
+        foreach (Order::cachedFindAll(['status' => $status_before]) as $order) {
+            $order->status = $status_after;
+            $order->save();
         }
     }
 
@@ -198,9 +223,8 @@ class ProviderController extends Controller
 
     public function actionIndex()
     {
-        $this->_dir_name = 'web/provider-order/' . date('Y-m-d');
-        is_dir($this->_dir_name) or mkdir($this->_dir_name, 0777, true);
-        
+        $this->_dir_name = 'temp/provider-order/' . date('Y-m-d');
+        is_dir($this->_dir_name) or mkdir($this->_dir_name, 0755, true);
         $this->actionPreOrders();
         $this->actionOrders();
         $this->archiveDay();
