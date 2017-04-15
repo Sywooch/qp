@@ -135,7 +135,7 @@ echo Nav::widget([
                 </div>
             </div>
             <div class="modal-body" style="padding: 0;">
-
+                <div class="js-search-result"></div>
             </div>
         </div>
     </div>
