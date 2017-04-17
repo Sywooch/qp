@@ -62,6 +62,13 @@ class ProviderController extends Controller
             ->setCellValue('H5', 'Стоимость')
             ->setCellValue('I5', 'Поставщик');
 
+        $objPHPExcel->getActiveSheet()->getStyle('C:C')
+            ->getNumberFormat()
+            ->setFormatCode(PHPExcel_Style_NumberFormat::FORMAT_TEXT);
+        $objPHPExcel->getActiveSheet()->getStyle('I:I')
+            ->getNumberFormat()
+            ->setFormatCode(PHPExcel_Style_NumberFormat::FORMAT_TEXT);
+
         if (!$is_preorder) {
             $objPHPExcel->setActiveSheetIndex(0)
                 ->setCellValue('C3', 'к предварительному заказу №')
@@ -87,8 +94,7 @@ class ProviderController extends Controller
             if ($is_preorder) {
                 foreach (OrderProduct::find()->joinWith('order')->where([
                     'order.status' => Order::STATUS_NEW,
-                    // CHANGE to VENDOR
-                    'order_product.product_c1id' => $order_product->vendor
+                    'order_product.product_vendor' => $order_product->product_vendor,
                 ])->all() as $op) {
                     $op->provider_order_id = $this->_provider_order->id;
                     $op->save();
@@ -100,7 +106,7 @@ class ProviderController extends Controller
                 ->setCellValue('A' . $excel_num, $num + 1)
                 ->setCellValue('B' . $excel_num, $order_product->product_name)
                 // TODO: add this fields
-                ->setCellValue('C' . $excel_num, $order_product->vendor)
+                ->setCellValue('C' . $excel_num, $order_product->product_vendor)
 //                ->setCellValue('D' . $excel_num, $product_name)
 //                ->setCellValue('E' . $excel_num, $product_name)
                 ->setCellValue('F' . $excel_num, $order_product->old_price / 100)
@@ -121,9 +127,9 @@ class ProviderController extends Controller
             [Order::STATUS_PAID, Order::STATUS_ORDERED, 'order'];
 
         $order_products = OrderProduct::find()->joinWith('order')
-            ->select(['product_c1id, product_name, old_price, SUM(products_count) AS count_by_c1id'])
+            ->select(['provider, product_vendor, product_name, old_price, SUM(products_count) AS count_by_c1id'])
             ->where(['order.status' => $status_before])
-            ->groupBy('product_c1id, product_name, old_price')
+            ->groupBy('provider, product_vendor, product_name, old_price')
             ->all();
 
         $providers = [];
@@ -140,11 +146,9 @@ class ProviderController extends Controller
             $excel = $this->initExcel($is_preorder, $pr);
             $this->addOrders($orders, $excel, $pr, $is_preorder);
 
-            if ($is_preorder) {
-            }
-
             $objWriter = PHPExcel_IOFactory::createWriter($excel, 'Excel2007');
             $dir_name = $this->_dir_name . Helper::ru2Lat("/$pr");
+
             is_dir($dir_name) or mkdir($dir_name);
             $objWriter->save($dir_name . "/$excel_name.xlsx");
         }

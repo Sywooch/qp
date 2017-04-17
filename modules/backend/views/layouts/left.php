@@ -33,6 +33,7 @@
                     ['label' => 'Menu Yii2', 'options' => ['class' => 'header']],
                     ['label' => 'Gii', 'icon' => 'fa fa-file-code-o', 'url' => ['/gii']],
                     ['label' => 'Debug', 'icon' => 'fa fa-dashboard', 'url' => ['/debug']],
+                    ['label' => 'Загрузки', 'icon' => 'fa fa-download ', 'url' => ['/backend/']],
                     ['label' => 'Пользователи', 'icon' => 'fa fa-user', 'url' => ['/backend/user']],
                     ['label' => 'Категории товаров', 'icon' => 'fa fa-sitemap', 'url' => ['/backend/menu']],
                     ['label' => 'Товары', 'icon' => 'fa fa-diamond', 'url' => ['/backend/good']],

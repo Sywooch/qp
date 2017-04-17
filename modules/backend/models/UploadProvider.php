@@ -33,39 +33,45 @@ class UploadProvider extends Model
         $rows = $excelObj->getActiveSheet()->toArray(null, true, true, true);
 
         for ($i = 6; $rows[$i]['A'] == $i - 5; $i++) {
-            if ($product = Good::cachedFindOne(['c1id' => $rows[$i]['C']])) {
-                $products_count = $rows[$i]['G'];
+            $product_vendor = $rows[$i]['C'];
+            $products_count1 = $products_count = $rows[$i]['G'];
 
-                foreach (OrderProduct::cachedFindAll([
-                    'provider_order_id' => $rows[1]['D'],
-                    'product_c1id' => $product->c1id,
-                ]) as $op) {
-                    $op->confirmed_count = min($products_count, $op->products_count);
-                    $op->save();
-                    if ($op->products_count -= $products_count <= 0) {
-                        break;
-                    }
-                }
-            } else {
-                Yii::$app->session->setFlash('error', 'Неизвестный артикул' . $rows[$i]['C']);
+            foreach (OrderProduct::cachedFindAll([
+                'provider_order_id' => $rows[1]['D'],
+                'product_vendor' => $product_vendor,
+            ]) as $op) {
+                /* @var $op OrderProduct */
+                $products_count -= $op->confirmed_count = min($products_count, $op->products_count);
+                $op->save();
+            }
+            if ($products_count > 0) {
+                Yii::$app->session->setFlash('error', $products_count == $products_count1 ?
+                    "Товара с артикулом $product_vendor нет ни в одном заказе." :
+                    "$products_count из $products_count1 товаров с артикулом $product_vendor лишнии."
+                );
             }
         }
+
         foreach (Order::cachedFindAll(['status' => Order::STATUS_PROVIDER_CHECKING]) as $order) {
-            $all_null = true;
-            $all_succ = true;
+            /* @var $order Order */
+            $all_was = true;
+            $all_full = true;
             foreach (OrderProduct::cachedFindAll(['order_id' => $order->id]) as $op) {
-                if ($op->confirmed_count) {
-                    $all_null = false;
+                if (is_null($op->confirmed_count)) {
+                    $all_was = false;
+                    break;
                 }
                 if ($op->confirmed_count != $op->products_count) {
-                    $all_succ = false;
+                    $all_full = false;
                 }
             }
-            $order->status = $all_null ?
-                Order::STATUS_UNCONFIRMED : $all_succ ?
+
+            if ($all_was) {
+                $order->status = $all_full ?
                     Order::STATUS_CONFIRMED:
                     Order::STATUS_PARTIAL_CONFIRMED;
-            $order->save();
+                $order->save();
+            }
         }
     }
 }

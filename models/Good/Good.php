@@ -129,8 +129,9 @@ class Good extends CachedActiveRecord implements CartPositionProviderInterface
         return [
             [['measure', 'price', 'category_id'], 'integer'],
             ['properties', 'checkIsArrayOrEmpty'],
-            [['c1id', 'name', 'pic'], 'string', 'max' => 255],
-            [['c1id'], 'unique'],
+            [['c1id', 'name', 'pic', 'vendor', 'provider'], 'string', 'max' => 255],
+            [['c1id', 'vendor'], 'unique'],
+            [['vendor', 'provider'], 'required'],
             ['measure', 'in', 'range' => [ self::ITEM_MEASURE ],
                 'message' => 'Неизвестный тип единиц измерения.'],
             [['category_id'], 'exist', 'skipOnError' => true, 'targetClass' => Menu::className(),
@@ -158,6 +159,8 @@ class Good extends CachedActiveRecord implements CartPositionProviderInterface
             'price' => 'Цена в копейках',
             'category_id' => 'ID категории',
             'properties' => 'Свойства',
+            'provider' => 'Поставщик',
+            'vendor' => 'Артикул',
         ];
     }
 

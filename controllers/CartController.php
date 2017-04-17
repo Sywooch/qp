@@ -100,6 +100,8 @@ class CartController extends \yii\web\Controller
                     'order_id' => $order->id,
                     'product_name' => $product->getProduct()->name,
                     'old_price' => $product->getProduct()->price,
+                    'product_vendor' => $product->getProduct()->vendor,
+                    'provider' => $product->getProduct()->provider,
                 ]);
                 if (!$op->save()) {
                     Yii::error('Ошибка при оформлении заказа. ' .

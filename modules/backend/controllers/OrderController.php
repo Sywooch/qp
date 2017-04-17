@@ -2,6 +2,7 @@
 
 namespace app\modules\backend\controllers;
 
+use app\models\Good\Good;
 use Yii;
 use app\models\Order;
 use app\models\OrderProduct;
@@ -124,7 +125,18 @@ class OrderController extends Controller
     {
         $model = new OrderProduct();
         $model->order_id = $order_id;
-        if ($model->load(Yii::$app->request->post()) && $model->save()) {
+        if ($model->load(Yii::$app->request->post())) {
+            if ($product = Good::cachedFindOne(['c1id' => $model->product_c1id])) {
+                $model->product_vendor = $product->vendor;
+                $model->provider = $product->provider;
+            }
+            else {
+                Yii::$app->session->setFlash('error', 'Товара с таким c1id не существует');
+                return $this->render('product-create', [
+                    'model' => $model,
+                ]);
+            }
+            $model->save();
             return $this->redirect(['update', 'id' => $model->order_id]);
         } else {
             return $this->render('product-create', [

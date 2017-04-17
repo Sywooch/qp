@@ -35,9 +35,11 @@ class OrderProduct extends CachedActiveRecord
         return [
             [['order_id', 'product_c1id'], 'required'],
             [['order_id', 'products_count', 'old_price', 'provider_order_id', 'confirmed_count'], 'integer'],
+            [['product_vendor', 'provider'], 'string'],
             [['product_c1id', 'product_name'], 'string', 'max' => 255],
             [['order_id'], 'exist', 'skipOnError' => true, 'targetClass' => Order::className(),
                 'targetAttribute' => ['order_id' => 'id']],
+            ['confirmed_count', 'default', 'value' => null ],
         ];
     }
 
@@ -49,6 +51,8 @@ class OrderProduct extends CachedActiveRecord
             'confirmed_count' => 'Подтверждённое количество товара',
             'provider_order_id' => 'Номер заказа поставщику',
             'old_price' => 'Цена на момент заказа',
+            'vendor' => 'Артикул',
+            'provider' => 'Поставщик',
         ];
     }
     /**
@@ -57,15 +61,5 @@ class OrderProduct extends CachedActiveRecord
     public function getOrder()
     {
         return $this->hasOne(Order::className(), ['id' => 'order_id']);
-    }
-
-    // TODO: replace these dummy
-    public function getProvider()
-    {
-        return $this->old_price > 15000 ? 'ExpensiveProvider' : 'CheapProvider';     //TODO: $this->provider;
-    }
-    public function getVendor()
-    {
-        return $this->product_c1id;
     }
 }

@@ -40,7 +40,7 @@ class DefaultController extends Controller
         if (Yii::$app->request->isPost) {
             $model->zipFile = UploadedFile::getInstance($model, 'zipFile');
             if ($model->upload()) {
-                yii::$app->session->setFlash('success', 'Архив принят на обработку');
+                yii::$app->session->addFlash('success', 'Архив принят на обработку');
             }
         }
         return $this->render('index', [
@@ -52,14 +52,14 @@ class DefaultController extends Controller
     public function actionDownloadProvider()
     {
         $date = date('Y-m-d');
-        $arch = "provider-order/$date.zip";
+        $arch = "../temp/provider-order/$date.zip";
         if (file_exists($arch)) {
             set_time_limit(5*60);
             Yii::$app->response->sendFile($arch);
         }
         else {
             Yii::$app->session->setFlash('error', "Архив за $date не найден");
-            return $this->refresh();
+            $this->redirect('/backend');
         }
     }
 
