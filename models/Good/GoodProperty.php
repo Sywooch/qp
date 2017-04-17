@@ -66,7 +66,7 @@ class GoodProperty extends CachedActiveRecord
         }
 
         if ($this->type == self::DICTIONARY_TYPE) {             // ADD code for rest cases
-            if ($value_model = PropertyValue::FindOne(['c1id' => $value])) {
+            if ($value_model = PropertyValue::cachedFindOne(['c1id' => $value])) {
                 return $value_model->id;
             }
             else {
@@ -76,7 +76,7 @@ class GoodProperty extends CachedActiveRecord
             }
         }
         else {
-            $value_model = PropertyValue::FindOne(['value' => $value, 'property_id' => $this->id]);
+            $value_model = PropertyValue::cachedFindOne(['value' => $value, 'property_id' => $this->id]);
             if (!$value_model) {
                 $value_model = new PropertyValue([
                     'value' => $value,

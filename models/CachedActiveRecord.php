@@ -61,6 +61,10 @@ class CachedActiveRecord extends ActiveRecord
         }, null, new TagDependency(['tags'=>'cache_table_' . static::tableName()]));
     }
 
+    /**
+     * @inheritdoc
+     * @return static[] an array of CachedActiveRecord instances, or an empty array if nothing matches.
+     */
     public static function cachedFindAll($cond = []) {
         return static::getDb()->cache(function ($db) use($cond)
         {

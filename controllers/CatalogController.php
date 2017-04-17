@@ -90,14 +90,14 @@ class CatalogController extends \yii\web\Controller
             $fst_prod = array_shift($products);
             $common_props = $fst_prod->properties;
             foreach ($fst_prod->properties as $name => $pr) {
-                $common_props[$name] = [ $common_props[$name] ];
+                $common_props[$name] = [ $common_props[$name] => 1 ];
                 $prices = [$fst_prod->price];
             }
 
             foreach ($products as $prod) {
                 foreach ($common_props as $name => &$pr) {
                     if (isset($prod->properties[$name])) {
-                        array_push($pr, $prod->properties[$name]);
+                        $pr[$prod->properties[$name]] = 1;
                     }
                     else {
                         unset($common_props[$name]);
@@ -115,7 +115,7 @@ class CatalogController extends \yii\web\Controller
                             'value_id' => $x,
                             'value_name' => PropertyValue::cachedFindOne($x)->value
                         ];
-                    }, $value)
+                    }, array_keys($value))
                 ];
             }
         }
@@ -125,6 +125,7 @@ class CatalogController extends \yii\web\Controller
     public function actionProducts($cid)
     {
         $get = Yii::$app->request->get();
+        $category = Menu::findOneOr404($cid);
         $ordering = Good::ORDERING_PRICE_ACS;
         if (isset($get['f']) && strpos($get['f'], 'o')) {
             list($rest, $ordering) = explode('o', $get['f']);
@@ -161,7 +162,6 @@ class CatalogController extends \yii\web\Controller
         }
 
         list($filters, $prices) = $this->getProductFilters($products);
-        $category = Menu::findOneOr404($cid);
 
         return $this->render('/product/index', [
             'products' => $filtered_products,
