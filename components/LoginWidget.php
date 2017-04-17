@@ -24,9 +24,13 @@ class LoginWidget extends Widget
                 echo $cart;
             }
         } else {
+            $profile = 'Личный кабинет';
+            if($this->mobile) {
+                $profile .= '<span class="side-nav__mail">'. \Yii::$app->user->identity->email .'</span>';
+            }
             $items = [
-                '<li><div class=\'divider\'></div></li>',
-                ['label' => 'Личный кабинет <span class="side-nav__mail">'. \Yii::$app->user->identity->email .'</span>', 'url' => '/profile/index'],
+                $this->mobile ? '<li><div class=\'divider\'></div></li>' : '',
+                ['label' => $profile, 'url' => '/profile/index'],
                 ['label' => 'Избранное', 'url' => '/profile/bookmark'],
             ];
 
