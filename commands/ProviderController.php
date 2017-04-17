@@ -4,15 +4,12 @@ namespace app\commands;
 use app\models\Order;
 use app\models\OrderProduct;
 use app\models\ProviderOrder;
-use Faker\Provider\cs_CZ\DateTime;
-use MongoDB\BSON\Timestamp;
 use PHPExcel;
 use PHPExcel_IOFactory;
 use PHPExcel_Shared_Date;
 use PHPExcel_Style_NumberFormat;
-use RecursiveIteratorIterator;
 use yii\console\Controller;
-use ZipArchive;
+use app\components\Helper;
 
 require_once dirname(__FILE__) . '/../Classes/PHPExcel.php';
 
@@ -147,7 +144,7 @@ class ProviderController extends Controller
             }
 
             $objWriter = PHPExcel_IOFactory::createWriter($excel, 'Excel2007');
-            $dir_name = $this->_dir_name . "/$pr";
+            $dir_name = $this->_dir_name . Helper::ru2Lat("/$pr");
             is_dir($dir_name) or mkdir($dir_name);
             $objWriter->save($dir_name . "/$excel_name.xlsx");
         }
@@ -166,57 +163,6 @@ class ProviderController extends Controller
         $this->Excel(false);
     }
 
-    public static function deleteDir($dirPath) {
-        if (! is_dir($dirPath)) {
-            throw new \InvalidArgumentException("$dirPath must be a directory");
-        }
-        if (substr($dirPath, strlen($dirPath) - 1, 1) != '/') {
-            $dirPath .= '/';
-        }
-        $files = glob($dirPath . '*', GLOB_MARK);
-        foreach ($files as $file) {
-            if (is_dir($file)) {
-                self::deleteDir($file);
-            } else {
-                unlink($file);
-            }
-        }
-        rmdir($dirPath);
-    }
-
-    public function archiveDay() {
-        // Get real path for our folder
-        $rootPath = realpath($this->_dir_name);
-
-        // Initialize archive object
-        $zip = new ZipArchive();
-        $zip->open("$this->_dir_name.zip", ZipArchive::CREATE | ZipArchive::OVERWRITE);
-
-        // Create recursive directory iterator
-        /** @var SplFileInfo[] $files */
-        $files = new RecursiveIteratorIterator(
-            new \RecursiveDirectoryIterator($rootPath),
-            RecursiveIteratorIterator::LEAVES_ONLY
-        );
-
-        foreach ($files as $name => $file) {
-            // Skip directories (they would be added automatically)
-            if (!$file->isDir()) {
-                // Get real and relative path for current file
-                $filePath = $file->getRealPath();
-                $relativePath = substr($filePath, strlen($rootPath) + 1);
-
-                // Add current file to archive
-                $zip->addFile($filePath, $relativePath);
-
-                // Add current file to "delete list"
-                // delete it later cause ZipArchive create archive only after calling close function and ZipArchive lock files until archive created)
-            }
-        }
-
-        // Zip archive will be created only after closing object
-        $zip->close();
-    }
 
     public function setUnpaidStatus() {
     }
@@ -227,8 +173,8 @@ class ProviderController extends Controller
         is_dir($this->_dir_name) or mkdir($this->_dir_name, 0755, true);
         $this->actionPreOrders();
         $this->actionOrders();
-        $this->archiveDay();
-        self::deleteDir($this->_dir_name);
+        Helper::archiveDir($this->_dir_name);
+        Helper::deleteDir($this->_dir_name);
 
         $this->setUnpaidStatus();
     }
