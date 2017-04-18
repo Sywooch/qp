@@ -43,8 +43,10 @@ class CartController extends \yii\web\Controller
     {
         $get = Yii::$app->request->post();
         if (Yii::$app->request->isAjax) {
-            Yii::$app->cart->put(Good::findOneOr404($get['product_id'])->getCartPosition(),
-                $get['product_count']);
+            if ($pr = Good::findOkStatus($get['product_id'])) {
+                Yii::$app->cart->put($pr->getCartPosition(),
+                    $get['product_count']);
+            }
         }
         return CartWidget::widget();
     }
@@ -57,7 +59,9 @@ class CartController extends \yii\web\Controller
             /** @var $cart \yz\shoppingcart\ShoppingCart */
             $cart = Yii::$app->cart;
             foreach ($get['products'] as $item) {
-                $cart->update(Good::findOneOr404($item['id'])->getCartPosition(), $item['count']);
+                if ($pr = Good::findOkStatus($item['id'])){
+                    $cart->update($pr->getCartPosition(), $item['count']);
+                }
             }
         }
         return CartWidget::widget();

@@ -39,7 +39,7 @@ class ProductCartPosition extends Object implements CartPositionInterface
     public function getProduct()
     {
         if ($this->_product === null) {
-            $this->_product = Good::cachedFindOne($this->id);
+            $this->_product = Good::findOkStatus($this->id);
         }
         return $this->_product;
     }

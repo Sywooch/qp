@@ -99,7 +99,7 @@ class Menu extends CachedActiveRecord
     }
 
     public function getProducts() {
-        return $this->hasMany(Good::className(), ['category_id' => 'id']);
+        return $this->hasMany(Good::className(), ['category_id' => 'id'])->where(['status' => Good::STATUS_OK]);
     }
 
     public function getProductCount() {

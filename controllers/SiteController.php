@@ -105,7 +105,7 @@ class SiteController extends Controller
         ];
 
 
-        $products = Good::find()->limit(3)->all();
+        $products = Good::find()->where(['status' => Good::STATUS_OK])->limit(3)->all();
         return $this->render('index', [
             'catalog' => Menu::getRoot(),
             'products' => $products,

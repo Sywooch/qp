@@ -38,6 +38,9 @@ $this->params['breadcrumbs'][] = $this->title;
             'pic',
             'price',
             'category_id',
+            'vendor',
+            'provider',
+            [ 'attribute' => 'status', 'value' => $model::$STATUS_TO_STRING[$model->status] ],
         ]
     ]);
     if ($prop = $model->properties) {

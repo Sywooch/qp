@@ -26,6 +26,14 @@ use yii\widgets\ActiveForm;
 
     <?= $form->field($model, 'category_id')->textInput() ?>
 
+    <?= $form->field($model, 'vendor')->textInput() ?>
+
+    <?= $form->field($model, 'provider')->textInput() ?>
+
+    <?= $form->field($model, 'status')->dropDownList([
+        $model::$STATUS_TO_STRING
+    ]) ?>
+
     <div class="form-group">
         <?= Html::submitButton($model->isNewRecord ? 'Добавить' : 'Изменить',
             ['class' => $model->isNewRecord ? 'btn btn-success' : 'btn btn-primary']) ?>

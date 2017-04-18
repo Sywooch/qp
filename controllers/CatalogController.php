@@ -141,7 +141,7 @@ class CatalogController extends \yii\web\Controller
                 Good::ORDERING_NAME => ['name' => SORT_ASC],
             ];
             return Good::find()->joinWith('bookmark')->orderBy($ordering_to_db_query[$ordering])
-                ->where([ 'category_id' => $cid ])->all();
+                ->where([ 'category_id' => $cid, 'status' => Good::STATUS_OK ])->all();
         }, null, new TagDependency([
             'tags'=> [
                 'cache_table_' . Good::tableName(),
@@ -177,7 +177,7 @@ class CatalogController extends \yii\web\Controller
         $selector = function($p) { return [ 'id' => $p->id, 'label' => $p->name ]; };
         if (Yii::$app->request->isAjax) {
             $data = [
-                'products' => array_map($selector, Good::cachedFindAll()),
+                'products' => array_map($selector, Good::cachedFindAll(['status' => Good::STATUS_OK])),
                 'categories' => array_map($selector, Menu::cachedFindAll()),
             ];
             echo json_encode($data);

@@ -204,8 +204,7 @@ class ProfileController extends \yii\web\Controller
 
         $cart = Yii::$app->cart;
         foreach($products as $p) {
-            if ($prod_model = Good::findOneOr404(['c1id' => $p->product_c1id])) {
-                // TODO check is product available
+            if ($prod_model = Good::findOkStatus(['c1id' => $p->product_c1id])) {
                 $cart->put($prod_model->getCartPosition(), $p->products_count);
             }
             else {

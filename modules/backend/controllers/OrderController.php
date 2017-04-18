@@ -126,7 +126,7 @@ class OrderController extends Controller
         $model = new OrderProduct();
         $model->order_id = $order_id;
         if ($model->load(Yii::$app->request->post())) {
-            if ($product = Good::cachedFindOne(['c1id' => $model->product_c1id])) {
+            if ($product = Good::findOkStatus(['c1id' => $model->product_c1id])) {
                 $model->product_vendor = $product->vendor;
                 $model->provider = $product->provider;
             }

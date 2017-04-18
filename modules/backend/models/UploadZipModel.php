@@ -213,6 +213,19 @@ class UploadZipModel extends Model
         }
     }
 
+    public function checkProducts() {
+        foreach(Good::cachedFindAll(['status' => null]) as $product) {
+            if (!$product->price) {
+                Yii::$app->session->addFlash('error', "Не указана цена товара с ГУИД $product->c1id");
+                $product->status = Good::STATUS_ERROR;
+            }
+            else {
+                $product->status = Good::STATUS_OK;
+            }
+            $product->save();
+        }
+    }
+
 
     public function upload()
     {
@@ -277,6 +290,7 @@ class UploadZipModel extends Model
                 $this->goodHandler(new SimpleXMLElement($good['goods']));
                 $this->priceHandler(new SimpleXMLElement($good['prices']));
             }
+            $this->checkProducts();
 
             $zip->close();
 

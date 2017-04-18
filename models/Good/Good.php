@@ -3,6 +3,7 @@
 namespace app\models\Good;
 
 use app\models\CachedActiveRecord;
+use Yii;
 use yz\shoppingcart\CartPositionProviderInterface;
 use baibaratsky\yii\behaviors\model\SerializedAttributes;
 use app\models\Bookmark;
@@ -116,6 +117,17 @@ class Good extends CachedActiveRecord implements CartPositionProviderInterface
         return self::$MEASURE_TO_STRING[$this->measure];
     }
 
+    const STATUS_ERROR = 1;
+    const STATUS_HIDDEN = 2;
+    const STATUS_OK = 10;
+
+    static $STATUS_TO_STRING = [
+        self::STATUS_ERROR      => 'Ошибка',
+        self::STATUS_HIDDEN     => 'Скрытый',
+        self::STATUS_OK         => 'ОК',
+    ];
+
+
     public static function tableName()
     {
         return 'good';
@@ -127,15 +139,16 @@ class Good extends CachedActiveRecord implements CartPositionProviderInterface
     public function rules()
     {
         return [
-            [['measure', 'price', 'category_id'], 'integer'],
+            [['measure', 'price', 'category_id', 'status'], 'integer'],
             ['properties', 'checkIsArrayOrEmpty'],
             [['c1id', 'name', 'pic', 'vendor', 'provider'], 'string', 'max' => 255],
             [['c1id', 'vendor'], 'unique'],
             [['vendor', 'provider'], 'required'],
-            ['measure', 'in', 'range' => [ self::ITEM_MEASURE ],
+            ['measure', 'in', 'range' => array_keys(self::$MEASURE_TO_STRING),
                 'message' => 'Неизвестный тип единиц измерения.'],
             [['category_id'], 'exist', 'skipOnError' => true, 'targetClass' => Menu::className(),
                 'targetAttribute' => ['category_id' => 'id']],
+            ['status', 'in', 'range' => array_keys(self::$STATUS_TO_STRING)],
         ];
     }
 
@@ -183,5 +196,17 @@ class Good extends CachedActiveRecord implements CartPositionProviderInterface
     public function getImgPath()
     {
         return 'img/catalog/good/' . ($this->pic ? $this->pic : 'default.png');
+    }
+
+    static public function findOkStatus($cond)
+    {
+        $ret = self::findOneOr404($cond);
+        if ($ret->status == self::STATUS_OK) {
+            return $ret;
+        }
+        else {
+            Yii::$app->session->setFlash('error', "Товар $ret->name недоступен");
+            return false;
+        }
     }
 }
