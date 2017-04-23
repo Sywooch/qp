@@ -27,7 +27,12 @@
     }
   }
   &-title {
-    height: 1.6em;
+    height: 3.6em;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    display: -webkit-box;
+    overflow: hidden;
   }
   &-panel {
     background-color: $colorgray;

@@ -195,7 +195,7 @@ class Good extends CachedActiveRecord implements CartPositionProviderInterface
 
     public function getImgPath()
     {
-        return 'img/catalog/good/' . ($this->pic ? $this->pic : 'default.png');
+        return $this->pic ? 'img/catalog/good/'. $this->pic : 'img/null.svg';
     }
 
     static public function findOkStatus($cond)
