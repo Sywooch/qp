@@ -5,7 +5,7 @@
 <div class="filter__item">
     <span class="filter__item-title"><?=$filter['prop_name']?></span>
     <div class="text-subline"></div>
-    <div class="input-group-custom">
+    <div class="filter__item-prop input-group-custom">
         <?php
         $i = 0;
         foreach ($filter['values'] as $item) :
