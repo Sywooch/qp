@@ -10,7 +10,13 @@
         $sort = $('#sort'),
         filterApply = 'filter-apply-btn',
         $filterApply = $('.' + filterApply),
+        $showMore = $('.js-show-more'),
         catalogID = $('.products-view').data("catalogId");
+
+    //Параметры для ajax запроса. Очищаются после каждого запроса
+    var ajaxParams = '',
+        //с какого элемента выводить товары. По умолчанию 24, т.к. это число товаров уже выведенно.
+        offset = 24;
 
     var Data = function () {
         this.m = []; // filter for products [{id: 1, values: [1,2,3...n]}, ...]
@@ -204,6 +210,7 @@
         init: function() {
             this.event();
             this.setFilter();
+            offset = this.getOffset();
         },
         event: function() {
             var self = this;
@@ -225,7 +232,11 @@
                 self.getData();
             });
             $filterApply.on('click', function () {
-                self.getData();
+                self.getData(true);
+            });
+            $showMore.on('click', function () {
+                ajaxParams += '&offset=' + offset;
+                self.getData(true);
             });
             $sort.on('change', function () {
                 self.sort($(this).val());
@@ -269,13 +280,19 @@
             }
         },
 
-        getData: function () {
+        /*
+         * @param {boolean} append
+         */
+        getData: function (append) {
             var url = '/catalog/view/'+catalogID+'?' + data.getUrl();
             $loader.css('opacity', 1);
             $.ajax({
-                url:     url + '&ajax=1',
+                url:     url + '&ajax=1' + ajaxParams,
                 success: function(data){
-                    $content.html(data);
+                    if(append)
+                        $content.append(data);
+                    else
+                        $content.html(data);
                     App.reinit();
                     setTimeout(function() {
                         $loader.css('opacity', 0);
@@ -286,12 +303,27 @@
                     App.message('Произошла ошибка', false);
                 }
             });
+            console.log(url + '&ajax=1' + ajaxParams);
+            //Очищаем параметры
+            ajaxParams = '';
+
+            offset = this.getOffset();
 
             // Change url
             if(url != window.location){
                 window.history.pushState(null, null, url);
             }
         },
+
+        /*
+         * Находит offset последнего элемента.
+         *
+         * @returns integer
+         */
+        getOffset: function () {
+            var _offset = $('.products-list').last().data('offset');
+            return _offset || 1;
+        }
     };
 
     Filters.init();
