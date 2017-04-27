@@ -58,7 +58,14 @@ class CatalogController extends \yii\web\Controller
         return $this->actionProducts($catalog->id);
     }
 
-    public function applyFilters($filters, $products) {
+    public function applyFilters($filters, $products, &$offset) {
+        array_walk($products, function(&$x) use(&$offset) {
+            $x->offset =  $offset++;
+        });
+        if (!$filters) {
+            return $products;
+        }
+
         $filters = explode(';', $filters);
         $filters = array_filter($filters, function ($f) { return $f !== ''; });
 
@@ -122,53 +129,78 @@ class CatalogController extends \yii\web\Controller
         return [$filters, $prices];
     }
 
+    static $ordering_to_db_query = [
+        Good::ORDERING_PRICE_ACS => ['price' => SORT_ASC],
+        Good::ORDERING_PRICE_DESC => ['price' => SORT_DESC],
+        Good::ORDERING_NAME => ['name' => SORT_ASC],
+    ];
+
     public function actionProducts($cid)
     {
+        $limit = 24;
         $get = Yii::$app->request->get();
         $category = Menu::findOneOr404($cid);
-        $ordering = Good::ORDERING_PRICE_ACS;
-        if (isset($get['f']) && strpos($get['f'], 'o')) {
-            list($rest, $ordering) = explode('o', $get['f']);
+
+        $query = Good::find()->joinWith('bookmark')
+            ->where([ 'category_id' => $cid, 'status' => Good::STATUS_OK ]);
+
+        $filter = isset($get['f']) ? $get['f'] : null;
+
+        if (strpos($filter, 'o')) {
+            list($rest, $ordering) = explode('o', $filter);
             $ordering = substr($ordering, 1);
             $ordering = explode(';', $ordering)[0];
         }
+        else {
+            $ordering = Good::ORDERING_PRICE_ACS;
+        }
 
-        $products = Yii::$app->db->cache(function ($db) use($cid, $ordering)
-        {
-            static $ordering_to_db_query = [
-                Good::ORDERING_PRICE_ACS => ['price' => SORT_ASC],
-                Good::ORDERING_PRICE_DESC => ['price' => SORT_DESC],
-                Good::ORDERING_NAME => ['name' => SORT_ASC],
-            ];
-            return Good::find()->joinWith('bookmark')->orderBy($ordering_to_db_query[$ordering])
-                ->where([ 'category_id' => $cid, 'status' => Good::STATUS_OK ])->all();
-        }, null, new TagDependency([
-            'tags'=> [
-                'cache_table_' . Good::tableName(),
-                'cache_table_' . Bookmark::tableName(),
-            ]]));
+        $offset = isset($get['offset']) ? $get['offset'] : 0;
 
-        if(isset($get['f'])) {
-            $filtered_products = $this->applyFilters($get['f'], $products);
-            if (isset($get['ajax'])) {
-                $this->layout = "_null";
-                return $this->render('/product/_view', [
-                    'products' => $filtered_products
-                ]);
+        if (isset($get['ajax'])) {
+            $filtered_products = [];
+
+            while(count($filtered_products) < $limit) {
+                $products = Yii::$app->db->cache(function ($db) use($query, $ordering, $offset, $limit)
+                {
+                    return $query->orderBy(self::$ordering_to_db_query[$ordering])->offset($offset)->limit($limit)->all();
+                }, null, new TagDependency([
+                    'tags'=> [
+                        'cache_table_' . Good::tableName(),
+                        'cache_table_' . Bookmark::tableName(),
+                    ]]));
+                if (empty($products)) {
+                    break;
+                }
+                $filtered_products += $this->applyFilters($filter, $products, $offset);
             }
+
+
+            $this->layout = "_null";
+            return $this->render('/product/_view', [
+                'products' => array_slice($filtered_products, 0, $limit),
+                'offset' => end($filtered_products)->offset + 1,
+            ]);
         }
         else {
-            $filtered_products = $products;
+            $products = Yii::$app->db->cache(function ($db) use ($query, $ordering) {
+                return $query->orderBy(self::$ordering_to_db_query[$ordering])->all();
+            }, null, new TagDependency([
+                'tags' => [
+                    'cache_table_' . Good::tableName(),
+                    'cache_table_' . Bookmark::tableName(),
+                ]]));
+
+            list($filters, $prices) = $this->getProductFilters($products);
+            $filtered_products = $this->applyFilters($filter, $products, $offset);
+            return $this->render('/product/index', [
+                'products' => array_slice($filtered_products, 0, $limit),
+                'category' => $category,
+                'filters' => $filters,
+                'prices' => $prices,
+                'offset' => end($filtered_products)->offset + 1,
+            ]);
         }
-
-        list($filters, $prices) = $this->getProductFilters($products);
-
-        return $this->render('/product/index', [
-            'products' => $filtered_products,
-            'category' => $category,
-            'filters' => $filters,
-            'prices' => $prices,
-        ]);
     }
 
     public function actionSearchData() {
