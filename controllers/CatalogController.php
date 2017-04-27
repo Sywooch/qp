@@ -192,9 +192,9 @@ class CatalogController extends \yii\web\Controller
                 ]]));
 
             list($filters, $prices) = $this->getProductFilters($products);
-            $filtered_products = $this->applyFilters($filter, $products, $offset);
+            $filtered_products = array_slice($this->applyFilters($filter, $products, $offset), 0, $limit);
             return $this->render('/product/index', [
-                'products' => array_slice($filtered_products, 0, $limit),
+                'products' => $filtered_products,
                 'category' => $category,
                 'filters' => $filters,
                 'prices' => $prices,
