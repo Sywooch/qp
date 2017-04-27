@@ -67,7 +67,7 @@ class CatalogController extends \yii\web\Controller
             if ($prop == 'p') {
                 list($min, $max) = explode('-', $values);
                 $products = array_filter($products, function ($prod) use ($min, $max) {
-                    return (int)$min <= $prod->price && $prod->price <= (int)$max;
+                    return ((int)$min - 100) <= $prod->price && $prod->price <= ((int)$max + 100);
                 });
             }
             else if ($prop == 'o') {
