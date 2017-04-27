@@ -550,7 +550,7 @@ var Cart = (function($){
                 self.getData();
             });
             $filterApply.on('click', function () {
-                self.getData(true);
+                self.getData();
             });
             $showMore.on('click', function () {
                 ajaxParams += '&offset=' + offset;
