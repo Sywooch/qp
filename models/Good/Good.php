@@ -26,6 +26,7 @@ use himiklab\yii2\search\behaviors\SearchBehavior;
 
 class Good extends CachedActiveRecord implements CartPositionProviderInterface
 {
+    public $offset;
     public function getCartPosition($params = [])
     {
         return \Yii::createObject([
