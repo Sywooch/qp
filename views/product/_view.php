@@ -8,10 +8,12 @@ use app\components\catalog\ProductWidget;
 ?>
 <div class="products-list" data-offset="<?=$offset?>">
     <?php
-    foreach ($products as $product) {
-        echo ProductWidget::widget([
-            'product' => $product,
-        ]);
+    if (!empty($products)) {
+        foreach ($products as $product) {
+            echo ProductWidget::widget([
+                'product' => $product,
+            ]);
+        }
     }
     ?>
 </div>

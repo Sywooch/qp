@@ -50,9 +50,9 @@ $this->params['breadcrumbs'][] = $this->title;
                             <span class="filter__item-title">Цена, руб.</span>
                             <div class="text-subline"></div>
                             <div class="range-controls form-inline">
-                                <input type="text" id="price_from" class="form-control" data-id="price_from" data-min="<?=Html::rubles(min($prices))?>" data-type="from" placeholder="<?=Html::rubles(min($prices[0], $prices[1]))?>">
+                                <input type="text" id="price_from" class="form-control" data-id="price_from" data-min="<?=Html::rubles(min($prices))?>" data-type="from" placeholder="<?=Html::rubles(min($prices))?>">
                                 <span>—</span>
-                                <input type="text" id="price_to" class="form-control" data-id="price_to" data-max="<?=Html::rubles(max($prices))?>" data-type="to" placeholder="<?=Html::rubles(max($prices[0], $prices[1]))?>">
+                                <input type="text" id="price_to" class="form-control" data-id="price_to" data-max="<?=Html::rubles(max($prices))?>" data-type="to" placeholder="<?=Html::rubles(max($prices))?>">
                             </div>
                             <div class="slider-range"></div>
                         </div>
