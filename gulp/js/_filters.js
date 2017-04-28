@@ -297,12 +297,8 @@
                 setTimeout(function() {
                     $loader.css('opacity', 0);
                 }, 150);
+                offset = this.getOffset();
             });
-
-            offset = this.getOffset();
-
-            setTimeout("jQuery('#preloader').animate({'opacity' : '0'},300,function(){jQuery('#preloader').hide()})",800);
-            setTimeout("jQuery('.preloader_hide, .selector_open').animate({'opacity' : '1'},500)",800);
 
             // Change url
             if(url != window.location){
@@ -340,9 +336,8 @@
                 $('html, body').animate({
                     scrollTop: self.getLastListProduct().offset().top - 20
                 }, 500);
+                offset = self.getOffset();
             });
-
-            offset = this.getOffset();
         },
 
         /*
