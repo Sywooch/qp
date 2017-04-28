@@ -11,7 +11,8 @@
         filterApply = 'filter-apply-btn',
         $filterApply = $('.' + filterApply),
         $showMore = $('.js-show-more'),
-        catalogID = $('.products-view').data("catalogId");
+        catalogID = $('.products-view').data("catalogId"),
+        $preloader = $('.preloader');
 
     //Параметры для ajax запроса. Очищаются после каждого запроса
     var ajaxParams = '',
@@ -24,8 +25,9 @@
         this.price = {
             key: 'p',
             value: [0, 999999],
+            active: false,
             getUrl: function () {
-                return !!(this.value[0] && this.value[1]) ?
+                return this.active ?
                     this.key + ":" + (this.value[0] * 100) + "-" + (this.value[1] * 100) + ";" : "";
             }
         };
@@ -136,11 +138,11 @@
         };
 
         this.getUrl = function () {
-            var url = "f=";
+            var url = "";
             url += this.price.getUrl();
             url += data.serialize();
             url += this.order.getUrl();
-            return url;
+            return url ? "f=" + url : "";
         };
     };
 
@@ -151,11 +153,15 @@
             $from =  $( "#price_from"),
             $to =  $( "#price_to");
 
+        var min, max;
+
         return {
             init: function () {
-                var min = parseInt(arguments[0]/100 || $from.data('min')),
-                    max = parseInt(arguments[1]/100 || $to.data('max'));
                 var self = this;
+
+                min = parseInt(arguments[0]/100 || $from.data('min'));
+                max = parseInt(arguments[1]/100 || $to.data('max'));
+
                 self.setValue(min, max);
                 $slider.slider({
                     range: true,
@@ -175,10 +181,11 @@
                 $to.val(max);
                 data.price.value[0] = min;
                 data.price.value[1] = max;
+                data.price.active = this.isActive();
             },
 
             isActive: function () {
-                return !!$from.val();
+                return !(min == data.price.value[0] && max == data.price.value[1]);
             },
 
             getInterval: function () {
@@ -229,14 +236,13 @@
                 $(e.target).hasClass(filterApply) || $filterApply.fadeOut(250);
             });
             $fullApply.on('click', function () {
-                self.getData();
+                self.getFilteredData();
             });
             $filterApply.on('click', function () {
-                self.getData();
+                self.getFilteredData();
             });
             $showMore.on('click', function () {
-                ajaxParams += '&offset=' + offset;
-                self.getData(true);
+                self.showMore();
             });
             $sort.on('change', function () {
                 self.sort($(this).val());
@@ -248,7 +254,7 @@
         sort: function (value) {
             App.log("Select order: " + value);
             data.setOrder(value);
-            this.getData();
+            this.getFilteredData();
         },
 
         /*
@@ -280,34 +286,23 @@
             }
         },
 
-        /*
-         * @param {boolean} append
-         */
-        getData: function (append) {
+        getFilteredData: function (append) {
             var url = '/catalog/view/'+catalogID+'?' + data.getUrl();
+
             $loader.css('opacity', 1);
-            $.ajax({
-                url:     url + '&ajax=1' + ajaxParams,
-                success: function(data){
-                    if(append)
-                        $content.append(data);
-                    else
-                        $content.html(data);
-                    App.reinit();
-                    setTimeout(function() {
-                        $loader.css('opacity', 0);
-                    }, 150);
-                },
-                error: function () {
-                    App.log('Error');
-                    App.message('Произошла ошибка', false);
-                }
+
+            this.getData(url, function (data) {
+                $content.html(data);
+                App.reinit();
+                setTimeout(function() {
+                    $loader.css('opacity', 0);
+                }, 150);
             });
-            console.log(url + '&ajax=1' + ajaxParams);
-            //Очищаем параметры
-            ajaxParams = '';
 
             offset = this.getOffset();
+
+            setTimeout("jQuery('#preloader').animate({'opacity' : '0'},300,function(){jQuery('#preloader').hide()})",800);
+            setTimeout("jQuery('.preloader_hide, .selector_open').animate({'opacity' : '1'},500)",800);
 
             // Change url
             if(url != window.location){
@@ -316,12 +311,54 @@
         },
 
         /*
+         * @param {string} url
+         * @param {function} callback(resultData)
+         */
+        getData: function (url, handler) {
+            $.ajax({
+                url:     url + '&ajax=1',
+                success: handler,
+                error: function () {
+                    App.log('Error');
+                    App.message('Произошла ошибка', false);
+                }
+            });
+        },
+
+        showMore: function () {
+            var url = '/catalog/view/'+catalogID+'?' + data.getUrl() + '&offset=' + offset;
+            var self = this;
+            $showMore.hide()
+            $preloader.show();
+            self.getData(url, function (data) {
+                $content.append(data);
+                App.reinit();
+                setTimeout(function() {
+                    $showMore.show();
+                    $preloader.hide();
+                }, 150);
+                $('html, body').animate({
+                    scrollTop: self.getLastListProduct().offset().top - 20
+                }, 500);
+            });
+
+            offset = this.getOffset();
+        },
+
+        /*
+         * @returns {object} - DOM элемент
+         */
+        getLastListProduct: function () {
+            return $('.products-list').last();
+        },
+
+        /*
          * Находит offset последнего элемента.
          *
          * @returns integer
          */
         getOffset: function () {
-            var _offset = $('.products-list').last().data('offset');
+            var _offset = this.getLastListProduct().data('offset');
             return _offset || 1;
         }
     };

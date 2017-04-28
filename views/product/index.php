@@ -98,6 +98,9 @@ $this->params['breadcrumbs'][] = $this->title;
             ]); ?>
             </div>
             <div class="products-more">
+                <!-- PRELOADER -->
+                <div class="preloader"><div><em></em><em></em><em></em><em></em></div></div>
+                <!-- //PRELOADER -->
                 <a href="javascript:void(0)" class="btn btn-default js-show-more">Показать ещё</a>
             </div>
         </div>
