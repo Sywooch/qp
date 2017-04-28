@@ -104,6 +104,24 @@
   }
 }
 
+.products{
+  &-list:not(:first-child) {
+    clear: both;
+    border-top: 1px solid $gray-3;
+    padding-top: 0.5em;
+  }
+  &-more {
+    text-align: center;
+    .btn {
+      width: 100%;
+      max-width: 400px;
+      height: 3em;
+      line-height: 2em;
+    }
+  }
+
+}
+
 /*
  * Products mobile
  */
