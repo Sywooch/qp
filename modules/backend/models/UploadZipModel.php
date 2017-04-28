@@ -158,12 +158,13 @@ class UploadZipModel extends Model
                             "Неизвестное свойство товара с ГУИД <i>$prop_val_xml->Ид</i>");
                         continue;
                     }
-                    $val_id = $prop->valueId((string) $prop_val_xml->Значение);
+                    $str_val = (string) $prop_val_xml->Значение;
+                    $val_id = $prop->valueId($str_val);
                     if (isset($val_id)) {
                         $props[$prop->id] = $val_id;
                     }
                     if ($prop->name == 'Поставщик') {
-                        $good_model->provider = PropertyValue::cachedFindOne($val_id)->value;
+                        $good_model->provider = $str_val;
                     }
                 }
                 $good_model->setAttributes([

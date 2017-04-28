@@ -1,6 +1,7 @@
 <?php
 namespace app\commands;
 
+use app\models\Good\PropertyValue;
 use app\models\Order;
 use app\models\OrderProduct;
 use app\models\ProviderOrder;
@@ -46,11 +47,16 @@ class ProviderController extends Controller
 
         $objPHPExcel = new PHPExcel();
         $objPHPExcel->setActiveSheetIndex(0)
-            ->setCellValue('C1', 'Бланк' . ($is_preorder ? ' предварительного' : '') . ' заказа поставщику №')
-            ->setCellValue('D1', $this->_provider_order->id)
+            ->setCellValue('A1', 'Бланк' . ($is_preorder ? ' предварительного' : '') . ' заказа поставщику №')
+            ->setCellValue('B1', $this->_provider_order->id)
 
-            ->setCellValue('C2', 'Дата')
-            ->setCellValue('D2', PHPExcel_Shared_Date::PHPToExcel( $time ))
+            ->setCellValue('A2', 'Дата')
+            ->setCellValue('B2', PHPExcel_Shared_Date::PHPToExcel( $time ))
+
+            ->setCellValue('C1', 'Название поставщика')
+            ->setCellValue('D1', PropertyValue::cachedFindOne(['c1id' => $pr])->value)
+            ->setCellValue('C2', 'ИД поставщика')
+            ->setCellValue('D2', $pr)
 
             ->setCellValue('A5', '№')
             ->setCellValue('B5', 'Наименование')
@@ -59,34 +65,34 @@ class ProviderController extends Controller
             ->setCellValue('E5', 'Объём')
             ->setCellValue('F5', 'Цена')
             ->setCellValue('G5', 'Количество')
-            ->setCellValue('H5', 'Стоимость')
-            ->setCellValue('I5', 'Поставщик');
+            ->setCellValue('H5', 'Стоимость');
 
         $objPHPExcel->getActiveSheet()->getStyle('C:C')
             ->getNumberFormat()
-            ->setFormatCode(PHPExcel_Style_NumberFormat::FORMAT_TEXT);
+            ->setFormatCode(PHPExcel_Style_NumberFormat::FORMAT_NUMBER);
+        $objPHPExcel->getActiveSheet()->getColumnDimension('C')->setWidth(20);
         $objPHPExcel->getActiveSheet()->getStyle('I:I')
             ->getNumberFormat()
             ->setFormatCode(PHPExcel_Style_NumberFormat::FORMAT_TEXT);
 
         if (!$is_preorder) {
             $objPHPExcel->setActiveSheetIndex(0)
-                ->setCellValue('C3', 'к предварительному заказу №')
-                ->setCellValue('D3', $this->_provider_order->id)
-                ->setCellValue('C4', 'От')
-                ->setCellValue('D4', PHPExcel_Shared_Date::PHPToExcel( $time ));
+                ->setCellValue('A3', 'к предварительному заказу №')
+                ->setCellValue('B3', $this->_provider_order->id)
+                ->setCellValue('A4', 'От')
+                ->setCellValue('B4', PHPExcel_Shared_Date::PHPToExcel( $time ));
         }
 
 
-        $objPHPExcel->getActiveSheet()->getStyle('D2')->getNumberFormat()
+        $objPHPExcel->getActiveSheet()->getStyle('B2')->getNumberFormat()
             ->setFormatCode(PHPExcel_Style_NumberFormat::FORMAT_DATE_DDMMYYYY);
-        $objPHPExcel->getActiveSheet()->getStyle('D4')->getNumberFormat()
+        $objPHPExcel->getActiveSheet()->getStyle('B4')->getNumberFormat()
             ->setFormatCode(PHPExcel_Style_NumberFormat::FORMAT_DATE_DDMMYYYY);
 
         return $objPHPExcel;
     }
 
-    public function addOrders($orders, $excel, $provider, $is_preorder)
+    public function addOrders($orders, $excel, $is_preorder)
     {
         /** @var $excel PHPExcel */
         $excel_num = 6;
@@ -111,8 +117,7 @@ class ProviderController extends Controller
 //                ->setCellValue('E' . $excel_num, $product_name)
                 ->setCellValue('F' . $excel_num, $order_product->old_price / 100)
                 ->setCellValue('G' . $excel_num, $order_product->count_by_c1id)
-                ->setCellValue('H' . $excel_num, "=G$excel_num*F$excel_num")
-                ->setCellValue('I' . $excel_num, $provider);
+                ->setCellValue('H' . $excel_num, "=G$excel_num*F$excel_num");
         }
         $excel->setActiveSheetIndex(0)
             ->setCellValue('B' . ($excel_num + 1), "Итого")
@@ -143,11 +148,13 @@ class ProviderController extends Controller
         }
 
         foreach($providers as $pr => $orders) {
+            $provider_name = PropertyValue::cachedFindOne(['c1id' => $pr])->value;
+
             $excel = $this->initExcel($is_preorder, $pr);
-            $this->addOrders($orders, $excel, $pr, $is_preorder);
+            $this->addOrders($orders, $excel, $is_preorder);
 
             $objWriter = PHPExcel_IOFactory::createWriter($excel, 'Excel2007');
-            $dir_name = $this->_dir_name . Helper::ru2Lat("/$pr");
+            $dir_name = $this->_dir_name . Helper::ru2Lat("/$provider_name");
 
             is_dir($dir_name) or mkdir($dir_name);
             $objWriter->save($dir_name . "/$excel_name.xlsx");

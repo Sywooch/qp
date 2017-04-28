@@ -173,7 +173,7 @@ class Good extends CachedActiveRecord implements CartPositionProviderInterface
             'price' => 'Цена в копейках',
             'category_id' => 'ID категории',
             'properties' => 'Свойства',
-            'provider' => 'Поставщик',
+            'provider' => '1с ИД Поставщика',
             'vendor' => 'Артикул',
         ];
     }

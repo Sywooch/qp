@@ -51,8 +51,8 @@ class OrderProduct extends CachedActiveRecord
             'confirmed_count' => 'Подтверждённое количество товара',
             'provider_order_id' => 'Номер заказа поставщику',
             'old_price' => 'Цена на момент заказа',
-            'vendor' => 'Артикул',
-            'provider' => 'Поставщик',
+            'product_vendor' => 'Артикул',
+            'provider' => '1с ИД Поставщика',
         ];
     }
     /**
