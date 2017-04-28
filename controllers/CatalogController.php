@@ -177,6 +177,12 @@ class CatalogController extends \yii\web\Controller
 
 
             $this->layout = "_null";
+            if (empty($filtered_products)) {
+                return $this->render('/product/_view', [
+                    'products' => null,
+                    'offset' => -1,
+                ]);
+            }
             return $this->render('/product/_view', [
                 'products' => array_slice($filtered_products, 0, $limit),
                 'offset' => end($filtered_products)->offset + 1,
