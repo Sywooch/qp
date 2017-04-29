@@ -3,6 +3,7 @@
 namespace app\modules\backend\controllers;
 
 use app\models\Good\Good;
+use app\models\User;
 use Yii;
 use app\models\Order;
 use app\models\OrderProduct;
@@ -150,5 +151,35 @@ class OrderController extends Controller
         $model->delete();
 
         return $this->redirect(['update', 'id' => $model->order_id ]);
+    }
+
+    public function actionRandom()
+    {
+        while(!$user = User::find()->offset(rand() % 40)->one());
+        $order = new Order([
+            'user_id' => $user->id,
+            'public_id' => (string)rand(),
+        ]);
+
+        if ($order->save());
+        var_dump($order->firstErrors);
+        $n = rand() % 5;
+        var_dump($n);
+        for ($i = 0; $i < $n; $i++) {
+            while(!$product = Good::find()->where(['status' => Good::STATUS_OK ])->offset(rand() % 400)->one());
+            $op = new OrderProduct([
+                'products_count' => rand() % 40,
+                'product_c1id' => $product->c1id,
+                'order_id' => $order->id,
+                'product_name' => $product->name,
+                'old_price' => $product->price,
+                'product_vendor' => $product->vendor,
+                'provider' => $product->provider,
+            ]);
+            if (!$op->save())
+                break;
+            var_dump($op->firstErrors);
+        }
+        return $this->redirect(['index']);
     }
 }
