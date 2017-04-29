@@ -69,7 +69,7 @@ class ProviderController extends Controller
 
         $objPHPExcel->getActiveSheet()->getStyle('C:C')
             ->getNumberFormat()
-            ->setFormatCode(PHPExcel_Style_NumberFormat::FORMAT_NUMBER);
+            ->setFormatCode(PHPExcel_Style_NumberFormat::FORMAT_TEXT);
         $objPHPExcel->getActiveSheet()->getColumnDimension('C')->setWidth(20);
         $objPHPExcel->getActiveSheet()->getStyle('I:I')
             ->getNumberFormat()

@@ -33,11 +33,11 @@ class UploadProvider extends Model
         $rows = $excelObj->getActiveSheet()->toArray(null, true, true, true);
 
         for ($i = 6; $rows[$i]['A'] == $i - 5; $i++) {
-            $product_vendor = $rows[$i]['C'];
+            $product_vendor = (string) $rows[$i]['C'];
             $products_count1 = $products_count = $rows[$i]['G'];
 
             foreach (OrderProduct::cachedFindAll([
-                'provider_order_id' => $rows[1]['D'],
+                'provider_order_id' => $rows[1]['B'],
                 'product_vendor' => $product_vendor,
             ]) as $op) {
                 /* @var $op OrderProduct */
@@ -45,7 +45,7 @@ class UploadProvider extends Model
                 $op->save();
             }
             if ($products_count > 0) {
-                Yii::$app->session->setFlash('error', $products_count == $products_count1 ?
+                Yii::$app->session->addFlash('error', $products_count == $products_count1 ?
                     "Товара с артикулом $product_vendor нет ни в одном заказе." :
                     "$products_count из $products_count1 товаров с артикулом $product_vendor лишнии."
                 );
