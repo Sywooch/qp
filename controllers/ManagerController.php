@@ -3,11 +3,13 @@
 namespace app\controllers;
 
 use app\models\OrderProduct;
+use app\models\Profile\Message;
 use Yii;
 use app\models\Order;
 use yii\caching\TagDependency;
 use yii\data\ActiveDataProvider;
 use yii\filters\AccessControl;
+use yii\filters\VerbFilter;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 
@@ -23,6 +25,12 @@ class ManagerController extends Controller
                         'allow' => true,
                         'roles' => ['manager'],
                     ],
+                ],
+            ],
+            'verbs' => [
+                'class' => VerbFilter::className(),
+                'actions' => [
+                    'order-ready' => ['POST'],
                 ],
             ],
         ];
@@ -74,4 +82,42 @@ class ManagerController extends Controller
             'order' => $order,
         ]);
     }
+
+    public function actionOrderReady($id) {
+        /* @var $order Order */
+        $order = Order::findOneOr404($id);
+        if ($order->status == Order::STATUS_ORDERED) {
+            $order->status = Order::STATUS_DELIVERED;
+        }
+        else {
+            Yii::$app->session->addFlash('error', 'Неверный текущий статус заказа: ' .
+                Order::$STATUS_TO_STRING[$order->status]);
+        }
+
+        $products = Yii::$app->db->cache(function ($db) use ($order) {
+            return $order->orderProducts;
+        }, null, new TagDependency(['tags' => 'cache_table_' . OrderProduct::tableName()]));
+
+        if ($order->save()) {
+            $message = new Message([
+                'user_id' => $order->user_id,
+                'text' => "Вы можете забрать ваш заказ $order->public_id 
+                с 10.00 до 20.00 по адресу: " . Yii::$app->params['deliveryAddress'] .
+                ". Стоимость заказа: " . array_reduce($products, function($carry, $item) {
+                        return $carry + $item->confirmed_count * $item->old_price;
+                    }) . "руб. Заявка будет храниться 14 дней."
+            ]);
+            $message->save();
+            $message->sendEmail();
+        }
+        else {
+            Yii::$app->session->addFlash('error', 'Ошибка при изменении статуса заказа: ' . $order->firstErrors);
+        }
+
+        return $this->render('view-order', [
+            'products' => $products,
+            'order' => $order,
+        ]);
+    }
+
 }

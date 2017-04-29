@@ -70,4 +70,15 @@ class Message extends CachedActiveRecord
     {
         return $this->hasOne(User::className(), ['id' => 'user_id']);
     }
+
+    public function sendEmail()
+    {
+        return Yii::$app->mailer->compose()
+            ->setFrom([Yii::$app->params['supportEmail'] => Yii::$app->name.' (отправлено роботом).'])
+            ->setTo(User::cachedFindOne($this->user_id)->email)
+            ->setSubject('Заказа готов к выдаче')
+            ->setTextBody($this->text)
+            ->send();
+
+    }
 }

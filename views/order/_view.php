@@ -1,6 +1,7 @@
 <?php
 use app\components\Html;
 use app\models\Order;
+use app\models\User;
 
 /* @var $products array of sapp\models\OrderProduct*/
 /* @var $order app\models\Order*/
@@ -11,6 +12,10 @@ use app\models\Order;
 <div class="row">
     <div class="col-sm-6">
         <table class="table">
+            <tr>
+                <td class="key">Email заказчика</td>
+                <td class="value"><?=User::cachedFindOne($order->user_id)->email?></td>
+            </tr>
             <tr>
                 <td class="key">Дата заказа</td>
                 <td class="value"><?=date('d.m.Y', $order->created_at)?></td>
@@ -78,6 +83,18 @@ use app\models\Order;
         <?= Html::a('Отменить заказ', ['cancel', 'id' => $order->id], [
             'class' => 'btn btn-warning btn-lg ',
             'data' => [
+                'method' => 'post',
+            ],
+
+        ]) ?>
+    </div>
+<?php endif; ?>
+<?php if($order->status == Order::STATUS_ORDERED and Yii::$app->user->can('manager')) : ?>
+    <div>
+        <?= Html::a('Готов к выдаче', ['order-ready', 'id' => $order->id], [
+            'class' => 'btn btn-success btn-lg ',
+            'data' => [
+                'confirm' => 'Вы уверены?',
                 'method' => 'post',
             ],
 
