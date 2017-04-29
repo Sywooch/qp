@@ -17,6 +17,8 @@ class UploadZipModel extends Model
      * @var $zipFile UploadedFile
      */
     public $zipFile;
+    private $_report;
+    const VERBOSE = 0;
 
     public function rules()
     {
@@ -37,10 +39,12 @@ class UploadZipModel extends Model
 
                 if (static::str2bool($xmlc->ПометкаУдаления) && $menuc) {
                     if ($menuc->deleteWithChildren()) {
-                        Yii::$app->session->addFlash('warning',
+                        $this->_report['warning']['удалений корневых категорий']++;
+                        self::VERBOSE && Yii::$app->session->addFlash('warning',
                             "Категория <i>$menuc->name</i> и все вложенные в неё удалены");
                     }
                     else {
+                        $this->_report['error']['ошибок']++;
                         Yii::$app->session->addFlash('error',
                             "Возникла ошибка при удалении категории <i>$menuc->name</i>");
                     }
@@ -58,13 +62,16 @@ class UploadZipModel extends Model
                     if (!$menuc->parents(1)->one() || ($menuc->parents(1)->one()->id != $menu->id)) {
                         if ($menuc->validate() && $menuc->appendTo($menu)) {
                             if ($was_new) {
-                                Yii::$app->session->addFlash('success', "Категория <i>$menuc->name </i> добавлена");
+                                $this->_report['success']['добавлений категорий']++;
+                                self::VERBOSE && Yii::$app->session->addFlash('success', "Категория <i>$menuc->name </i> добавлена");
                             }
                             else {
-                                Yii::$app->session->addFlash('warning', "Категория <i>$menuc->name </i> перенесена");
+                                $this->_report['warning']['перемещений категорий']++;
+                                self::VERBOSE && Yii::$app->session->addFlash('warning', "Категория <i>$menuc->name </i> перенесена");
                             }
                         }
                         else {
+                            $this->_report['error']['ошибок']++;
                             Yii::$app->session->addFlash('error',
                                 "Возникла ошибка при добавлении категории <i>$menuc->name</i>. " .
                                 implode(', ', $menuc->getFirstErrors()));
@@ -88,6 +95,7 @@ class UploadZipModel extends Model
 
             if (static::str2bool($prop_xml->ПометкаУдаления)) {
                 if ($prop_model && !$prop_model->delete()) {
+                    $this->_report['error']['ошибок']++;
                     Yii::$app->session->addFlash('error',
                         "Ошибка при удалении свойства товара <i>$prop_model->name</i>");
                 };
@@ -100,6 +108,7 @@ class UploadZipModel extends Model
                         'type' => GoodProperty::getTypeByC1name((string)$prop_xml->ТипЗначений),
                     ]);
                     if (!$prop_model->validate() || !$prop_model->save()) {
+                        $this->_report['error']['ошибок']++;
                         Yii::$app->session->addFlash('error',
                             "Ошибка при добавлении свойства товара <i>$prop_model->name</i>. " .
                             implode(', ', $prop_model->getFirstErrors()));
@@ -117,6 +126,7 @@ class UploadZipModel extends Model
                                 'property_id' => $prop_model->id,
                             ]);
                             if (!$dict_model->validate() || !$dict_model->save()) {
+                                $this->_report['error']['ошибок']++;
                                 Yii::$app->session->addFlash('error',
                                     "Ошибка при добавлении значения <i>$dict_model->value</i> в справочник. " .
                                     implode(', ', $dict_model->getFirstErrors()));
@@ -130,17 +140,20 @@ class UploadZipModel extends Model
 
     public function goodHandler($xml) {
         foreach($xml->Каталог->Товары->Товар as $good_xml) {
+
             $good_c1id = (string) $good_xml->Ид;
             $good_model = Good::findOne([ 'c1id' => $good_c1id ]);
 
             if (static::str2bool($good_xml->ПометкаУдаления)) {
                 if ($good_model && !$good_model->delete()) {
+                    $this->_report['error']['ошибок']++;
                     Yii::$app->session->addFlash('error',
                         "Ошибка при удалении товара <i>$good_model->name</i>");
                 };
             }
             else {
                 if (!$category = Menu::findByC1id($c1id = (string)$good_xml->Группы->Ид)) {
+                    $this->_report['error']['ошибок']++;
                     Yii::$app->session->addFlash('error',
                         "Неизвестная категория товаров с ГУИД <i>$c1id</i>");
                     continue;
@@ -154,6 +167,7 @@ class UploadZipModel extends Model
                 $props = [];
                 foreach ($good_xml->ЗначенияСвойств->ЗначенияСвойства as $prop_val_xml) {
                     if (!$prop = GoodProperty::cachedFindOne([ 'c1id' => (string) $prop_val_xml->Ид ])) {
+                        $this->_report['error']['ошибок']++;
                         Yii::$app->session->addFlash('error',
                             "Неизвестное свойство товара с ГУИД <i>$prop_val_xml->Ид</i>");
                         continue;
@@ -183,12 +197,14 @@ class UploadZipModel extends Model
 
                 $is_new = $good_model->isNewRecord;
                 if (!$good_model->validate() || !$good_model->save()) {
+                    $this->_report['error']['ошибок']++;
                     Yii::$app->session->addFlash('error',
                         "Ошибка при добавлении товара <i>$good_model->name</i>. " .
                         implode(', ', $good_model->getFirstErrors()));
                 }
                 else {
-                    Yii::$app->session->addFlash('success',
+                    $this->_report['success'][$is_new ? 'добавлений товаров' : 'изменений товаров']++;
+                    self::VERBOSE && Yii::$app->session->addFlash('success',
                         "Товар <i>$good_model->name</i> " . ($is_new ? 'добавлен.' : 'обновлён.'));
                 }
             }
@@ -202,12 +218,14 @@ class UploadZipModel extends Model
                     // Change ЦенаЗаЕдиницу for another measure type
                 $good_model->price = (int) (100 * floatval($price_xml->Цены->Цена->ЦенаЗаЕдиницу));
                 if (!$good_model->validate() || !$good_model->save()) {
+                    $this->_report['error']['ошибок']++;
                     Yii::$app->session->addFlash('error',
                         "Ошибка при добавлении цены товара <i>$good_model->name</i>. " .
                         implode(', ', $good_model->getFirstErrors()));
                 };
             }
             else {
+                $this->_report['error']['ошибок']++;
                 Yii::$app->session->addFlash('error',
                     "Неизвествный товар с ГУИД <i>$good_c1id</i>.");
             }
@@ -215,19 +233,24 @@ class UploadZipModel extends Model
     }
 
     public function checkProducts() {
-        foreach(Good::cachedFindAll(['status' => null]) as $product) {
-            if (!$product->price) {
-                Yii::$app->session->addFlash('error', "Не указана цена товара с ГУИД $product->c1id");
-                $product->status = Good::STATUS_ERROR;
+        foreach(Good::find()->batch() as $batch) {
+            foreach($batch as $product) {
+                if (!$product->price) {
+                    $this->_report['error']['ошибок']++;
+                    Yii::$app->session->addFlash('error', "Не указана цена товара с ГУИД $product->c1id");
+                    $product->status = Good::STATUS_ERROR;
+                } else {
+                    $product->status = Good::STATUS_OK;
+                }
+                $product->save();
             }
-            else {
-                $product->status = Good::STATUS_OK;
-            }
-            $product->save();
         }
     }
 
 
+    /**
+     * @return bool
+     */
     public function upload()
     {
         if ($this->validate()) {
@@ -254,6 +277,7 @@ class UploadZipModel extends Model
                 if (strpos($fname, $zip_img_dir) === 0 && pathinfo($fname, PATHINFO_EXTENSION)) {
 
                     if ($zip->extractTo($server_img_dir, $fname) !== true) {
+                        $this->_report['error']['ошибок']++;
                         Yii::$app->session->addFlash('error',
                             "Не удалось извлечь изображение <i>$fname</i>.");
                     }
@@ -283,8 +307,22 @@ class UploadZipModel extends Model
                 }
             }
 
-            ini_set('memory_limit', '1024M');
+            ini_set('memory_limit', '110M');
             ini_set('max_execution_time', 1000);
+            $this->_report = [
+                'success' => [
+                    'добавлений категорий' => 0,
+                    'добавлений товаров' => 0,
+                    'изменений товаров' => 0,
+                ],
+                'warning' => [
+                    'удалений корневых категорий' => 0,
+                    'перемещений категорий' => 0,
+                ],
+                'error' => ['ошибок' => 0]
+
+            ];
+
             $this->catalogHandler(new SimpleXMLElement($files['catalog']));
             $this->propertyHandler(new SimpleXMLElement($files['property']));
             foreach($files['goods'] as $good) {
@@ -294,6 +332,13 @@ class UploadZipModel extends Model
             $this->checkProducts();
 
             $zip->close();
+            foreach ($this->_report as $swe => $subjs) {
+                foreach ($subjs as $subj => $count) {
+                    if ($count) {
+                        Yii::$app->session->addFlash($swe, "Произошло $count $subj");
+                    }
+                }
+            }
 
             return true;
         } else {
