@@ -339,7 +339,6 @@ class UploadZipModel extends Model
                     }
                 }
             }
-
             return true;
         } else {
             return false;

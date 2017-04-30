@@ -76,7 +76,9 @@ class Good extends CachedActiveRecord implements CartPositionProviderInterface
     public function beforeDelete()
     {
         if (parent::beforeDelete()) {
-            unlink($this->getImgPath());
+            if ($this->pic) {
+                unlink($this->getImgPath());
+            }
             return true;
         } else {
             return false;

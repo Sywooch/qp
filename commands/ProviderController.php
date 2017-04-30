@@ -9,6 +9,7 @@ use PHPExcel;
 use PHPExcel_IOFactory;
 use PHPExcel_Shared_Date;
 use PHPExcel_Style_NumberFormat;
+use Yii;
 use yii\console\Controller;
 use app\components\Helper;
 
@@ -176,12 +177,27 @@ class ProviderController extends Controller
 
 
     public function setUnpaidStatus() {
+        Order::updateAll(['status' => Order::STATUS_UNPAID],
+        ['or',
+            ['status' => Order::STATUS_CONFIRMED],
+            ['status' => Order::STATUS_PARTIAL_CONFIRMED],
+        ]);
+    }
+
+    public function setNotTakenStatus() {
+        Order::updateAll(['status' => Order::STATUS_NOT_TAKEN],['and',
+            'status=' . Order::STATUS_DELIVERED,
+            'updated_at<=' . (time() - Yii::$app->params['order.deliveredExpire'])
+        ]);
+        Order::flushCache();
     }
 
     public function actionIndex()
     {
         $this->_dir_name = 'temp/provider-order/' . date('Y-m-d');
         is_dir($this->_dir_name) or mkdir($this->_dir_name, 0755, true);
+        $this->setUnpaidStatus();
+        $this->setNotTakenStatus();
         $this->actionPreOrders();
         $this->actionOrders();
         Helper::archiveDir($this->_dir_name);

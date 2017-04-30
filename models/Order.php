@@ -32,6 +32,7 @@ class Order extends CachedActiveRecord
     const STATUS_DONE = 50;
     const STATUS_UNPAID = 51;
     const STATUS_CANCELED = 52;
+    const STATUS_NOT_TAKEN = 53;
 
     static $STATUS_TO_STRING = [
         self::STATUS_NEW                => 'Проверяется наличие',
@@ -41,10 +42,11 @@ class Order extends CachedActiveRecord
         self::STATUS_UNCONFIRMED        => 'Полностью неподтверждён',
         self::STATUS_PAID               => 'Оплачен',
         self::STATUS_ORDERED            => 'Оплачен (Отправлен поставщику)',
-        self::STATUS_DELIVERED          => 'На пункте выдачи',
+        self::STATUS_DELIVERED          => 'Готов к выдаче',
         self::STATUS_DONE               => 'Выполнен',
         self::STATUS_UNPAID             => 'Оплата просрочена',
         self::STATUS_CANCELED           => 'Отменён',
+        self::STATUS_NOT_TAKEN          => 'Не забран с пункта выдачи',
     ];
 
     /**

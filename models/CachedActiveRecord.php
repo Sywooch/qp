@@ -13,7 +13,7 @@ use yii\web\NotFoundHttpException;
  */
 class CachedActiveRecord extends ActiveRecord
 {
-    protected function flushCache()
+    static function flushCache()
     {
         TagDependency::invalidate(Yii::$app->cache,
             new TagDependency(['tags' => 'cache_table_' . static::tableName()]));
@@ -27,7 +27,7 @@ class CachedActiveRecord extends ActiveRecord
     public function beforeSave($insert)
     {
         if (parent::beforeSave($insert)) {
-            $this->flushCache();
+            self::flushCache();
             return true;
         } else {
             return false;
@@ -40,7 +40,7 @@ class CachedActiveRecord extends ActiveRecord
     public function beforeDelete()
     {
         if (parent::beforeDelete()) {
-            $this->flushCache();
+            self::flushCache();
             return true;
         } else {
             return false;

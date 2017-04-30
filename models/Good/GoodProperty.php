@@ -27,7 +27,6 @@ class GoodProperty extends CachedActiveRecord
         'Справочник' => self::DICTIONARY_TYPE,
         'Число' => self::NUMBER_TYPE,
     ];
-
     static function getTypeByC1name($c1name)
     {
         if (!array_key_exists($c1name, static::$__type_enum)) {
@@ -38,17 +37,12 @@ class GoodProperty extends CachedActiveRecord
         }
         return static::$__type_enum[$c1name];
     }
-    /*
-     * @inheritdoc
-     */
+
     public static function tableName()
     {
         return 'good_property';
     }
 
-    /**
-     * @inheritdoc
-     */
     public function rules()
     {
         return [
