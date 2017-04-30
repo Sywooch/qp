@@ -4,6 +4,7 @@ namespace app\modules\backend\models;
 use app\models\Good\Good;
 use app\models\Order;
 use app\models\OrderProduct;
+use app\models\Profile\Message;
 use PHPExcel_IOFactory;
 use yii\base\Model;
 use Yii;
@@ -71,6 +72,12 @@ class UploadProvider extends Model
                     Order::STATUS_CONFIRMED:
                     Order::STATUS_PARTIAL_CONFIRMED;
                 $order->save();
+                $msg = new Message([
+                    'user_id' => $order->user_id,
+                    // TODO: оплачен до...
+                    'text' => "Заказ $order->public_id был $order->status_str и должен быть оплачен до...",
+                ]);
+                $msg->save();
             }
         }
     }

@@ -4,6 +4,7 @@ namespace app\commands;
 use app\models\Good\PropertyValue;
 use app\models\Order;
 use app\models\OrderProduct;
+use app\models\Profile\Message;
 use app\models\ProviderOrder;
 use PHPExcel;
 use PHPExcel_IOFactory;
@@ -177,14 +178,41 @@ class ProviderController extends Controller
 
 
     public function setUnpaidStatus() {
+        foreach(Order::find()->where(
+        ['or',
+            ['status' => Order::STATUS_CONFIRMED],
+            ['status' => Order::STATUS_PARTIAL_CONFIRMED],
+        ])->all() as $order) {
+            $msg = new Message([
+                'user_id' => $order->user_id,
+                // TODO: оплачен до...
+                'text' => "Оплата заказа $order->public_id была просрочена.",
+            ]);
+            $msg->save();
+        }
+
         Order::updateAll(['status' => Order::STATUS_UNPAID],
         ['or',
             ['status' => Order::STATUS_CONFIRMED],
             ['status' => Order::STATUS_PARTIAL_CONFIRMED],
         ]);
+        Order::flushCache();
     }
 
     public function setNotTakenStatus() {
+        foreach(Order::find()->where(
+            ['and',
+                'status=' . Order::STATUS_DELIVERED,
+                'updated_at<=' . (time() - Yii::$app->params['order.deliveredExpire'])
+            ])->all() as $order) {
+            $msg = new Message([
+                'user_id' => $order->user_id,
+                // TODO: оплачен до...
+                'text' => "Вы не забрали заказ $order->public_id с пункта выдачи в срок.",
+            ]);
+            $msg->save();
+        }
+
         Order::updateAll(['status' => Order::STATUS_NOT_TAKEN],['and',
             'status=' . Order::STATUS_DELIVERED,
             'updated_at<=' . (time() - Yii::$app->params['order.deliveredExpire'])
