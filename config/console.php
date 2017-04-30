@@ -1,7 +1,7 @@
 <?php
 
 $params = require(__DIR__ . '/params.php');
-$db = require(__DIR__ . '/db.php');
+$secret = require(__DIR__ . '/db.php');
 
 $config = [
     'id' => 'basic-console',
@@ -32,8 +32,7 @@ $config = [
         'authManager' => [
             'class' => 'yii\rbac\PhpManager',
         ],
-        'db' => $db,
-    ],
+    ] + $secret,
     'params' => $params,
     /*
     'controllerMap' => [
