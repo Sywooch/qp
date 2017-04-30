@@ -155,9 +155,8 @@ class OrderController extends Controller
 
     public function actionRandom()
     {
-        while(!$user = User::find()->offset(rand() % 40)->one());
         $order = new Order([
-            'user_id' => $user->id,
+            'user_id' => Yii::$app->user->id,
             'public_id' => (string)rand(),
         ]);
 

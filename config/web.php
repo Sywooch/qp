@@ -50,17 +50,7 @@ $config = [
         'errorHandler' => [
             'errorAction' => 'site/error',
         ],
-        'mailer' => [
-            'class' => 'yii\swiftmailer\Mailer',
-            'transport' => [
-                'class' => 'Swift_SmtpTransport',
-                'host' => 'smtp.timeweb.ru',  // e.g. smtp.mandrillapp.com or smtp.gmail.com
-                'username' => 'no-reply@qpvl.ru',
-                'password' => 'qweqwe',
-                'port' => '25', // Port 25 is a very common port too
-            ],
 
-        ],
         'log' => [
             'traceLevel' => YII_DEBUG ? 3 : 0,
             'targets' => [
@@ -74,7 +64,6 @@ $config = [
             'class' => 'yii\rbac\PhpManager',
             'defaultRoles' => ['guest'],
         ],
-        'db' => require(__DIR__ . '/db.php'),
 
         'urlManager' => [
             'enablePrettyUrl' => true,
@@ -102,7 +91,7 @@ $config = [
         ],
         'eauth' => require('eauth.php'),
 
-    ],
+    ] + require(__DIR__ . '/db.php'),
     'modules' => [
         'backend' => [
             'class' => 'app\modules\backend\Admin',
