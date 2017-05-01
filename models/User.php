@@ -76,8 +76,8 @@ class User extends CachedActiveRecord implements IdentityInterface
     }
 
     public function getRole() {
-        if ($roles = Yii::$app->authManager->getRolesByUser($this->getId())) {
-            return array_keys($roles)[0];
+        if ($roles = array_keys(Yii::$app->authManager->getRolesByUser($this->getId()))) {
+            return end($roles);
         }
     }
 

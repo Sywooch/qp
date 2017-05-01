@@ -5,6 +5,7 @@ namespace app\controllers;
 use app\models\Good\Good;
 use Yii;
 use yii\data\ArrayDataProvider;
+use yii\filters\AccessControl;
 use yii\filters\VerbFilter;
 use app\models\Order;
 use app\models\OrderProduct;
@@ -23,6 +24,15 @@ class CartController extends \yii\web\Controller
                     'add-multiple' => ['POST'],
                 ],
             ],
+            'access' => [
+                'class' => AccessControl::className(),
+                'only' => ['order'],
+                'rules' => [[
+                    'allow' => true,
+                    'actions' => ['order'],
+                    'roles' => ['user'],
+                ]]
+            ]
         ];
     }
 
