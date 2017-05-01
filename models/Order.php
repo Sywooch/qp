@@ -2,6 +2,7 @@
 
 namespace app\models;
 
+use app\components\Html;
 use Yii;
 use yii\behaviors\TimestampBehavior;
 
@@ -91,6 +92,8 @@ class Order extends CachedActiveRecord
             'status' => 'Статус',
             'status_str' => 'Статус',
             'password' => 'Секретный ключ',
+            'totalPrice' => 'Сумма заказа',
+            'confirmedPrice' => 'Сумма к оплате',
         ];
     }
     /**
@@ -106,19 +109,24 @@ class Order extends CachedActiveRecord
         return $this->hasOne(User::className(), ['id' => 'user_id']);
     }
 
-    /**
-     * @return \yii\db\ActiveQuery
-     */
+
     public function getOrderProducts()
     {
-        return $this->hasMany(OrderProduct::className(), ['order_id' => 'id']);
+        return OrderProduct::cachedFindAll(['order_id' => $this->id]);
     }
 
     public function getTotalPrice()
     {
-        return array_reduce($this->orderProducts, function($carry, $item) {
-            return $carry + $item->products_count * $item->old_price;
-        });
+        return Html::unstyled_price(array_reduce($this->orderProducts, function($carry, $item) {
+                return $carry + $item->confirmed_count * $item->old_price;
+            }));
+    }
+
+    public function getConfirmedPrice()
+    {
+        return Html::unstyled_price(array_reduce($this->orderProducts, function($carry, $item) {
+                return $carry + $item->products_count * $item->old_price;
+            }));
     }
 
     public function generatePassword() {

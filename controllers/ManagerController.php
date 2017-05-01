@@ -103,9 +103,7 @@ class ManagerController extends Controller
                 'user_id' => $order->user_id,
                 'text' => "Вы можете забрать ваш заказ $order->public_id 
                 с 10.00 до 20.00 по адресу: " . Yii::$app->params['deliveryAddress'] .
-                ". Стоимость заказа: " . array_reduce($products, function($carry, $item) {
-                        return $carry + $item->confirmed_count * $item->old_price;
-                    }) . "руб. Заявка будет храниться 14 дней."
+                ". Стоимость заказа: $order->confirmedPrice Заявка будет храниться 14 дней."
             ]);
             $message->save();
             $message->sendEmail();

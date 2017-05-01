@@ -33,9 +33,7 @@ use app\models\User;
             <tr>
                 <td class="key">Сумма заказа</td>
                 <td class="value">
-                    <?=Html::price(array_reduce($products, function($carry, $item) {
-                        return $carry + $item->products_count * $item->old_price;
-                    }))?>
+                    <?=$order->getConfirmedPrice()?>
                 </td>
             </tr>
             <tr>
@@ -45,9 +43,7 @@ use app\models\User;
             })) : ?>
                 <tr>
                     <td class="key">Сумма к оплате</td>
-                    <td class="value"><?=Html::price(array_reduce($products, function($carry, $item) {
-                            return $carry + $item->confirmed_count * $item->old_price;
-                        }))?>
+                    <td class="value"><?=$order->getConfirmedPrice()?>
                     </td>
                 </tr>
             <?php endif; ?>

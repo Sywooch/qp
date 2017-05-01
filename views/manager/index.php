@@ -36,14 +36,8 @@ $this->params['breadcrumbs'][] = $this->title;
                 }
             ],
             'created_at:datetime',
-            [
-                'attribute' => 'Сумма',
-                'format' => 'raw',
-                'value' => function ($order) {
-                    /* @var $order app\models\Order*/
-                    return Html::price($order->getTotalPrice());
-                }
-            ],
+            'totalPrice',
+            'confirmedPrice',
             'status_str',
         ],
     ]); ?>
