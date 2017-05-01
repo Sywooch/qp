@@ -35,7 +35,7 @@ class GoodController extends Controller
     public function actionIndex()
     {
         $dataProvider = new ActiveDataProvider([
-            'query' => Good::find()->where(Yii::$app->request->get()),
+            'query' => Good::find(),
         ]);
 
         return $this->render('index', [
