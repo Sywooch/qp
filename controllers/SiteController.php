@@ -213,13 +213,10 @@ class SiteController extends Controller
         catch(InvalidParamException $e) {
             throw new BadRequestHttpException($e->getMessage());
         }
-        if($activation->getUser()->activateAccount()):
-            $activation->getUser()->sendMessage('Добро пожаловать!');
-            Yii::$app->session->setFlash('success', 'Активация прошла успешно.');
-        else:
+        if(!$activation->getUser()->activateAccount()) {
             Yii::$app->session->setFlash('error', 'Ошибка активации.');
             Yii::error('Ошибка при активации.');
-        endif;
+        }
         return $this->redirect(Url::to(['/site/login']));
     }
 

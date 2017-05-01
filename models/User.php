@@ -220,6 +220,9 @@ class User extends CachedActiveRecord implements IdentityInterface
         if ($this->save()) {
             $auth = Yii::$app->authManager;
             $auth->assign($auth->getRole('user'), $this->getId());
+
+            $this->sendMessage('Добро пожаловать! Вы зарегистрировались на сайте qpvl.ru');
+            Yii::$app->session->addFlash('success', 'Активация прошла успешно.');
             return true;
         }
         return false;
