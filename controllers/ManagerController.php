@@ -106,9 +106,9 @@ class ManagerController extends Controller
         if ($order->save()) {
             $message = new Message([
                 'user_id' => $order->user_id,
-                'text' => "Вы можете забрать ваш заказ $order->public_id".
-                    "\nс 10.00 до 20.00 по адресу: " . Yii::$app->params['deliveryAddress'] .
-                    ".\nСтоимость заказа: $order->confirmedPrice Заявка будет храниться 14 дней." .
+                'text' => "Вы можете забрать ваш заказ " . $order->getLink() .
+                    ".\nс 10.00 до 20.00 по адресу: " . Yii::$app->params['deliveryAddress'] .
+                    ".\nСтоимость заказа: $order->confirmedPrice Заявка будет храниться 14 дней" .
                     ".\nСекретный ключ: $order->password."
             ]);
             $message->sendEmail();

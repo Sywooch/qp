@@ -163,4 +163,13 @@ class Order extends CachedActiveRecord
     public function haveSecretKey() {
         return $this->status == self::STATUS_DELIVERED;
     }
+
+    public function getLink() {
+        $link = Yii::$app->urlManager->createAbsoluteUrl(
+            [
+                "/profile/order/view/",
+                'id' => $this->id,
+            ]);
+        return "<a href=$link>Заказ $this->public_id</a>";
+    }
 }
