@@ -141,7 +141,6 @@ class Order extends CachedActiveRecord
     public function pay() {
         // TODO: implement rest stuff
         $this->status = Order::STATUS_PAID;
-        $this->generatePassword();
         return $this->save();
     }
 
@@ -162,6 +161,6 @@ class Order extends CachedActiveRecord
     }
 
     public function haveSecretKey() {
-        return $this->status >= self::STATUS_PAID && $this->status < self::STATUS_DONE;
+        return $this->status == self::STATUS_DELIVERED;
     }
 }

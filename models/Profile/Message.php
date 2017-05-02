@@ -76,7 +76,7 @@ class Message extends CachedActiveRecord
         return Yii::$app->mailer->compose()
             ->setFrom([Yii::$app->params['supportEmail'] => Yii::$app->name.' (отправлено роботом).'])
             ->setTo(User::cachedFindOne($this->user_id)->email)
-            ->setSubject('Заказа готов к выдаче')
+            ->setSubject('Сообщение с сайта qpvl.ru')
             ->setTextBody($this->text)
             ->send();
 

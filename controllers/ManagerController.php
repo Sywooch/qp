@@ -86,27 +86,33 @@ class ManagerController extends Controller
     public function actionOrderReady($id) {
         /* @var $order Order */
         $order = Order::findOneOr404($id);
-        if ($order->status == Order::STATUS_ORDERED) {
-            $order->status = Order::STATUS_DELIVERED;
-        }
-        else {
-            Yii::$app->session->addFlash('error', 'Неверный текущий статус заказа: ' .
-                Order::$STATUS_TO_STRING[$order->status]);
-        }
-
         $products = Yii::$app->db->cache(function ($db) use ($order) {
             return $order->orderProducts;
         }, null, new TagDependency(['tags' => 'cache_table_' . OrderProduct::tableName()]));
 
+        if ($order->status == Order::STATUS_ORDERED) {
+            $order->status = Order::STATUS_DELIVERED;
+            $order->generatePassword();
+        }
+        else {
+            Yii::$app->session->addFlash('error', 'Неверный текущий статус заказа: ' .
+                Order::$STATUS_TO_STRING[$order->status]);
+            return $this->render('view-order', [
+                'products' => $products,
+                'order' => $order,
+            ]);
+        }
+
         if ($order->save()) {
             $message = new Message([
                 'user_id' => $order->user_id,
-                'text' => "Вы можете забрать ваш заказ $order->public_id 
-                с 10.00 до 20.00 по адресу: " . Yii::$app->params['deliveryAddress'] .
-                ". Стоимость заказа: $order->confirmedPrice Заявка будет храниться 14 дней."
+                'text' => "Вы можете забрать ваш заказ $order->public_id".
+                    "\nс 10.00 до 20.00 по адресу: " . Yii::$app->params['deliveryAddress'] .
+                    ".\nСтоимость заказа: $order->confirmedPrice Заявка будет храниться 14 дней." .
+                    ".\nСекретный ключ: $order->password."
             ]);
-            $message->save();
             $message->sendEmail();
+            $message->save();
         }
         else {
             Yii::$app->session->addFlash('error', 'Ошибка при изменении статуса заказа: ' . $order->firstErrors);
