@@ -115,14 +115,19 @@ class Order extends CachedActiveRecord
         return OrderProduct::cachedFindAll(['order_id' => $this->id]);
     }
 
-    public function getTotalPrice()
+    public function getConfirmedPrice()
     {
-        return Html::unstyled_price(array_reduce($this->orderProducts, function($carry, $item) {
-                return $carry + $item->confirmed_count * $item->old_price;
-            }));
+        $has_nonconf = false;
+        $ret = Html::unstyled_price(array_reduce($this->orderProducts, function($carry, $item) use(&$has_nonconf){
+            if (!isset($item->confirmed_count)) {
+                $has_nonconf = true;
+            }
+            return $carry + $item->confirmed_count * $item->old_price;
+        }));
+        return $has_nonconf ? null : $ret;
     }
 
-    public function getConfirmedPrice()
+    public function getTotalPrice()
     {
         return Html::unstyled_price(array_reduce($this->orderProducts, function($carry, $item) {
                 return $carry + $item->products_count * $item->old_price;

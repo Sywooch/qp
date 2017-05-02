@@ -33,20 +33,15 @@ use app\models\User;
             <tr>
                 <td class="key">Сумма заказа</td>
                 <td class="value">
-                    <?=$order->getConfirmedPrice()?>
+                    <?=$order->getTotalPrice()?>
                 </td>
             </tr>
             <tr>
-
-            <?php if(array_reduce($products, function($carry, $x) {
-                return !isset($carry) || $carry && isset($x->confirmed_count);
-            })) : ?>
-                <tr>
-                    <td class="key">Сумма к оплате</td>
-                    <td class="value"><?=$order->getConfirmedPrice()?>
-                    </td>
-                </tr>
-            <?php endif; ?>
+            <tr>
+                <td class="key">Сумма к оплате</td>
+                <td class="value"><?=is_null($pr = $order->getConfirmedPrice()) ? '-' : $pr ?>
+                </td>
+            </tr>
         </table>
     </div>
 </div>
