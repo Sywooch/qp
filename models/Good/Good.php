@@ -177,6 +177,7 @@ class Good extends CachedActiveRecord implements CartPositionProviderInterface
             'properties' => 'Свойства',
             'provider' => '1с ИД Поставщика',
             'vendor' => 'Артикул',
+            'providerName' => 'Название поставщика',
         ];
     }
 
@@ -211,5 +212,10 @@ class Good extends CachedActiveRecord implements CartPositionProviderInterface
             Yii::$app->session->setFlash('error', "Товар $ret->name недоступен");
             return false;
         }
+    }
+
+    public function getProviderName()
+    {
+        return PropertyValue::cachedFindOne(['c1id' => $this->provider])->value;
     }
 }
