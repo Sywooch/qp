@@ -72,9 +72,15 @@ class UploadProvider extends Model
                     Order::STATUS_CONFIRMED:
                     Order::STATUS_PARTIAL_CONFIRMED;
                 $order->save();
+                $link = Yii::$app->urlManager->createAbsoluteUrl(
+                    [
+                        "/profile/order/view/",
+                        'id' => $order->id,
+                    ]);
                 $msg = new Message([
                     'user_id' => $order->user_id,
-                    'text' => "Заказ $order->public_id был $order->status_str и должен быть оплачен до 23:30 " . date('d.m.Y', time()),
+                    'text' => "<a href=$link>Заказ $order->public_id</a> был $order->status_str и должен быть оплачен до 23:30 " .
+                        date('d.m.Y', time())
                 ]);
                 $msg->sendEmail();
                 $msg->save();

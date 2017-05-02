@@ -7,5 +7,4 @@
 
 use yii\helpers\Html;
 
-echo "Ссылка для $for_what аккаунта" . Yii::$app->name . ': ';
-echo $link;
+echo "<a href=$link>Ссылка</a> для $for_what аккаунта" . Yii::$app->name . ': ';
