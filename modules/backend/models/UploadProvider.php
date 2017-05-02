@@ -74,9 +74,9 @@ class UploadProvider extends Model
                 $order->save();
                 $msg = new Message([
                     'user_id' => $order->user_id,
-                    // TODO: оплачен до...
-                    'text' => "Заказ $order->public_id был $order->status_str и должен быть оплачен до...",
+                    'text' => "Заказ $order->public_id был $order->status_str и должен быть оплачен до 23:30 " . date('d.m.Y', time()),
                 ]);
+                $msg->sendEmail();
                 $msg->save();
             }
         }
