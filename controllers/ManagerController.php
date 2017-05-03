@@ -51,9 +51,10 @@ class ManagerController extends Controller
         }, null, new TagDependency(['tags' => 'cache_table_' . Order::tableName()]));
 
         if ($pass = Yii::$app->request->post('password')) {
-            $order = Order::findOneOr404([
-                    'password' => $pass,
-            ]);
+            if (!$order = Order::findOne([ 'password' => $pass ])) {
+                Yii::$app->session->setFlash('error', 'Неверный секретный ключ.');
+                return $this->redirect([ '/manager' ]);
+            }
             if ($order->status != Order::STATUS_DELIVERED) {
                 Yii::$app->session->setFlash('error', 'Заказ ' . $order->public_id  . ' не готов к выдаче.');
                 return $this->redirect([ 'view-order', 'id' => $order->id ]);

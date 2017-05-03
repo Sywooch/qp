@@ -180,6 +180,9 @@ class UploadZipModel extends Model
                     if ($prop->name == 'Поставщик') {
                         $good_model->provider = $str_val;
                     }
+                    if ($prop->name == 'Акционный товар') {
+                        $good_model->is_discount = $str_val == 'true';
+                    }
                 }
                 $good_model->setAttributes([
                     'c1id' => $good_c1id,

@@ -152,6 +152,8 @@ class Good extends CachedActiveRecord implements CartPositionProviderInterface
             [['category_id'], 'exist', 'skipOnError' => true, 'targetClass' => Menu::className(),
                 'targetAttribute' => ['category_id' => 'id']],
             ['status', 'in', 'range' => array_keys(self::$STATUS_TO_STRING)],
+            ['is_discount', 'boolean'],
+            ['is_discount', 'default', 'value' => false],
         ];
     }
 
@@ -178,6 +180,7 @@ class Good extends CachedActiveRecord implements CartPositionProviderInterface
             'provider' => '1с ИД Поставщика',
             'vendor' => 'Артикул',
             'providerName' => 'Название поставщика',
+            'is_discount' => 'Акционный товар'
         ];
     }
 

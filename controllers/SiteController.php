@@ -8,6 +8,7 @@ use app\models\Good\Menu;
 use app\models\Order;
 use app\models\OrderProduct;
 use Yii;
+use yii\caching\TagDependency;
 use yii\filters\AccessControl;
 use yii\web\Controller;
 use yii\filters\VerbFilter;
@@ -104,8 +105,10 @@ class SiteController extends Controller
             'products' => round($fake_clients * $fake_clients / 27) + OrderProduct::cachedGetCount()
         ];
 
+        $products = Yii::$app->db->cache(function ($db) {
+            return Good::find()->where(['status' => Good::STATUS_OK, 'is_discount' => true])->limit(3)->all();
+        }, null, new TagDependency(['tags' => 'cache_table_' . Good::tableName()]));
 
-        $products = Good::find()->where(['status' => Good::STATUS_OK])->limit(3)->all();
         return $this->render('index', [
             'catalog' => Menu::getRoot(),
             'products' => $products,
