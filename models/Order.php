@@ -40,7 +40,7 @@ class Order extends CachedActiveRecord
         self::STATUS_PROVIDER_CHECKING  => 'Проверяется наличие (Отправлен поставщику)',
         self::STATUS_CONFIRMED          => 'Подтверждён',
         self::STATUS_PARTIAL_CONFIRMED  => 'Частично подтверждён',
-        self::STATUS_UNCONFIRMED        => 'Полностью неподтверждён',
+        self::STATUS_UNCONFIRMED        => 'Полностью не подтверждён',
         self::STATUS_PAID               => 'Оплачен',
         self::STATUS_ORDERED            => 'Оплачен (Отправлен поставщику)',
         self::STATUS_DELIVERED          => 'Готов к выдаче',

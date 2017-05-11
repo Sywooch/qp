@@ -2,6 +2,8 @@
 
 namespace app\models\Good;
 use creocoder\nestedsets\NestedSetsQueryBehavior;
+use Yii;
+use yii\caching\TagDependency;
 
 class MenuQuery extends \yii\db\ActiveQuery
 {
@@ -21,7 +23,10 @@ class MenuQuery extends \yii\db\ActiveQuery
      */
     public function all($db = null)
     {
-        return parent::all($db);
+        return Yii::$app->getDb()->cache(function ($db)
+        {
+            return parent::all($db);
+        }, null, new TagDependency(['tags'=>'cache_table_' . Menu::tableName()]));
     }
 
     /**
