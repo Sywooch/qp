@@ -67,8 +67,6 @@ class Helper
         $rootPath = realpath($dir_name);
 
         // Initialize archive object
-        $zip = new ZipArchive();
-        $zip->open("$dir_name.zip", ZipArchive::CREATE | ZipArchive::OVERWRITE);
 
         // Create recursive directory iterator
         /** @var SplFileInfo[] $files */
@@ -76,10 +74,16 @@ class Helper
             new \RecursiveDirectoryIterator($rootPath),
             RecursiveIteratorIterator::LEAVES_ONLY
         );
+        $zip = null;
 
         foreach ($files as $name => $file) {
             // Skip directories (they would be added automatically)
             if (!$file->isDir()) {
+            	if (is_null($zip)) {
+					$zip = new ZipArchive();
+					$zip->open("$dir_name.zip", ZipArchive::CREATE | ZipArchive::OVERWRITE);
+				}
+
                 // Get real and relative path for current file
                 $filePath = $file->getRealPath();
                 $relativePath = substr($filePath, strlen($rootPath) + 1);
@@ -92,6 +96,6 @@ class Helper
             }
         }
         // Zip archive will be created only after closing object
-        $zip->close();
+        $zip and $zip->close();
     }
 }
