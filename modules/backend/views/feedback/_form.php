@@ -15,7 +15,7 @@ use app\models\ContactForm;
     <?= $form->field($model, 'email')->textInput(['maxlength' => true]) ?>
     <?= $form->field($model, 'name')->textInput(['maxlength' => true]) ?>
     <?= $form->field($model, 'rating')->dropDownList(ContactForm::$RATING_TO_STRING) ?>
-    <?= $form->field($model, 'body')->textInput(['maxlength' => true]) ?>
+    <?= $form->field($model, 'body')->textarea(['rows' => '6']) ?>
 
     <?= $form->field($model, 'status')->dropDownList(ContactForm::$STATUS_TO_STRING) ?>
     <div class="form-group">

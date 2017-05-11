@@ -28,9 +28,8 @@ class MenuController extends Controller
 
    public function actionView($id = null)
     {
-        $id or $id = Menu::getRoot();
+        $par = $id ? Menu::findOneOr404($id) : Menu::getRoot();
         $menu = new Menu;
-        $par = Menu::findOneOr404($id);
 
         if ($menu->load(Yii::$app->request->post())) {
             $menu->appendTo($par);
