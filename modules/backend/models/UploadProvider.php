@@ -41,7 +41,7 @@ class UploadProvider extends Model
         ], [
             'provider_order_id' => $po_id,
         ]);
-        for ($i = 6; $rows[$i]['A'] == $i - 5; $i++) {
+        for ($i = 6; is_numeric($rows[$i]['A']); $i++) {
             $product_vendor = (string) $rows[$i]['C'];
             $products_count1 = $products_count = $rows[$i]['G'];
             foreach (OrderProduct::cachedFindAll([
@@ -71,54 +71,55 @@ class UploadProvider extends Model
 
         foreach (Order::cachedFindAll(['status' => Order::STATUS_PROVIDER_CHECKING]) as $order) {
             /* @var $order Order */
-            if (isset($orders_table[$order->id])) {
-                $all_was = true;
-                $all_full = true;
-                $all_empty = true;
-                foreach (OrderProduct::cachedFindAll(['order_id' => $order->id]) as $op) {
-                    if (is_null($op->confirmed_count)) {
-                        $all_was = false;
-                        break;
-                    }
-                    if ($op->confirmed_count != 0) {
-                        $all_empty = false;
-                    }
-                    if ($op->confirmed_count != $op->products_count) {
-                        $all_full = false;
-                    }
+            $all_was = true;
+            $all_full = true;
+            $all_empty = true;
+            foreach (OrderProduct::cachedFindAll(['order_id' => $order->id]) as $op) {
+                if (is_null($op->confirmed_count)) {
+                    $all_was = false;
+                    break;
                 }
-                if ($all_was) {
-                    if ($all_full) {
-                        $order->status = $all_full * Order::STATUS_CONFIRMED;
-                        $full_count += 1;
-                    }
-                    elseif($all_empty) {
-                        $order->status = $all_empty * Order::STATUS_UNCONFIRMED;
-                        $empty_count += 1;
-                    }
-                    else {
-                        $order->status = Order::STATUS_PARTIAL_CONFIRMED;
-                        $partial_count += 1;
-                    }
-                    $order->save();
-                    $link = $order->getLink();
-                    $msg = new Message([
-                        'user_id' => $order->user_id,
-                        'text' => "$link был $order->status_str и должен быть оплачен до 23:30 " .
-                            date('d.m.Y', time())
-                    ]);
-                    $msg->sendEmail();
-                    $msg->save();
+                if ($op->confirmed_count != 0) {
+                    $all_empty = false;
                 }
+                if ($op->confirmed_count != $op->products_count) {
+                    $all_full = false;
+                }
+            }
+            if ($all_was) {
+                if ($all_full) {
+                    $order->status = $all_full * Order::STATUS_CONFIRMED;
+                    $full_count += 1;
+                }
+                elseif($all_empty) {
+                    $order->status = $all_empty * Order::STATUS_UNCONFIRMED;
+                    $empty_count += 1;
+                }
+                else {
+                    $order->status = Order::STATUS_PARTIAL_CONFIRMED;
+                    $partial_count += 1;
+                }
+                $order->save();
+                $link = $order->getLink();
+                $msg = new Message([
+                    'user_id' => $order->user_id,
+                    'text' => "$link был $order->status_str и должен быть оплачен до 23:30 " .
+                        date('d.m.Y', time())
+                ]);
+                $msg->sendEmail();
+                $msg->save();
             }
         }
         Yii::$app->session->addFlash('success', "$products_counter товаров было распределено по $total_count заказам.");
-        Yii::$app->session->addFlash('success', "$full_count заказов получило статус " .
-            Order::$STATUS_TO_STRING[Order::STATUS_CONFIRMED]);
-        Yii::$app->session->addFlash('success', $empty_count . " заказов получило статус " .
-            Order::$STATUS_TO_STRING[Order::STATUS_UNCONFIRMED]);
-        Yii::$app->session->addFlash('success', $partial_count . " заказов получило статус " .
-            Order::$STATUS_TO_STRING[Order::STATUS_PARTIAL_CONFIRMED]);
+        if ($full_count != 0)
+            Yii::$app->session->addFlash('success', "$full_count заказов получило статус " .
+                Order::$STATUS_TO_STRING[Order::STATUS_CONFIRMED]);
+        if ($empty_count != 0)
+            Yii::$app->session->addFlash('success', $empty_count . " заказов получило статус " .
+                Order::$STATUS_TO_STRING[Order::STATUS_UNCONFIRMED]);
+        if ($partial_count != 0)
+            Yii::$app->session->addFlash('success', $partial_count . " заказов получило статус " .
+                Order::$STATUS_TO_STRING[Order::STATUS_PARTIAL_CONFIRMED]);
     }
 }
 ?>
