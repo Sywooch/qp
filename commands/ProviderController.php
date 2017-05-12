@@ -129,12 +129,12 @@ class ProviderController extends Controller
     }
 
     public function Excel($is_preorder) {
-        list($status_before, $status_after, $excel_name) = $is_preorder ?
-            [Order::STATUS_NEW, Order::STATUS_PROVIDER_CHECKING, 'preorder'] :
-            [Order::STATUS_PAID, Order::STATUS_ORDERED, 'order'];
+        list($status_before, $status_after, $excel_name, $count_attr) = $is_preorder ?
+            [Order::STATUS_NEW, Order::STATUS_PROVIDER_CHECKING, 'preorder', 'products_count'] :
+            [Order::STATUS_PAID, Order::STATUS_ORDERED, 'order', 'confirmed_count'];
 
         $order_products = OrderProduct::find()->joinWith('order')
-            ->select(['provider, product_vendor, product_name, old_price, SUM(products_count) AS count_by_c1id'])
+            ->select(["provider, product_vendor, product_name, old_price, SUM($count_attr) AS count_by_c1id"])
             ->where(['order.status' => $status_before])
             ->groupBy('provider, product_vendor, product_name, old_price')
             ->all();
