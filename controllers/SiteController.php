@@ -2,6 +2,7 @@
 
 namespace app\controllers;
 
+use app\models\Bookmark;
 use app\models\Profile\Message;
 use app\models\Good\Good;
 use app\models\Good\Menu;
@@ -89,7 +90,7 @@ class SiteController extends Controller
 
     const MAX_FAKE_CLIENTS = 1000;
     const DAYS_BEFORE_HALF_MAX = 100;
-    public function actionIndex()
+    public function actionIndex($is_discount = 0)
     {
         $start = new DateTime();
         $start->setDate(2017, 1, 1);
@@ -105,9 +106,25 @@ class SiteController extends Controller
             'products' => round($fake_clients * $fake_clients / 27) + OrderProduct::cachedGetCount()
         ];
 
-        $products = Yii::$app->db->cache(function ($db) {
-            return Good::find()->where(['status' => Good::STATUS_OK, 'is_discount' => true])->limit(3)->all();
-        }, null, new TagDependency(['tags' => 'cache_table_' . Good::tableName()]));
+
+        $products = $is_discount ?
+            Yii::$app->db->cache(function ($db) {
+                return Good::find()
+                    ->select('good.*')
+                    ->joinWith(Bookmark::tableName())
+                    ->addSelect('COUNT(bookmark.id) AS bookmarkCount')
+                    ->groupBy('good.id')
+                    ->where(['status' => Good::STATUS_OK])
+                    ->orderBy('bookmarkCount DESC')
+                    ->limit(6)
+                    ->all();
+            }, null, new TagDependency(['tags' => 'cache_table_' . Bookmark::tableName()]))
+
+            :
+
+            Yii::$app->db->cache(function ($db) {
+                return Good::find()->where(['status' => Good::STATUS_OK, 'is_discount' => true])->limit(6)->all();
+            }, null, new TagDependency(['tags' => 'cache_table_' . Good::tableName()]));
 
         return $this->render('index', [
             'catalog' => Menu::getRoot(),

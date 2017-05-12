@@ -231,7 +231,7 @@ class CatalogController extends \yii\web\Controller
                 'product_id' => $get['product_id']
             ]);
             if($model->save()) {
-                return Bookmark::cachedGetCount(['product_id' => $get['product_id']]) ;
+                return Bookmark::cachedGetCount(['product_id' => $get['product_id']]);
             }
             return "Error: ".$get['product_id'];
         }
@@ -248,7 +248,7 @@ class CatalogController extends \yii\web\Controller
                     'product_id' => $get['product_id'],
                 ]))
                 && $model->delete()) {
-                return "Delete";
+                return Bookmark::cachedGetCount(['product_id' => $get['product_id']]);
             }
             return "Error";
         }

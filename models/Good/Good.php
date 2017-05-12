@@ -26,7 +26,7 @@ use himiklab\yii2\search\behaviors\SearchBehavior;
 
 class Good extends CachedActiveRecord implements CartPositionProviderInterface
 {
-    public $offset;
+    public $offset, $bookmarkCount;
     public function getCartPosition($params = [])
     {
         return \Yii::createObject([
@@ -191,8 +191,12 @@ class Good extends CachedActiveRecord implements CartPositionProviderInterface
 
     public function getBookmark()
     {
-        return $this->hasOne(Bookmark::className(), ['product_id' => 'id'])
-            ->onCondition(['user_id' => \Yii::$app->user->getId()]);
+        return $this->hasOne(Bookmark::className(), [ 'product_id' => 'id' ]);
+    }
+
+    public function getBookmarksValue()
+    {
+        return Bookmark::cachedFindOne(['product_id' => 'id', 'user_id' => \Yii::$app->user->getId()]);
     }
 
     public function getBookmarksCount()

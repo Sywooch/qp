@@ -33,7 +33,7 @@ $tomorrow = date("d m", strtotime("+1 day"));
     </section>
     <section class="top-product">
         <div class="section-title">
-            Товары со скидкой
+            Популярные товары
         </div>
         <div class="row">
             <?php

@@ -31,11 +31,16 @@ $this->params['breadcrumbs'][] =  [
 ];
 $this->params['breadcrumbs'][] = $this->title;
 
-
-$bookmark = $product->bookmark ? $product->bookmark : new Bookmark([
-    'user_id' => Yii::$app->user->getId(),
-    'product_id' => $product->getId(),
+$bookmark = Bookmark::cachedFindOne([
+    'product_id' => $product->id,
+    'user_id' => Yii::$app->user->getId()
 ]);
+if (!$bookmark) {
+    $bookmark = new Bookmark([
+        'user_id' => Yii::$app->user->getId(),
+        'product_id' => $product->getId(),
+    ]);
+}
 
 ?>
 <div class="product-view">

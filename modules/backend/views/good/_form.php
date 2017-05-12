@@ -29,6 +29,10 @@ use yii\widgets\ActiveForm;
     <?= $form->field($model, 'vendor')->textInput() ?>
 
     <?= $form->field($model, 'provider')->textInput() ?>
+    <?= $form->field($model, 'is_discount')->dropDownList([
+        true => 'Да',
+        false => 'Нет',
+    ]) ?>
 
     <?= $form->field($model, 'status')->dropDownList([
         $model::$STATUS_TO_STRING

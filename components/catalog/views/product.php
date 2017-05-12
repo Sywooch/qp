@@ -9,10 +9,16 @@ $img = Html::img([ $product->getImgPath() ],
     ['height'=>204, 'width'=>270, 'class'=>'img-responsive', 'data-product-id'=>$product->id]);
 
 $url = ['product/view', 'id' => $product->id];
-$bookmark = $product->bookmark ? $product->bookmark : new Bookmark([
-    'user_id' => Yii::$app->user->getId(),
-    'product_id' => $product->getId(),
+$bookmark = Bookmark::cachedFindOne([
+    'product_id' => $product->id,
+    'user_id' => Yii::$app->user->getId()
 ]);
+if (!$bookmark) {
+    $bookmark = new Bookmark([
+        'user_id' => Yii::$app->user->getId(),
+        'product_id' => $product->getId(),
+    ]);
+}
 ?>
 <div class='col-md-4 col-sm-6 col-xs-12'>
     <div class="product card">
