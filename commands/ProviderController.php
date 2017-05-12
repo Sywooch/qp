@@ -186,7 +186,7 @@ class ProviderController extends Controller
             $msg = new Message([
                 'user_id' => $order->user_id,
                 // TODO: оплачен до...
-                'text' => "Оплата заказа $order->public_id была просрочена.",
+                'text' => "Оплата $order->link была просрочена.",
             ]);
             $msg->save();
         }
@@ -208,7 +208,7 @@ class ProviderController extends Controller
             $msg = new Message([
                 'user_id' => $order->user_id,
                 // TODO: оплачен до...
-                'text' => "Вы не забрали заказ $order->public_id с пункта выдачи в срок.",
+                'text' => "Вы не забрали $order->link с пункта выдачи в срок.",
             ]);
             $msg->save();
         }

@@ -15,7 +15,11 @@ $this->params['breadcrumbs'][] = $this->title;
         'dataProvider' => $ordersDataProvider,
         'columns' => [
             'created_at:datetime',
-            'text',
+            [
+                'format' => 'raw',
+                'value' => function($model) { return Html::decode($model->text); },
+                'label' => Yii::t('app', 'Some Label')
+            ],
             [
                 'class' => 'yii\grid\ActionColumn',
                 'template' => '{view}',
