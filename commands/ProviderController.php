@@ -22,7 +22,7 @@ class ProviderController extends Controller
     private $_provider_order;
 
     public function initExcel($is_preorder, $pr) {
-        $time = time();
+        $time = localtime();
         if ($is_preorder) {
             $this->_provider_order = new ProviderOrder([
                 'pre_order_at' => $time,
@@ -34,7 +34,7 @@ class ProviderController extends Controller
                 'order_at' => null,
                 'provider' => $pr
             ]);
-            if ($this->_provider_order ) {
+            if ($this->_provider_order) {
                 $this->_provider_order ->order_at = $time;
             }
             else {
@@ -135,17 +135,20 @@ class ProviderController extends Controller
 
         $order_products = OrderProduct::find()->joinWith('order')
             ->select(["provider, product_vendor, product_name, old_price, SUM($count_attr) AS count_by_c1id"])
-            ->where(['order.status' => $status_before])
+            ->where(['order.status' => $status_before] + (!$is_preorder ?
+                    ['order.provider_order_id' => $this->_provider_order->id] : []))
             ->groupBy('provider, product_vendor, product_name, old_price')
             ->all();
 
         $providers = [];
         foreach ($order_products as $op) {
-            if (array_key_exists($op->provider, $providers)) {
-                $providers[$op->provider][] = $op;
-            }
-            else {
-                $providers[$op->provider] =  [$op];
+            if ($op->count_by_c1id > 0) {
+                if (array_key_exists($op->provider, $providers)) {
+                    $providers[$op->provider][] = $op;
+                }
+                else {
+                    $providers[$op->provider] =  [$op];
+                }
             }
         }
 
@@ -222,7 +225,7 @@ class ProviderController extends Controller
 
     public function actionIndex()
     {
-        $this->_dir_name = \Yii::getAlias('@app') . '/temp/provider-order/' . date('Y-m-d-H');
+        $this->_dir_name = \Yii::getAlias('@app') . '/temp/provider-order/' . date('Y-m-d');
         is_dir($this->_dir_name) or mkdir($this->_dir_name, 0755, true);
         $this->setUnpaidStatus();
         $this->setNotTakenStatus();
