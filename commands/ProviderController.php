@@ -222,7 +222,7 @@ class ProviderController extends Controller
 
     public function actionIndex()
     {
-        $this->_dir_name = 'temp/provider-order/' . date('Y-m-d');
+        $this->_dir_name = \Yii::getAlias('@app') . '/temp/provider-order/' . date('Y-m-d-H');
         is_dir($this->_dir_name) or mkdir($this->_dir_name, 0755, true);
         $this->setUnpaidStatus();
         $this->setNotTakenStatus();
