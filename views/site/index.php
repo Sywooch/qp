@@ -4,7 +4,7 @@
 /** @var $catalog app\models\Good\Menu  */
 /** @var $products app\models\Good\Good  */
 /** @var $stats array */
-
+/** @var $is_discount */
 use app\components\catalog\CategoryWidget;
 use app\components\catalog\ProductWidget;
 use app\components\Html;
@@ -33,7 +33,7 @@ $tomorrow = date("d m", strtotime("+1 day"));
     </section>
     <section class="top-product">
         <div class="section-title">
-            Популярные товары
+            <?= $is_discount ? 'Товары со скидкой' : 'Популярные товары' ?>
         </div>
         <div class="row">
             <?php

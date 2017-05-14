@@ -14,6 +14,7 @@ $itemMenu = [
         ['label' => 'Отзывы', 'url' => ['/site/reviews']],
     ],
     'bottom' => [
+        ['label' => 'Популярное', 'url' => '/'],
         ['label' => 'Акции', 'url' => ['/', 'is_discount' => 1]],
     ]
 ];

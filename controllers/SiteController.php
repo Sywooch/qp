@@ -107,7 +107,7 @@ class SiteController extends Controller
         ];
 
 
-        $products = $is_discount ?
+        $products = !$is_discount ?
             Yii::$app->db->cache(function ($db) {
                 return Good::find()
                     ->select('good.*')
@@ -119,9 +119,7 @@ class SiteController extends Controller
                     ->limit(6)
                     ->all();
             }, null, new TagDependency(['tags' => 'cache_table_' . Bookmark::tableName()]))
-
             :
-
             Yii::$app->db->cache(function ($db) {
                 return Good::find()->where(['status' => Good::STATUS_OK, 'is_discount' => true])->limit(6)->all();
             }, null, new TagDependency(['tags' => 'cache_table_' . Good::tableName()]));
@@ -130,6 +128,7 @@ class SiteController extends Controller
             'catalog' => Menu::getRoot(),
             'products' => $products,
             'stats' => $stats,
+            'is_discount' => $is_discount,
         ]);
     }
 
