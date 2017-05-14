@@ -165,11 +165,8 @@ class Order extends CachedActiveRecord
     }
 
     public function getLink() {
-        $link = Yii::$app->urlManager->createAbsoluteUrl(
-            [
-                "/profile/order/view/",
-                'id' => $this->id,
-            ]);
+        // plain link here to use $order->link in commands/ProviderController.php
+        $link = "http://qpvl.ru/profile/order/view?id=$this->id";
         return "<a href=$link>Заказ $this->public_id</a>";
     }
 }

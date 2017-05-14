@@ -18,7 +18,7 @@ $this->params['breadcrumbs'][] = $this->title;
             [
                 'format' => 'raw',
                 'value' => function($model) { return Html::decode($model->text); },
-                'label' => Yii::t('app', 'Some Label')
+                'label' => 'Сообщение',
             ],
             [
                 'class' => 'yii\grid\ActionColumn',
