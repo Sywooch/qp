@@ -6,6 +6,7 @@ use app\models\Order;
 use app\models\OrderProduct;
 use app\models\Profile\Message;
 use app\models\ProviderOrder;
+use Exception;
 use PHPExcel;
 use PHPExcel_IOFactory;
 use PHPExcel_Shared_Date;
@@ -22,38 +23,14 @@ class ProviderController extends Controller
     private $_provider_order;
 
     public function initExcel($is_preorder, $pr) {
-        $time = localtime();
-        if ($is_preorder) {
-            $this->_provider_order = new ProviderOrder([
-                'pre_order_at' => $time,
-                'provider' => $pr
-            ]);
-        }
-        else {
-            $this->_provider_order = ProviderOrder::cachedFindOne([
-                'order_at' => null,
-                'provider' => $pr
-            ]);
-            if ($this->_provider_order) {
-                $this->_provider_order ->order_at = $time;
-            }
-            else {
-                print("ERROR: Can't find pre-order for provider $pr\n");
-                $this->_provider_order = new ProviderOrder([
-                    'order_at' => $time,
-                    'provider' => $pr
-                ]);
-            }
-        }
-        $this->_provider_order->save();
-
+        $time = time();
         $objPHPExcel = new PHPExcel();
         $objPHPExcel->setActiveSheetIndex(0)
             ->setCellValue('A1', 'Бланк' . ($is_preorder ? ' предварительного' : '') . ' заказа поставщику №')
             ->setCellValue('B1', $this->_provider_order->id)
 
             ->setCellValue('A2', 'Дата')
-            ->setCellValue('B2', PHPExcel_Shared_Date::PHPToExcel( $time ))
+            ->setCellValue('B2', PHPExcel_Shared_Date::PHPToExcel( $time, true ))
 
             ->setCellValue('C1', 'Название поставщика')
             ->setCellValue('D1', PropertyValue::cachedFindOne(['c1id' => $pr])->value)
@@ -128,55 +105,90 @@ class ProviderController extends Controller
         ;
     }
 
-    public function Excel($is_preorder) {
-        list($status_before, $status_after, $excel_name, $count_attr) = $is_preorder ?
-            [Order::STATUS_NEW, Order::STATUS_PROVIDER_CHECKING, 'preorder', 'products_count'] :
-            [Order::STATUS_PAID, Order::STATUS_ORDERED, 'order', 'confirmed_count'];
-
+    public function selectPreorders() {
         $order_products = OrderProduct::find()->joinWith('order')
-            ->select(["provider, product_vendor, product_name, old_price, SUM($count_attr) AS count_by_c1id"])
-            ->where(['order.status' => $status_before] + (!$is_preorder ?
-                    ['order.provider_order_id' => $this->_provider_order->id] : []))
+            ->select(["provider, product_vendor, product_name, old_price, SUM(products_count) AS count_by_c1id"])
+            ->where(['order.status' => Order::STATUS_NEW])
             ->groupBy('provider, product_vendor, product_name, old_price')
             ->all();
-
         $providers = [];
         foreach ($order_products as $op) {
-            if ($op->count_by_c1id > 0) {
-                if (array_key_exists($op->provider, $providers)) {
-                    $providers[$op->provider][] = $op;
-                }
-                else {
-                    $providers[$op->provider] =  [$op];
-                }
+            $key = $op->provider;
+            if (array_key_exists($key, $providers)) {
+                $providers[$key][] = $op;
+            }
+            else {
+                $providers[$key] =  [$op];
             }
         }
+        return $providers;
+    }
 
-        foreach($providers as $pr => $orders) {
-            $provider_name = PropertyValue::cachedFindOne(['c1id' => $pr])->value;
-
-            $excel = $this->initExcel($is_preorder, $pr);
-            $this->addOrders($orders, $excel, $is_preorder);
-
-            $objWriter = PHPExcel_IOFactory::createWriter($excel, 'Excel2007');
-            $dir_name = $this->_dir_name . Helper::ru2Lat("/$provider_name");
-
-            is_dir($dir_name) or mkdir($dir_name);
-            $objWriter->save($dir_name . "/$excel_name.xlsx");
+    public function selectOrders() {
+        $order_products = OrderProduct::find()->joinWith('order')
+            ->select(["provider_order_id, provider, product_vendor, product_name, old_price, SUM(confirmed_count) AS count_by_c1id"])
+            ->where(['order.status' => Order::STATUS_PAID])
+            ->groupBy('provider_order_id, provider, product_vendor, product_name, old_price')
+            ->all();
+        $provider_orders = [];
+        foreach ($order_products as $op) {
+            $key = $op->provider_order_id;
+            if (array_key_exists($key, $provider_orders)) {
+                $provider_orders[$key][] = $op;
+            }
+            else {
+                $provider_orders[$key] = [$op];
+            }
         }
-
-        foreach (Order::cachedFindAll(['status' => $status_before]) as $order) {
-            $order->status = $status_after;
-            $order->save();
-        }
+        return $provider_orders;
     }
 
     public function actionPreOrders() {
-        $this->Excel(true);
+        foreach($this->selectPreorders() as $pr => $orders) {
+            $this->_provider_order = new ProviderOrder([
+                'pre_order_at' => time(),
+                'provider' => $pr
+            ]);
+            if(!$this->_provider_order->save()) {
+                throw new Exception("ERROR: while saving provider_order in DB: " .
+                    implode(', ', $this->_provider_order->getFirstErrors()) . "\n");
+            }
+
+            $excel = $this->initExcel(true, $pr);
+            $this->addOrders($orders, $excel, true);
+
+            $objWriter = PHPExcel_IOFactory::createWriter($excel, 'Excel2007');
+            $dir_name = $this->_dir_name . Helper::ru2Lat('/' . PropertyValue::cachedFindOne(['c1id' => $pr])->value);
+
+            is_dir($dir_name) or mkdir($dir_name);
+            $objWriter->save($dir_name . '/' . $this->_provider_order->id . '-preorder.xlsx');
+        }
+        Order::updateAll(['status' => Order::STATUS_PROVIDER_CHECKING], ['status' => Order::STATUS_NEW]);
     }
 
     public function actionOrders() {
-        $this->Excel(false);
+        foreach($this->selectOrders() as $provider_order_id => $orders) {
+            $this->_provider_order = ProviderOrder::cachedFindOne($provider_order_id);
+            if(!$this->_provider_order) {
+                throw new Exception("ERROR: Can't find pre-order with id $provider_order_id \n");
+            }
+            $this->_provider_order->order_at = time();
+            if(!$this->_provider_order->save()) {
+                throw new Exception("ERROR: while saving provider_order in DB: " .
+                    implode(', ', $this->_provider_order->getFirstErrors()) . "\n");
+            }
+            $provider_c1id = $this->_provider_order->provider;
+            $excel = $this->initExcel(false, $provider_c1id);
+            $this->addOrders($orders, $excel, false);
+
+            $objWriter = PHPExcel_IOFactory::createWriter($excel, 'Excel2007');
+            $dir_name = $this->_dir_name . Helper::ru2Lat('/' .
+                    PropertyValue::cachedFindOne(['c1id' => $provider_c1id])->value);
+
+            is_dir($dir_name) or mkdir($dir_name);
+            $objWriter->save($dir_name . '/' . $this->_provider_order->id . '-order.xlsx');
+        }
+        Order::updateAll(['status' => Order::STATUS_ORDERED], ['status' => Order::STATUS_PAID]);
     }
 
 
@@ -199,7 +211,6 @@ class ProviderController extends Controller
             ['status' => Order::STATUS_CONFIRMED],
             ['status' => Order::STATUS_PARTIAL_CONFIRMED],
         ]);
-        Order::flushCache();
     }
 
     public function setNotTakenStatus() {
@@ -220,7 +231,6 @@ class ProviderController extends Controller
             'status=' . Order::STATUS_DELIVERED,
             'updated_at<=' . (time() - Yii::$app->params['order.deliveredExpire'])
         ]);
-        Order::flushCache();
     }
 
     public function actionIndex()
@@ -233,7 +243,5 @@ class ProviderController extends Controller
         $this->actionOrders();
         Helper::archiveDir($this->_dir_name);
         Helper::deleteDir($this->_dir_name);
-
-        $this->setUnpaidStatus();
     }
 }

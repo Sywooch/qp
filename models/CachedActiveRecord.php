@@ -20,6 +20,12 @@ class CachedActiveRecord extends ActiveRecord
         return true;
     }
 
+    static function updateAll($attr, $cond = null, $params = [])
+    {
+        $ret = parent::updateAll($attr, $cond, $params);
+        self::flushCache();
+        return $ret;
+    }
     /**
      * @param bool $insert
      * @return bool
