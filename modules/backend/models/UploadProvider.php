@@ -103,8 +103,8 @@ class UploadProvider extends Model
                 $link = $order->getLink();
                 $msg = new Message([
                     'user_id' => $order->user_id,
-                    'text' => "$link был $order->status_str и должен быть оплачен до 23:30 " .
-                        date('d.m.Y', time())
+                    'text' => "$link был $order->status_str" . ($all_empty ? ' и должен быть оплачен до 23:30 ' .
+                        date('d.m.Y', time()) : '')
                 ]);
                 $msg->sendEmail();
                 $msg->save();
