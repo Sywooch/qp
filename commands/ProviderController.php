@@ -59,7 +59,7 @@ class ProviderController extends Controller
                 ->setCellValue('A3', 'к предварительному заказу №')
                 ->setCellValue('B3', $this->_provider_order->id)
                 ->setCellValue('A4', 'От')
-                ->setCellValue('B4', PHPExcel_Shared_Date::PHPToExcel( $time ));
+                ->setCellValue('B4', PHPExcel_Shared_Date::PHPToExcel( $time, true ));
         }
 
 
