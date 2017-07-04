@@ -7,58 +7,66 @@ use yii\bootstrap\NavBar;
 
 $itemMenu = [
     'top' => [
-        ['label' => 'Доставка', 'url' => ['/p/delivery']],
-        ['label' => 'Оплата', 'url' => ['/p/payment']],
-        ['label' => 'О компании', 'url' => ['/p/about']],
-        ['label' => 'Контакты', 'url' => ['/site/contact']],
-        ['label' => 'Отзывы', 'url' => ['/site/reviews']],
+
     ],
     'bottom' => [
-        ['label' => 'Популярное', 'url' => '/'],
         ['label' => 'Акции', 'url' => ['/', 'is_discount' => 1]],
+        ['label' => 'О компании', 'url' => ['/p/about']],
+        ['label' => 'Доставка', 'url' => ['/p/delivery']],
+        ['label' => 'Оплата', 'url' => ['/p/payment']],
+        ['label' => 'Отзывы', 'url' => ['/site/reviews']],
+        ['label' => 'Контакты', 'url' => ['/site/contact']],
     ]
 ];
 ?>
 
 <header class="header">
-    <div class="header__top hidden-xs">
-        <div class="container">
-            <?php
-            echo Nav::widget([
-                'options' => ['class' => 'nav header__top-navbar'],
-                'items' => $itemMenu['top'],
-            ]);
-            ?>
-        </div>
-    </div>
     <div class="header__middle">
         <div class="container">
             <div class="row">
-                <div class="col-md-3 col-xs-6 col-xs-offset-3 col-md-offset-0">
-                    <div class="header__logo">
-                        <a class="navbar-brand" href="/">Купи</a>
+                <div class="col-md-2 header__contact">
+                    <div>
+                        <span class="clock lnr lnr-clock"></span><span class="clock-text">с 10:00 до 19:00</span>
                     </div>
-                    <div class="header__slogan">
-                        Интернет-супермаркет
+                    <div>
+                        <span class="phone lnr lnr-phone-handset"></span>
+                        <span class="phone-text"><?=Yii::$app->params['phone.manager']?></span>
                     </div>
                 </div>
-                <div class="col-xs-3 visible-xs visible-sm mobile-nav-controls">
-                    <button class="btn btn-search-modal" data-toggle="modal" data-target=".bs-search-modal-lg">
-                        <i class="fa fa-search"></i>
-                    </button>
-                </div>
-                <div>
-
-                </div>
-                <div class="col-md-6 col-xs-12">
+                <div class="col-md-2 col-xs-12">
                     <section class="search row">
                         <?= $this->render('_search_form', ['text' => '']) ?>
+                        <div class="col-xs-3 visible-xs visible-sm mobile-nav-controls">
+                            <button class="btn btn-search-modal" data-toggle="modal" data-target=".bs-search-modal-lg">
+                                <i class="fa fa-search"></i>
+                            </button>
+                        </div>
                     </section>
                 </div>
-                <div class="col-md-3 hidden-xs hidden-sm">
-                    <div class="header__phone">
-                        <?=Yii::$app->params['phone.manager']?>
+                <div class="col-md-3 col-xs-6 col-xs-offset-3 col-md-offset-0">
+                    <div class="header__logo">
+                        <a class="header__logo-link" href="/">
+                            <img src="/img/logo-qp.gif">
+                        </a>
+                        <span class="header__logo-slogan">
+                            Интернет-супермаркет
+                        </span>
                     </div>
+
+                </div>
+                <div class="col-md-3 col-xs-6 col-xs-offset-3 col-md-offset-0">
+                    <?php
+                    echo Nav::widget([
+                        'options' => ['class' => 'navbar-nav nav header__personal'],
+                        'items' => [
+                            LoginWidget::widget(),
+                            "<li class=\"header__bookmark\">
+                                <a href='/profile/bookmark'><span class=\"icon lnr lnr-heart\"></span> Избранное</a>
+                            </li>" ,
+                            "<li class=\"shopping\">".\app\components\CartWidget::widget()."</li>"
+                        ],
+                    ]);
+                    ?>
                 </div>
             </div>
         </div>
@@ -83,15 +91,7 @@ $itemMenu = [
                         ], $itemMenu['bottom'] ),
                     ]);
                     ?>
-                    <?php
-                    echo Nav::widget([
-                        'options' => ['class' => 'navbar-nav nav header__personal'],
-                        'items' => [
-                            LoginWidget::widget(),
-                            "<li class=\"shopping\">".\app\components\CartWidget::widget()."</li>",
-                        ],
-                    ]);
-                    ?>
+
                 </div>
             </div>
         </div>

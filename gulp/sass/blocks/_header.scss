@@ -1,9 +1,11 @@
+@import "../variable";
+
 $line-height-header: 50px;
 /*
  * Header default
  */
 .header {
-
+  background-color: #fff;
   // top header
   &__top {
     $_height: 32px;
@@ -63,11 +65,21 @@ $line-height-header: 50px;
   // End middle header
 
   &__logo {
-    a {
-      color: $cgreen;
-      font-size: 5.5rem;
+    display: flex;
+    flex-direction: column;
+    &-link {
+      color: #00c57b;
+      font-size: 2.5rem;
+      line-height: 1em;
       text-align: center;
       width: 100%;
+      img {
+        height: 60px;
+      }
+    }
+    &-slogan {
+      font-size: 14px;
+      text-align: center;
     }
   }
   &__slogan {
@@ -80,7 +92,7 @@ $line-height-header: 50px;
     padding-left: 0;
   }
   &__navbar {
-    background-color: $colorgray;
+    background-color: #3e5763;
     line-height: 2rem;
     li:first-child {
       padding-left: 0;
@@ -89,9 +101,8 @@ $line-height-header: 50px;
       padding: 10px 6px;
       & > a {
         border-radius: 3px;
-        color: #434345;
+        color: #fff;
         font-size: 1.6rem;
-        font-weight: 600;
         padding: 8px 10px;
       }
       &.active > a, & > a:hover, & > a:focus {
@@ -122,16 +133,26 @@ $line-height-header: 50px;
       }
     }
   }
-  &__phone {
-    font-size: 2.5rem;
-    text-align: center;
-    padding-top: 25px;
+  &__contact {
+    flex-direction: column;
+    padding-top: 15px;
+    margin-right: 20px;
+    flex-basis: 45%;
+    & > div {
+      margin-bottom: 10px;
+    }
+    .lnr {
+      margin-right: 10px;
+      font-size: 16px;
+    }
   }
   &__personal {
-    float: right;
+    height: 90px;
+    display: flex;
+    align-items: center;
     & > li {
       &.active > a, & > a:hover, & > a:focus, .btn {
-        background-color: #dddddf;
+        background-color: transparent;
         color: #434345;
       }
       .btn {
@@ -139,6 +160,18 @@ $line-height-header: 50px;
         text-align: left;
         text-decoration: none;
       }
+    }
+  }
+  &__bookmark {
+    a {
+      display: flex !important;
+      align-items: center;
+      height: 46px;
+      color: #333;
+    }
+    .icon {
+      font-size: 34px;
+      color: #333;
     }
   }
 }
@@ -184,6 +217,28 @@ $line-height-header: 50px;
 
 
 .shopping {
+  a {
+    display: flex !important;
+    align-items: center;
+    height: 46px;
+    color: #333;
+
+  }
+  .icon {
+    font-size: 34px;
+    color: #333;
+  }
+  .cart-number {
+    font-size: 12px;
+    height: 16px;
+    padding: 0 8px;
+    line-height: 16px;
+    text-align: center;
+    color: #fff;
+    background-color: #f66;
+    -webkit-border-radius: 16px;
+    border-radius: 16px;
+  }
   .badge {
     background-color: $cgreen;
   }
