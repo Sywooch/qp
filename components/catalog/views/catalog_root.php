@@ -21,7 +21,7 @@ function traversal($node) {
     }
     else {
         echo Html::beginTag('li') . "\n";
-        echo Html::a($node->name . '(' . $node->getProductCount() . ')', ['catalog/view', 'id' => $node->id]);
+        echo Html::a($node->name . '<span>' . $node->getProductCount() . '</span>', ['catalog/view', 'id' => $node->id]);
     }
     echo Html::endTag('li') . "\n";
 }

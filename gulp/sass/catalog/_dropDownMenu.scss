@@ -5,8 +5,11 @@
       visibility: visible;
     }
   }
+  &.catalog-active {
+    background-color: #324853 !important;
+  }
   &.active > a, &.catalog-active > a {
-    background-color: $cgreen !important;
+    background-color: #324853 !important;
     color: $white-1 !important;
     &:before {
       transform: rotate(-45deg);
@@ -18,7 +21,7 @@
     }
   }
   & > a {
-    background-color: $cgreen;
+    background-color: #324853;
     color: $white-1 !important;
     width: 260px;
     &:before, &:after {
@@ -34,12 +37,12 @@
     }
     &:before {
       transform: rotate(45deg);
-      right: 11px;
+      right: 16px;
       top: 21px;
     }
     &:after {
       transform: rotate(-45deg);
-      right: 5px;
+      right: 9px;
       top: 15px;
     }
   }
@@ -47,7 +50,7 @@
     @include shadow();
     list-style: none;
     opacity: 0;
-    padding: 10px 0;
+    padding: 0;
     position: absolute;
     height: auto;
     width: 250px;
@@ -58,10 +61,18 @@
     visibility: hidden;
     li {
       padding: 0;
+      border-bottom: 1px solid #f4f5f5;
       a {
         &:hover {
           background: transparent;
           color: $black-1;
+        }
+        span {
+          margin-left: 8px;
+          color: #bfbfbf;
+          padding: 1px 7px;
+          border-radius: 2px;
+          font-size: 11px;
         }
       }
       & > a {

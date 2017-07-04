@@ -12,6 +12,7 @@
     list-style: none;
     padding-left: 0;
     margin-top: -20px;
+    background-color: #fff;
     li.has-child {
       & > a {
         &:before, &:after {
@@ -52,11 +53,24 @@
     li {
       text-indent: 0;
       position: relative;
+      border-bottom: 1px solid #f4f5f5;
       a {
-        color: rgb(67, 67, 69);
         width: 100%;
         display: block;
-        padding: 5px 15px;
+        padding: 10px 15px;
+        color: #5b6970;
+        font-size: 12px;
+        white-space: nowrap;
+        text-overflow: ellipsis;
+        text-transform: uppercase;
+        position: relative;
+        span {
+          margin-left: 8px;
+          color: #bfbfbf;
+          padding: 1px 7px;
+          border-radius: 2px;
+          font-size: 11px;
+        }
         &:hover {
           background-color: $colorgray;
           text-decoration: none;
