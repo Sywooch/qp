@@ -94,6 +94,7 @@ $line-height-header: 50px;
   &__navbar {
     background-color: #3e5763;
     line-height: 2rem;
+    border-radius: 0;
     li:first-child {
       padding-left: 0;
       padding-right: 0;
@@ -152,6 +153,14 @@ $line-height-header: 50px;
     display: flex;
     align-items: center;
     & > li {
+      span > a {
+        color: #333;
+        &:hover {
+          span:not(.icon) {
+            text-decoration: underline;
+          }
+        }
+      }
       &.active > a, & > a:hover, & > a:focus, .btn {
         background-color: transparent;
         color: #434345;

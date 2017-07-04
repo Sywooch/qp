@@ -61,7 +61,10 @@ $itemMenu = [
                         'items' => [
                             LoginWidget::widget(),
                             "<li class=\"header__bookmark\">
-                                <a href='/profile/bookmark'><span class=\"icon lnr lnr-heart\"></span> Избранное</a>
+                                <a href='/profile/bookmark'>
+                                    <span class=\"icon lnr lnr-heart\"></span> 
+                                    <span class=\"link bookmark-text\">Избранное</span> 
+                                </a>
                             </li>" ,
                             "<li class=\"shopping\">".\app\components\CartWidget::widget()."</li>"
                         ],

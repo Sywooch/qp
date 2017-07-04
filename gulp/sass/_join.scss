@@ -1,6 +1,7 @@
 .join {
   &-body {
-    background-color: $colorgray;
+    background-color: white;
+
   }
   &-recovery {
     padding-top: 11px;
@@ -26,7 +27,7 @@
     .active {
       a {
         color: $colorblack;
-        background-color: $colorgray;
+        background-color: white;
         box-shadow: none;
         &:hover {
           cursor: default;

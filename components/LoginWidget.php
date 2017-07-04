@@ -17,8 +17,8 @@ class LoginWidget extends Widget
         $cart = "<li class=\"shopping\">".\app\components\CartWidget::widget()."</li>";
 
         if(\Yii::$app->user->isGuest) {
-            echo  '<li>' . Html::a('Вход', ['/site/login'] ) . '</li>';
-            echo  '<li>' . Html::a('Регистрация', ['/site/reg'] ) . '</li>';
+            echo  '<li><span>' . Html::a('Вход', ['/site/login'] ) . '</span></li>&nbsp;/&nbsp;';
+            echo  '<li><span>' . Html::a('Регистрация', ['/site/reg'] ) . '</span></li>';
             if($this->mobile) {
                 echo  '<li>' . Html::a('Главная', ['/'] ) . '</li>';
                 echo $cart;
