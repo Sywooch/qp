@@ -1,6 +1,6 @@
 @import "../variable";
 
-$line-height-header: 50px;
+$line-height-header: 60px;
 /*
  * Header default
  */
@@ -53,6 +53,7 @@ $line-height-header: 50px;
 
   // Middle header
   &__middle {
+    background-color: $color-bg;
     @media (max-width: $screen-xs-min) {
       height: $line-height-header;
     }
@@ -202,21 +203,29 @@ $line-height-header: 50px;
       }
     }
 
+    &__navbar {
+      background-color: white;
+    }
+
     &__logo {
+      padding-top: 10px;
       a {
         font-size: 2rem;
         margin-top: -5px;
         z-index: 3;
       }
+      img {
+        height: 40px;
+      }
+      &-slogan {
+        font-size: 1rem;
+        position: relative;
+        line-height: 1rem;
+        height: 1rem;
+      }
     }
 
-    &__slogan {
-      font-size: 1rem;
-      position: relative;
-      top: -10px;
-      line-height: 1rem;
-      height: 1rem;
-    }
+
 
   }
 
@@ -332,10 +341,15 @@ $line-height-header: 50px;
 
 .navbar-toggle {
   transition: background-color 200ms linear;
-  background-color: transparent;
   float: left;
-  margin-left: 5px;
+  background-color: transparent;
   z-index: 2;
+  position: relative;
+  margin: 0;
+  padding: 10px 10px;
+  top: 12px;
+  border: 1px solid transparent;
+  border-radius: 4px;
   .icon-bar {
     border-bottom: 1px solid $colorblack;
   }
