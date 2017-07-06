@@ -61,6 +61,7 @@ class Order extends CachedActiveRecord
     /**
      * @inheritdoc
      */
+    public $total_price, $confirmed_price;
     public function rules()
     {
         return [
@@ -72,6 +73,8 @@ class Order extends CachedActiveRecord
                 'targetAttribute' => ['user_id' => 'id']],
             ['status', 'in', 'range' => array_keys(self::$STATUS_TO_STRING)],
             ['status', 'default', 'value' => self::STATUS_NEW],
+            ['total_price', 'safe'],
+            ['confirmed_price', 'safe'],
         ];
     }
 
@@ -92,8 +95,11 @@ class Order extends CachedActiveRecord
             'status' => 'Статус',
             'status_str' => 'Статус',
             'password' => 'Секретный ключ',
-            'totalPrice' => 'Сумма заказа',
-            'confirmedPrice' => 'Сумма к оплате',
+            'total_price' => 'Сумма заказа',
+            'confirmed_price' => 'Сумма к оплате',
+            'totalPriceHtml' => 'Сумма заказа',
+            'confirmedPriceHtml' => 'Сумма к оплате',
+            'ref' => 'Номер заказа',
         ];
     }
     /**
@@ -101,7 +107,10 @@ class Order extends CachedActiveRecord
      */
 
     public function getStatus_str() {
-        return self::$STATUS_TO_STRING[$this->status];
+        return Yii::$app->getUser()->can('manager') ?
+            self::$STATUS_TO_STRING[$this->status] :
+            explode('(', self::$STATUS_TO_STRING[$this->status])[0]
+            ;
     }
 
     public function getUser()
@@ -115,7 +124,7 @@ class Order extends CachedActiveRecord
         return OrderProduct::cachedFindAll(['order_id' => $this->id]);
     }
 
-    public function getConfirmedPrice()
+    public function getConfirmedPriceHtml()
     {
         $has_nonconf = false;
         $ret = Html::unstyled_price(array_reduce($this->orderProducts, function($carry, $item) use(&$has_nonconf){
@@ -127,7 +136,7 @@ class Order extends CachedActiveRecord
         return $has_nonconf ? null : $ret;
     }
 
-    public function getTotalPrice()
+    public function getTotalPriceHtml()
     {
         return Html::unstyled_price(array_reduce($this->orderProducts, function($carry, $item) {
                 return $carry + $item->products_count * $item->old_price;

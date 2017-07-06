@@ -33,13 +33,13 @@ use app\models\User;
             <tr>
                 <td class="key">Сумма заказа</td>
                 <td class="value">
-                    <?=$order->getTotalPrice()?>
+                    <?=$order->getTotalPriceHtml()?>
                 </td>
             </tr>
             <tr>
             <tr>
                 <td class="key">Сумма к оплате</td>
-                <td class="value"><?=is_null($pr = $order->getConfirmedPrice()) ? '-' : $pr ?>
+                <td class="value"><?=is_null($pr = $order->getConfirmedPriceHtml()) ? '-' : $pr ?>
                 </td>
             </tr>
         </table>

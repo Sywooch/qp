@@ -23,8 +23,8 @@ $this->params['breadcrumbs'][] = $this->title;
                 }
             ],
             'created_at:datetime',
-            'totalPrice',
-            'confirmedPrice',
+            'totalPriceHtml',
+            'confirmedPriceHtml',
             'status_str',
             [
                 'class' => 'yii\grid\ActionColumn',
