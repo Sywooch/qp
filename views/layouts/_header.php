@@ -119,7 +119,6 @@ echo Nav::widget([
          $divider ,
 
         $itemMenu['bottom'],
-        $divider ,
         $itemMenu['top'],
         [ $this->render('mobile/_sidebarLogout') ]
     )
