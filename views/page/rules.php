@@ -36,7 +36,7 @@ $this->params['breadcrumbs'][] = $this->title;
         padding-left: 0;
     }
 </style>
-<div class="p-rules">
+<div class="page-static p-rules">
     <h1><?= Html::encode($this->title) ?></h1>
     <div class="row">
         <div class="col-sm-2">

@@ -10,7 +10,7 @@ $this->params['catalog'] = true;
 $this->title = 'Отзывы';
 $this->params['breadcrumbs'][] = $this->title;
 ?>
-<div class="site-contact">
+<div class="page-static">
     <h1><?=$this->title?></h1>
 
     <?php if (Yii::$app->session->hasFlash('contactFormSubmitted')): ?>
