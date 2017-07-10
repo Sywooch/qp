@@ -1,6 +1,8 @@
 <?php
 
+use app\assets\ManagerAsset;
 use app\components\Html;
+use yii\bootstrap\Nav;
 use yii\grid\GridView;
 
 /* @var $this yii\web\View */
@@ -8,19 +10,54 @@ use yii\grid\GridView;
 
 $this->title = 'Панель менеджера';
 $this->params['breadcrumbs'][] = $this->title;
+
+$date = new DateTime();
+$date->add(DateInterval::createFromDateString('yesterday'));
+
+$today = date('Y-m-d');
+$yesterday = $date->format('Y-m-d');
+
+
+ManagerAsset::register($this);
 ?>
+<div class="manager-toolbar">
+    <div class="row manager-toolbar-wrap">
+        <div class="col-sm-7 manager-date">
+            <form action="/manager" method="get" class="datepicker-form">
+                <input type="hidden" name="before" class="manager-date-start" />
+                <input type="hidden" name="after" class="manager-date-end" />
+                <?php
+                echo Nav::widget([
+                    'options' => ['class' => 'nav nav-pills'],
+                    'encodeLabels' => false,
+                    'items' => [
+                        ['label' => 'Сегодня', 'url' => ['/manager', 'before' => $today, 'after' => $today]],
+                        ['label' => 'Вчера', 'url' => ['/manager', 'before' => $yesterday, 'after' => $yesterday]],
+                        '<li><input type="text" class="form-control date-interval" placeholder="Задать интервал" name="daterange"/></li>',
+                    ],
+                ]);
+                ?>
+            </form>
+        </div>
+        <div class="col-sm-5 manager-password">
+            <form action="/manager/secret" method="post">
+                <ul class="nav nav-pills">
+                    <li class="col-xs-8 cell">
+                        <input type="hidden" name="_csrf" value="<?=Yii::$app->request->getCsrfToken()?>" />
+                        <input type="text" name="password" class="form-control col-xs-10" placeholder="Секретный ключ заказа">
+                    </li>
+                    <li class="col-xs-3 cell">
+                        <button type="submit" class="btn">Отправить</button>
+                    </li>
+                </ul>
 
-<div class="manager-password">
+            </form>
+        </div><!-- manager-password -->
 
-    <form action="/manager/secret" method="post">
-        <input type="hidden" name="_csrf" value="<?=Yii::$app->request->getCsrfToken()?>" />
-        Секретный ключ заказа:<br>
-        <input type="text" name="password">
-        <br>
-        <input type="submit" value="Отправить">
-    </form>
+    </div>
+</div>
 
-</div><!-- manager-password -->
+
 
 <div class="product__table">
     <?= GridView::widget([
