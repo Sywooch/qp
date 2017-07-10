@@ -32,8 +32,9 @@ $(document).ready(function () {
 
 
     var interval = getInterval();
+    $dateInterval = $('.date-interval');
 
-    $('input[name="daterange"]').daterangepicker({
+    $dateInterval.daterangepicker({
         startDate: interval.start,
         endDate: interval.end,
         locale: {
@@ -45,7 +46,7 @@ $(document).ready(function () {
         }
     });
 
-    $dateInterval = $('.date-interval');
+
     $start = $('.manager-date-start');
     $end = $('.manager-date-end');
     $('.daterangepicker .applyBtn').click(function () {

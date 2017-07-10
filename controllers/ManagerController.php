@@ -90,10 +90,10 @@ class ManagerController extends Controller
         ]);
         $get = Yii::$app->request->get();
         if (isset($get['after'])) {
-            $dataProvider->query->andFilterWhere(['>=', 'order.created_at', $get['after']]);
+            $dataProvider->query->andFilterWhere(['>=', 'order.created_at', strtotime($get['after'])]);
         }
         if (isset($get['before'])) {
-            $dataProvider->query->andFilterWhere(['<=', 'order.created_at', $get['before']]);
+            $dataProvider->query->andFilterWhere(['<=', 'order.created_at', strtotime($get['before'])]);
         }
         if (isset($get['status'])) {
             $dataProvider->query->andFilterWhere(['in', 'order.status', explode(',', $get['status'])]);
