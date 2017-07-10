@@ -4,7 +4,7 @@ $this->title = "Доставка";
 $this->params['breadcrumbs'][] = $this->title;
 ?>
 <h1><?=$this->title?></h1>
-<div class="delivery">
+<div class="page-static delivery">
     <p>
         Мы осуществляем доставку по Владивостоку и о. Русский.<br/>
         <b>Стоимость доставки зависит от общей стоимости товаров в корзине:</b><br/>

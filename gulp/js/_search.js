@@ -121,7 +121,6 @@
                     for(i = 0; i < dataCategories.length; i++) {
                         dataCategories[i].url = '/catalog/view/' + dataCategories[i].id;
                     }
-                    App.log('Данные для поиска полученны');
                 },
                 error: function () {
                     App.log('Error #10');

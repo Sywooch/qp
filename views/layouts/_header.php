@@ -24,7 +24,7 @@ $itemMenu = [
     <div class="header__middle">
         <div class="container">
             <div class="row">
-                <div class="col-md-2 header__contact">
+                <div class="col-md-2 header__contact visible-md visible-lg">
                     <div>
                         <span class="clock lnr lnr-clock"></span><span class="clock-text">с 10:00 до 19:00</span>
                     </div>
@@ -54,7 +54,7 @@ $itemMenu = [
                     </div>
 
                 </div>
-                <div class="col-md-3 col-xs-6 col-xs-offset-3 col-md-offset-0">
+                <div class="col-md-3 col-xs-6 col-xs-offset-3 col-md-offset-0  visible-md visible-lg">
                     <?php
                     echo Nav::widget([
                         'options' => ['class' => 'navbar-nav nav header__personal'],
@@ -119,7 +119,6 @@ echo Nav::widget([
          $divider ,
 
         $itemMenu['bottom'],
-        $divider ,
         $itemMenu['top'],
         [ $this->render('mobile/_sidebarLogout') ]
     )

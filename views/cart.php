@@ -10,9 +10,8 @@ use yii\grid\GridView;
 $this->title = 'Корзина';
 ?>
 <main class="cart" id="app" data-stage="cart">
-    <h1><?= Html::encode($this->title) ?></h1>
 <?php if($dataProvider->getTotalCount()) : ?>
-
+    <h1><?= Html::encode($this->title) ?></h1>
     <div class="product__table">
         <?= GridView::widget([
             'dataProvider' => $dataProvider,
@@ -83,13 +82,17 @@ $this->title = 'Корзина';
     </div>
 
 <?php else: ?>
-    <div class="cart-empty">
+    <div class="cart-empty row">
+        <div class="cart-empty__icon col-sm-3">
+            <?=Html::img('@web/img/components/cart-empty.gif');?>
+        </div>
+        <div class="col-sm-9">
+            <h2>Корзина пуста :(</h2>
+            <br/>
+            <p><b>В корзине нет ни одного товара или услуги</b></p>
+            <p>Если вы считаете, что это ошибка, обратитесь в IT-отдел компании: <?=Yii::$app->params['phone.it']?></p>
 
-        <?=Html::img('@web/img/components/cart-empty.gif');?>
-        <h2>Корзина пуста</h2>
-        <br/>
-        <p><b>В корзине нет ни одного товара или услуги</b></p>
-        <p>Если вы считаете, что это ошибка, обратитесь в IT-отдел компании: <?=Yii::$app->params['phone.it']?></p>
+        </div>
     </div>
 <?php endif; ?>
 

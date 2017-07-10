@@ -20,6 +20,9 @@
 }
 
 .cart {
+  background-color: $color-bg;
+  padding-left: 15px;
+  padding-right: 15px;
   &-btn {
     margin-top: 20px;
   }
@@ -50,18 +53,6 @@
     float: right;
     width: 300px;
   }
-  &-empty {
-    img {
-      float: left;
-      margin-right: 20px;
-    }
-    h2 {
-      color: $red-1;
-    }
-    p {
-      font-size: 16px;
-    }
-  }
   @media (max-width: $screen-sm) {
     .btn-success {
       width: 100%;
@@ -69,6 +60,24 @@
     }
   }
 }
+
+.cart-empty {
+  padding-top: 50px;
+  padding-bottom: 50px;
+  &__icon {
+    text-align: center;
+  }
+  h2 {
+    color: $red-1;
+    @media (max-width: $screen-xs-min) {
+      text-align: center;
+    }
+  }
+  p {
+    font-size: 16px;
+  }
+}
+
 .fa-rub {
   color: #555;
   font-weight: 100;
