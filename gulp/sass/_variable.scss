@@ -1,5 +1,5 @@
 //== Colors
-
+$color-brand: #00C57B;
 $black-1: #000;
 $black-2: #151516;
 $black-3: #4f4f4f;
@@ -87,5 +87,3 @@ $medium-and-down: "only screen and (max-width : #{$medium-screen})" !default;
 $medium-only: "only screen and (min-width : #{$small-screen-up}) and (max-width : #{$medium-screen})" !default;
 
 //== Fonts
-
-@include font-face("Roboto", "../fonts/roboto/Roboto-Regular");

@@ -29,7 +29,7 @@ class CartWidget extends Widget
         $this->price = $cart->getCost();
         $this->countProduct = $cart->getCount();
         if($this->countProduct < 1) {
-            $this->result = '<span>Корзина</span>';
+            $this->result = '<span class="cart-number">0</span>';
         } else {
             $price = '<span class="shopping__price">'
                 . Html::price($this->price)
@@ -49,7 +49,7 @@ class CartWidget extends Widget
         }
         $this->content = '
             <a href="/cart">
-                <i class="fa fa-shopping-cart" aria-hidden="true"></i> '. $this->result
+                <span class="icon lnr lnr-cart"></span> '. $this->result
             . '</a>';
     }
 }

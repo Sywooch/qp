@@ -21,39 +21,27 @@ if (!$bookmark) {
 }
 ?>
 <div class='col-md-4 col-sm-6 col-xs-12'>
-    <div class="product card">
+    <div class="product">
         <?=Html::a($img, $url, ['class' => 'thumbnail'])?>
-        <div class="caption">
-            <div class="product-title">
-                <?=Html::a($product->name, $url)?>
-            </div>
-            <label class="product-price">
-                <?=Html::price($product->price)?>
-            </label>
-            <div class="product-panel">
-                <div class="btn-group"  data-toggle="buttons">
-                    <button class="btn btn-default bookmark <?=$bookmark->isNewRecord ? '' : 'active'?>"
-                            data-product-id="<?= $product->id ?>"
-                            data-placement="top"
-                            title="<?=$bookmark->isNewRecord ? 'В избранное' : 'В избранном'?>">
-                       <span class="bookmark-count">
-                           <?= $product->getBookmarksCount() ? $product->getBookmarksCount() : '' ?>
-                       </span>
-                        <input type="checkbox">
-                    </button>
-                    <?=Html::stepper($product->id)?>
-                    <button class="btn btn-icon btn-icon-left btn-success btn-compare"
-                            data-product-id="<?= $product->id ?>"
-                            data-product-count="1"
-                            data-active="1">
-                        <i class="fa fa-shopping-cart" aria-hidden="true"></i>
-                        <i class="fa fa-plus hidden-xs" aria-hidden="true"></i>
-                        <span class="visible-xs">Купить</span>
-                    </button>
-                </div>
-
-            </div>
-            <div class="clear" style="clear: both"></div>
+        <?=Html::a($product->name, $url, ['class' => 'product-name'])?>
+        <div class="product-price">
+            <?=Html::price($product->price)?>
         </div>
+        <div class="product-action">
+            <button class="btn product-to-bookmark btn-default bookmark <?=$bookmark->isNewRecord ? '' : 'active'?>"
+                    data-product-id="<?= $product->id ?>"
+                    data-placement="top"
+                    title="<?=$bookmark->isNewRecord ? 'В избранное' : 'В избранном'?>">
+                <span class="icon lnr lnr-heart"></span>
+                <span class="counter"><?= $product->getBookmarksCount() ? $product->getBookmarksCount() : '' ?></span>
+            </button>
+            <button class="btn product-to-cart btn-success btn-compare"
+                    data-product-id="<?= $product->id ?>"
+                    data-product-count="1"
+                    data-active="1">
+                <span>Купить</span>
+            </button>
+        </div>
+
     </div>
 </div>

@@ -1,3 +1,26 @@
+.search {
+  .form-control {
+    border-radius: 0;
+    border: none;
+    font-size: 14px;
+    box-shadow: none;
+  }
+  .input-group-addon {
+    padding: 0;
+    border: none;
+    width: 60px;
+    background-color: transparent;
+  }
+  &__btn {
+    background-color: transparent;
+    width: 100%;
+    height: 46px;
+    border-radius: 0;
+    font-size: 34px;
+    padding: 0;
+  }
+}
+
 .ui-autocomplete {
   position: absolute;
   top: 100%;
