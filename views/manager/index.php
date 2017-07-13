@@ -24,8 +24,8 @@ ManagerAsset::register($this);
     <div class="row manager-toolbar-wrap">
         <div class="col-sm-7 manager-date">
             <form action="/manager" method="get" class="datepicker-form">
-                <input type="hidden" name="before" class="manager-date-start" />
-                <input type="hidden" name="after" class="manager-date-end" />
+                <input type="hidden" name="after" class="manager-date-start" />
+                <input type="hidden" name="before" class="manager-date-end" />
                 <?php
                 echo Nav::widget([
                     'options' => ['class' => 'nav nav-pills'],
@@ -60,6 +60,7 @@ ManagerAsset::register($this);
 
 
 <div class="product__table">
+    <button class="btn js-print">Печать</button>
     <?= GridView::widget([
         'dataProvider' => $dataProvider,
         'columns' => [
