@@ -17,6 +17,18 @@ $date->add(DateInterval::createFromDateString('yesterday'));
 $today = date('Y-m-d');
 $yesterday = $date->format('Y-m-d');
 
+$get = Yii::$app->request->get();
+
+$interval = isset($get['after']) && isset($get['before']) ? $get['after'] : '';
+
+if (isset($get['after'])) {
+
+}
+if (isset($get['before'])) {
+
+}
+
+
 ManagerAsset::register($this);
 ?>
 <div class="manager-toolbar">
