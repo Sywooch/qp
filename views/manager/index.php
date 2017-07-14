@@ -17,7 +17,6 @@ $date->add(DateInterval::createFromDateString('yesterday'));
 $today = date('Y-m-d');
 $yesterday = $date->format('Y-m-d');
 
-
 ManagerAsset::register($this);
 ?>
 <div class="manager-toolbar">

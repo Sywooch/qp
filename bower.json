@@ -1,3 +1,21 @@
 {
-  "directory": "vendor/bower-asset"
+  "name": "qp",
+  "description": "qpvl",
+  "main": "gulpfile.js",
+  "authors": [
+    "s.chernov <s.chernov@cy.cardpay.com>"
+  ],
+  "license": "ISC",
+  "homepage": "https://github.com/sosed/qp",
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "vendor/bower",
+    "test",
+    "tests"
+  ],
+  "dependencies": {
+    "docxtemplater": "^3.1.3"
+  }
 }

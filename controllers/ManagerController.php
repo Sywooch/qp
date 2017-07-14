@@ -4,8 +4,10 @@ namespace app\controllers;
 
 use app\models\OrderProduct;
 use app\models\Profile\Message;
+use DateTime;
 use Yii;
 use app\models\Order;
+use yii\base\Object;
 use yii\caching\TagDependency;
 use yii\data\ActiveDataProvider;
 use yii\filters\AccessControl;
@@ -31,7 +33,8 @@ class ManagerController extends Controller
                 'class' => VerbFilter::className(),
                 'actions' => [
                     'order-ready' => ['POST'],
-                    'secret' => ['POST']
+                    'secret' => ['POST'],
+                    'get-orders-json' => ['GET']
                 ],
             ],
         ];
@@ -60,6 +63,12 @@ class ManagerController extends Controller
 
     public function actionIndex()
     {
+        return $this->render('index', [
+            'dataProvider' => $this->getOrders()
+        ]);
+    }
+
+    public function getOrders() {
         $dataProvider = new ActiveDataProvider([
             'query' => Order::find()
                 ->select('order.id, order.status, order.created_at, order.public_id, order.user_id, user.email,
@@ -106,9 +115,24 @@ class ManagerController extends Controller
             'cache_table_' . OrderProduct::tableName(),
         ]]));
 
-        return $this->render('index', [
-            'dataProvider' => $dataProvider,
-        ]);
+        return $dataProvider;
+    }
+
+    public function getOrdersJson() {
+        $dataProvider = $this->getOrders();
+        $items = [];
+        foreach ($dataProvider->models as $item) {
+            $ts = $item["created_at"];
+            $fdf = new DateTime("@$ts");
+            array_push($items, [
+                'id_order' => $item['public_id'],
+                'email' => $item['user']['email'],
+                'status' => $item['public_id'],
+                'price' => $item['status_str'],
+                'created' => $fdf->format('d-m-Y H:i:s')
+            ]);
+        }
+        return json_encode($items);
     }
 
     public function actionViewOrder($id) {
