@@ -118,7 +118,7 @@ class ManagerController extends Controller
         return $dataProvider;
     }
 
-    public function getOrdersJson() {
+    public function actionGetOrdersJson() {
         $dataProvider = $this->getOrders();
         $items = [];
         foreach ($dataProvider->models as $item) {

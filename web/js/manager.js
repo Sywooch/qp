@@ -83,67 +83,48 @@ $(document).ready(function () {
 
     $('.js-print').click(function () {
         var dateTime = new Date().today() + "_" + new Date().timeNow();
-        loadFile("../docs/list.tmpl.docx",function(error,content){
-            if (error) { throw error };
-            var zip = new JSZip(content);
-            var doc = new Docxtemplater().loadZip(zip);
-            doc.setData({
-                date_generated: dateTime,
-                order: [
-                    {
-                        id_order: "120938",
-                        email: "0652455478",
-                        status: "Готов",
-                        price: "323 руб",
-                        created:"12.12.2017"
-                    }, {
-                        id_order: "436",
-                        email: "csh@fd.ri",
-                        status: "Готов",
-                        price: "33 руб",
-                        created:"16.12.2017"
-                    }
-                ]
-            });
-            try {
-                // render the document (replace all occurences of {first_name} by John, {last_name} by Doe, ...)
-                doc.render()
-            }
-            catch (error) {
-                var e = {
-                    message: error.message,
-                    name: error.name,
-                    stack: error.stack,
-                    properties: error.properties
-                };
-                console.log(JSON.stringify({error: e}));
-                // The error thrown here contains additional information when logged with JSON.stringify (it contains a property object).
-                throw error;
-            }
-            var out = doc.getZip().generate({
-                type:"blob",
-                mimeType: "application/vnd.openxmlformats-officedocument.wordprocessingml.document",
-            }) //Output the document using Data-URI
-            saveAs(out,  dateTime + "_orders.docx");
-        });
-
-        // setTimeout(function () {
-        //     var filter = getFilter();
-        //
-        //     $.ajax( {
-        //         url: "/manager/getOrdersJson?after=" + filter.start +"&before=" + filter.end,
-        //         dataType: "json",
-        //         type: "get",
-        //         success: function( data ) {
-        //             console.log(data);
-        //
-        //         },
-        //         error: function () {
-        //             App.log('Error #11');
-        //             App.message('Произошла ошибка. Списоке заказов не удалось получить', false);
-        //         }
-        //     } );
-        // }, 0);
+        setTimeout(function () {
+            var filter = getFilter();
+            $.ajax( {
+                url: "/manager/get-orders-json?",//after=" + filter.start +"&before=" + filter.end,
+                dataType: "json",
+                type: "get",
+                success: function( data ) {
+                    loadFile("../docs/list.tmpl.docx",function(error,content){
+                        if (error) { throw error };
+                        var zip = new JSZip(content);
+                        var doc = new Docxtemplater().loadZip(zip);
+                        doc.setData({
+                            date_generated: dateTime,
+                            order: data
+                        });
+                        try {
+                            // render the document (replace all occurrences of {first_name} by John, {last_name} by Doe, ...)
+                            doc.render()
+                        }
+                        catch (error) {
+                            var e = {
+                                message: error.message,
+                                name: error.name,
+                                stack: error.stack,
+                                properties: error.properties
+                            };
+                            console.log(JSON.stringify({error: e}));
+                            // The error thrown here contains additional information when logged with JSON.stringify (it contains a property object).
+                            throw error;
+                        }
+                        var out = doc.getZip().generate({
+                            type:"blob",
+                            mimeType: "application/vnd.openxmlformats-officedocument.wordprocessingml.document",
+                        }) //Output the document using Data-URI
+                        saveAs(out,  dateTime + "_orders.docx");
+                    });
+                },
+                error: function () {
+                    App.log('Error #11');
+                    App.message('Произошла ошибка. Списоке заказов не удалось получить', false);
+                }
+            } );
+        }, 0);
     });
-
 });
