@@ -7,6 +7,7 @@ use yii\grid\GridView;
 
 /* @var $this yii\web\View */
 /* @var $dataProvider yii\data\ActiveDataProvider */
+/* @var $model app\models\OrderFilterForm */
 
 $this->title = 'Панель менеджера';
 $this->params['breadcrumbs'][] = $this->title;
@@ -27,7 +28,6 @@ if (isset($get['after'])) {
 if (isset($get['before'])) {
 
 }
-
 
 ManagerAsset::register($this);
 ?>

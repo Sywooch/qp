@@ -2,6 +2,7 @@
 
 namespace app\controllers;
 
+use app\models\OrderFilterForm;
 use app\models\OrderProduct;
 use app\models\Profile\Message;
 use DateTime;
@@ -63,9 +64,13 @@ class ManagerController extends Controller
 
     public function actionIndex()
     {
+        $model = new OrderFilterForm();
+        $model->load(Yii::$app->request->get(), '');
         return $this->render('index', [
-            'dataProvider' => $this->getOrders()
+            'dataProvider' => $this->getOrders(),
+            'model' => $model,
         ]);
+
     }
 
     public function getOrders() {
