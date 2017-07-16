@@ -152,10 +152,20 @@ class ManagerController extends Controller
     public function actionGetOrderContentJson($id) {
         $content = $this->getOrderContent($id);
         $content['order'] = self::order2array($content['order']);
-        $content['products'] = array_map(function ($x) { return [
-            'price' => $x->old_price / 100,
-            'products_count' => $x->confirmed_count,
+
+        $content['total_price'] = 0;
+        $content['total_products'] = 0;
+        $content['products'] = array_map(function ($x) use(&$content){
+            $price_sum = $x->old_price * $x->confirmed_count/ 100;
+            $content['total_price'] += $price_sum;
+            $content['total_products'] += $x->confirmed_count;
+            return [
+                'product_name' => $x->product_name,
+                'price' => $x->old_price / 100,
+                'products_count' => $x->confirmed_count,
+                'price_sum' => $price_sum,
         ];}, $content['products']);
+
         return json_encode($content);
     }
 
