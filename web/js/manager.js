@@ -81,16 +81,16 @@ $(document).ready(function () {
         JSZipUtils.getBinaryContent(url,callback);
     }
 
-    $('.js-print').click(function () {
+    function getFile(url, tmplPath, nameFile) {
         var dateTime = new Date().today() + "_" + new Date().timeNow();
         setTimeout(function () {
             var filter = getFilter();
             $.ajax( {
-                url: "/manager/get-orders-json?",//after=" + filter.start +"&before=" + filter.end,
+                url: url,//after=" + filter.start +"&before=" + filter.end,
                 dataType: "json",
                 type: "get",
                 success: function( data ) {
-                    loadFile("../docs/list.tmpl.docx",function(error,content){
+                    loadFile(tmplPath,function(error,content){
                         if (error) { throw error };
                         var zip = new JSZip(content);
                         var doc = new Docxtemplater().loadZip(zip);
@@ -117,7 +117,7 @@ $(document).ready(function () {
                             type:"blob",
                             mimeType: "application/vnd.openxmlformats-officedocument.wordprocessingml.document",
                         }) //Output the document using Data-URI
-                        saveAs(out,  dateTime + "_orders.docx");
+                        saveAs(out,  nameFile + dateTime  + ".docx");
                     });
                 },
                 error: function () {
@@ -126,5 +126,13 @@ $(document).ready(function () {
                 }
             } );
         }, 0);
+    }
+
+    $('.js-print').click(function () {
+        getFile("/manager/get-orders-json?", "../docs/list.tmpl.docx", "orders_");
+    });
+
+    $('.js-print-order').click(function () {
+        getFile("/manager/get-orders-json?", "../docs/order.tmpl.docx", "descr_");
     });
 });

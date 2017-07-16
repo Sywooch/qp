@@ -7,10 +7,14 @@ $this->params['breadcrumbs'][] = [
     'label' => 'Панель менеджера', 'url' => ['/manager']
 ];
 $this->params['breadcrumbs'][] = $this->title;
+ManagerAsset::register($this);
 ?>
 
-<?=$this->render('/order/_view', [
-    'products' => $products,
-    'order' => $order,
-    'is_owner' => false,
-]); ?>
+<div class="page-static">
+    <button class="btn js-print-order" style="float: right;">Сохранить в файл</button>
+    <?=$this->render('/order/_view', [
+        'products' => $products,
+        'order' => $order,
+        'is_owner' => false,
+    ]); ?>
+</div>
