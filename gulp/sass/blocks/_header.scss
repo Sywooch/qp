@@ -93,7 +93,7 @@ $line-height-header: 60px;
     padding-left: 0;
   }
   &__navbar {
-    background-color: #3e5763;
+    background-color: $color-navbar;
     line-height: 2rem;
     border-radius: 0;
     li:first-child {

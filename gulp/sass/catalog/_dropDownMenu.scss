@@ -6,7 +6,7 @@
     }
   }
   &.catalog-active {
-    background-color: #324853 !important;
+    background-color: $color-navbar-dark !important;
   }
   &.active > a, &.catalog-active > a {
     background-color: #324853 !important;
@@ -21,7 +21,7 @@
     }
   }
   & > a {
-    background-color: #324853;
+    background-color: $color-navbar-dark;
     color: $white-1 !important;
     width: 260px;
     &:before, &:after {

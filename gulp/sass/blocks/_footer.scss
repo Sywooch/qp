@@ -1,9 +1,11 @@
 .footer {
   margin-top: 40px;
-  border-top: 40px solid #F3F4F9;
+  border-top: 40px solid $color-navbar-dark;;
   padding-top: 30px;
+  background-color: $color-navbar;
+  color: white;
   &-title {
-    color: $black-1;
+
     line-height: 2;
     margin-top: 0;
     margin-bottom: 0;
@@ -12,7 +14,13 @@
     text-transform: uppercase;
   }
   a {
-    color: $black-2;
+    color: rgba(255, 255, 255, 0.8);
+    border-bottom: 1px dotted rgba(255, 255, 255, 0.5);
+    &:hover {
+      text-decoration: none;
+      border-bottom-style: solid;
+      color: white;
+    }
   }
   &-nav {
     list-style: none;
@@ -40,8 +48,9 @@
   }
   &__bottom {
     padding: 15px 0;
-    margin-top: 15px;
-    border-top: 3px solid $gray-1;
+    margin-top: 30px;
+    background-color: 3px solid $color-navbar;
+    background-color: $color-navbar-dark;
   }
 }
 .subscribe__btn {
