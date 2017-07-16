@@ -1,5 +1,7 @@
 <?php
 /* @var $products array of sapp\models\OrderProduct*/
+use app\assets\ManagerAsset;
+
 /* @var $order app\models\Order*/
 
 $this->title = 'Просмотр заказа';
