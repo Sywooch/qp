@@ -13,7 +13,7 @@ ManagerAsset::register($this);
 ?>
 
 <div class="page-static">
-    <button class="btn js-print-order" style="float: right;" data-order-id="<?=$id?>">Сохранить в файл</button>
+    <button class="btn js-print-order" style="float: right;" data-order-id="<?=$order->id?>">Сохранить в файл</button>
     <?=$this->render('/order/_view', [
         'products' => $products,
         'order' => $order,
