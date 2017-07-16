@@ -133,6 +133,7 @@ $(document).ready(function () {
     });
 
     $('.js-print-order').click(function () {
-        getFile("/manager/get-orders-json?", "../docs/order.tmpl.docx", "descr_");
+        var id = $(this).data('order-id');
+        getFile("/manager/get-order-content-json?id=" + id, "../docs/order.tmpl.docx", "descr_");
     });
 });
