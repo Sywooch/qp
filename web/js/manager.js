@@ -84,7 +84,7 @@ $(document).ready(function () {
     function getFile(url, tmplPath, nameFile) {
         var dateTime = new Date().today() + "_" + new Date().timeNow();
         setTimeout(function () {
-            var filter = getFilter();
+            // var filter = getFilter();
             $.ajax( {
                 url: url,//after=" + filter.start +"&before=" + filter.end,
                 dataType: "json",
