@@ -123,33 +123,44 @@ class ManagerController extends Controller
         return $dataProvider;
     }
 
-    public function actionGetOrdersJson() {
-        $dataProvider = $this->getOrders();
-        $items = [];
-        foreach ($dataProvider->models as $item) {
-            $ts = $item["created_at"];
-            $fdf = new DateTime("@$ts");
-            array_push($items, [
-                'id_order' => $item['public_id'],
-                'email' => $item['user']['email'],
-                'status' => $item['public_id'],
-                'price' => $item['status_str'],
-                'created' => $fdf->format('d-m-Y H:i:s')
-            ]);
-        }
-        return json_encode($items);
+    public static function order2array($order) {
+        return [
+            'id_order' => $order->public_id,
+            'email' => $order->user->email,
+            'created' => gmdate('d-m-Y H:i:s', $order->created_at),
+            'status' => $order->status_str,
+            'price' => $order->confirmed_price / 100,
+        ];
     }
 
-    public function actionViewOrder($id) {
+    public function actionGetOrdersJson() {
+        return json_encode(array_map('self::order2array', $this->getOrders()->models));
+    }
+
+    private function getOrderContent($id) {
         $order = Order::findOneOr404($id);
         $products = Yii::$app->db->cache(function ($db) use ($order) {
             return $order->orderProducts;
         }, null, new TagDependency(['tags' => 'cache_table_' . OrderProduct::tableName()]));
 
-        return $this->render('view-order', [
+        return [
             'products' => $products,
             'order' => $order,
-        ]);
+        ];
+    }
+
+    public function actionGetOrderContentJson($id) {
+        $content = $this->getOrderContent($id);
+        $content['order'] = self::order2array($content['order']);
+        $content['products'] = array_map(function ($x) { return [
+            'price' => $x->old_price / 100,
+            'products_count' => $x->confirmed_count,
+        ];}, $content['products']);
+        return json_encode($content);
+    }
+
+    public function actionViewOrder($id) {
+        return $this->render('view-order', $this->getOrderContent($id));
     }
 
     public function actionOrderReady($id) {
