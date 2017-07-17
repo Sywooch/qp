@@ -123,7 +123,7 @@ $(document).ready(function () {
                         doc.setData(_data);
                         try {
                             // render the document (replace all occurrences of {first_name} by John, {last_name} by Doe, ...)
-                            doc.render()
+                            doc.render();
                         }
                         catch (error) {
                             var e = {
