@@ -93,12 +93,17 @@ $(document).ready(function () {
                     var _data = {};
                     if (isSingle) {
                         if( 'order' in data ) {
+                            var order = data.order;
                             _data = {
                                 date_generated: dateTime,
                                 total_price: data.total_price,
                                 total_products: data.total_products,
-                                order: data.order,
-                                products: data.products,
+                                created: order.created,
+                                email: order.email,
+                                id_order: order.id_order,
+                                price: order.price,
+                                status: order.status,
+                                products: data.products
                             }
                         } else {
                             console.log(data);
@@ -110,7 +115,7 @@ $(document).ready(function () {
                             order: data
                         }
                     }
-
+                    console.log(_data);
                     loadFile(tmplPath,function(error,content){
                         if (error) { throw error };
                         var zip = new JSZip(content);
