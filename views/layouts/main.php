@@ -29,7 +29,7 @@ AppAsset::register($this);
 <?php $this->beginBody() ?>
 
 <div class="wrap">
-
+    <?= $this->render('_search_modal') ?>
     <?= $this->render('_header') ?>
 
     <div class="container">

@@ -1,3 +1,39 @@
+.search-overlay {
+  background: rgba(0,0,0,0.35);
+  .modal-content {
+    background-color: transparent;
+    box-shadow: none;
+  }
+  .search {
+    margin-top: 20px;
+    &__btn {
+      background-color: white;
+    }
+  }
+  .input-group {
+    width: 100%;
+  }
+  .btn-close {
+    color: rgba(255,255,255, 0.8);
+    font-size: 46px;
+    position: absolute;
+    right: 20px;
+    top: 7px;
+    width: 50px;
+    &:hover {
+      cursor: pointer;
+      color: rgba(255,255,255, 1);
+    }
+  }
+  &.hide {
+    .search {
+      animation: 0.2s;
+      animation-name: fadeOutUp;
+    }
+
+  }
+}
+
 .search {
   .form-control {
     border-radius: 0;
@@ -73,4 +109,15 @@
 }
 .ui-helper-hidden-accessible {
   display: none;
+}
+
+@keyframes fadeOutUp {
+  from {
+    opacity: 1;
+  }
+
+  to {
+    opacity: 0;
+    transform: translate3d(0, -100%, 0);
+  }
 }

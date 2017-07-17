@@ -63,9 +63,15 @@ gulp.task('scripts', function() {
 gulp.task('php', function(){
     connectPHP.server({ base: 'web/', keepalive:true, hostname: 'localhost', port:7000, open: false}, function () {
         browserSync({
-            proxy:'127.0.0.1:7000'
+            port: 7001,
+            proxy:'127.0.0.1'
         });
     });
+});
+
+gulp.task('reload', function() {
+    browserSync.reload();
+    browserSync.stream();
 });
 
 gulp.task('html', function(){
@@ -74,8 +80,8 @@ gulp.task('html', function(){
 });
 
 gulp.task('watch', function () {
-    gulp.watch(paths.css, ['sass']);
-    gulp.watch(paths.html, ['html']);
-    gulp.watch(paths.js.src, ['scripts']);
+    gulp.watch(paths.css, ['sass', 'reload']);
+    gulp.watch(paths.html, ['html', 'reload']);
+    gulp.watch(paths.js.src, ['scripts', 'reload']);
 });
 gulp.task('default', ['watch', 'php']);
