@@ -6,46 +6,16 @@ $(document).ready(function () {
     Date.prototype.timeNow = function () {
         return ((this.getHours() < 10)?"0":"") + this.getHours() +":"+ ((this.getMinutes() < 10)?"0":"") + this.getMinutes() +":"+ ((this.getSeconds() < 10)?"0":"") + this.getSeconds();
     };
-    function getInterval() {
-        var today = new Date();
-        var dd = today.getDate();
-        var mm = today.getMonth() + 1; //January is 0!
-        var yyyy = today.getFullYear();
-
-        function toString(d, m, y) {
-            if (d < 10) {
-                d = '0' + d
-            }
-
-            if (m < 10) {
-                m = '0' + m;
-            }
-            return d + '.' + m + '.' + y;
-        }
-        var end = toString(dd, mm, yyyy);
-
-        if (mm - 1 < 0) {
-            mm = 12;
-            yyyy --;
-        } else {
-            mm--;
-        }
-        var start = toString(dd, mm, yyyy);
-        return {
-            start: start,
-            end: end
-        }
-    }
-
-
-    var interval = getInterval();
     $dateInterval = $('.date-interval');
 
+    $start = $('.manager-date-start');
+    $end = $('.manager-date-end');
+
     $dateInterval.daterangepicker({
-        startDate: interval.start,
-        endDate: interval.end,
+        startDate: $start.val(),
+        endDate: $end.val(),
         locale: {
-            format: 'DD.MM.YYYY',
+            format: 'YYYY-MM-DD',
             applyLabel: "Принять",
             cancelLabel: "Отмена",
             daysOfWeek: ["Вс", "Пн", "Вт", "Ср", "Чт", "Пт", "Сб"],
@@ -54,25 +24,18 @@ $(document).ready(function () {
     });
 
 
-    $start = $('.manager-date-start');
-    $end = $('.manager-date-end');
-
     function getFilter() {
-
-        var m = $dateInterval.val().split(" - ");
-        console.log($dateInterval.val());
-
         return {
-            start: m[0].split(".").reverse().join("-"),
-            end: m[1].split(".").reverse().join("-")
+            start: $('input[name=daterangepicker_start]'),
+            end: $('input[name=daterangepicker_end]')
         }
     }
     $('.daterangepicker .applyBtn').click(function () {
         setTimeout(function () {
             var f = getFilter();
             // $dateInterval.val(start + ' - ' + end);
-            $start.val(f.start);
-            $end.val(f.end);
+            $start.val(f.start.val());
+            $end.val(f.end.val());
             $dateInterval.attr('name', '');
             $('.datepicker-form').submit();
         }, 0);
@@ -84,14 +47,13 @@ $(document).ready(function () {
     function getFile(url, tmplPath, nameFile) {
         var dateTime = new Date().today() + "_" + new Date().timeNow();
         setTimeout(function () {
-            // var filter = getFilter();
             $.ajax( {
-                url: url,//after=" + filter.start +"&before=" + filter.end,
+                url: url + "after=" + $start.val().slice(0, -1) +"&before=" + $end.val().slice(0, -1),
                 dataType: "json",
                 type: "get",
                 success: function( data ) {
                     loadFile(tmplPath,function(error,content){
-                        if (error) { throw error };
+                        if (error) { throw error; }
                         var zip = new JSZip(content);
                         var doc = new Docxtemplater().loadZip(zip);
                         doc.setData({

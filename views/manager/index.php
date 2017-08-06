@@ -12,12 +12,9 @@ use yii\grid\GridView;
 $this->title = 'Панель менеджера';
 $this->params['breadcrumbs'][] = $this->title;
 
-$date = new DateTime();
-$date->add(DateInterval::createFromDateString('yesterday'));
-
 $today = date('Y-m-d');
-$yesterday = $date->format('Y-m-d');
-
+$yesterday = date("Y-m-d", time() - 60 * 60 * 24);
+$before_yesterday = date("Y-m-d", time() - 2 * 60 * 60 * 24);
 $get = Yii::$app->request->get();
 
 $interval = isset($get['after']) && isset($get['before']) ? $get['after'] : '';
@@ -35,15 +32,15 @@ ManagerAsset::register($this);
     <div class="row manager-toolbar-wrap">
         <div class="col-sm-7 manager-date">
             <form action="/manager" method="get" class="datepicker-form">
-                <input type="hidden" name="after" class="manager-date-start" />
-                <input type="hidden" name="before" class="manager-date-end" />
+                <input type="hidden" name="after" class="manager-date-start" value=<?=$model->after?>/>
+                <input type="hidden" name="before" class="manager-date-end" value=<?=$model->before?>/>
                 <?php
                 echo Nav::widget([
                     'options' => ['class' => 'nav nav-pills'],
                     'encodeLabels' => false,
                     'items' => [
-                        ['label' => 'Сегодня', 'url' => ['/manager', 'before' => $today, 'after' => $today]],
-                        ['label' => 'Вчера', 'url' => ['/manager', 'before' => $yesterday, 'after' => $yesterday]],
+                        ['label' => 'Сегодня', 'url' => ['/manager', 'before' => $today, 'after' => $yesterday]],
+                        ['label' => 'Вчера', 'url' => ['/manager', 'before' => $yesterday, 'after' => $before_yesterday]],
                         '<li><input type="text" class="form-control date-interval" placeholder="Задать интервал" name="daterange"/></li>',
                     ],
                 ]);
