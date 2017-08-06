@@ -4,7 +4,9 @@
 
     var $open = $('.btn-search-modal'),
         $inputMobile = $('#search-input-mobile'),
-        $input = $('#search-input');
+        $input = $('#search-input'),
+        $closeSearch = $('.js-search-close'),
+        $searchOverlay = $('.search-overlay');
 
     var csrfToken = $('meta[name="csrf-token"]').attr("content");
 
@@ -133,6 +135,16 @@
             $open.on('click', function () {
                 setTimeout(self.openSearch, 800);
             });
+            $closeSearch.on('click', function () {
+                self.hideOverlay();
+            });
+        },
+        hideOverlay: function () {
+            $searchOverlay.addClass('hide');
+            setTimeout(function () {
+                //$searchOverlay.css('display', 'none');
+                $searchOverlay.removeClass('hide');
+            }, 200);
         },
         openSearch: function () {
             $inputMobile.focus();
