@@ -87,7 +87,7 @@ $menuUser = [
             <div class="row">
                 <div class="col-sm-3"><p>&copy; qpvl <?= date('Y') ?></p></div>
                 <div class="col-sm-3">
-                    <?=Html::a('Пользовательское соглашение', ['/p/rules'])?>
+                    <?=Html::a('Правовая информация', ['/p/rules'])?>
                 </div>
             </div>
 

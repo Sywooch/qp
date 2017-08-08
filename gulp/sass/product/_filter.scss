@@ -107,12 +107,17 @@
 }
 
 .range-controls {
+  padding: 10px 0 20px 0;
+  display: flex;
   input {
     width: 45% !important;
     display: inline-block;
     height: 30px;
   }
-  padding: 10px 0 20px 0;
+  span {
+    padding: 0 5px;
+  }
+
 }
 
 .btn-apply, .btn-close, .btn-refresh{

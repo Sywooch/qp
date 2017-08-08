@@ -1,7 +1,8 @@
 <?php
 use app\components\Html;
 
-$this->title = 'Пользовательское соглашение';
+$this->title = 'Правовая информация' .
+    '';
 $this->params['breadcrumbs'][] = $this->title;
 ?>
 <style>
