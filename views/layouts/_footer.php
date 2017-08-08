@@ -3,16 +3,16 @@ use app\components\Html;
 use yii\helpers\Url;
 
 $menuShop = [
-    ['label' => 'О компании', 'url' => ['/site/about']],
+    ['label' => 'О компании', 'url' => ['/p/about']],
     ['label' => 'Каталог', 'url' => ['/site/catalog']],
     ['label' => 'Контакты', 'url' => ['/site/contact']],
     ['label' => 'Отзывы', 'url' => ['/site/reviews']],
 ];
 $menuUser = [
-    ['label' => 'Доставка', 'url' => ['/site/p/delivery']],
-    ['label' => 'Оплата', 'url' => ['/site/p/payment']],
-    ['label' => 'Помощь', 'url' => ['/site/about']],
-    ['label' => 'Возврат товара', 'url' => ['/site/about']],
+    ['label' => 'Доставка', 'url' => ['/p/delivery']],
+    ['label' => 'Оплата', 'url' => ['/p/payment']],
+    ['label' => 'Помощь', 'url' => ['/p/about']],
+    ['label' => 'Возврат товара', 'url' => ['/p/about']],
 ];
 ?>
 
@@ -95,4 +95,4 @@ $menuUser = [
     </div>
 </footer>
 
-<div class="drag-target" data-sidenav="nav-mobile" style="left: 0px; touch-action: pan-y; -webkit-user-drag: none; -webkit-tap-highlight-color: rgba(0, 0, 0, 0);"></div>
+<div class="drag-target" data-sidenav="nav-mobile" style="left: 0; touch-action: pan-y; -webkit-user-drag: none; -webkit-tap-highlight-color: rgba(0, 0, 0, 0);"></div>
