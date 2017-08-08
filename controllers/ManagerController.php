@@ -5,16 +5,12 @@ namespace app\controllers;
 use app\models\OrderFilterForm;
 use app\models\OrderProduct;
 use app\models\Profile\Message;
-use DateTime;
 use Yii;
 use app\models\Order;
-use yii\base\Object;
 use yii\caching\TagDependency;
-use yii\data\ActiveDataProvider;
 use yii\filters\AccessControl;
 use yii\filters\VerbFilter;
 use yii\web\Controller;
-use yii\web\NotFoundHttpException;
 
 class ManagerController extends Controller
 {
@@ -66,75 +62,30 @@ class ManagerController extends Controller
     {
         $model = new OrderFilterForm();
         $model->load(Yii::$app->request->get(), '');
+        $model->validate();
         return $this->render('index', [
-            'dataProvider' => $this->getOrders(),
+            'dataProvider' => $model->getOrders(),
             'model' => $model,
         ]);
 
     }
 
-    public function getOrders() {
-        $dataProvider = new ActiveDataProvider([
-            'query' => Order::find()
-                ->select('order.id, order.status, order.created_at, order.public_id, order.user_id, user.email,
-                    sum(order_product.products_count * old_price) as total_price,
-                    sum(order_product.confirmed_count * old_price) as confirmed_price'
-                )->groupBy('order.id')
-                ->join('RIGHT JOIN', 'order_product', 'order.id=order_product.order_id')
-                ->joinWith('user')
-            ,
-            'sort' => [
-                'attributes' => [
-                    'created_at',
-                    'total_price',
-                    'confirmed_price',
-                    'user.email',
-                    'status_str' => [
-                        'asc' => ['status' => SORT_ASC],
-                        'desc' => ['status' => SORT_DESC],
-                        'default' => SORT_DESC,
-                    ],
-                    'ref' => [
-                        'asc' => ['public_id' => SORT_ASC],
-                        'desc' => ['public_id' => SORT_DESC],
-                        'default' => SORT_DESC,
-                    ]
-                ]
-            ]
-        ]);
-        $get = Yii::$app->request->get();
-        if (isset($get['after'])) {
-            $dataProvider->query->andFilterWhere(['>=', 'order.created_at', strtotime($get['after'])]);
-        }
-        if (isset($get['before'])) {
-            $dataProvider->query->andFilterWhere(['<=', 'order.created_at', strtotime($get['before'])]);
-        }
-        if (isset($get['status'])) {
-            $dataProvider->query->andFilterWhere(['in', 'order.status', explode(',', $get['status'])]);
-        }
-
-        Yii::$app->db->cache(function ($db) use ($dataProvider) {
-            $dataProvider->prepare();
-        }, null, new TagDependency(['tags' => [
-            'cache_table_' . Order::tableName(),
-            'cache_table_' . OrderProduct::tableName(),
-        ]]));
-
-        return $dataProvider;
-    }
 
     public static function order2array($order) {
         return [
             'id_order' => $order->public_id,
             'email' => $order->user->email,
-            'created' => gmdate('d-m-Y H:i:s', $order->created_at),
+            'created' => date('d-m-Y H:i:s', $order->created_at),
             'status' => $order->status_str,
             'price' => $order->confirmed_price / 100,
         ];
     }
 
     public function actionGetOrdersJson() {
-        return json_encode(array_map('self::order2array', $this->getOrders()->models));
+        $model = new OrderFilterForm();
+        $model->load(Yii::$app->request->get(), '');
+        $model->validate();
+        return json_encode(array_map('self::order2array', $model->getOrders()->models));
     }
 
     private function getOrderContent($id) {
