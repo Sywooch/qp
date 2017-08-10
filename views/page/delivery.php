@@ -19,9 +19,11 @@ $this->params['breadcrumbs'][] = $this->title;
     <div class="info">
         <b>Окончательная цена фиксируется в момент подтверждения заказа.</b> Цены товаров не постоянны и зависят от цен поставщиков, а также от конъюнктуры рынка.
     </div>
+
+    <div class="yandex-map">
+        <h3>Карта доставки</h3>
+        <script type="text/javascript" charset="utf-8" async src="https://api-maps.yandex.ru/services/constructor/1.0/js/?um=constructor%3AxIJW017IJvnxZeKpt_C00CQYFPqXIkj-&amp;width=687&amp;height=452&amp;lang=ru_RU&amp;scroll=true"></script>
+    </div>
+
 </div>
 
-<div class="yandex-map">
-    <h3>Карта доставки</h3>
-    <script type="text/javascript" charset="utf-8" async src="https://api-maps.yandex.ru/services/constructor/1.0/js/?sid=xIJW017IJvnxZeKpt_C00CQYFPqXIkj-&amp;width=687&amp;height=452&amp;lang=ru_RU&amp;sourceType=constructor&amp;scroll=true"></script>
-</div>

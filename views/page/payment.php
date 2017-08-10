@@ -5,7 +5,7 @@ $this->params['breadcrumbs'][] = $this->title;
 ?>
 <h1><?=$this->title?></h1>
 <div class="page-static payment">
-    <h3>Банковские карты и наличные</h3>
+    <h3>Банковские карты</h3>
 
 </div>
 
