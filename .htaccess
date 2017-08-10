@@ -1,3 +1,10 @@
 AddDefaultCharset utf-8
 #AddType 'text/html; charset=utf-8' .html .htm .shtml
 #DirectoryIndex web/index.php
+RewriteEngine On
+# This will enable the Rewrite capabilities
+
+RewriteCond %{HTTPS} !=on
+# This checks to make sure the connection is not already HTTPS
+
+RewriteRule ^/?(.*) https://%{SERVER_NAME}/$1 [R,L]
