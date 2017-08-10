@@ -4,7 +4,7 @@ use yii\helpers\Url;
 
 $menuShop = [
     ['label' => 'О компании', 'url' => ['/p/about']],
-    ['label' => 'Каталог', 'url' => ['/site/catalog']],
+    ['label' => 'Каталог', 'url' => ['/catalog']],
     ['label' => 'Контакты', 'url' => ['/site/contact']],
     ['label' => 'Отзывы', 'url' => ['/site/reviews']],
 ];
