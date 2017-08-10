@@ -146,7 +146,7 @@ var Cart = (function($){
                 price = parseFloat($item.data('productPrice'));
 
             quantity.text(val);
-            sum.text(parseInt(val) * price);
+            sum.text(Math.ceil( parseInt(val) * price * 100 ) / 100);
             total().update();
 
             this.addProduct(id, val);
