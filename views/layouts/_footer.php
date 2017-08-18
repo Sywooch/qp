@@ -12,7 +12,7 @@ $menuUser = [
     ['label' => 'Доставка', 'url' => ['/p/delivery']],
     ['label' => 'Оплата', 'url' => ['/p/payment']],
     ['label' => 'Помощь', 'url' => ['/p/about']],
-    ['label' => 'Возврат товара', 'url' => ['/p/about']],
+    ['label' => 'Возврат товара', 'url' => ['/p/purchase-returns']],
 ];
 ?>
 
