@@ -11,7 +11,7 @@ $menuShop = [
 $menuUser = [
     ['label' => 'Доставка', 'url' => ['/p/delivery']],
     ['label' => 'Оплата', 'url' => ['/p/payment']],
-    ['label' => 'Помощь', 'url' => ['/p/about']],
+    ['label' => 'Как оформить заказ', 'url' => ['/p/order_individual']],
     ['label' => 'Возврат товара', 'url' => ['/p/purchase-returns']],
 ];
 ?>
