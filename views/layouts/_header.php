@@ -33,11 +33,11 @@ $itemMenu = [
                         <span class="phone-text"><?=Yii::$app->params['phone.manager']?></span>
                     </div>
                 </div>
-                <div class="col-md-2 col-xs-12">
+                <div class="col-md-2 col-xs-12 visible-md visible-lg">
                     <section class="search row">
                         <?= $this->render('_search_form', ['text' => '']) ?>
                         <div class="col-xs-3 visible-xs visible-sm mobile-nav-controls">
-                            <button class="btn btn-search-modal" data-toggle="modal" data-target=".bs-search-modal-lg">
+                            <button class="btn btn-search-modal" data-toggle="modal" data-target="#search-modal">
                                 <i class="fa fa-search"></i>
                             </button>
                         </div>
@@ -124,21 +124,3 @@ echo Nav::widget([
     )
 ]);
 ?>
-
-<div class="modal fade bs-search-modal-lg" id="searchModal" tabindex="-1" role="dialog" aria-labelledby="searchLabel">
-    <div class="modal-dialog modal-lg" role="document">
-        <div class="modal-content">
-            <div class="modal-header">
-                <div class="row">
-                    <?= $this->render('_search_form', ['text' => '']) ?>
-                    <div class="col-xs-2 search__cancel visible-xs visible-sm">
-                        <button type="button" class="btn search-hidden" data-dismiss="modal" aria-label="Close">Отмена</button>
-                    </div>
-                </div>
-            </div>
-            <div class="modal-body" style="padding: 0;">
-                <div class="js-search-result"></div>
-            </div>
-        </div>
-    </div>
-</div>

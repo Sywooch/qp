@@ -29,7 +29,6 @@ AppAsset::register($this);
 <?php $this->beginBody() ?>
 
 <div class="wrap">
-    <?= $this->render('_search_modal') ?>
     <?= $this->render('_header') ?>
 
     <div class="container">
@@ -55,7 +54,7 @@ AppAsset::register($this);
 </div>
 
 <?= $this->render('_footer') ?>
-
+<?= $this->render('_search_modal') ?>
 <?php $this->endBody() ?>
 </body>
 </html>

@@ -3,7 +3,7 @@
 /** @var string $date */
 /** @var boolean $status */
 ?>
-<div class="col-xs-6">
+<div class="col-xs-12 col-sm-6">
     <div class="item <?=$status ? 'free' : 'busy'?>">
         <div class="item-day"><i class="fa fa-calendar"></i>  <?=$day?></div>
         <div class="item-date"><?=$date?></div>

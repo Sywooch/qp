@@ -298,25 +298,6 @@ $line-height-header: 60px;
     border: none;
     width: 100%;
   }
-  .form-search {
-    padding: 0 5px;
-  }
-  @media (max-width: $screen-md-min) {
-    background-color: $colorgray;
-    position: fixed;
-    top: 0;
-    padding-top: 3px;
-    width: 100%;
-    transform: translateY(-100%);
-    transition: transform 0.3s 0.1s;
-  }
-  &__cancel {
-    line-height: $line-height-header;
-  }
-  &.visible {
-    display: block;
-    transform: translateY(0);
-  }
 }
 
 .mobile-nav-controls {

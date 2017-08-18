@@ -3,9 +3,11 @@
     "use strict";
 
     var $open = $('.btn-search-modal'),
-        $inputMobile = $('#search-input-mobile'),
         $input = $('#search-input'),
         $closeSearch = $('.js-search-close'),
+        $modal = $('#search-modal'),
+        $searchHeaderWrap = $('#js-search-wrap'),
+        $searchHeaderInput = $('#js-search-input'),
         $searchOverlay = $('.search-overlay');
 
     var csrfToken = $('meta[name="csrf-token"]').attr("content");
@@ -70,6 +72,8 @@
 
     var Search = {
         init: function() {
+
+            console.log($input);
             this.event();
             this.getData();
 
@@ -133,10 +137,15 @@
         event: function() {
             var self = this;
             $open.on('click', function () {
-                setTimeout(self.openSearch, 800);
             });
             $closeSearch.on('click', function () {
                 self.hideOverlay();
+            });
+            $modal.on('shown.bs.modal', function () {
+                self.openSearch();
+            });
+            $searchHeaderInput.on('focus', function () {
+                $modal.modal('show');
             });
         },
         hideOverlay: function () {
@@ -147,7 +156,7 @@
             }, 200);
         },
         openSearch: function () {
-            $inputMobile.focus();
+            $input.focus();
         }
     };
 

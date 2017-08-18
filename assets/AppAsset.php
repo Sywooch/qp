@@ -21,12 +21,13 @@ class AppAsset extends AssetBundle
         'css/main.css',
     ];
     public $js = [
+        'https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js',
         'js/jquery-ui.min.js',
         'js/app.js',
 
     ];
     public $depends = [
         'yii\web\YiiAsset',
-        //'yii\bootstrap\BootstrapAsset',
+        'yii\bootstrap\BootstrapAsset',
     ];
 }
