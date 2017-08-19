@@ -10,6 +10,7 @@ use app\models\Order;
 use app\models\OrderProduct;
 use Yii;
 use yii\caching\TagDependency;
+use yii\data\ActiveDataProvider;
 use yii\filters\AccessControl;
 use yii\web\Controller;
 use yii\filters\VerbFilter;
@@ -332,21 +333,19 @@ class SiteController extends Controller
 
     public function actionSearch($q = '')
     {
-        /** @var \himiklab\yii2\search\Search $search */
-        $searchData = Yii::$app->search->find($q . '~0.1'); // Search by full index.
-        //$searchData = $search->find($q, ['model' => 'page']); // Search by index provided only by model `page`.
-
-        $dataProvider = new ArrayDataProvider([
-            'allModels' => $searchData['results'],
-            'pagination' => ['pageSize' => 10],
+        $productDataProvider = new ActiveDataProvider([
+            'query' => Good::soundexSearch($q),
+        ]);
+        $categoryDataProvider = new ActiveDataProvider([
+            'query' => Menu::soundexSearch($q),
         ]);
 
         return $this->render(
             'found',
             [
-                'hits' => $dataProvider->getModels(),
-                'pagination' => $dataProvider->getPagination(),
-                'query' => $searchData['query']
+                'productDataProvider' => $productDataProvider,
+                'categoryDataProvider' => $categoryDataProvider,
+                'query' => $q
             ]
         );
     }

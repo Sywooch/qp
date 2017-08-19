@@ -11,13 +11,6 @@ $config = [
     'timeZone' => 'Asia/Vladivostok',
     'controllerNamespace' => 'app\commands',
     'components' => [
-        'search' => [
-            'class' => 'himiklab\yii2\search\Search',
-            'models' => [
-                'app\models\Good\Good',
-                'app\models\Good\Menu',
-            ],
-        ],
         'cache' => [
             'class' => 'yii\caching\FileCache',
         ],

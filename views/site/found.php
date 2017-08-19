@@ -1,40 +1,33 @@
 <?php
 use yii\helpers\Html;
 use app\components\catalog\ProductWidget;
-$query = yii\helpers\Html::encode($query);
+use yii\widgets\ListView;
+
+/* @var $this yii\web\View */
+/* @var $productDataProvider yii\data\ActiveDataProvider */
+/* @var $categoryDataProvider yii\data\ActiveDataProvider */
+/* @var $query string */
+
 $this->title = "Результаты поиска";
 $this->params['breadcrumbs'][] = $this->title;
 
-
-app\modules\search\SearchAssets::register($this);
-$this->registerJs("jQuery('.search').highlight('{$query}');");
-$query = explode('~', $query)[0];
 ?>
 <h1>Результат поиска по запросу: "<?=$query?>"</h1>
+<h2>Товары</h2>
 <div class="row">
-    <?php
-    Yii::$app->search->index();
-    if (!empty($hits)):
-        foreach ($hits as $hit):
-            $arr = [];
-            $doc = $hit->getDocument();
-
-            foreach($doc->getFieldNames() as $key) {
-                $arr[$key] = $doc->getField($key)->value;
-            }
-            // TODO: make other widget for search result rendering
-            echo ProductWidget::widget([
-                'product' => new \app\models\Good\Good($arr)
-            ]);
-        endforeach;
-    else:
-        ?>
-        <div class="alert alert-danger"><h3>По запросу "<?= $query ?>" ничего не найдено!</h3></div>
-        <?php
-    endif;
-
-    echo yii\widgets\LinkPager::widget([
-        'pagination' => $pagination,
-    ]);
-    ?>
+    <?= ListView::widget([
+        'dataProvider' => $productDataProvider,
+        'itemOptions' => ['class' => 'item'],
+        'itemView' => function ($model, $key, $index, $widget) {
+            return Html::a($model->name, ['product/view', 'id' => $model->id]);
+        },
+    ]) ?>
+    <h2>Категории</h2>
+    <?= ListView::widget([
+        'dataProvider' => $categoryDataProvider,
+        'itemOptions' => ['class' => 'item'],
+        'itemView' => function ($model, $key, $index, $widget) {
+            return Html::a($model->name, ['catalog/view', 'id' => $model->id]);
+        },
+    ]) ?>
 </div>

@@ -2,11 +2,8 @@
 
 namespace app\models\Good;
 
-use app\models\CachedActiveRecord;
-use himiklab\yii2\search\behaviors\SearchBehavior;
-use Yii;
+use app\models\SoundexCachedActiveRecord;
 use creocoder\nestedsets\NestedSetsBehavior;
-use yii\web\NotFoundHttpException;
 use yii\caching\TagDependency;
 
 /**
@@ -18,8 +15,13 @@ use yii\caching\TagDependency;
  * @property integer $depth
  * @property string $name
  */
-class Menu extends CachedActiveRecord
+class Menu extends SoundexCachedActiveRecord
 {
+    static function soundex_columns()
+    {
+        return ['name'];
+    }
+
     public function rules()
     {
         return [
@@ -30,21 +32,6 @@ class Menu extends CachedActiveRecord
 }
     public function behaviors() {
         return [
-            'search' => [
-                'class' => SearchBehavior::className(),
-                'searchScope' => function ($model) {
-                    /** @var \yii\db\ActiveQuery $model */
-                    $model->select(['id', 'name']);
-                },
-                'searchFields' => function ($model) {
-                    /** @var self $model */
-                    return [
-                        ['name' => 'id', 'value' => $model->id, 'type' => SearchBehavior::FIELD_UNINDEXED],
-                        ['name' => 'name', 'value' => $model->name],
-                    ];
-                }
-            ],
-
             'tree' => [
                 'class' => NestedSetsBehavior::className(),
                 // 'treeAttribute' => 'tree',

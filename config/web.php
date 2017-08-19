@@ -10,13 +10,6 @@ $config = [
     'language' => 'ru-RU',
     'timeZone' => 'Asia/Vladivostok',
     'components' => [
-        'search' => [
-            'class' => 'himiklab\yii2\search\Search',
-            'models' => [
-                'app\models\Good\Good',
-                'app\models\Good\Menu',
-            ],
-        ],
         'assetManager' => [
             'appendTimestamp' => true,
             'bundles' => [
