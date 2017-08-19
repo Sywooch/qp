@@ -17,7 +17,7 @@ class SoundexCachedActiveRecord extends CachedActiveRecord
         return [];
     }
 
-    public static function stringToSoundex($str)
+    public static function stringToSoundex($str, $for_like = false)
     {
         $str = Helper::ru2Lat($str);
         $words = preg_split(
@@ -26,7 +26,10 @@ class SoundexCachedActiveRecord extends CachedActiveRecord
             -1,
             PREG_SPLIT_NO_EMPTY
         );
-        return implode(' ', array_map("soundex", $words));
+        $callback = $for_like ? function($x) {
+            return '%' . soundex($x) . '%';
+        } : "soundex";
+        return implode(' ', array_map($callback, $words));
 
     }
 
@@ -45,7 +48,7 @@ class SoundexCachedActiveRecord extends CachedActiveRecord
     }
 
     public static function  soundexSearch($query) {
-        $query = self::stringToSoundex($query);
-        return self::find()->where("MATCH (soundex_search) AGAINST ('$query')");
+        $query = self::stringToSoundex($query, true);
+        return self::find()->where("soundex_search LIKE '$query'");
     }
 }

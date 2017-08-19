@@ -65,7 +65,7 @@ class RegForm extends Model
 
     public function sendActivationEmail($user)
     {
-        $for_what = 'активации аккаунта';
+        $for_what = 'активации';
         $link = Yii::$app->urlManager->createAbsoluteUrl(
         [
             '/site/activate-account',
