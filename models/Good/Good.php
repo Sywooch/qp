@@ -133,6 +133,7 @@ class Good extends SoundexCachedActiveRecord implements CartPositionProviderInte
             ['status', 'in', 'range' => array_keys(self::$STATUS_TO_STRING)],
             ['is_discount', 'boolean'],
             ['is_discount', 'default', 'value' => false],
+            ['soundex_search', 'string']
         ];
     }
 

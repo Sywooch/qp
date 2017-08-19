@@ -25,11 +25,12 @@ class Menu extends SoundexCachedActiveRecord
     public function rules()
     {
         return [
-        [[ 'name', 'c1id' ], 'string'],
-        ['name', 'required'],
-        ['c1id', 'unique'],
-    ];
-}
+            [[ 'name', 'c1id' ], 'string'],
+            ['name', 'required'],
+            ['c1id', 'unique'],
+            ['soundex_search', 'string']
+        ];
+    }
     public function behaviors() {
         return [
             'tree' => [
