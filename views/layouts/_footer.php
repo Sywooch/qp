@@ -11,8 +11,8 @@ $menuShop = [
 $menuUser = [
     ['label' => 'Доставка', 'url' => ['/p/delivery']],
     ['label' => 'Оплата', 'url' => ['/p/payment']],
-    ['label' => 'Помощь', 'url' => ['/p/about']],
-    ['label' => 'Возврат товара', 'url' => ['/p/about']],
+    ['label' => 'Как оформить заказ', 'url' => ['/p/order_individual']],
+    ['label' => 'Возврат товара', 'url' => ['/p/purchase-returns']],
 ];
 ?>
 
@@ -96,3 +96,20 @@ $menuUser = [
 </footer>
 
 <div class="drag-target" data-sidenav="nav-mobile" style="left: 0; touch-action: pan-y; -webkit-user-drag: none; -webkit-tap-highlight-color: rgba(0, 0, 0, 0);"></div>
+<div class="mobile-footer visible-xs visible-sm">
+    <ul>
+        <li class="shopping"><?=\app\components\CartWidget::widget()?></li>
+        <li>
+            <a href="#" data-toggle="modal" data-target="#search-modal">
+                <span class="icon-mobile lnr lnr-magnifier"></span>
+                <span class="link">Поиск</span>
+            </a>
+        </li>
+        <li>
+            <a href="<?=Url::to(['/profile/bookmark'])?>">
+                <span class="icon-mobile lnr lnr-heart"></span>
+                <span class="link bookmark-text">Избранное</span>
+            </a>
+        </li>
+    </ul>
+</div>

@@ -3,9 +3,12 @@
   .modal-content {
     background-color: transparent;
     box-shadow: none;
+    border: none;
+    height: 50px;
   }
   .search {
     margin-top: 20px;
+    background-color: transparent;
     &__btn {
       background-color: white;
     }
@@ -35,6 +38,7 @@
 }
 
 .search {
+  width: 100%;
   .form-control {
     border-radius: 0;
     border: none;
@@ -54,6 +58,20 @@
     border-radius: 0;
     font-size: 34px;
     padding: 0;
+  }
+}
+
+#search-modal {
+  @media (max-width: $screen-sm) {
+
+    .modal-dialog {
+      width: 85%;
+    }
+    button.close {
+      position: relative;
+      left: 20px;
+      top: 20px;
+    }
   }
 }
 
