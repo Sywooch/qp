@@ -2,6 +2,7 @@
 
 use app\assets\ManagerAsset;
 use app\components\Html;
+use app\models\Order;
 use yii\bootstrap\Nav;
 use yii\grid\GridView;
 
@@ -45,8 +46,15 @@ ManagerAsset::register($this);
                     ],
                 ]);
                 ?>
+                <select name="status">
+                <?php foreach (Order::$STATUS_TO_STRING as $k => $v) {
+                    echo "<option value='$k'>$v</option>";
+                }?>
+                </select>
             </form>
         </div>
+
+
         <div class="col-sm-5 manager-password">
             <form action="/manager/secret" method="post">
                 <ul class="nav nav-pills">
@@ -58,7 +66,6 @@ ManagerAsset::register($this);
                         <button type="submit" class="btn">Отправить</button>
                     </li>
                 </ul>
-
             </form>
         </div><!-- manager-password -->
 

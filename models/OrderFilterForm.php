@@ -61,7 +61,7 @@ class OrderFilterForm extends Model
         ]);
         $dataProvider->query->andFilterWhere(['>=', 'order.created_at', strtotime($this->after)]);
         $dataProvider->query->andFilterWhere(['<=', 'order.created_at', strtotime($this->before)]);
-//        $dataProvider->query->andFilterWhere(['in', 'order.status', explode(',', $this->status)]);
+        $dataProvider->query->andFilterWhere(['=', 'order.status', $this->status]);
 
         Yii::$app->db->cache(function ($db) use ($dataProvider) {
             $dataProvider->prepare();
