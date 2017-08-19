@@ -68,6 +68,7 @@ class ProfileController extends \yii\web\Controller
         return $this->render('order/view', [
             'products' => $products,
             'order' => $order,
+            'is_owner' => Yii::$app->user->identity->getId() == $order->user_id
         ]);
     }
 

@@ -3,6 +3,7 @@
 use app\assets\ManagerAsset;
 
 /* @var $order app\models\Order*/
+/* @var $is_owner bool */
 
 $this->title = 'Просмотр заказа';
 $this->params['breadcrumbs'][] = [

@@ -24,7 +24,7 @@ use app\models\User;
                 <td class="key">Текущий статус</td>
                 <td class="value"><?=$order->status_str?></td>
             </tr>
-            <?php if($order->haveSecretKey() and $is_owner) : ?>
+            <?php if($order->haveSecretKey() and $is_owner and $order->user_id == Yii::$app->user->identity->getId()) : ?>
                 <tr>
                     <td class="key">Секретный ключ (не сообщайте его никому, кроме менеджера при выдаче заказа)</td>
                     <td class="value"><?=$order->password?></td>

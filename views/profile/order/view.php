@@ -13,5 +13,5 @@ $this->params['breadcrumbs'][] = $this->title;
 <?=$this->render('/order/_view', [
     'products' => $products,
     'order' => $order,
-    'is_owner' => true,
+    'is_owner' => $is_owner,
 ]); ?>
