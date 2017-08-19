@@ -146,7 +146,7 @@ class CatalogController extends \yii\web\Controller
 
         $filter = isset($get['f']) ? $get['f'] : null;
 
-        if (strpos($filter, 'o')) {
+        if (strpos($filter, 'o') !== false) {
             list($rest, $ordering) = explode('o', $filter);
             $ordering = substr($ordering, 1);
             $ordering = explode(';', $ordering)[0];
@@ -180,7 +180,7 @@ class CatalogController extends \yii\web\Controller
             if (empty($filtered_products)) {
                 return $this->render('/product/_view', [
                     'products' => null,
-                    'offset' => -1,
+                    'offset' => $offset,
                 ]);
             }
             return $this->render('/product/_view', [
@@ -199,6 +199,17 @@ class CatalogController extends \yii\web\Controller
 
             list($filters, $prices) = $this->getProductFilters($products);
             $filtered_products = array_slice($this->applyFilters($filter, $products, $offset), 0, $limit);
+
+            if (empty($filtered_products)) {
+                return $this->render('/product/index', [
+                    'products' => null,
+                    'category' => $category,
+                    'filters' => $filters,
+                    'prices' => $prices,
+                    'offset' => -1,
+                ]);
+            }
+
             return $this->render('/product/index', [
                 'products' => $filtered_products,
                 'category' => $category,
