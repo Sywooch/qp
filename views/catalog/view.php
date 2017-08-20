@@ -2,6 +2,7 @@
 /* @var $this yii\web\View */
 /** @var $catalog app\models\Good\Menu */
 use yii\helpers\Url;
+use app\components\Html;
 use app\components\catalog\CategoryWidget;
 use yii\caching\TagDependency;
 use app\models\Good\Menu;
@@ -19,6 +20,14 @@ foreach(Yii::$app->db->cache(function ($db) use($catalog)
 }
 $this->params['breadcrumbs'][] = $this->title;
 ?>
+
+<?php if(\Yii::$app->user->can('admin')) : ?>
+    <?= Html::a('Просмотреть в панели администратора',
+            ['backend/menu/view', 'id' => $catalog->id], [
+        ])
+    ?>
+<?php endif; ?>
+
 <div class="catalog">
     <?=\app\components\catalog\CatalogMateWidget::widget([
         'catalog' => $catalog->children(1)->one()

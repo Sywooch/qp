@@ -8,6 +8,13 @@ use app\models\User;
 /* @var $is_owner bool */
 ?>
 
+<?php if(\Yii::$app->user->can('admin')) : ?>
+    <?= Html::a('Просмотреть в панели администратора',
+        ['backend/order/update', 'id' => $order->id], [
+        ])
+    ?>
+<?php endif; ?>
+
 <h3>Заказ № <?=$order->public_id?> </h3>
 <div class="row">
     <div class="col-sm-6">

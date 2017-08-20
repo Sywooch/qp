@@ -25,6 +25,7 @@ foreach(Yii::$app->db->cache(function() use($category) {
         'url' => Url::to(['catalog/view', 'id' => $par->id])
     ];
 }
+
 $this->params['breadcrumbs'][] =  [
     'label' => $category->name,
     'url' => Url::to(['catalog/view', 'id' => $category->id])
@@ -41,8 +42,15 @@ if (!$bookmark) {
         'product_id' => $product->getId(),
     ]);
 }
-
 ?>
+
+<?php if(\Yii::$app->user->can('admin')) : ?>
+    <?= Html::a('Просмотреть в панели администратора',
+        ['backend/good/view', 'id' => $product->id], [
+        ])
+    ?>
+<?php endif; ?>
+
 <div class="product-view">
 
     <h1><?= Html::encode($this->title) ?></h1>
