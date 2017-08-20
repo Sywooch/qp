@@ -27,6 +27,7 @@ $this->params['breadcrumbs'][] = "Редактирование заказа №$
 
             'id',
             'product_c1id',
+            'product_name',
             'products_count',
             'confirmed_count',
             'provider_order_id',
