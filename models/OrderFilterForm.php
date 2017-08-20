@@ -23,6 +23,8 @@ class OrderFilterForm extends Model
         return [
             [['before', 'after'], 'string'],
             ['status', 'in', 'range' => array_keys(Order::$STATUS_TO_STRING)],
+            // all status
+            ['status', 'default', 'value' => -1],
             ['before', 'default', 'value' => date('Y-m-d')],
             ['after', 'default', 'value' => date('Y-m-d', time() - 7 * 60 * 60 * 24)],
             [['before', 'after', 'status'], 'safe'],
@@ -61,7 +63,9 @@ class OrderFilterForm extends Model
         ]);
         $dataProvider->query->andFilterWhere(['>=', 'order.created_at', strtotime($this->after)]);
         $dataProvider->query->andFilterWhere(['<=', 'order.created_at', strtotime($this->before)]);
-        $dataProvider->query->andFilterWhere(['=', 'order.status', $this->status]);
+        if ($this->status != -1) {
+            $dataProvider->query->andFilterWhere(['=', 'order.status', $this->status]);
+        }
 
         Yii::$app->db->cache(function ($db) use ($dataProvider) {
             $dataProvider->prepare();

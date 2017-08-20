@@ -46,7 +46,8 @@ ManagerAsset::register($this);
                     ],
                 ]);
                 ?>
-                <select name="status">
+                <select name="status" value=<?=$model->status?>>
+                    <option value="-1">Все</option>
                 <?php foreach (Order::$STATUS_TO_STRING as $k => $v) {
                     echo "<option value='$k'>$v</option>";
                 }?>
