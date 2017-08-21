@@ -2,6 +2,7 @@
 
 namespace app\models\Good;
 
+use app\models\CachedSearchActiveRecord;
 use app\models\SoundexCachedActiveRecord;
 use Yii;
 use yz\shoppingcart\CartPositionProviderInterface;
@@ -23,12 +24,12 @@ use app\models\Bookmark;
  * @property Menu $category
  */
 
-class Good extends SoundexCachedActiveRecord implements CartPositionProviderInterface
+class Good extends CachedSearchActiveRecord implements CartPositionProviderInterface
 {
     public $offset, $bookmarkCount;
-    static function soundex_columns()
+    static function search_columns()
     {
-        return ['name'];
+        return 'name';
     }
 
     public function getCartPosition($params = [])

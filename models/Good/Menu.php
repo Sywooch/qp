@@ -2,7 +2,7 @@
 
 namespace app\models\Good;
 
-use app\models\SoundexCachedActiveRecord;
+use app\models\CachedSearchActiveRecord;
 use creocoder\nestedsets\NestedSetsBehavior;
 use yii\caching\TagDependency;
 
@@ -15,11 +15,11 @@ use yii\caching\TagDependency;
  * @property integer $depth
  * @property string $name
  */
-class Menu extends SoundexCachedActiveRecord
+class Menu extends CachedSearchActiveRecord
 {
-    static function soundex_columns()
+    static function search_columns()
     {
-        return ['name'];
+        return 'name';
     }
 
     public function rules()
@@ -104,7 +104,6 @@ class Menu extends SoundexCachedActiveRecord
             }
             return $ret;
         }
-
         return self::getDb()->cache(function ($db)
         {
             return $this->getProducts()->count();

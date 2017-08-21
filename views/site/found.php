@@ -4,8 +4,8 @@ use app\components\catalog\ProductWidget;
 use yii\widgets\ListView;
 
 /* @var $this yii\web\View */
-/* @var $productDataProvider yii\data\ActiveDataProvider */
-/* @var $categoryDataProvider yii\data\ActiveDataProvider */
+/* @var $productDataProvider yii\data\ArrayDataProvider */
+/* @var $categoryDataProvider yii\data\ArrayDataProvider */
 /* @var $query string */
 
 $this->title = "Результаты поиска";

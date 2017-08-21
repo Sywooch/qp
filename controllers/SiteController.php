@@ -3,14 +3,13 @@
 namespace app\controllers;
 
 use app\models\Bookmark;
-use app\models\Profile\Message;
 use app\models\Good\Good;
 use app\models\Good\Menu;
 use app\models\Order;
 use app\models\OrderProduct;
 use Yii;
 use yii\caching\TagDependency;
-use yii\data\ActiveDataProvider;
+use yii\data\ArrayDataProvider;
 use yii\filters\AccessControl;
 use yii\web\Controller;
 use yii\filters\VerbFilter;
@@ -23,7 +22,6 @@ use yii\base\InvalidParamException;
 use yii\web\BadRequestHttpException;
 use yii\helpers\Url;
 use app\models\Profile\AccountActivation;
-use yii\data\ArrayDataProvider;
 use DateTime;
 
 class SiteController extends Controller
@@ -333,11 +331,11 @@ class SiteController extends Controller
 
     public function actionSearch($q = '')
     {
-        $productDataProvider = new ActiveDataProvider([
-            'query' => Good::soundexSearch($q),
+        $productDataProvider = new ArrayDataProvider([
+            'allModels' => Good::search($q),
         ]);
-        $categoryDataProvider = new ActiveDataProvider([
-            'query' => Menu::soundexSearch($q),
+        $categoryDataProvider = new ArrayDataProvider([
+            'allModels' => Menu::search($q),
         ]);
 
         return $this->render(
