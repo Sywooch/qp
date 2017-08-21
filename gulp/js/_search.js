@@ -22,7 +22,7 @@ String.prototype.score=function(e,f){if(this===e)return 1;if(""===e)return 0;var
             if (text === null) {
                 return null
             }
-            var search = query.replace(/\s/g, '').toLowerCase(),
+            var search = query.toLowerCase(),
                 tokens = '',
                 textLen = text.length,
                 searchLen = search.length,
@@ -31,7 +31,7 @@ String.prototype.score=function(e,f){if(this===e)return 1;if(""===e)return 0;var
             for (var n = 0; n < textLen; n++) {
                 var text_char = text[n];
                 if (search_position < searchLen &&
-                    text_char.toLowerCase() === search[search_position]) {
+                    text_char === search[search_position]) {
                     text_char = '<b>' + text_char + '</b>';
                     search_position += 1;
                 }
@@ -44,24 +44,26 @@ String.prototype.score=function(e,f){if(this===e)return 1;if(""===e)return 0;var
         }
         var matchesProd = [], matchesCat = [];
 
-        if (request.term==="") {
+        if (request.term === "") {
             response([]);
             return;
         }
         function add(dataList, matches) {
-            dataList.map(function(item) {
-                if (item.label === null) {
+            var counter = 0;
+            dataProducts.map(function(item) {
+                if (item.label === null || counter > 20) {
                     return false;
                 }
                 var rating = item.label.score(request.term, 0.5);
-                if (rating > 0.5) {
-                    var result = fuzzy_match(item.label, request.term);
+                if (rating > 0.4) {
+                    var result = fuzzy_match(item.label.toLowerCase(), request.term);
                     if (result !== null) {
                         matches.push({
                             id: item.id,
                             rating: rating,
                             label: result
                         });
+                        counter++;
                     }
                 }
             });
@@ -71,7 +73,7 @@ String.prototype.score=function(e,f){if(this===e)return 1;if(""===e)return 0;var
             if (arr.length === 0) {
                 return;
             }
-            arr.sort(function (a, b) {
+            matches.sort(function (a, b) {
                 return a.rating < b.rating
             }).slice(0, 10);
             arr.unshift({
@@ -84,6 +86,9 @@ String.prototype.score=function(e,f){if(this===e)return 1;if(""===e)return 0;var
 
         sortAndSlice(matchesProd, 0);
         sortAndSlice(matchesCat, 1);
+        matchesProd.slice(0, 5);
+        dataCategories.slice(0, 10);
+        console.log(matchesProd.length)
 
         response(matchesProd.concat(matchesCat));
     }
@@ -101,13 +106,6 @@ String.prototype.score=function(e,f){if(this===e)return 1;if(""===e)return 0;var
                 messages: {
                     noResults: '',
                     results: function() {}
-                },
-                focus: function( event, ui ) {
-                    if(ui.item.label === 0 || ui.item.label === 1) {
-                        return false;
-                    }
-                    $input.val( ui.item.label );
-                    return false;
                 }
             })
             .data( "ui-autocomplete" )._renderItem = function( ul, item ) {
