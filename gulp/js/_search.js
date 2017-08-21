@@ -1,3 +1,5 @@
+String.prototype.score=function(e,f){if(this===e)return 1;if(""===e)return 0;var d=0,a,g=this.toLowerCase(),n=this.length,h=e.toLowerCase(),k=e.length,b;a=0;var l=1,m,c;f&&(m=1-f);if(f)for(c=0;c<k;c+=1)b=g.indexOf(h[c],a),-1===b?l+=m:(a===b?a=.7:(a=.1," "===this[b-1]&&(a+=.8)),this[b]===e[c]&&(a+=.1),d+=a,a=b+1);else for(c=0;c<k;c+=1){b=g.indexOf(h[c],a);if(-1===b)return 0;a===b?a=.7:(a=.1," "===this[b-1]&&(a+=.8));this[b]===e[c]&&(a+=.1);d+=a;a=b+1}d=.5*(d/n+d/k)/l;h[0]===g[0]&&.85>d&&(d+=.15);return d};
+
 (function($){
 
     "use strict";
@@ -16,64 +18,84 @@
     var dataCategories;
 
     function lightwell(request, response) {
-        function hasMatch (needle, haystack) {
-            var hlen = haystack.length;
-            var nlen = needle.length;
-            if (nlen > hlen) {
-                return false;
+        function fuzzy_match(text, query) {
+            if (text === null) {
+                return null
             }
-            if (nlen === hlen) {
-                return needle === haystack;
-            }
-            outer: for (var i = 0, j = 0; i < nlen; i++) {
-                var nch = needle.charCodeAt(i);
-                while (j < hlen) {
-                    if (haystack.charCodeAt(j++) === nch) {
-                        continue outer;
-                    }
+            var search = query.toLowerCase(),
+                tokens = '',
+                textLen = text.length,
+                searchLen = search.length,
+                search_position = 0;
+
+            for (var n = 0; n < textLen; n++) {
+                var text_char = text[n];
+                if (search_position < searchLen &&
+                    text_char === search[search_position]) {
+                    text_char = '<b>' + text_char + '</b>';
+                    search_position += 1;
                 }
-                return false;
+                tokens += text_char;
             }
-            return true;
+            if (search_position !== searchLen) {
+                return null;
+            }
+            return tokens;
         }
-        var i, l, obj, matches = [];
+        var matchesProd = [], matchesCat = [];
 
-        var hasProduct = true, hasCategory = true;
-
-        if (request.term==="") {
+        if (request.term === "") {
             response([]);
             return;
         }
+        function add(dataList, matches) {
+            var counter = 0;
+            dataProducts.map(function(item) {
+                if (item.label === null || counter > 20) {
+                    return false;
+                }
+                var rating = item.label.score(request.term, 0.5);
+                if (rating > 0.4) {
+                    var result = fuzzy_match(item.label.toLowerCase(), request.term);
+                    if (result !== null) {
+                        matches.push({
+                            id: item.id,
+                            rating: rating,
+                            label: result
+                        });
+                        counter++;
+                    }
+                }
+            });
+        }
+        
+        function sortAndSlice(arr, label) {
+            if (arr.length === 0) {
+                return;
+            }
+            matches.sort(function (a, b) {
+                return a.rating < b.rating
+            }).slice(0, 10);
+            arr.unshift({
+                label: label
+            });
+        }
 
-        for  (i = 0, l = dataProducts.length; i<l; i++) {
-            obj = dataProducts[i];
-            if (hasMatch(request.term.toLowerCase(), obj.label.toLowerCase())) {
-                if(hasProduct) {
-                    matches.push({label: 0});
-                    hasProduct = false;
-                }
-                matches.push(obj);
-                if(matches.length > 9)
-                    break;
-            }
-        }
-        for  (i = 0, l = dataCategories.length; i<l; i++) {
-            obj = dataCategories[i];
-            if (hasMatch(request.term.toLowerCase(), obj.label.toLowerCase())) {
-                if(hasCategory) {
-                    matches.push({label: 1});
-                    hasCategory = false;
-                }
-                matches.push(obj);
-            }
-        }
-        response(matches);
+        add(dataProducts, matchesProd);
+        add(dataCategories, matchesCat);
+
+        sortAndSlice(matchesProd, 0);
+        sortAndSlice(matchesCat, 1);
+        matchesProd.slice(0, 5);
+        dataCategories.slice(0, 10);
+        console.log(matchesProd.length)
+
+        response(matchesProd.concat(matchesCat));
     }
 
     var Search = {
         init: function() {
 
-            console.log($input);
             this.event();
             this.getData();
 
@@ -84,22 +106,15 @@
                 messages: {
                     noResults: '',
                     results: function() {}
-                },
-                focus: function( event, ui ) {
-                    if(ui.item.label == 0 || ui.item.label == 1) {
-                        return false;
-                    }
-                    $input.val( ui.item.label );
-                    return false;
                 }
             })
             .data( "ui-autocomplete" )._renderItem = function( ul, item ) {
-                if(item.label == 0) {
+                if(item.label === 0) {
                     return $( "<li class='ui-autocomplete-category'>" )
                         .append( "Товары" )
                         .appendTo( ul );
                 }
-                if(item.label == 1) {
+                if(item.label === 1) {
                     return $( "<li class='ui-autocomplete-category'>" )
                         .append( "Категории" )
                         .appendTo( ul );
