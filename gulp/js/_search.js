@@ -71,13 +71,12 @@ String.prototype.score=function(e,f){if(this===e)return 1;if(""===e)return 0;var
             if (arr.length === 0) {
                 return;
             }
-            arr.push({
-                label: label,
-                rating: 2
-            });
             arr.sort(function (a, b) {
                 return a.rating < b.rating
-            }).slice(0, 20);
+            }).slice(0, 10);
+            arr.unshift({
+                label: label
+            });
         }
 
         add(dataProducts, matchesProd);
