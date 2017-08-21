@@ -47,6 +47,7 @@ class OrderProduct extends CachedActiveRecord
     {
         return [
             'product_c1id' => '1с идентификатор товара',
+            'product_name' => 'Название товара',
             'products_count' => 'Заказанное количество товара',
             'confirmed_count' => 'Подтверждённое количество товара',
             'provider_order_id' => 'Номер заказа поставщику',

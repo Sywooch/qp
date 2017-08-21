@@ -81,7 +81,8 @@ class CachedSearchActiveRecord extends CachedActiveRecord
         usort($metric_data, function($x, $y) {
             return $x[0] > $y[0] ? -1 : 1;
         });
-        array_slice($metric_data, 0, self::MAX_COUNT);
+
+        $metric_data = array_slice($metric_data, 0, self::MAX_COUNT);
         return array_map(function($x) { return $x[1]; }, $metric_data);
     }
 }
