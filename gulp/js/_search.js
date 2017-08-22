@@ -149,12 +149,10 @@ String.prototype.score=function(e,f){if(this===e)return 1;if(""===e)return 0;var
             jQuery.ui.autocomplete.prototype._resizeMenu = function () {
                 if (skel.vars.mobile) {
                     this.menu.element.outerWidth( $input.parent().width() + 50 );
-                    this.menu.element.outerHeight( $(window).height() - 140);
                 } else {
                     this.menu.element.outerWidth( $input.parent().width() );
-                    this.menu.element.outerHeight( $(window).height() - 110);
                 }
-
+                this.menu.element.outerHeight( $(window).height() - 110);
                 var left = $input.parent().offset().left;
                 this.menu.element.css({left: left + 'px'});
                 console.log(left);
