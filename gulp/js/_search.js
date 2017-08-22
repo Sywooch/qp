@@ -8,7 +8,7 @@ String.prototype.score=function(e,f){if(this===e)return 1;if(""===e)return 0;var
         $input = $('#search-input'),
         $closeSearch = $('.js-search-close'),
         $modal = $('#search-modal'),
-        $searchHeaderWrap = $('#js-search-wrap'),
+        $uiContent = $('.ui-widget-content'),
         $searchHeaderInput = $('#js-search-input'),
         $searchOverlay = $('.search-overlay');
 
@@ -61,7 +61,8 @@ String.prototype.score=function(e,f){if(this===e)return 1;if(""===e)return 0;var
                         matches.push({
                             id: item.id,
                             rating: rating,
-                            label: result
+                            label: result,
+                            url: item.url
                         });
                         counter++;
                     }
@@ -69,24 +70,41 @@ String.prototype.score=function(e,f){if(this===e)return 1;if(""===e)return 0;var
             });
         }
         
-        function sortAndSlice(arr, label) {
+        function sort(arr) {
             if (arr.length === 0) {
                 return;
             }
             arr = arr.sort(function (a, b) {
                 return a.rating < b.rating
             });
-            arr = arr.slice(0, 10);
-            arr.unshift({
-                label: label
-            });
         }
 
         addMatches(dataProducts, matchesProd);
         addMatches(dataCategories, matchesCat);
 
-        sortAndSlice(matchesProd, 0);
-        sortAndSlice(matchesCat, 1);
+        sort(matchesProd);
+        sort(matchesCat);
+
+        const LENGTH = 10;
+        var _len1 = matchesProd.length,
+            _len2 = matchesCat.length;
+
+        if (_len1 > LENGTH) {
+            matchesProd = matchesProd.slice(0, 10);
+        }
+        if (_len2 > LENGTH) {
+            matchesCat = matchesCat.slice(0, 10);
+        }
+        if (_len1 > 0) {
+            matchesProd.unshift({
+                label: 0
+            });
+        }
+        if (_len2 > 0) {
+            matchesCat.unshift({
+                label: 1
+            });
+        }
 
         response(matchesProd.concat(matchesCat));
     }
@@ -104,9 +122,16 @@ String.prototype.score=function(e,f){if(this===e)return 1;if(""===e)return 0;var
                 messages: {
                     noResults: '',
                     results: function() {}
+                },
+                focus: function( event, ui ) {
+                    if(ui.item.label === 0 || ui.item.label === 1) {
+                        return false;
+                    }
+                    $input.val( ui.item.label.replace(/(<([^>]+)>)/ig, '') );
+                    return false;
                 }
-            })
-            .data( "ui-autocomplete" )._renderItem = function( ul, item ) {
+            });
+            jQuery.ui.autocomplete.prototype._renderItem = function( ul, item ) {
                 if(item.label === 0) {
                     return $( "<li class='ui-autocomplete-category'>" )
                         .append( "Товары" )
@@ -121,6 +146,19 @@ String.prototype.score=function(e,f){if(this===e)return 1;if(""===e)return 0;var
                     .append( "<a href='" + item.url + "'>" + item.label + "</a>" )
                     .appendTo( ul );
             };
+            jQuery.ui.autocomplete.prototype._resizeMenu = function () {
+                if (skel.vars.mobile) {
+                    this.menu.element.outerWidth( $input.parent().width() + 50 );
+                    this.menu.element.outerHeight( $(window).height() - 140);
+                } else {
+                    this.menu.element.outerWidth( $input.parent().width() );
+                    this.menu.element.outerHeight( $(window).height() - 110);
+                }
+
+                var left = $input.parent().offset().left;
+                this.menu.element.css({left: left + 'px'});
+                console.log(left);
+            }
         },
         getData: function () {
             $.ajax( {
@@ -143,7 +181,6 @@ String.prototype.score=function(e,f){if(this===e)return 1;if(""===e)return 0;var
                 },
                 error: function () {
                     App.log('Error #10');
-                    App.message('Произошла ошибка', false);
                 }
             } );
         },

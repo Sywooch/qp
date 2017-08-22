@@ -11,13 +11,25 @@ var App = (function(){
             var that = this,
                 currentCategory = "";
             $.each( items, function( index, item ) {
-                if ( item.category != currentCategory ) {
+                if ( item.category !== currentCategory ) {
                     ul.append( "<li class='ui-autocomplete-category'>" + item.category + "</li>" );
                     currentCategory = item.category;
                 }
                 that._renderItemData( ul, item );
             });
         }
+    });
+
+    // Skel.
+    skel.breakpoints({
+        xlarge: '(max-width: 1680px)',
+        large: '(max-width: 1280px)',
+        medium: '(max-width: 980px)',
+        small: '(max-width: 736px)',
+        xsmall: '(max-width: 480px)',
+        xxsmall: '(max-width: 360px)',
+        short: '(min-aspect-ratio: 16/7)',
+        xshort: '(min-aspect-ratio: 16/6)'
     });
 
     //public API
