@@ -48,9 +48,9 @@ String.prototype.score=function(e,f){if(this===e)return 1;if(""===e)return 0;var
             response([]);
             return;
         }
-        function add(dataList, matches) {
+        function addMatches(dataList, matches) {
             var counter = 0;
-            dataProducts.map(function(item) {
+            dataList.map(function(item) {
                 if (item.label === null || counter > 20) {
                     return false;
                 }
@@ -73,22 +73,20 @@ String.prototype.score=function(e,f){if(this===e)return 1;if(""===e)return 0;var
             if (arr.length === 0) {
                 return;
             }
-            matches.sort(function (a, b) {
+            arr = matches.sort(function (a, b) {
                 return a.rating < b.rating
-            }).slice(0, 10);
+            });
+            arr = arr.slice(0, 10);
             arr.unshift({
                 label: label
             });
         }
 
-        add(dataProducts, matchesProd);
-        add(dataCategories, matchesCat);
+        addMatches(dataProducts, matchesProd);
+        addMatches(dataCategories, matchesCat);
 
         sortAndSlice(matchesProd, 0);
         sortAndSlice(matchesCat, 1);
-        matchesProd.slice(0, 5);
-        dataCategories.slice(0, 10);
-        console.log(matchesProd.length)
 
         response(matchesProd.concat(matchesCat));
     }
