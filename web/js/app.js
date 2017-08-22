@@ -1511,7 +1511,7 @@ String.prototype.score=function(e,f){if(this===e)return 1;if(""===e)return 0;var
         function addMatches(dataList, matches) {
             var counter = 0;
             dataList.map(function(item) {
-                if (item.label === null || counter > 20) {
+                if (item.label === null || counter > 100) {
                     return false;
                 }
                 var rating = item.label.score(request.term, 0.5);
@@ -1533,7 +1533,7 @@ String.prototype.score=function(e,f){if(this===e)return 1;if(""===e)return 0;var
             if (arr.length === 0) {
                 return;
             }
-            arr = matches.sort(function (a, b) {
+            arr = arr.sort(function (a, b) {
                 return a.rating < b.rating
             });
             arr = arr.slice(0, 10);
