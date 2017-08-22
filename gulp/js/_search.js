@@ -8,7 +8,7 @@ String.prototype.score=function(e,f){if(this===e)return 1;if(""===e)return 0;var
         $input = $('#search-input'),
         $closeSearch = $('.js-search-close'),
         $modal = $('#search-modal'),
-        $uiContent = $('.ui-widget-content'),
+        $mobileFooter  = $('.mobile-footer'),
         $searchHeaderInput = $('#js-search-input'),
         $searchOverlay = $('.search-overlay');
 
@@ -200,6 +200,7 @@ String.prototype.score=function(e,f){if(this===e)return 1;if(""===e)return 0;var
         },
         hideOverlay: function () {
             $searchOverlay.addClass('hide');
+            $mobileFooter.removeClass('mini');
             setTimeout(function () {
                 //$searchOverlay.css('display', 'none');
                 $searchOverlay.removeClass('hide');
@@ -207,6 +208,7 @@ String.prototype.score=function(e,f){if(this===e)return 1;if(""===e)return 0;var
         },
         openSearch: function () {
             $input.focus();
+            $mobileFooter.addClass('mini');
         }
     };
 

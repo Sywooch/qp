@@ -10,6 +10,7 @@
   background-color: white;
   border-top: 1px solid #f2f2f2;
   box-sizing: border-box;
+  transition: all 200ms linear;
   & > ul {
     display: flex;
     list-style: none;
@@ -23,6 +24,8 @@
     padding-top: 10px;
     &:focus, &:hover {
       text-decoration: none;
+      border: none;
+      outline: none;
     }
     .icon-mobile {
       font-size: 22px;
@@ -37,6 +40,16 @@
     a {
       flex-direction: row;
     }
-
+  }
+  &.mini {
+    height: 33px;
+    .icon-mobile, .icon {
+      font-size: 18px;
+    }
+    .shopping a {
+      padding-top: 0;
+      top: -5px;
+      position: relative;
+    }
   }
 }
