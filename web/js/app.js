@@ -1609,12 +1609,10 @@ String.prototype.score=function(e,f){if(this===e)return 1;if(""===e)return 0;var
             jQuery.ui.autocomplete.prototype._resizeMenu = function () {
                 if (skel.vars.mobile) {
                     this.menu.element.outerWidth( $input.parent().width() + 50 );
-                    this.menu.element.outerHeight( $(window).height() - 140);
                 } else {
                     this.menu.element.outerWidth( $input.parent().width() );
-                    this.menu.element.outerHeight( $(window).height() - 110);
                 }
-
+                this.menu.element.outerHeight( $(window).height() - 110);
                 var left = $input.parent().offset().left;
                 this.menu.element.css({left: left + 'px'});
                 console.log(left);
@@ -2494,6 +2492,7 @@ var App = (function(){
 
             stage[currentStage].init();
 
+
             $('input[type=number]').stepper({
                 type: 'int',       // Allow floating point numbers
                 wheel_step:1,       // Wheel increment is 1
@@ -2515,4 +2514,24 @@ App.init();
 
 $(document).ready(function () {
     //$('[data-toggle="tooltip"]').tooltip();
+    if (skel.vars.mobile) {
+        var width = $('.yandex-map').width();
+        var isLoad = false;
+        for(var i = 1000; i < 30 * 1000; i += 1000) {
+            (function(i, width, isLoad) {
+                if (isLoad) {
+                    console.log('loaded');
+                    return;
+                }
+                setInterval(function () {
+                    var maps = $('ymaps[id]');
+                    if (maps.length) {
+                        maps.css({width: width + 'px'});
+                        isLoad = true;
+                    }
+                }, i);
+            }) (i, width, isLoad);
+
+        }
+    }
 });
