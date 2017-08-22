@@ -1,3 +1,7 @@
+$z-index-modal: 1060;
+$z-index-search-result: 1070;
+$z-index-search-input: 1080;
+
 .search-overlay {
   background: rgba(255, 255, 255, 0.85);
   .modal-content {
@@ -16,6 +20,7 @@
   .input-group {
     width: 100%;
     border: 2px solid #49ae48;
+    z-index: $z-index-search-input;
   }
   .btn-close {
     color: #111;
@@ -93,6 +98,7 @@
   list-style: none;
   background-clip: padding-box;
   overflow-y: auto;
+  z-index: $z-index-search-result;
 }
 .ui-autocomplete-category {
   padding: 0 15px;
