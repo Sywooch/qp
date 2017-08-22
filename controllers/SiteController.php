@@ -331,18 +331,11 @@ class SiteController extends Controller
 
     public function actionSearch($q = '')
     {
-        $productDataProvider = new ArrayDataProvider([
-            'allModels' => Good::search($q),
-        ]);
-        $categoryDataProvider = new ArrayDataProvider([
-            'allModels' => Menu::search($q),
-        ]);
-
         return $this->render(
             'found',
             [
-                'productDataProvider' => $productDataProvider,
-                'categoryDataProvider' => $categoryDataProvider,
+                'products' => Good::search($q),
+                'categories' => Menu::search($q),
                 'query' => $q
             ]
         );

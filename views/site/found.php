@@ -4,7 +4,8 @@ use app\components\catalog\ProductWidget;
 use yii\widgets\ListView;
 
 /* @var $this yii\web\View */
-/* @var $productDataProvider yii\data\ArrayDataProvider */
+/* @var app\models\Good\Good $products */
+/* @var app\models\Good\Menu $categories */
 /* @var $categoryDataProvider yii\data\ArrayDataProvider */
 /* @var $query string */
 
@@ -13,21 +14,29 @@ $this->params['breadcrumbs'][] = $this->title;
 
 ?>
 <h1>Результат поиска по запросу: "<?=$query?>"</h1>
-<h2>Товары</h2>
-<div class="row">
-    <?= ListView::widget([
-        'dataProvider' => $productDataProvider,
-        'itemOptions' => ['class' => 'item'],
-        'itemView' => function ($model, $key, $index, $widget) {
-            return Html::a($model->name, ['product/view', 'id' => $model->id]);
-        },
-    ]) ?>
+<?php if (!empty($categories)) : ?>
     <h2>Категории</h2>
-    <?= ListView::widget([
-        'dataProvider' => $categoryDataProvider,
-        'itemOptions' => ['class' => 'item'],
-        'itemView' => function ($model, $key, $index, $widget) {
-            return Html::a($model->name, ['catalog/view', 'id' => $model->id]);
-        },
-    ]) ?>
+    <div class="catalog">
+        <ul class="nav nav-stacked mate__nav">
+            <?php
+            foreach ($categories as $category) {
+                echo "<li>".Html::a($category->name, ['/catalog/view', 'id' => $category->id])."</li>";
+            }
+            ?>
+        </ul>
+    </div>
+<?php endif; ?>
+
+<h2>Товары</h2>
+<div class="products-list">
+    <?php
+    if (!empty($products)) {
+        foreach ($products as $product) {
+            echo ProductWidget::widget([
+                'product' => $product,
+            ]);
+        }
+    }
+    ?>
 </div>
+

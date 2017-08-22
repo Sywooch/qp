@@ -14,8 +14,11 @@ $config = [
             'appendTimestamp' => true,
             'bundles' => [
                 'yii\bootstrap\BootstrapPluginAsset' => [
+                    'js' => [],
+                    'css' => [],
                 ],
                 'yii\bootstrap\BootstrapAsset' => [
+                    'js' => [],
                     'css' => [],
                 ],
             ],

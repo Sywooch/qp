@@ -22,10 +22,12 @@ class AppAsset extends AssetBundle
     ];
     public $js = [
         'js/jquery-ui.min.js',
-        'js/app.js'
+        'https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.7/js/bootstrap.min.js',
+        'js/app.js',
+
     ];
     public $depends = [
         'yii\web\YiiAsset',
-        'yii\bootstrap\BootstrapAsset',
+        //'yii\bootstrap\BootstrapAsset',
     ];
 }
