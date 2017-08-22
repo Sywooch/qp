@@ -1654,13 +1654,19 @@ String.prototype.score=function(e,f){if(this===e)return 1;if(""===e)return 0;var
             $modal.on('shown.bs.modal', function () {
                 self.openSearch();
             });
+            $modal.on('hidden.bs.modal', function () {
+                $mobileFooter.removeClass('mini');
+            });
+            $searchHeaderInput.on('focus', function () {
+                $modal.modal('show');
+            });
             $searchHeaderInput.on('focus', function () {
                 $modal.modal('show');
             });
         },
         hideOverlay: function () {
             $searchOverlay.addClass('hide');
-            $mobileFooter.removeClass('mini');
+
             setTimeout(function () {
                 //$searchOverlay.css('display', 'none');
                 $searchOverlay.removeClass('hide');
