@@ -238,8 +238,8 @@ class UploadZipModel extends Model
     public function checkProducts() {
         foreach(Good::find()->batch() as $batch) {
             foreach($batch as $product) {
-                if (!$product->price) {
-                    $this->_report['error']['ошибок']++;
+                if (!$product->haveValidPrice) {
+                    $this->_report['error']['товаров со статусом ОШИБКА']++;
                     Yii::$app->session->addFlash('error', "Не указана цена товара с ГУИД $product->c1id");
                     $product->status = Good::STATUS_ERROR;
                 } else {
@@ -322,7 +322,10 @@ class UploadZipModel extends Model
                     'удалений корневых категорий' => 0,
                     'перемещений категорий' => 0,
                 ],
-                'error' => ['ошибок' => 0]
+                'error' => [
+                    'ошибок' => 0,
+                    'добавлений товаров со статусом ОШИБКА' => 0
+                ]
 
             ];
 

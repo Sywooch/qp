@@ -28,7 +28,6 @@ class Menu extends CachedSearchActiveRecord
             [[ 'name', 'c1id' ], 'string'],
             ['name', 'required'],
             ['c1id', 'unique'],
-            ['soundex_search', 'string']
         ];
     }
     public function behaviors() {

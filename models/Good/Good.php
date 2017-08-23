@@ -123,6 +123,7 @@ class Good extends CachedSearchActiveRecord implements CartPositionProviderInter
     {
         return [
             [['measure', 'price', 'category_id', 'status'], 'integer'],
+            ['price', 'compare', 'compareValue' => 0, 'operator' => '>'],
             ['properties', 'checkIsArrayOrEmpty'],
             [['c1id', 'name', 'pic', 'vendor', 'provider'], 'string', 'max' => 255],
             [['c1id', 'vendor'], 'unique'],
@@ -134,7 +135,6 @@ class Good extends CachedSearchActiveRecord implements CartPositionProviderInter
             ['status', 'in', 'range' => array_keys(self::$STATUS_TO_STRING)],
             ['is_discount', 'boolean'],
             ['is_discount', 'default', 'value' => false],
-            ['soundex_search', 'string']
         ];
     }
 
@@ -205,5 +205,15 @@ class Good extends CachedSearchActiveRecord implements CartPositionProviderInter
     public function getProviderName()
     {
         return PropertyValue::cachedFindOne(['c1id' => $this->provider])->value;
+    }
+
+    public function getStatusString()
+    {
+        return static::$STATUS_TO_STRING[$this->status];
+    }
+
+    public function haveValidPrice()
+    {
+        return $this->price and is_int($this->price) and ($this->price > 0);
     }
 }
