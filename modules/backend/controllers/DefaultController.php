@@ -89,4 +89,9 @@ class DefaultController extends Controller
             'model' => $model,
         ]);
     }
+
+    public function actionManual()
+    {
+        return $this->render('manual');
+    }
 }
