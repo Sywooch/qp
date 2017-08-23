@@ -109,7 +109,12 @@ class ProfileController extends \yii\web\Controller
         ]);
         Yii::$app->db->cache(function ($db) use ($dataProvider) {
             $dataProvider->prepare();
-        }, null, new TagDependency(['tags' => 'cache_table_' . Bookmark::tableName()]));
+        }, null, new TagDependency([
+            'tags' => [
+                'cache_table_' . Bookmark::tableName(),
+                'cache_table_' . Good::tableName()
+            ]
+        ]));
         return $this->render('bookmark', [
             'dataProvider' => $dataProvider,
         ]);
