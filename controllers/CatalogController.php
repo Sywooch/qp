@@ -83,7 +83,7 @@ class CatalogController extends \yii\web\Controller
             else {
                 $products = array_filter($products, function ($prod) use ($prop, $values) {
                     $values = explode(',', $values);
-                    return isset($prod->properties[$prop]) and in_array($prod->properties[$prop], $values);
+                    return isset($prod->safeProperties[$prop]) and in_array($prod->safeProperties[$prop], $values);
                 });
             }
         }
@@ -95,16 +95,16 @@ class CatalogController extends \yii\web\Controller
         $prices = [];
         if ($products) {
             $fst_prod = array_shift($products);
-            $common_props = $fst_prod->properties;
-            foreach ($fst_prod->properties as $name => $pr) {
+            $common_props = $fst_prod->safeProperties;
+            foreach ($fst_prod->safeProperties as $name => $pr) {
                 $common_props[$name] = [ $common_props[$name] => 1 ];
                 $prices = [$fst_prod->price];
             }
 
             foreach ($products as $prod) {
                 foreach ($common_props as $name => &$pr) {
-                    if (isset($prod->properties[$name])) {
-                        $pr[$prod->properties[$name]] = 1;
+                    if (isset($prod->safeProperties[$name])) {
+                        $pr[$prod->safeProperties[$name]] = 1;
                     }
                     else {
                         unset($common_props[$name]);
@@ -161,8 +161,7 @@ class CatalogController extends \yii\web\Controller
             $filtered_products = [];
 
             while(count($filtered_products) < $limit) {
-                $products = Yii::$app->db->cache(function ($db) use($query, $ordering, $offset, $limit)
-                {
+                $products = Yii::$app->db->cache(function ($db) use($query, $ordering, $offset, $limit) {
                     return $query->orderBy(self::$ordering_to_db_query[$ordering])->offset($offset)->limit($limit)->all();
                 }, null, new TagDependency([
                     'tags'=> [
@@ -174,7 +173,6 @@ class CatalogController extends \yii\web\Controller
                 }
                 $filtered_products += $this->applyFilters($filter, $products, $offset);
             }
-
 
             $this->layout = "_null";
             if (empty($filtered_products)) {

@@ -107,7 +107,7 @@ if (!$bookmark) {
                     <div role="tabpanel" class="tab-pane" id="tab-param">
                         <ul class="product__params-list">
                             <?php
-                            foreach ($product->properties as $key => $value) {
+                            foreach ($product->safeProperties as $key => $value) {
                                 echo "<li class='item'><span class='item-key'>" . GoodProperty::cachedFindOne($key)->name . "</span>"
                                     . "<span class='item-value'>" . PropertyValue::cachedFindOne($value)->value . "</span></li>";
                             }

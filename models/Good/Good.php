@@ -50,9 +50,14 @@ class Good extends CachedSearchActiveRecord implements CartPositionProviderInter
             ],
         ];
     }
-    /**
-     * @return bool
-     */
+    public function getSafeProperties() {
+        $ret = $this->properties;
+        if (!Yii::$app->user->can('manager')) {
+            unset($ret[GoodProperty::cachedFindOne(['name' => 'Поставщик'])->id]);
+        }
+        return $ret;
+    }
+
     public function beforeDelete()
     {
         if (parent::beforeDelete()) {
