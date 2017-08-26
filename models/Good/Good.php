@@ -75,7 +75,12 @@ class Good extends CachedSearchActiveRecord implements CartPositionProviderInter
     {
         if (parent::beforeDelete()) {
             if ($this->pic) {
-                unlink($this->getImgPath());
+                try {
+                    unlink($this->getImgPath());
+                }
+                catch (Exception $e) {
+                    Yii::$app->session->addFlash('warning', 'Не удалось удалить картинку');
+                }
             }
             return true;
         } else {
