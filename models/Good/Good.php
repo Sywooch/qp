@@ -120,11 +120,13 @@ class Good extends CachedSearchActiveRecord implements CartPositionProviderInter
 
     const STATUS_ERROR = 1;
     const STATUS_HIDDEN = 2;
+    const STATUS_NEW = 3;
     const STATUS_OK = 10;
 
     static $STATUS_TO_STRING = [
         self::STATUS_ERROR      => 'Ошибка',
         self::STATUS_HIDDEN     => 'Скрытый',
+        self::STATUS_NEW        => 'Новый (цена не добавлена)',
         self::STATUS_OK         => 'ОК',
     ];
 
@@ -151,7 +153,7 @@ class Good extends CachedSearchActiveRecord implements CartPositionProviderInter
             [['category_id'], 'exist', 'skipOnError' => true, 'targetClass' => Menu::className(),
                 'targetAttribute' => ['category_id' => 'id']],
             ['status', 'in', 'range' => array_keys(self::$STATUS_TO_STRING)],
-            ['status', 'default', 'value' => self::STATUS_ERROR],
+            ['status', 'default', 'value' => self::STATUS_NEW],
             ['is_discount', 'boolean'],
             ['is_discount', 'default', 'value' => false],
             [['status', 'provider', 'vendor', 'price'], 'checkStatus'],

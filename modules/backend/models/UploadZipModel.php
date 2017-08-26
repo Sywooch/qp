@@ -221,7 +221,9 @@ class UploadZipModel extends Model
                     // Change ЦенаЗаЕдиницу for another measure type
                 $good_model->price = (int) (100 * floatval($price_xml->Цены->Цена->ЦенаЗаЕдиницу));
                 if ($good_model->validate() and $good_model->save()) {
-                    $good_model->status = Good::STATUS_OK;
+                    if ($good_model->status == Good::STATUS_NEW) {
+                        $good_model->status = Good::STATUS_OK;
+                    }
                 }
                 if (!$good_model->validate() || !$good_model->save()) {
                     $this->_report['error']['ошибок']++;
@@ -311,7 +313,6 @@ class UploadZipModel extends Model
                 ],
                 'error' => [
                     'ошибок' => 0,
-                    'добавлений товаров со статусом ОШИБКА' => 0
                 ]
 
             ];
@@ -322,6 +323,12 @@ class UploadZipModel extends Model
                 $this->goodHandler(new SimpleXMLElement($good['goods']));
                 $this->priceHandler(new SimpleXMLElement($good['prices']));
             }
+
+            $this->_report['error']['добавлений товаров с ошибкой'] =
+                Good::updateAll(['status' => Good::STATUS_ERROR], ['status' => Good::STATUS_NEW]);
+
+            $this->_report['success']['добавлений товаров'] -= $this->_report['error']['добавлений товаров с ошибкой'];
+
             $zip->close();
             foreach ($this->_report as $swe => $subjs) {
                 foreach ($subjs as $subj => $count) {
