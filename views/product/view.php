@@ -77,8 +77,11 @@ if (!$bookmark) {
                 </div>
                 <button class="btn btn-icon btn-icon-left btn-success btn-compare"
                         data-product-id="<?= $product->id ?>"
-                        data-product-count="1">
-                    <i class="fa fa-shopping-cart" aria-hidden="true"></i> Купить
+                        data-product-count="1"
+                        <?=$product->readyToSale() ?
+                            "><span><i class=\"fa fa-shopping-cart\" aria-hidden=\"true\"></i>Купить</span>" :
+                            "disabled><span>Недоступен</span>"
+                        ?>
                 </button>
                 <button class="btn btn-default bookmark <?=$bookmark->isNewRecord ? '' : 'active'?>"
                         data-product-id="<?= $product->id ?>"

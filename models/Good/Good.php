@@ -3,11 +3,15 @@
 namespace app\models\Good;
 
 use app\models\CachedSearchActiveRecord;
-use app\models\SoundexCachedActiveRecord;
 use Yii;
+use yii\base\InvalidConfigException;
+use yii\caching\TagDependency;
+use yii\helpers\ArrayHelper;
+use yii\web\NotFoundHttpException;
 use yz\shoppingcart\CartPositionProviderInterface;
 use baibaratsky\yii\behaviors\model\SerializedAttributes;
 use app\models\Bookmark;
+use yii\web\ForbiddenHttpException;
 
 /**
  * This is the model class for table "good".
@@ -24,9 +28,12 @@ use app\models\Bookmark;
  * @property Menu $category
  */
 
+
+
 class Good extends CachedSearchActiveRecord implements CartPositionProviderInterface
 {
     public $offset, $bookmarkCount;
+
     static function search_columns()
     {
         return 'name';
@@ -34,10 +41,16 @@ class Good extends CachedSearchActiveRecord implements CartPositionProviderInter
 
     public function getCartPosition($params = [])
     {
-        return \Yii::createObject([
-            'class' => ProductCartPosition::className(),
-            'id' => $this->id,
-        ]);
+        if ($this->status === Good::STATUS_OK) {
+            return \Yii::createObject([
+                'class' => ProductCartPosition::className(),
+                'id' => $this->id,
+            ]);
+        }
+        else {
+            Yii::$app->session->setFlash('error', "Товар недоступен");
+            return null;
+        }
     }
 
     public function behaviors()
@@ -140,13 +153,37 @@ class Good extends CachedSearchActiveRecord implements CartPositionProviderInter
             ['status', 'in', 'range' => array_keys(self::$STATUS_TO_STRING)],
             ['is_discount', 'boolean'],
             ['is_discount', 'default', 'value' => false],
+            [['status', 'provider', 'vendor', 'price'], 'checkStatus'],
         ];
+    }
+
+    public function checkStatus($attribute, $params)
+    {
+        if ($this->status == static::STATUS_OK) {
+            if (!$this->haveValidPrice()) {
+                $this->addError('price', "Не указана или указана неверно цена товара.");
+            }
+            if (!$this->provider) {
+                $this->addError('provider', "Не указан поставщик товара.");
+                if ($pr = PropertyValue::findOne(['c1id' => $this->provider])) {
+                    if (!$this->getProviderName()) {
+                        $this->addError('provider', "Поставщик с 1С ИД $this->provider не имеет названия");
+                    }
+                }
+                else {
+                    $this->addError('provider', "Поставщик с 1С ИД $this->provider не найден");
+                }
+            }
+            if (!$this->vendor) {
+                $this->addError('vendor', "Не указан артикул товара.");
+            }
+        }
     }
 
     public function checkIsArrayOrEmpty($attribute, $params)
     {
         if ($this->properties && !is_array($this->properties)) {
-            $this->addError('config', 'Properties should be array');
+            $this->addError('properties', 'Properties should be array');
         }
     }
     /**
@@ -166,7 +203,8 @@ class Good extends CachedSearchActiveRecord implements CartPositionProviderInter
             'provider' => '1с ИД Поставщика',
             'vendor' => 'Артикул',
             'providerName' => 'Название поставщика',
-            'is_discount' => 'Акционный товар'
+            'is_discount' => 'Акционный товар',
+            'status' => 'Статус'
         ];
     }
 
@@ -197,19 +235,19 @@ class Good extends CachedSearchActiveRecord implements CartPositionProviderInter
 
     static public function findOkStatus($cond)
     {
-        $ret = self::findOneOr404($cond);
+        $ret = self::cachedFindOne($cond);
         if ($ret->status == self::STATUS_OK) {
             return $ret;
         }
         else {
-            Yii::$app->session->setFlash('error', "Товар $ret->name недоступен");
-            return false;
+            return null;
         }
     }
 
     public function getProviderName()
     {
-        return PropertyValue::cachedFindOne(['c1id' => $this->provider])->value;
+        $provider = PropertyValue::cachedFindOne(['c1id' => $this->provider]);
+        return $provider ? $provider->value: '';
     }
 
     public function getStatusString()
@@ -219,6 +257,12 @@ class Good extends CachedSearchActiveRecord implements CartPositionProviderInter
 
     public function haveValidPrice()
     {
-        return $this->price and is_int($this->price) and ($this->price > 0);
+        return $this->price and is_numeric($this->price) and ((int)$this->price > 0);
+    }
+
+    public function readyToSale()
+    {
+        return $this->haveValidPrice() and $this->provider
+            and $this->getProviderName() and $this->status == self::STATUS_OK;
     }
 }

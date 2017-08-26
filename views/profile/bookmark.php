@@ -47,10 +47,11 @@ $this->params['breadcrumbs'][] = $this->title;
                         '<br><button class="btn btn-icon btn-icon-left btn-success btn-compare"
                             data-product-id="' . $model->product->id . '"
                             data-product-count="1"
-                            data-active="1">
-                        <i class="fa fa-shopping-cart" aria-hidden="true"></i>
-                        <span>Купить</span>
-                    </button>';
+                            data-active="1"' .
+                        ($model->product->readyToSale() ?
+                            "><span>Купить</span>" :
+                            "disabled><span>Недоступен</span>") .
+                    '</button>';
                 }
             ],
             [

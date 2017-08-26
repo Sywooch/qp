@@ -53,9 +53,13 @@ class CartController extends \yii\web\Controller
     {
         $get = Yii::$app->request->post();
         if (Yii::$app->request->isAjax) {
-            if ($pr = Good::findOkStatus($get['product_id'])) {
+            $pid = $get['product_id'];
+            if ($pr = Good::findOkStatus($pid)) {
                 Yii::$app->cart->put($pr->getCartPosition(),
                     $get['product_count']);
+            }
+            else {
+                Yii::$app->session->addFlash('error', "Товар с id $pid недоступен.");
             }
         }
         return CartWidget::widget();
@@ -69,8 +73,12 @@ class CartController extends \yii\web\Controller
             /** @var $cart \yz\shoppingcart\ShoppingCart */
             $cart = Yii::$app->cart;
             foreach ($get['products'] as $item) {
-                if ($pr = Good::findOkStatus($item['id'])){
+                $pid = $item['id'];
+                if ($pr = Good::findOkStatus($pid)){
                     $cart->update($pr->getCartPosition(), $item['count']);
+                }
+                else {
+                    Yii::$app->session->addFlash('error', "Товар с id $pid недоступен.");
                 }
             }
         }
@@ -107,26 +115,33 @@ class CartController extends \yii\web\Controller
         if ($order->save()) {
             $user->order_counter++;
             $user->save();
-            foreach($cart->getPositions() as $product) {
+            foreach($cart->getPositions() as $position) {
                 $op = new OrderProduct([
-                    'products_count' => $product->getQuantity(),
-                    'product_c1id' => $product->getProduct()->c1id,
+                    'products_count' => $position->getQuantity(),
                     'order_id' => $order->id,
-                    'product_name' => $product->getProduct()->name,
-                    'old_price' => $product->getProduct()->price,
-                    'product_vendor' => $product->getProduct()->vendor,
-                    'provider' => $product->getProduct()->provider,
                 ]);
+                if (!$op->fillWithProduct($position->id)) {
+                    continue;
+                }
                 if (!$op->save()) {
-                    Yii::error('Ошибка при оформлении заказа. ' .
-                        implode(', ', $op->getFirstErrors()));
-                    return $this->redirect('/profile');
+                    Yii::$app->session->addFlash('error',
+                        'Ошибка при оформлении заказа. ' . implode(', ', $op->getFirstErrors()));
                 }
             }
             $cart->removeAll();
-            Yii::$app->session->setFlash('success', 'Заказ ' . $order->public_id . ' успешно оформлен.');
-            Yii::$app->user->identity->sendMessage($order->getLink() . ' успешно оформлен.');
-            return $this->redirect(['/profile/order/view', 'id' => $order->id ]);
+
+            if ($order->getOrderProducts()) {
+                Yii::$app->session->addFlash('success', 'Заказ ' . $order->public_id . ' успешно оформлен.');
+                Yii::$app->user->identity->sendMessage($order->getLink() . ' успешно оформлен.');
+                return $this->redirect(['/profile/order/view', 'id' => $order->id ]);
+            }
+            else {
+                Yii::$app->session->addFlash('error', 'Не удалось добавить ни одного товара в заказ.');
+                $order->delete();
+                return $this->redirect(['/index' ]);
+            }
+
+
         }
         Yii::error('Ошибка при оформлении заказа. ' .
             implode(', ', $order->getFirstErrors()));

@@ -2,6 +2,7 @@
 
 namespace app\models;
 
+use app\models\Good\Good;
 use Yii;
 use yii\web\NotFoundHttpException;
 
@@ -56,6 +57,28 @@ class OrderProduct extends CachedActiveRecord
             'provider' => '1с ИД Поставщика',
         ];
     }
+
+    public function fillWithProduct($product_id) {
+        $product = Good::findOne($product_id);
+        if (!$product) {
+            Yii::$app->session->addFlash('error', "Товара с ИД $product_id не существует.");
+            return false;
+        }
+        if (!$product->readyToSale()) {
+            Yii::$app->session->addFlash('error', "Товара с ИД $product_id недоступен.");
+            return false;
+        }
+
+        $this->product_c1id = $product->c1id;
+        $this->product_name = $product->name;
+        $this->old_price = $product->price;
+        $this->product_vendor = $product->vendor;
+        $this->provider = $product->provider;
+
+        return true;
+    }
+
+
     /**
      * @return \yii\db\ActiveQuery
      */

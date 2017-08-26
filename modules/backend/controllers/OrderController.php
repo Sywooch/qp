@@ -132,7 +132,7 @@ class OrderController extends Controller
                 $model->provider = $product->provider;
             }
             else {
-                Yii::$app->session->setFlash('error', 'Товара с таким c1id не существует');
+                Yii::$app->session->setFlash('error', "Товара с 1С ИД $model->product_c1id недоступен");
                 return $this->render('product-create', [
                     'model' => $model,
                 ]);
@@ -161,9 +161,7 @@ class OrderController extends Controller
         ]);
 
         if ($order->save());
-        var_dump($order->firstErrors);
         $n = rand() % 5;
-        var_dump($n);
         for ($i = 0; $i < $n; $i++) {
             while(!$product = Good::find()->where(['status' => Good::STATUS_OK ])->offset(rand() % 400)->one());
             $op = new OrderProduct([
@@ -177,7 +175,6 @@ class OrderController extends Controller
             ]);
             if (!$op->save())
                 break;
-            var_dump($op->firstErrors);
         }
         return $this->redirect(['index']);
     }

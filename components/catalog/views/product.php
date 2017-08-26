@@ -38,8 +38,13 @@ if (!$bookmark) {
             <button class="btn product-to-cart btn-success btn-compare"
                     data-product-id="<?= $product->id ?>"
                     data-product-count="1"
-                    data-active="1">
-                <span>Купить</span>
+                    data-active="1"
+                    <?=$product->readyToSale() ?
+                        "><span>Купить</span>" :
+                        "disabled><span>Недоступен</span>"
+                    ?>
+            >
+
             </button>
         </div>
 

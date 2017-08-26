@@ -105,23 +105,26 @@ class SiteController extends Controller
             'products' => round($fake_clients * $fake_clients / 27) + OrderProduct::cachedGetCount()
         ];
 
+        $productQuery = Good::find()
+            ->select('good.*')
+            ->joinWith(Bookmark::tableName())
+            ->addSelect('COUNT(bookmark.id) AS bookmarkCount')
+            ->groupBy('good.id')
+            ->where(['status' => Good::STATUS_OK])
+            ->orderBy('bookmarkCount DESC')
+            ->limit(6);
 
-        $products = !$is_discount ?
-            Yii::$app->db->cache(function ($db) {
-                return Good::find()
-                    ->select('good.*')
-                    ->joinWith(Bookmark::tableName())
-                    ->addSelect('COUNT(bookmark.id) AS bookmarkCount')
-                    ->groupBy('good.id')
-                    ->where(['status' => Good::STATUS_OK])
-                    ->orderBy('bookmarkCount DESC')
-                    ->limit(6)
-                    ->all();
-            }, null, new TagDependency(['tags' => 'cache_table_' . Bookmark::tableName()]))
-            :
-            Yii::$app->db->cache(function ($db) {
-                return Good::find()->where(['status' => Good::STATUS_OK, 'is_discount' => true])->limit(6)->all();
-            }, null, new TagDependency(['tags' => 'cache_table_' . Good::tableName()]));
+        if ($is_discount) {
+            $productQuery->andFilterWhere(['is_discount' => true]);
+        }
+
+
+        $products = Yii::$app->db->cache(function ($db) use($productQuery) {
+                return $productQuery->all();
+            }, null, new TagDependency(['tags' => [
+                'cache_table_' . Bookmark::tableName(),
+                'cache_table_' . Good::tableName(),
+            ]]));
 
         return $this->render('index', [
             'catalog' => Menu::getRoot(),
