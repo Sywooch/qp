@@ -15,7 +15,6 @@ $this->params['breadcrumbs'][] = $this->title;
 
 $today = date('Y-m-d');
 $yesterday = date("Y-m-d", time() - 60 * 60 * 24);
-$before_yesterday = date("Y-m-d", time() - 2 * 60 * 60 * 24);
 $get = Yii::$app->request->get();
 
 $interval = isset($get['after']) && isset($get['before']) ? $get['after'] : '';
@@ -40,8 +39,8 @@ ManagerAsset::register($this);
                     'options' => ['class' => 'nav nav-pills'],
                     'encodeLabels' => false,
                     'items' => [
-                        ['label' => 'Сегодня', 'url' => ['/manager', 'before' => $today, 'after' => $yesterday]],
-                        ['label' => 'Вчера', 'url' => ['/manager', 'before' => $yesterday, 'after' => $before_yesterday]],
+                        ['label' => 'Сегодня', 'url' => ['/manager', 'before' => $today, 'after' => $today]],
+                        ['label' => 'Вчера', 'url' => ['/manager', 'before' => $yesterday, 'after' => $yesterday]],
                         '<li><input type="text" class="form-control date-interval" placeholder="Задать интервал" name="daterange"/></li>',
                     ],
                 ]);

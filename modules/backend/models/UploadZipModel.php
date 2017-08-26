@@ -202,7 +202,7 @@ class UploadZipModel extends Model
                 if (!$good_model->validate() || !$good_model->save()) {
                     $this->_report['error']['ошибок']++;
                     Yii::$app->session->addFlash('error',
-                        "Ошибка при добавлении товара <i>$good_model->name</i>. " .
+                        "Ошибка при" . ($is_new ? " добавлении товара " : " изменении товара ") . "<i>$good_model->name</i>. " .
                         implode(', ', $good_model->getFirstErrors()));
                 }
                 else {
