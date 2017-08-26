@@ -173,14 +173,14 @@ class Good extends CachedSearchActiveRecord implements CartPositionProviderInter
             }
             if (!$this->provider) {
                 $this->addError('provider', "Не указан поставщик товара.");
-                if ($pr = PropertyValue::findOne(['c1id' => $this->provider])) {
-                    if (!$this->getProviderName()) {
-                        $this->addError('provider', "Поставщик с 1С ИД $this->provider не имеет названия");
-                    }
+            }
+            if ($pr = PropertyValue::findOne(['c1id' => $this->provider])) {
+                if (!$this->getProviderName()) {
+                    $this->addError('provider', "Поставщик с 1С ИД $this->provider не имеет названия");
                 }
-                else {
-                    $this->addError('provider', "Поставщик с 1С ИД $this->provider не найден");
-                }
+            }
+            else {
+                $this->addError('provider', "Поставщик с 1С ИД $this->provider не найден");
             }
             if (!$this->vendor) {
                 $this->addError('vendor', "Не указан артикул товара.");
