@@ -220,6 +220,9 @@ class UploadZipModel extends Model
             if ($good_model = Good::findOne([ 'c1id' => $good_c1id ])) {
                     // Change ЦенаЗаЕдиницу for another measure type
                 $good_model->price = (int) (100 * floatval($price_xml->Цены->Цена->ЦенаЗаЕдиницу));
+                if ($good_model->validate() and $good_model->save()) {
+                    $good_model->status = Good::STATUS_OK;
+                }
                 if (!$good_model->validate() || !$good_model->save()) {
                     $this->_report['error']['ошибок']++;
                     Yii::$app->session->addFlash('error',
@@ -231,21 +234,6 @@ class UploadZipModel extends Model
                 $this->_report['error']['ошибок']++;
                 Yii::$app->session->addFlash('error',
                     "Попытка добавить цену неизвествного товар с ГУИД <i>$good_c1id</i>.");
-            }
-        }
-    }
-
-    public function checkProducts() {
-        foreach(Good::find()->batch() as $batch) {
-            foreach($batch as $product) {
-                if (!$product->haveValidPrice() or !$product->provider) {
-                    $this->_report['error']['добавлений товаров со статусом ОШИБКА']++;
-                    Yii::$app->session->addFlash('error', "Не указана цена товара с ГУИД $product->c1id");
-                    $product->status = Good::STATUS_ERROR;
-                } else {
-                    $product->status = Good::STATUS_OK;
-                }
-                $product->save();
             }
         }
     }
@@ -334,8 +322,6 @@ class UploadZipModel extends Model
                 $this->goodHandler(new SimpleXMLElement($good['goods']));
                 $this->priceHandler(new SimpleXMLElement($good['prices']));
             }
-            $this->checkProducts();
-
             $zip->close();
             foreach ($this->_report as $swe => $subjs) {
                 foreach ($subjs as $subj => $count) {
