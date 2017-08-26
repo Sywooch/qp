@@ -78,7 +78,7 @@ class Good extends CachedSearchActiveRecord implements CartPositionProviderInter
                 try {
                     unlink($this->getImgPath());
                 }
-                catch (Exception $e) {
+                catch (\Exception $e) {
                     Yii::$app->session->addFlash('warning', 'Не удалось удалить картинку');
                 }
             }
