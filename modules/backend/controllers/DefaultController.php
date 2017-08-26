@@ -51,7 +51,10 @@ class DefaultController extends Controller
 
     public function actionDownloadProvider()
     {
-        $date = date('Y-m-d');
+        $date = Yii::$app->request->post('date');
+        if (!$date) {
+            $date = date('Y-m-d');
+        }
         $arch = "../temp/provider-order/$date.zip";
         if (file_exists($arch)) {
             set_time_limit(5*60);

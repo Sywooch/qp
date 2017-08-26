@@ -8,7 +8,6 @@ $this->title = 'Панель администратора'
 /* @var $model app\modules\backend\models\UploadZipModel */
 /* @var $provider app\modules\backend\models\UploadProvider */
 ?>
-
 <?php $form1 = ActiveForm::begin(['options' => ['enctype' => 'multipart/form-data']]) ?>
 <?= $form1->field($model, 'zipFile')->fileInput()->label('Обновить базу данных из архива.') ?>
     <button>Отправить</button>
@@ -17,6 +16,14 @@ $this->title = 'Панель администратора'
 <br>
 <?php $form2 = ActiveForm::begin(['action' => ['download-provider']]) ?>
 <label class="control-label">Выгрузить зявки поставщикам</label> <br>
+    <?=
+        yii\jui\DatePicker::widget([
+        'name' => 'date',
+        'language' => 'ru',
+        'dateFormat' => 'yyyy-MM-dd',
+        'value' => date('Y-m-d'),
+        'clientOptions' => ['value' => date('Y-m-d')],
+    ]) ?>
     <button>Скачать</button>
 <?php ActiveForm::end() ?>
 
