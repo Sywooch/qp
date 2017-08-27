@@ -12,3 +12,14 @@
 .manager-date input {
   margin-top: 5px;
 }
+
+.filter-key {
+  border-bottom: 15px solid #eff0f0 !important;
+}
+.filter-key .btn, .js-print{
+  margin-top: 10px;
+}
+
+.filter__item .btn  {
+  width: 100%;
+}

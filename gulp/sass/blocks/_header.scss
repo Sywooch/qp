@@ -260,6 +260,13 @@ $line-height-header: 60px;
   }
   .badge {
     background-color: $cgreen;
+    position: absolute;
+    top: 3px;
+    left: 30px;
+  }
+
+  &__price {
+    white-space: nowrap;
   }
 }
 

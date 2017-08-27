@@ -1,7 +1,6 @@
 <?php
 /** @var $product app\models\Good\Good */
 
-use yii\bootstrap\ActiveForm;
 use app\models\Bookmark;
 use app\components\Html;
 
@@ -35,17 +34,17 @@ if (!$bookmark) {
                 <span class="icon lnr lnr-heart"></span>
                 <span class="counter"><?= $product->getBookmarksCount() ? $product->getBookmarksCount() : '' ?></span>
             </button>
-            <button class="btn product-to-cart btn-success btn-compare"
-                    data-product-id="<?= $product->id ?>"
-                    data-product-count="1"
-                    data-active="1"
-                    <?=$product->readyToSale() ?
-                        "><span>Купить</span>" :
-                        "disabled><span>Недоступен</span>"
-                    ?>
-            >
 
-            </button>
+            <?php if($product->readyToSale()) : ?>
+                <button class="btn product-to-cart btn-success btn-compare"
+                        data-product-id="<?= $product->id ?>"
+                        data-product-count="1"
+                        data-active="1">
+                    Купить
+                </button>
+            <?php else: ?>
+                <span class="product-disabled">Нет в наличии</span>
+            <?php endif; ?>
         </div>
 
     </div>

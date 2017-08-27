@@ -51,7 +51,11 @@
     margin-top: 30px;
     background-color: 3px solid $color-navbar;
     background-color: $color-navbar-dark;
+    @media (max-width: $screen-sm) {
+      padding-bottom: 70px;
+    }
   }
+
 }
 .subscribe__btn {
   height: 32px;

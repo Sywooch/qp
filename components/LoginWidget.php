@@ -51,7 +51,7 @@ class LoginWidget extends Widget
                     'encodeLabels' => false,
                     'items' => array_merge([
                         ['label' => 'Главная', 'url' => ['/']],
-                    ], [ $cart], $items)
+                    ], $items)
                 ]);
             } else {
                 $items = array_merge($items, [

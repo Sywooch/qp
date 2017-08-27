@@ -164,9 +164,15 @@
       }
     }
   }
+
+  &-disabled {
+    color: #6b6b6b;
+    line-height: 3.5rem;
+    cursor: not-allowed;
+  }
 }
 
-.products{
+.products {
   &-list:not(:first-child) {
     clear: both;
     border-top: 1px solid $gray-3;
@@ -210,7 +216,6 @@
     }
     &-price {
       float: right;
-      text-align: left;
     }
     &-panel {
       background-color: transparent;
@@ -221,14 +226,13 @@
       }
     }
     .btn-compare {
-      width: 120px;
       span {
         display: inline-block !important;
       }
     }
   }
 }
-@media (max-width: $screen-xs) {
+@media (max-width: $screen-sm-min) {
   .product {
     padding-bottom: 15px;
     .thumbnail {
