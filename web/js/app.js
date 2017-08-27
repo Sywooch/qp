@@ -1677,7 +1677,7 @@ String.prototype.score=function(e,f){if(this===e)return 1;if(""===e)return 0;var
         openSearch: function () {
             $input.focus();
             $mobileFooter.addClass('mini');
-        },
+        }
     };
 
     Search.init();
@@ -2486,8 +2486,8 @@ var App = (function(){
                 type: type,
                 delay: 2000,
                 animate: {
-                    enter: 'animated fadeInDown',
-                    exit: 'animated fadeOutUp'
+                    enter: 'animated slideInDown',
+                    exit: 'animated slideOutRight'
                 }
             });
         },

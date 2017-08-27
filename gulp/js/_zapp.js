@@ -67,8 +67,8 @@ var App = (function(){
                 type: type,
                 delay: 2000,
                 animate: {
-                    enter: 'animated fadeInDown',
-                    exit: 'animated fadeOutUp'
+                    enter: 'animated slideInDown',
+                    exit: 'animated slideOutRight'
                 }
             });
         },
