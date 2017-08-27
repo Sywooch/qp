@@ -3,6 +3,8 @@
 namespace app\models;
 
 use app\components\Html;
+use app\components\SberbankClient;
+use SoapClient;
 use Yii;
 use yii\behaviors\TimestampBehavior;
 
@@ -124,16 +126,22 @@ class Order extends CachedActiveRecord
         return OrderProduct::cachedFindAll(['order_id' => $this->id]);
     }
 
-    public function getConfirmedPriceHtml()
-    {
+    public function getConfirmedPrice() {
         $has_nonconf = false;
-        $ret = Html::unstyled_price(array_reduce($this->orderProducts, function($carry, $item) use(&$has_nonconf){
+        $ret = array_reduce($this->orderProducts, function($carry, $item) use(&$has_nonconf){
             if (!isset($item->confirmed_count)) {
                 $has_nonconf = true;
             }
             return $carry + $item->confirmed_count * $item->old_price;
-        }));
+        });
         return $has_nonconf ? null : $ret;
+    }
+
+    public function getConfirmedPriceHtml()
+    {
+        $ret = $this->getConfirmedPrice();
+        return $ret === null ? null : Html::unstyled_price($ret);
+
     }
 
     public function getTotalPriceHtml()
@@ -148,10 +156,60 @@ class Order extends CachedActiveRecord
     }
 
     public function pay() {
-        // TODO: implement rest stuff
-        $this->status = Order::STATUS_PAID;
-        return $this->save();
+        if(!$this->canPaid())
+            return false;
+
+        //Регистрируем заказ в системе
+        $client = new SberbankClient();
+        $response = $client->registerOrder($this->id, "Order in qpvl.ru", $this->getConfirmedPrice());
+
+        if($response !== false) {
+            //Обновляем модель
+            var_dump($response->orderdId);
+
+            $this->paymentOrderId = $response->orderdId;
+            $this->update();
+
+            //Возвращаем url
+            return $response->formUrl;
+        } else {
+            Yii::$app->session->addFlash('error', 'Не получилось сохранить заказ');
+            return false;
+        }
+
+
     }
+
+    public function setPaidStatus() {
+        $client = new SberbankClient();
+        $result = $client->getStatusOrder($this->id);
+        $this->status = Order::STATUS_PAID;
+
+        $paymentStatus = $result->orderStatus;
+
+
+        //если платеж уже прошел, сразу кидаем смс
+        if($paymentStatus == 2) {
+            //отправляем сообщение
+            $this->status = self::STATUS_PAID;
+            if($this->save()) {
+                Yii::$app->session->addFlash('success', 'Заказ успешно оплачен');
+
+                return true;
+            } else {
+                Yii::$app->session->addFlash('error', "Ошибка сохранения заказа в БД");
+                return false;
+            }
+        }
+        else {
+            $paymentErrorCode = $result->errorCode;
+            $paymentErrorMessage = !empty($result->errorMessage) ?  $result->errorMessage : '';
+            Yii::$app->session->addFlash('error',
+                "Ошибка оплаты. " . $paymentErrorMessage . " Код ошибки: " . $paymentErrorCode);
+            return false;
+        }
+    }
+
 
     public function canPaid() {
         return
