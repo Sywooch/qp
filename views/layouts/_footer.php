@@ -52,33 +52,17 @@ $menuUser = [
                     <div class="col-md-6">
                         <span class="footer-title">Время работы</span>
                         <div class="footer-hours">ПН-ПТ: 9:00-19:00<br/> СБ-ВС: 9:00-16:00</div>
-                    </div>
-                    <div class="col-md-6">
                         <div class="footer-phone">
                             <?=isset(Yii::$app->params['phone.manager']) ? Yii::$app->params['phone.manager'] : "Номер телефона"; ?>
                         </div>
                     </div>
-                    <div class="col-md-12">
-                        <p class="footer-subscribe-text">Подпишитесь на нашу рассылку и вы будете получать новости о новых поступлениях в нашем магазине</p>
-                    </div>
-                    <div class="col-md-12">
-                        <?= Html::beginForm(Url::to(['/site/subscribe']), 'get', ['class' => 'form form-search col-xs-9 col-md-12']) ?>
-                        <div class="input-group">
-
-                            <?= Html::textInput('email', '', ['class' => 'form-control ', 'placeholder' => 'ВАША ЭЛЕКТРОННАЯ ПОЧТА']) ?>
-                            <span class="input-group-addon">
-                                <?= Html::submitButton('ПОДПИСАТЬСЯ', ['class' => 'btn subscribe__btn']) ?>
-                            </span>
-                        </div><!-- /input-group -->
-                        <?= Html::endForm() ?>
+                    <div class="col-md-6">
+                        <span class="footer-title">Способы оплаты</span>
+                        <div>
+                            <?=Html::img('@web/img/payments.png')?>
+                        </div>
                     </div>
                 </div>
-            </div>
-            <div class="col-md-3">
-
-            </div>
-            <div class="col-md-3">
-
             </div>
         </div>
     </div>
