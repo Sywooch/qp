@@ -37,7 +37,6 @@ $(document).ready(function () {
             $start.val(f.start.val());
             $end.val(f.end.val());
             $dateInterval.attr('name', '');
-            $('.datepicker-form').submit();
         }, 0);
     });
     function loadFile(url,callback){
