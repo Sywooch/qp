@@ -239,4 +239,15 @@ class ProfileController extends \yii\web\Controller
             'message' => Message::cachedFindOne($id),
         ]);
     }
+
+    public function actionPaymentDone($orderId) {
+        $order = Order::findOneOr404($orderId);
+        if ($order->setPaidStatus()) {
+            return $this->redirect('viewOrder', ['id' => $orderId]);
+        }
+        else {
+            return $this->redirect('/index');
+        }
+    }
+
 }
