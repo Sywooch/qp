@@ -2,7 +2,6 @@
 
 use app\components\Html;
 use app\models\Bookmark;
-use yii\web\View;
 use yii\helpers\Url;
 use yii\caching\TagDependency;
 use app\models\Good\Menu;
@@ -44,7 +43,7 @@ if (!$bookmark) {
 }
 ?>
 
-<h1><?= Html::encode($this->title) ?></h1>
+<h1 class="product-title"><?= Html::encode($this->title) ?></h1>
 
 <div class="product-view page-static">
     <div class="row">
@@ -62,37 +61,73 @@ if (!$bookmark) {
             <?php endif; ?>
         </div>
         <div class="col-sm-8 col-xs-12 product-detail">
-
-            <div class="price">
-                <?=Html::price($product->price)?>
-            </div>
-            <div class="product__panel" data-toggle="buttons">
-                <div class="btn-group">
-                    <input type="number" min="1" value="1"
-                           name="product_count"
-                           class="product_count"
-                           data-product-id="<?= $product->id ?>">
-                    <input type="hidden" name="product_id" value=<?= $product->id ?>>
+            <div class="row">
+                <div class="col-sm-8">
+                    <div class="price">
+                        <?=Html::price($product->price)?>
+                    </div>
+                    <div class="product__panel" data-toggle="buttons">
+                        <div class="btn-group сщд-">
+                            <input type="number" min="1" value="1"
+                                   name="product_count"
+                                   class="product_count"
+                                   data-product-id="<?= $product->id ?>">
+                            <input type="hidden" name="product_id" value=<?= $product->id ?>>
+                        </div>
+                        <div class="btn-group">
+                        <?php if($product->readyToSale()) : ?>
+                            <button class="btn product-to-cart btn-success btn-compare"
+                                    data-product-id="<?= $product->id ?>"
+                                    data-product-count="1"
+                                    data-active="1">
+                                В корзину
+                            </button>
+                        <?php else: ?>
+                            <span class="product-disabled">Нет в наличии</span>
+                        <?php endif; ?>
+                        </div>
+                        <div class="btn-group">
+                            <button class="btn product-to-bookmark btn-default bookmark <?=$bookmark->isNewRecord ? '' : 'active'?>"
+                                    data-product-id="<?= $product->id ?>"
+                                    data-placement="top"
+                                    title="<?=$bookmark->isNewRecord ? 'В избранное' : 'В избранном'?>">
+                                <span class="icon lnr lnr-heart"></span>
+                                <span class="counter"><?= $product->getBookmarksCount() ? $product->getBookmarksCount() : '' ?></span>
+                            </button>
+                        </div>
+                    </div>
                 </div>
-                <button class="btn btn-icon btn-icon-left btn-success btn-compare"
-                        data-product-id="<?= $product->id ?>"
-                        data-product-count="1"
-                        <?=$product->readyToSale() ?
-                            "><span><i class=\"fa fa-shopping-cart\" aria-hidden=\"true\"></i>Купить</span>" :
-                            "disabled><span>Недоступен</span>"
-                        ?>
-                </button>
+                <div class="col-sm-4">
+                    <div class="product__delivery hidden-xs">
+                        <table cellspacing="0" cellpadding="0" border="0">
+                            <?php if ($product->readyToSale()) : ?>
+                            <tr>
+                                <td class="product__delivery-status available">
+                                    <i class="fa fa-check fa-lg"></i> Товар в наличии
+                                </td>
+                            </tr>
+                            <tr>
+                                <td><i class="fa fa-truck fa-lg"></i> Доставим:</td>
+                            </tr>
+                            <tr>
+                                <td><?=Html::dateRu(date("d m", strtotime("+1 day")))?> - <?=Html::dateRu(date("d m", strtotime("+2 day")))?></td>
+                            </tr>
+                            <tr>
+                                <td style="font-size: 12px;">(по Вашему выбору)</td>
+                            </tr>
+                            <?php else : ?>
+                                <tr>
+                                    <td class="product__delivery-status unavailable">
+                                        <span class="lnr lnr-sad"></span> Товар не доступен
+                                    </td>
+                                </tr>
+                            <?php endif; ?>
+                        </table>
 
-                <button class="btn product-to-bookmark btn-default bookmark <?=$bookmark->isNewRecord ? '' : 'active'?>"
-                        data-product-id="<?= $product->id ?>"
-                        data-placement="top"
-                        title="<?=$bookmark->isNewRecord ? 'В избранное' : 'В избранном'?>">
-                    <span class="icon lnr lnr-heart"></span>
-                    <span class="counter"><?= $product->getBookmarksCount() ? $product->getBookmarksCount() : '' ?></span>
-                    <input type="checkbox">
-                </button>
-
+                    </div>
+                </div>
             </div>
+
 
             <div class="product__params">
                 <!-- Nav tabs -->
