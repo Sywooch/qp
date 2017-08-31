@@ -1,40 +1,17 @@
 /*
  * Bookmark product
  */
-//.bookmark {
-//  width: 30px;
-//  height: 35px;
-//  font-size: 1.6rem;
-//  &.active {
-//    width: 44px;
-//  }
-//  &-count {
-//    position: relative;
-//    font-size: 1.5rem;
-//    color: $black-3;
-//  }
-//  &:before {
-//    font-family: FontAwesome;
-//    content: "&#xe813;";
-//    color: #2d8e47;;
-//    border-radius: 20px;
-//  }
-//  &.focus, &:hover, &.active:focus, & {
-//    border: none;
-//    background-color: transparent !important;
-//    box-shadow: none;
-//    outline: none !important;
-//  }
-//  &.focus {
-//    &:after {
-//    }
-//  }
-//  &.active {
-//    &:before {
-//      content: "\f005";
-//    }
-//  }
-//}
+.bookmark {
+  .icon {
+    transition: all 250ms ease-out;
+  }
+  &.active {
+    .icon {
+      background-color: rgba(197, 0, 0, 0.15);
+    }
+  }
+
+}
 .tooltip {
   font-size: 14px;
 }
