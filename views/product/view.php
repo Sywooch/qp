@@ -15,8 +15,6 @@ use app\models\Good\GoodProperty;
 
 $this->title = $product->name;
 
-$this->params['catalog'] = true;
-
 foreach(Yii::$app->db->cache(function() use($category) {
     return $category->parents()->all();
 }, null, new TagDependency(['tags' => 'cache_table_' . Menu::tableName()])) as $par) {
@@ -32,6 +30,8 @@ $this->params['breadcrumbs'][] =  [
 ];
 $this->params['breadcrumbs'][] = $this->title;
 
+
+
 $bookmark = Bookmark::cachedFindOne([
     'product_id' => $product->id,
     'user_id' => Yii::$app->user->getId()
@@ -44,25 +44,24 @@ if (!$bookmark) {
 }
 ?>
 
-<?php if(\Yii::$app->user->can('admin')) : ?>
-    <?= Html::a('Просмотреть в панели администратора',
-        ['backend/good/view', 'id' => $product->id], [
-        ])
-    ?>
-<?php endif; ?>
+<h1><?= Html::encode($this->title) ?></h1>
 
-<div class="product-view">
-
-    <h1><?= Html::encode($this->title) ?></h1>
+<div class="product-view page-static">
     <div class="row">
-        <div class="col-sm-5 col-xs-12">
+        <div class="col-sm-4 col-xs-12">
             <div class="thumbnails">
                 <div class="product-image">
                     <?=Html::img([ $product->getImgPath() ], ['height'=>204, 'width'=>270, 'class'=>'img-responsive', 'data-product-id'=>$product->id])?>
                 </div>
             </div>
+            <?php if(\Yii::$app->user->can('admin')) : ?>
+                <?= Html::a('Просмотреть в панели администратора',
+                    ['backend/good/view', 'id' => $product->id], [
+                    ])
+                ?>
+            <?php endif; ?>
         </div>
-        <div class="col-sm-7 col-xs-12 product-detail">
+        <div class="col-sm-8 col-xs-12 product-detail">
 
             <div class="price">
                 <?=Html::price($product->price)?>
@@ -83,15 +82,16 @@ if (!$bookmark) {
                             "disabled><span>Недоступен</span>"
                         ?>
                 </button>
-                <button class="btn btn-default bookmark <?=$bookmark->isNewRecord ? '' : 'active'?>"
+
+                <button class="btn product-to-bookmark btn-default bookmark <?=$bookmark->isNewRecord ? '' : 'active'?>"
                         data-product-id="<?= $product->id ?>"
                         data-placement="top"
                         title="<?=$bookmark->isNewRecord ? 'В избранное' : 'В избранном'?>">
-                       <span class="bookmark-count">
-                           <?= $product->getBookmarksCount() ? $product->getBookmarksCount() : '' ?>
-                       </span>
+                    <span class="icon lnr lnr-heart"></span>
+                    <span class="counter"><?= $product->getBookmarksCount() ? $product->getBookmarksCount() : '' ?></span>
                     <input type="checkbox">
                 </button>
+
             </div>
 
             <div class="product__params">
@@ -138,21 +138,5 @@ if (!$bookmark) {
             </div>
 
         </div>
-    </div>
-    <div class="product__delivery hidden-xs">
-        <table cellspacing="0" cellpadding="0" border="0">
-            <tr>
-                <td class="product__delivery-status available"><i class="fa fa-check fa-lg"></i> Товар в наличии</td>
-            </tr>
-            <tr>
-                <td><i class="fa fa-truck fa-lg"></i> Доставим:</td>
-            </tr>
-            <tr>
-                <td><?=Html::dateRu(date("d m", strtotime("+1 day")))?> - <?=Html::dateRu(date("d m", strtotime("+2 day")))?></td>
-            </tr>
-            <tr>
-                <td style="font-size: 12px;">(по Вашему выбору)</td>
-            </tr>
-        </table>
     </div>
 </div>
