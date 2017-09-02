@@ -39,7 +39,6 @@ class SberbankClient
         $usernameToken->addChild('wsse:Password', $this->password, $nsWsse)->addAttribute('Type', $passwordType);
 
         //берем из xml только security
-//        var_dump($root->asXML());exit;
         $secutiryXml = $root->xpath('/root/wsse:Security');
 
         //формируем заголовок
