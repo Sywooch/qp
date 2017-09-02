@@ -1,10 +1,7 @@
 <?php
 
 use app\components\Html;
-use yii\bootstrap\Nav;
 use yii\helpers\Url;
-use app\components\catalog\ProductWidget;
-use app\models\Good\Good;
 use yii\caching\TagDependency;
 use app\models\Good\Menu;
 use yii\widgets\Breadcrumbs;
@@ -101,7 +98,11 @@ $this->params['breadcrumbs'][] = $this->title;
                 <!-- PRELOADER -->
                 <div class="preloader"><div><em></em><em></em><em></em><em></em></div></div>
                 <!-- //PRELOADER -->
-                <a href="javascript:void(0)" class="btn btn-default js-show-more">Показать ещё</a>
+                <a href="javascript:void(0)"
+                   class="btn btn-default js-show-more"
+                   data-product-count="<?= $category->getProductCount();?>">
+                    Показать ещё
+                </a>
             </div>
         </div>
     </div>
