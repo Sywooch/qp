@@ -248,7 +248,7 @@ class ProfileController extends \yii\web\Controller
         if ($order->canPaid()) {
             $order->status = Order::STATUS_PAID;
             if ($order->validate() && $order->save()) {
-                Yii::$app->session->addFlash('success', "Заказ $order->id успешно оплачен");
+                Yii::$app->session->addFlash('success', "Заказ № $order->id успешно оплачен");
                 return $this->redirect(['profile/order/view', 'id' => $order->id]);
             }
             else {
