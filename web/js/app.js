@@ -340,7 +340,8 @@ var Cart = (function($){
     var ajaxParams = '',
         //с какого элемента выводить товары. По умолчанию 24, т.к. это число товаров уже выведенно.
         offset = 24,
-        productCount = $showMore.data('productCount');
+        productCount = $showMore.data('productCount'),
+        appliedFilters = [];
 
     var Data = function () {
         this.m = []; // filter for products [{id: 1, values: [1,2,3...n]}, ...]
@@ -591,23 +592,41 @@ var Cart = (function($){
                 $checkbox.each(function () {
                     var cur = $(this),
                         curVal = cur.val(),
-                        curName = cur.data('name');
+                        curName = cur.data('name'),
+                        cutTitle = cur.data('title');
+                    var applies = {
+                        title: cutTitle,
+                        value: []
+                    };
                     for(var i = 0; i < data.m.length; i++) {
                         if(data.m[i].id == curName) {
+
                             for(var k = 0; k < data.m[i].values.length; k++) {
                                 if(data.m[i].values[k] == curVal) {
+                                    applies.value.push(cur.parent().find('label').text().replace(/\s{2,}/g, ' '));
                                     cur.prop("checked", true);
                                 }
                             }
+
                         }
                     }
+                    if (applies.value.length > 0) {
+                        appliedFilters.push(applies);
+                    }
                 });
+                console.log(appliedFilters);
             } else {
                 Price().init();
             }
             if(data.order.value >= 0) {
                 $sort.val(data.order.value);
             }
+        },
+
+        setAppliedFilters: function () {
+            appliedFilters.map(function (item) {
+
+            });
         },
 
         getFilteredData: function () {
@@ -647,7 +666,6 @@ var Cart = (function($){
         },
 
         visibleShowMoreBtn: function () {
-            console.log(offset, productCount);
             if (offset >= productCount) {
                 $showMore.hide();
             } else {
@@ -1677,7 +1695,7 @@ String.prototype.score=function(e,f){if(this===e)return 1;if(""===e)return 0;var
                 $modal.modal('show');
             });
             $(window).resize(function () {
-                jQuery.ui.autocomplete.prototype._resizeMenu();
+                // jQuery.ui.autocomplete.prototype._resizeMenu();
             });
         },
         hideOverlay: function () {

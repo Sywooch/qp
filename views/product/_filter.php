@@ -7,13 +7,18 @@
     <div class="text-subline"></div>
     <div class="filter__item-prop input-group-custom">
         <?php
-        $i = 0;
         foreach ($filter['values'] as $item) :
-        $r = rand(); $i++;
+            $pref = "filter_".$item['value_id']."_".$filter['prop_id'];
         ?>
             <div class="checkbox checkbox-success">
-                <input type='checkbox' id="<?=$r. "-" . $i?>" class="styled" value="<?=$item['value_id']?>" data-name="<?=$filter['prop_id']?>">
-                <label class="checkbox-inline checkbox-register" for="<?=$r. "-" . $i?>">
+                <input type='checkbox'
+                       id = "<?=$pref?>"
+                       class = "styled"
+                       value = "<?=$item['value_id']?>"
+                       data-name = "<?=$filter['prop_id']?>"
+                       data-title = "<?=$filter['prop_name']?>"
+                >
+                <label class="checkbox-inline checkbox-register" for="<?=$pref?>">
                     <?=$item['value_name']?>
                 </label>
             </div>
