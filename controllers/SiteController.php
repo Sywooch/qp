@@ -242,35 +242,6 @@ class SiteController extends Controller
     }
 
     /**
-     * Displays contact page.
-     *
-     * @return string
-     */
-    public function actionContact()
-    {
-        $model = new ContactForm(['scenario' => ContactForm::SCENARIO_USER_FEEDBACK]);
-        if (Yii::$app->user->can('user')) {
-            $model->email = Yii::$app->user->identity->email;
-        }
-        if ($model->load(Yii::$app->request->post())) {
-            if ($model->contact(Yii::$app->params['adminEmail']) && $model->save(false)) {
-                Yii::$app->session->setFlash('contactFormSubmitted');
-            } else {
-                Yii::$app->session->setFlash('error', 'Возникла ошибка
-                при сохранении и отправке сообения. ' . implode(' ', $model->getFirstErrors()));
-            }
-            return $this->refresh();
-        }
-
-        return $this->render('contact', [
-            'model' => $model,
-            'feedbacks' => ContactForm::cachedFindAll([
-                'status' => ContactForm::STATUS_VISIBLE
-            ]),
-        ]);
-    }
-
-    /**
      * Displays review page.
      *
      * @return string
