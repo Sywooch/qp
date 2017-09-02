@@ -35,7 +35,7 @@ ManagerAsset::register($this);
                         'format' => 'raw',
                         'value' => function ($order) {
                             /* @var $order app\models\Order*/
-                            return Html::a($order->public_id, ['view-order', 'id' => $order->id]);
+                            return Html::a($order->id, ['view-order', 'id' => $order->id]);
                         }
                     ],
                     'user.email',

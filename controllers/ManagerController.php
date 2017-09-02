@@ -45,13 +45,13 @@ class ManagerController extends Controller
                 return $this->redirect([ '/manager' ]);
             }
             if ($order->status != Order::STATUS_DELIVERED) {
-                Yii::$app->session->setFlash('error', 'Заказ ' . $order->public_id  . ' не готов к выдаче.');
+                Yii::$app->session->setFlash('error', 'Заказ ' . $order->id  . ' не готов к выдаче.');
                 return $this->redirect([ 'view-order', 'id' => $order->id ]);
             }
             else {
                 $order->status = Order::STATUS_DONE;
                 $order->save();
-                Yii::$app->session->setFlash('success', 'Заказ ' . $order->public_id  . ' выдан.');
+                Yii::$app->session->setFlash('success', 'Заказ ' . $order->id  . ' выдан.');
                 return $this->redirect([ 'view-order', 'id' => $order->id ]);
             }
         }
@@ -73,7 +73,7 @@ class ManagerController extends Controller
 
     public static function order2array($order) {
         return [
-            'id_order' => $order->public_id,
+            'id_order' => $order->id,
             'email' => $order->user->email,
             'created' => date('d-m-Y H:i:s', $order->created_at),
             'status' => $order->status_str,

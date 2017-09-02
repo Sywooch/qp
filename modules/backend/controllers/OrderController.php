@@ -157,7 +157,6 @@ class OrderController extends Controller
     {
         $order = new Order([
             'user_id' => Yii::$app->user->id,
-            'public_id' => (string)rand(),
         ]);
 
         if ($order->save());

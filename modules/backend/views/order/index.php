@@ -28,7 +28,6 @@ $this->params['breadcrumbs'][] = $this->title;
         'dataProvider' => $dataProvider,
         'columns' => [
             'id',
-            'public_id',
             [
                 'attribute' => 'user_id',
                 'label' => 'ID пользователя',

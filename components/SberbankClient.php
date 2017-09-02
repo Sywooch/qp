@@ -18,7 +18,6 @@ class SberbankClient
 {
     private $login = 'kupi-api';
     private $password = 'kupi';
-    private $returnUrl = 'https://qpvl.ru/profile/payment-done';
     private $url = "https://3dsec.sberbank.ru/payment/webservices/merchant-ws?wsdl";
 
     private function getSoapHeaderWSSecurity()
@@ -62,23 +61,21 @@ class SberbankClient
         $order->addAttribute('merchantOrderNumber', $orderId);
         $order->addAttribute('description', $description);
         $order->addAttribute('amount', $amount);
-        $order->addAttribute('returnUrl', $this->returnUrl);
+        $order->addChild('returnUrl', Yii::$app->urlManager->createAbsoluteUrl('profile/payment-done'), null);
 
         $orderXml = $root->xpath('/root/order');
         $orderVar = new SoapVar($orderXml[0]->asXML(), XSD_ANYXML);
 
         try{
             //отправляем запрос, registerOrder - метод, который предоставляет wsdl
-
+            /**
+             * @var $result \stdClass
+             */
             $result = $client->registerOrder($orderVar);
-//            var_dump($orderVar);exit;
-            Yii::$app->session->addFlash('warning', "Код ошибки $result->errorCode: $result->errorMessage");
+//            Yii::$app->session->addFlash('warning', "Код возврата  $result->errorCode: $result->errorMessage");
             if($result->errorCode == 0){
                 return $result;
             } else {
-                /**
-                 * @var $result \stdClass
-                 */
                 Yii::$app->session->addFlash('error','Система вернула ошибку: ' . $result->errorCode . $result->errorMessage);
             }
         } catch (\SoapFault $ex){
@@ -115,7 +112,7 @@ class SberbankClient
             $result = $client->getOrderStatus($orderVar);
             return $result;
         } catch (\SoapFault $ex){
-            Yii::$app->session->addFlash('error','Система вернула ошибку: ' . json_encode($ex->getCode()) . $ex->getMessage());
+            Yii::$app->session->addFlash('error','Система вернула ошибку ' . json_encode($ex->getCode()) . ': '. $ex->getMessage());
         }
 
         return false;

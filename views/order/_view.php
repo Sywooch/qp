@@ -15,7 +15,7 @@ use app\models\User;
     ?>
 <?php endif; ?>
 
-<h3>Заказ № <?=$order->public_id?> </h3>
+<h3>Заказ № <?=$order->id?> </h3>
 <div class="row">
     <div class="col-sm-6">
         <table class="table">

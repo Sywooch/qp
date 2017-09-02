@@ -53,6 +53,10 @@ class CachedActiveRecord extends ActiveRecord
         }
     }
 
+    /**
+     * @inheritdoc
+     * @return static ActiveRecord instance matching the condition, or `null` if nothing matches.
+     */
     public static function cachedFindOne($cond) {
         return static::getDb()->cache(function ($db) use($cond)
         {
@@ -77,7 +81,10 @@ class CachedActiveRecord extends ActiveRecord
             return static::find()->where($cond)->all();
         }, null, new TagDependency(['tags'=>'cache_table_' . static::tableName()]));
     }
-
+    /**
+     * @inheritdoc
+     * @return static ActiveRecord instance matching the condition, or `null` if nothing matches.
+     */
     public static function findOneOr404($cond) {
         if (($model = self::cachedFindOne($cond)) !== null) {
             return $model;
