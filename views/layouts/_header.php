@@ -15,7 +15,6 @@ $itemMenu = [
         ['label' => 'Доставка', 'url' => ['/p/delivery']],
         ['label' => 'Оплата', 'url' => ['/p/payment']],
         ['label' => 'Отзывы', 'url' => ['/site/reviews']],
-        ['label' => 'Контакты', 'url' => ['/site/contact']],
     ]
 ];
 ?>

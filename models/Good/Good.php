@@ -114,7 +114,7 @@ class Good extends CachedSearchActiveRecord implements CartPositionProviderInter
 
     static $ORDERING_TO_STRING = [
         self::ORDERING_PRICE_ACS    => 'По возрастанию цены',
-        self::ORDERING_PRICE_DESC   => 'По убованию цены',
+        self::ORDERING_PRICE_DESC   => 'По убыванию цены',
         self::ORDERING_NAME         => 'По наименованию',
 //        self::ORDERING_BOOKMARK     => 'По рейтингу',
     ];

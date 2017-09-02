@@ -5,7 +5,11 @@
     var $el = $('.bookmark');
     var $btn = $('.btn-bookmark');
 
-    var action = true; // true - add to bookmark
+    const
+        BOOKMARK_ADD = true,
+        BOOKMARK_REMOVE = false;
+
+    var action = BOOKMARK_ADD;
 
     var csrfToken = $('meta[name="csrf-token"]').attr("content");
 
@@ -18,14 +22,13 @@
             $el.on('click', function () {
 
                 var url = (function(el) {
-
+                    action = BOOKMARK_ADD;
                     // Get url and change current title
                     if(el.hasClass('active')) {
                         el.attr("title", "В избранное");
-                        action = false;
+                        action = BOOKMARK_REMOVE;
                         return '/catalog/delete-bookmark';
                     }
-                    action = true;
                     el.attr("title", "В избранном");
                     return '/catalog/add-bookmark';
 
@@ -38,7 +41,7 @@
             });
             $btn.on('click', function () {
                 var id = $(this).data('productId');
-                action = false;
+                action = BOOKMARK_REMOVE;
                 var that = this;
                 self.getData('/catalog/delete-bookmark', {
                     id: id,
@@ -56,7 +59,6 @@
          * @param {object} el
          */
         getData: function (url, options, el) {
-            var self = this;
             $.ajax({
                 url: url,
                 dataType: "html",
@@ -67,12 +69,14 @@
                 },
                 success: function(result) {
                     var count = parseInt(result) ? parseInt(result) : "";
-                    if(action) {
+                    if(action === BOOKMARK_ADD) {
                         App.message('Товар добавлен в избранное', true);
+                        el.addClass('active');
                     } else {
                         App.message('Товар удалён из избранного', true);
+                        el.removeClass('active');
                     }
-                    el.find('.bookmark-count').html(count);
+                    el.find('.counter').html(count);
                     if(options.remover) {
                         //Remove dom element from /profile/bookmark
                         options.remover.fadeOut(400, function () {

@@ -39,10 +39,15 @@ AppAsset::register($this);
         if (isset($this->params['profileLayout']) && $this->params['profileLayout']) {
             // show sidebar for profile page
             echo $this->render('_profileLayout', ['content' => $content]);
+
         } elseif (isset($this->params['catalog']) && $this->params['catalog']) {
+
             echo $this->render('_catalog', ['content' => $content]);
+
         } elseif (isset($this->params['nullLayout']) && $this->params['nullLayout']) {
+
             echo $this->render('_null', ['content' => $content]);
+
         } else{
             echo Breadcrumbs::widget([
                 'links' => isset($this->params['breadcrumbs']) ? $this->params['breadcrumbs'] : [],

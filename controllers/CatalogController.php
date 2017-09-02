@@ -62,8 +62,9 @@ class CatalogController extends \yii\web\Controller
         array_walk($products, function(&$x) use(&$offset) {
             $x->offset =  $offset++;
         });
+        $applied_filters = [];
         if (!$filters) {
-            return $products;
+            return [$products, $applied_filters];
         }
 
         $filters = explode(';', $filters);
@@ -76,18 +77,20 @@ class CatalogController extends \yii\web\Controller
                 $products = array_filter($products, function ($prod) use ($min, $max) {
                     return ((int)$min - 100) <= $prod->price && $prod->price <= ((int)$max + 100);
                 });
+                $applied_filters['price'] = [$min, $max];
             }
             else if ($prop == 'o') {
                 continue;
             }
             else {
+                $values = explode(',', $values);
                 $products = array_filter($products, function ($prod) use ($prop, $values) {
-                    $values = explode(',', $values);
                     return isset($prod->safeProperties[$prop]) and in_array($prod->safeProperties[$prop], $values);
                 });
+                $applied_filters[$prop] = [$values];
             }
         }
-        return $products;
+        return [$products, $applied_filters];
     }
 
     public function getProductFilters($products) {
@@ -155,6 +158,7 @@ class CatalogController extends \yii\web\Controller
             $ordering = Good::ORDERING_PRICE_ACS;
         }
 
+
         $offset = isset($get['offset']) ? $get['offset'] : 0;
 
         if (isset($get['ajax'])) {
@@ -171,7 +175,8 @@ class CatalogController extends \yii\web\Controller
                 if (empty($products)) {
                     break;
                 }
-                $filtered_products += $this->applyFilters($filter, $products, $offset);
+                list($new_products, $applied_filters) = $this->applyFilters($filter, $products, $offset);
+                $filtered_products += $new_products;
             }
 
             $this->layout = "_null";
@@ -179,11 +184,13 @@ class CatalogController extends \yii\web\Controller
                 return $this->render('/product/_view', [
                     'products' => null,
                     'offset' => $offset,
+                    'applied_filters' => $applied_filters,
                 ]);
             }
             return $this->render('/product/_view', [
                 'products' => array_slice($filtered_products, 0, $limit),
                 'offset' => end($filtered_products)->offset + 1,
+                'applied_filters' => $applied_filters,
             ]);
         }
         else {
@@ -196,7 +203,8 @@ class CatalogController extends \yii\web\Controller
                 ]]));
 
             list($filters, $prices) = $this->getProductFilters($products);
-            $filtered_products = array_slice($this->applyFilters($filter, $products, $offset), 0, $limit);
+            list($filtered_products, $applied_filters) = $this->applyFilters($filter, $products, $offset);
+            array_slice($filtered_products, 0, $limit);
 
             if (empty($filtered_products)) {
                 return $this->render('/product/index', [
@@ -205,6 +213,7 @@ class CatalogController extends \yii\web\Controller
                     'filters' => $filters,
                     'prices' => $prices,
                     'offset' => -1,
+                    'applied_filters' => $applied_filters,
                 ]);
             }
 
@@ -214,6 +223,7 @@ class CatalogController extends \yii\web\Controller
                 'filters' => $filters,
                 'prices' => $prices,
                 'offset' => end($filtered_products)->offset + 1,
+                'applied_filters' => $applied_filters,
             ]);
         }
     }

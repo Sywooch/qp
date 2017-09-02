@@ -2,7 +2,7 @@
 
 use yii\grid\GridView;
 use app\components\Html;
-use yii\widgets\ListView;
+use yii\widgets\ActiveForm;
 
 /* @var $this yii\web\View */
 /* @var $dataProvider yii\data\ActiveDataProvider */
@@ -10,6 +10,12 @@ use yii\widgets\ListView;
 $this->title = 'Товары';
 $this->params['breadcrumbs'][] = $this->title;
 ?>
+
+<?php $form = ActiveForm::begin(['action' => ['check-status']]) ?>
+<label class="control-label">Попытаться установить статус ОК всем товарам со статусом ОШИБКА</label> <br>
+<button>Установить</button>
+<?php ActiveForm::end() ?>
+
 <div class="good-index">
 
     <h1><?= Html::encode($this->title) ?></h1>
