@@ -105,4 +105,28 @@ class GoodController extends Controller
 
         return $this->redirect(['index']);
     }
+
+    public function actionCheckStatus()
+    {
+        $ok_status = 0;
+        $error_status = 0;
+        foreach (Good::findAll(['status' => Good::STATUS_ERROR]) as $product) {
+            $product->status = Good::STATUS_OK;
+            if ($product->validate() && $product->save()) {
+                $ok_status++;
+            }
+            else {
+                Yii::$app->session->addFlash('error', implode(', ', $product->getFirstErrors()));
+                $error_status++;
+            }
+        }
+        if ($ok_status) {
+            Yii::$app->session->addFlash('success', "$ok_status товаров получили статус ОК");
+        }
+
+        if ($error_status) {
+            Yii::$app->session->addFlash('error', "$error_status товаров всё еще имеют статус ОШИБКА");
+        }
+        return $this->redirect(['index']);
+    }
 }

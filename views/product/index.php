@@ -15,8 +15,8 @@ use yii\widgets\Breadcrumbs;
 /* @var $products array of app\models\Good\Good */
 /* @var $filters null or array */
 /* @var $prices null or array */
+/* @var $applied_filters array or null*/
 /* @var integer $offset */
-
 $this->title = $category->name;
 
 $this->params['nullLayout'] = true;
@@ -94,7 +94,8 @@ $this->params['breadcrumbs'][] = $this->title;
             <div class="pjax-result row">
             <?=$this->render('_view', [
                 'products' => $products,
-                'offset' => $offset
+                'offset' => $offset,
+                'applied_filters' => $applied_filters,
             ]); ?>
             </div>
             <div class="products-more">

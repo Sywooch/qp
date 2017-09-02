@@ -110,7 +110,6 @@ class CartController extends \yii\web\Controller
         $user = Yii::$app->user->identity;
         $order = new Order([
             'user_id' => $user->id,
-            'public_id' => $user->id . '-' . $user->order_counter
         ]);
         if ($order->save()) {
             $user->order_counter++;
@@ -131,7 +130,7 @@ class CartController extends \yii\web\Controller
             $cart->removeAll();
 
             if ($order->getOrderProducts()) {
-                Yii::$app->session->addFlash('success', 'Заказ ' . $order->public_id . ' успешно оформлен.');
+                Yii::$app->session->addFlash('success', 'Заказ ' . $order->id . ' успешно оформлен.');
                 Yii::$app->user->identity->sendMessage($order->getLink() . ' успешно оформлен.');
                 return $this->redirect(['/profile/order/view', 'id' => $order->id ]);
             }

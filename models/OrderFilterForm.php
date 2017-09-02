@@ -34,7 +34,7 @@ class OrderFilterForm extends Model
     public function getOrders() {
         $dataProvider = new ActiveDataProvider([
             'query' => Order::find()
-                ->select('order.id, order.status, order.created_at, order.public_id, order.user_id, user.email,
+                ->select('order.id, order.status, order.created_at, order.user_id, user.email,
                     sum(order_product.products_count * old_price) as total_price,
                     sum(order_product.confirmed_count * old_price) as confirmed_price'
                 )->groupBy('order.id')
@@ -53,8 +53,8 @@ class OrderFilterForm extends Model
                         'default' => SORT_DESC,
                     ],
                     'ref' => [
-                        'asc' => ['public_id' => SORT_ASC],
-                        'desc' => ['public_id' => SORT_DESC],
+                        'asc' => ['id' => SORT_ASC],
+                        'desc' => ['id' => SORT_DESC],
                         'default' => SORT_DESC,
                     ]
                 ]

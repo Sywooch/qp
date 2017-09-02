@@ -50,7 +50,11 @@ class ProfileController extends \yii\web\Controller
     public function actionIndex()
     {
         $dataProvider = new ActiveDataProvider([
-            'query' => Yii::$app->user->identity->getOrders()]);
+            'query' => Order::find()->where([
+                'user_id' => Yii::$app->getUser()->getId() ]),
+             'sort'=> ['defaultOrder' => ['id'=>SORT_DESC]]
+        ]);
+
         Yii::$app->db->cache(function ($db) use ($dataProvider) {
             $dataProvider->prepare();
         }, null, new TagDependency(['tags' => 'cache_table_' . Order::tableName()]));
@@ -72,28 +76,13 @@ class ProfileController extends \yii\web\Controller
         ]);
     }
 
-    public function actionPay($id) {
-        $order = Order::findOneOr404([
-            'id' => $id,
-            'user_id' => Yii::$app->user->id,
-        ]);
-         if ($order->canPaid() && $order->pay()) {
-            Yii::$app->session->setFlash('success', 'Заказ ' . $order->public_id . ' оплачен.');
-        }
-        else {
-            Yii::$app->session->setFlash('error', 'Ошибка при оплате заказа.');
-        }
-
-        return $this->redirect(['profile/order/view', 'id' => $order->id]);
-    }
-
     public function actionCancel($id) {
         $order = Order::findOneOr404([
             'id' => $id,
             'user_id' => Yii::$app->user->id,
         ]);
         if ($order->canCanceled() && $order->cancel()) {
-            Yii::$app->session->setFlash('warning', 'Заказ ' . $order->public_id . ' отменён.');
+            Yii::$app->session->setFlash('warning', 'Заказ ' . $order->id . ' отменён.');
         }
         else {
             Yii::$app->session->setFlash('error', 'Ошибка при отмене заказа.');
@@ -240,14 +229,33 @@ class ProfileController extends \yii\web\Controller
         ]);
     }
 
-    public function actionPaymentDone($orderId) {
-        $order = Order::findOneOr404($orderId);
-        if ($order->setPaidStatus()) {
-            return $this->redirect('viewOrder', ['id' => $orderId]);
+    public function actionPay($id) {
+        $order = Order::findOneOr404([
+            'id' => $id,
+            'user_id' => Yii::$app->user->id,
+        ]);
+        if ($url = $order->pay()) {
+            return $this->redirect($url);
         }
         else {
-            return $this->redirect('/index');
+            Yii::$app->session->addFlash('error', 'Ошибка при оплате заказа.');
+            return $this->redirect(['profile/order/view', 'id' => $order->id]);
         }
+    }
+
+    public function actionPaymentDone($orderId) {
+        $order = Order::findOneOr404(['payment_id' => $orderId]);
+        if ($order->canPaid()) {
+            $order->status = Order::STATUS_PAID;
+            if ($order->validate() && $order->save()) {
+                Yii::$app->session->addFlash('success', "Заказ № $order->id успешно оплачен");
+                return $this->redirect(['profile/order/view', 'id' => $order->id]);
+            }
+            else {
+                Yii::$app->session->addFlash('error', implode(', ', $order->getFirstErrors()));
+            }
+        }
+        return $this->redirect('/');
     }
 
 }

@@ -14,7 +14,6 @@ use yii\widgets\ActiveForm;
     <?php $form = ActiveForm::begin(); ?>
 
     <?= $form->field($model, 'user_id')->textInput() ?>
-    <?= $form->field($model, 'public_id')->textInput() ?>
     <?= $form->field($model, 'status')->dropDownList(
         Order::$STATUS_TO_STRING
     ) ?>

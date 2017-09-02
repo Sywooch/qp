@@ -3,14 +3,13 @@
 
 use app\components\Html;
 
-$name = 'Александра Петровна';
 ?>
 
 <div class="col-sm-8 col-xs-12">
     <div class="review__item row">
         <div class="review__item-feed col-xs-12 col-sm-4">
             <div class="review__item-author">
-                <?=$name?>
+                <?=$item->name?>
             </div>
             <div class="review__item-date">
                 <?=Html::dateRu(date("d m Y", $item->created_at));?>

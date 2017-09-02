@@ -15,17 +15,25 @@ $this->params['breadcrumbs'][] = $this->title;
         'dataProvider' => $ordersDataProvider,
         'columns' => [
             [
-                'attribute' => 'Номер заказа',
+                'attribute' => 'id',
                 'format' => 'raw',
                 'value' => function ($order) {
                     /* @var $order app\models\Order*/
-                    return  Html::a($order->public_id, ['/profile/order/view', 'id' => $order->id]);
-                }
+                    return  Html::a($order->id, ['/profile/order/view', 'id' => $order->id]);
+                },
+                'enableSorting'=>TRUE,
             ],
             'created_at:datetime',
             'totalPriceHtml',
             'confirmedPriceHtml',
-            'status_str',
+            [
+                'attribute' => 'status',
+                'value' => function ($order) {
+                    /* @var $order app\models\Order*/
+                    return  $order->status_str;
+                },
+                'enableSorting'=>TRUE,
+            ],
             [
                 'class' => 'yii\grid\ActionColumn',
                 'template' => '{order-repeat}',

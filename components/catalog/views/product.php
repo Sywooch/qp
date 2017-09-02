@@ -40,7 +40,7 @@ if (!$bookmark) {
                         data-product-id="<?= $product->id ?>"
                         data-product-count="1"
                         data-active="1">
-                    Купить
+                    В корзину
                 </button>
             <?php else: ?>
                 <span class="product-disabled">Нет в наличии</span>

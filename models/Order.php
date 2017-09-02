@@ -13,9 +13,10 @@ use yii\behaviors\TimestampBehavior;
  *
  * @property integer $id
  * @property integer $user_id
- * @property integer public_id
  * @property integer $created_at
  * @property integer $updated_at
+ * @property integer $attempt_count
+ * @property string $payment_id
  *
  * @property User $user
  * @property OrderProduct[] $orderProducts
@@ -68,13 +69,16 @@ class Order extends CachedActiveRecord
     {
         return [
             [['user_id'], 'required'],
-            [['user_id', 'status'], 'integer'],
-            [['public_id', 'password'], 'string', 'max' => 255],
+            [['payment_id'], 'unique'],
+            [['user_id', 'status', 'attempt_count'], 'integer'],
+            [['password', 'payment_id'], 'string', 'max' => 255],
             [['user_id'], 'exist',
                 'skipOnError' => true, 'targetClass' => User::className(),
                 'targetAttribute' => ['user_id' => 'id']],
             ['status', 'in', 'range' => array_keys(self::$STATUS_TO_STRING)],
             ['status', 'default', 'value' => self::STATUS_NEW],
+            ['attempt_count', 'default', 'value' => 0],
+            ['status', 'checkStatus'],
             ['total_price', 'safe'],
             ['confirmed_price', 'safe'],
         ];
@@ -87,10 +91,51 @@ class Order extends CachedActiveRecord
         ];
     }
 
+    static $PREV_STATUS = [
+        self::STATUS_ORDERED => self::STATUS_PAID,
+        self::STATUS_DELIVERED => self::STATUS_ORDERED,
+        self::STATUS_NOT_TAKEN => self::STATUS_DELIVERED,
+        self::STATUS_DONE => self::STATUS_DELIVERED,
+    ];
+
+    private function shouldBePaid() {
+        return
+            $this->status == static::STATUS_PAID;
+    }
+    public function checkStatus()
+    {
+        $old = static::findOne($this->id);
+        if ($this->status == static::STATUS_PAID) {
+            if ($old == null or !$old->canPaid()) {
+                $this->addError('status', "Заказ не может быть оплачен.");
+            }
+            $client = new SberbankClient();
+            $response = $client->getStatusOrder($this->payment_id);
+            if (!$response) {
+                $this->addError('status', "Банк не вернул сведений о оплате товара.");
+            }
+            $paymentStatus = $response->orderStatus;
+            if ($paymentStatus != 2) {
+                $paymentErrorCode = $response->errorCode;
+                $paymentErrorMessage = !empty($response->errorMessage) ? $response->errorMessage : '';
+
+                $this->addError('status',
+                    "Заказ не оплачен, либо произошла ошибка получения статуса. 
+                    Код ответа $paymentErrorCode: $paymentErrorMessage"
+                );
+            }
+        }
+        if (array_key_exists($this->status, static::$PREV_STATUS)) {
+            if ($old == null or static::$PREV_STATUS[$this->status] != $old->status) {
+                $this->addError('status', "Нельзя изменить статус заказа с $old->status_str на $this->status_str");
+            }
+        }
+    }
+
     public function attributeLabels()
     {
         return [
-            'public_id' => 'Номер заказа',
+            'id' => 'Номер заказа',
             'user_id' => 'ID покупателя',
             'created_at' => 'Создан',
             'updated_at' => 'Изменён',
@@ -152,7 +197,7 @@ class Order extends CachedActiveRecord
     }
 
     public function generatePassword() {
-        $this->password = $this->public_id . '-' . sprintf("%04d", rand(1,9999));
+        $this->password = $this->id . '-' . sprintf("%04d", rand(1,9999));
     }
 
     public function pay() {
@@ -161,55 +206,26 @@ class Order extends CachedActiveRecord
 
         //Регистрируем заказ в системе
         $client = new SberbankClient();
-        $response = $client->registerOrder($this->id, "Order in qpvl.ru", $this->getConfirmedPrice());
+        $this->attempt_count++;
+        if ($this->save()) {
+            $response = $client->registerOrder(
+                $this->id . '_' . ($this->attempt_count - 1),
+                "Order in qpvl.ru",
+                $this->getConfirmedPrice()
+            );
 
-        if($response !== false) {
-            //Обновляем модель
-            var_dump($response->orderdId);
-
-            $this->paymentOrderId = $response->orderdId;
-            $this->update();
-
-            //Возвращаем url
-            return $response->formUrl;
-        } else {
-            Yii::$app->session->addFlash('error', 'Не получилось сохранить заказ');
-            return false;
-        }
-
-
-    }
-
-    public function setPaidStatus() {
-        $client = new SberbankClient();
-        $result = $client->getStatusOrder($this->id);
-        $this->status = Order::STATUS_PAID;
-
-        $paymentStatus = $result->orderStatus;
-
-
-        //если платеж уже прошел, сразу кидаем смс
-        if($paymentStatus == 2) {
-            //отправляем сообщение
-            $this->status = self::STATUS_PAID;
-            if($this->save()) {
-                Yii::$app->session->addFlash('success', 'Заказ успешно оплачен');
-
-                return true;
-            } else {
-                Yii::$app->session->addFlash('error', "Ошибка сохранения заказа в БД");
-                return false;
+            if ($response !== false) {
+                $this->payment_id = $response->orderId;
+                if ($this->save()) {
+                    return $response->formUrl;
+                }
             }
         }
         else {
-            $paymentErrorCode = $result->errorCode;
-            $paymentErrorMessage = !empty($result->errorMessage) ?  $result->errorMessage : '';
-            Yii::$app->session->addFlash('error',
-                "Ошибка оплаты. " . $paymentErrorMessage . " Код ошибки: " . $paymentErrorCode);
-            return false;
+            Yii::$app->session->addFlash('error', 'Не получилось сохранить заказ');
         }
+        return false;
     }
-
 
     public function canPaid() {
         return
@@ -233,7 +249,7 @@ class Order extends CachedActiveRecord
 
     public function getLink() {
         // plain link here to use $order->link in commands/ProviderController.php
-        $link = "http://qpvl.ru/profile/order/view?id=$this->id";
-        return "<a href=$link>Заказ $this->public_id</a>";
+        $link = "https://qpvl.ru/profile/order/view?id=$this->id";
+        return "<a href=$link>Заказ $this->id</a>";
     }
 }
