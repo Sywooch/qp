@@ -2,6 +2,7 @@
 
 use app\assets\ManagerAsset;
 use app\components\Html;
+use app\models\Order;
 use yii\grid\GridView;
 
 /* @var $this yii\web\View */
@@ -51,6 +52,27 @@ ManagerAsset::register($this);
                         'value' => function($x) { return Html::unstyled_price($x->confirmed_price); }
                     ],
                     'status_str',
+                    [
+                        'class' => 'yii\grid\ActionColumn',
+                        'template' => '{order-ready}',
+                        'buttons' => [
+                            'order-ready' => function ($url, $model) {
+                                if ($model->status == Order::STATUS_ORDERED and Yii::$app->user->can('manager')){
+                                    return Html::a(
+                                        '<i class="fa fa-thumbs-o-up"></i>',
+                                        $url,
+                                        [
+                                            'data' => [
+                                                'confirm' => 'Вы уверены?',
+                                                'method' => 'post',
+                                            ],
+                                        ]
+                                    );
+                                }
+                                return null;
+                            },
+                        ],
+                    ],
                 ],
             ]); ?>
         </div>
