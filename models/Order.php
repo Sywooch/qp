@@ -244,7 +244,7 @@ class Order extends CachedActiveRecord
 
     public function getLink() {
         // plain link here to use $order->link in commands/ProviderController.php
-        $link = "https://qpvl.ru/profile/order/view?id=$this->id";
+        $link = Yii::$app->params['public_host'] . "profile/order/view?id=$this->id";
         return "<a href=$link>Заказ $this->id</a>";
     }
 }
