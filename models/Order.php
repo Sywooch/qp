@@ -98,21 +98,17 @@ class Order extends CachedActiveRecord
         self::STATUS_DONE => self::STATUS_DELIVERED,
     ];
 
-    private function shouldBePaid() {
-        return
-            $this->status == static::STATUS_PAID;
-    }
     public function checkStatus()
     {
         $old = static::findOne($this->id);
         if ($this->status == static::STATUS_PAID) {
-            if ($old == null or !$old->canPaid()) {
-                $this->addError('status', "Заказ не может быть оплачен.");
-            }
             $client = new SberbankClient();
+            if (!$this->payment_id) {
+                $this->addError('status', "В заказе нет данных об оплате.");
+            }
             $response = $client->getStatusOrder($this->payment_id);
             if (!$response) {
-                $this->addError('status', "Банк не вернул сведений о оплате товара.");
+                $this->addError('status', "Банк не вернул сведений об оплате товара.");
             }
             $paymentStatus = $response->orderStatus;
             if ($paymentStatus != 2) {
@@ -215,7 +211,6 @@ class Order extends CachedActiveRecord
             );
 
             if ($response !== false) {
-                $this->payment_id = $response->orderId;
                 if ($this->save()) {
                     return $response->formUrl;
                 }

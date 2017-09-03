@@ -2,6 +2,7 @@
 
 namespace app\controllers;
 
+use app\components\SberbankClient;
 use app\models\OrderProduct;
 use app\models\Profile\Message;
 use app\models\Profile\SetPasswordForm;
@@ -244,9 +245,18 @@ class ProfileController extends \yii\web\Controller
     }
 
     public function actionPaymentDone($orderId) {
-        $order = Order::findOneOr404(['payment_id' => $orderId]);
+        $client = new SberbankClient();
+        $response = $client->getStatusOrder($orderId);
+        if (!$response) {
+            Yii::$app->session->addFlash('error', "Банк не вернул сведений о оплате товара.");
+        }
+
+        $real_order_id = explode('_', $response->orderNumber)[0];
+        $order = Order::findOneOr404($real_order_id);
+
         if ($order->canPaid()) {
             $order->status = Order::STATUS_PAID;
+            $order->payment_id = $orderId;
             if ($order->validate() && $order->save()) {
                 Yii::$app->session->addFlash('success', "Заказ № $order->id успешно оплачен");
                 return $this->redirect(['profile/order/view', 'id' => $order->id]);
@@ -254,6 +264,9 @@ class ProfileController extends \yii\web\Controller
             else {
                 Yii::$app->session->addFlash('error', implode(', ', $order->getFirstErrors()));
             }
+        }
+        else {
+            Yii::$app->session->addFlash('error', "Невозможно оплатить заказ $order->id");
         }
         return $this->redirect('/');
     }
