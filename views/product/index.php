@@ -95,7 +95,6 @@ $this->params['breadcrumbs'][] = $this->title;
             <?=$this->render('_view', [
                 'products' => $products,
                 'offset' => $offset,
-                'applied_filters' => $applied_filters,
             ]); ?>
             </div>
             <div class="products-more">

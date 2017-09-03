@@ -184,13 +184,11 @@ class CatalogController extends \yii\web\Controller
                 return $this->render('/product/_view', [
                     'products' => null,
                     'offset' => $offset,
-                    'applied_filters' => $applied_filters,
                 ]);
             }
             return $this->render('/product/_view', [
                 'products' => array_slice($filtered_products, 0, $limit),
                 'offset' => end($filtered_products)->offset + 1,
-                'applied_filters' => $applied_filters,
             ]);
         }
         else {
@@ -204,7 +202,7 @@ class CatalogController extends \yii\web\Controller
 
             list($filters, $prices) = $this->getProductFilters($products);
             list($filtered_products, $applied_filters) = $this->applyFilters($filter, $products, $offset);
-            array_slice($filtered_products, 0, $limit);
+            $filtered_products = array_slice($filtered_products, 0, $limit);
 
             if (empty($filtered_products)) {
                 return $this->render('/product/index', [
