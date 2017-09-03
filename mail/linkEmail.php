@@ -3,8 +3,7 @@
  * @var $this yii\web\View
  * @var $for_what app\models\User
  * @var $link string-link
+ * @var $end string
  */
 
-use yii\helpers\Html;
-
-echo "<a href=$link>Ссылка</a> для $for_what аккаунта " . Yii::$app->name . ': ';
+echo "<a href=$link>Ссылка</a> для $for_what аккаунта " . Yii::$app->name . '.' . (isset($end) and $end ? $end : '');
