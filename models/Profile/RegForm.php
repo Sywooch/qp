@@ -75,7 +75,7 @@ class RegForm extends Model
         [
             'for_what' => $for_what,
             'link' => $link,
-            'end' => "Перейдите по ней для завершения регистрации."
+            'end' => "<br>Перейдите по ней для завершения регистрации."
         ])->setFrom([Yii::$app->params['supportEmail'] => Yii::$app->name.' (отправлено роботом).'])
             ->setTo($this->email)
             ->setSubject('Ссылка для ' .$for_what . ' аккаунта ' . Yii::$app->name)
