@@ -6,4 +6,4 @@
  * @var $end string
  */
 
-echo "<a href=$link>Ссылка</a> для $for_what аккаунта " . Yii::$app->name . '.' . (isset($end) and $end ? $end : '');
+echo "<a href=$link>Ссылка</a> для $for_what аккаунта " . Yii::$app->name . '.' . (isset($end) && $end ? $end : '');
