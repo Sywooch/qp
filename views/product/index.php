@@ -1,10 +1,8 @@
 <?php
 
+use app\components\AppliedFiltersWidget\AppliedFiltersWidget;
 use app\components\Html;
-use yii\bootstrap\Nav;
 use yii\helpers\Url;
-use app\components\catalog\ProductWidget;
-use app\models\Good\Good;
 use yii\caching\TagDependency;
 use app\models\Good\Menu;
 use yii\widgets\Breadcrumbs;
@@ -20,6 +18,8 @@ use yii\widgets\Breadcrumbs;
 $this->title = $category->name;
 
 $this->params['nullLayout'] = true;
+
+$productCount = $category->getProductCount();
 
 foreach(Yii::$app->db->cache(function ($db) use($category)
 {
@@ -83,11 +83,15 @@ $this->params['breadcrumbs'][] = $this->title;
             ?>
         </div>
         <div class="good-index">
+            <?=AppliedFiltersWidget::widget()?>
             <div class="row">
-                <div class="col-xs-7 col-sm-9 hidden-xs">
+                <div class="col-xs-7 col-sm-12 col-lg-9 hidden-xs products-title">
                     <h1><?= Html::encode($this->title) ?></h1>
+                    <span class="products-count text-nowrap text-ellipsis">
+                        <?= $productCount. " " .Html::ending($productCount, ['товар', 'товара', 'товаров'])?>
+                    </span>
                 </div>
-                <div class="col-xs-12 col-sm-3 toolbar">
+                <div class="col-xs-12 col-sm-12 col-lg-3 toolbar">
                     <?=$this->render("_ordering") ?>
                 </div>
             </div>
@@ -101,7 +105,11 @@ $this->params['breadcrumbs'][] = $this->title;
                 <!-- PRELOADER -->
                 <div class="preloader"><div><em></em><em></em><em></em><em></em></div></div>
                 <!-- //PRELOADER -->
-                <a href="javascript:void(0)" class="btn btn-default js-show-more">Показать ещё</a>
+                <a href="javascript:void(0)"
+                   class="btn btn-default js-show-more"
+                   data-product-count="<?= $productCount?>">
+                    Показать ещё
+                </a>
             </div>
         </div>
     </div>

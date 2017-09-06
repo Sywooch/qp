@@ -203,7 +203,7 @@ String.prototype.score=function(e,f){if(this===e)return 1;if(""===e)return 0;var
                 $modal.modal('show');
             });
             $(window).resize(function () {
-                jQuery.ui.autocomplete.prototype._resizeMenu();
+                // jQuery.ui.autocomplete.prototype._resizeMenu();
             });
         },
         hideOverlay: function () {

@@ -7,6 +7,7 @@
 
 namespace app\assets;
 
+use app\components\AppliedFiltersWidget\AppliedFiltersWidgetAssets;
 use yii\web\AssetBundle;
 
 /**
@@ -28,6 +29,7 @@ class AppAsset extends AssetBundle
     ];
     public $depends = [
         'yii\web\YiiAsset',
+        AppliedFiltersWidgetAssets::class
         //'yii\bootstrap\BootstrapAsset',
     ];
 }
