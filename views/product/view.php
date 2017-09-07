@@ -67,25 +67,30 @@ if (!$bookmark) {
                         <?=Html::price($product->price)?>
                     </div>
                     <div class="product__panel" data-toggle="buttons">
-                        <div class="btn-group сщд-">
-                            <input type="number" min="1" value="1"
-                                   name="product_count"
-                                   class="product_count"
-                                   data-product-id="<?= $product->id ?>">
-                            <input type="hidden" name="product_id" value=<?= $product->id ?>>
-                        </div>
-                        <div class="btn-group">
+
+
                         <?php if($product->readyToSale()) : ?>
-                            <button class="btn product-to-cart btn-success btn-compare"
-                                    data-product-id="<?= $product->id ?>"
-                                    data-product-count="1"
-                                    data-active="1">
-                                В корзину
-                            </button>
+                            <div class="btn-group">
+                                <input type="number" min="1" value="1"
+                                       name="product_count"
+                                       class="product_count"
+                                       data-product-id="<?= $product->id ?>">
+                                <input type="hidden" name="product_id" value=<?= $product->id ?>>
+                            </div>
+                            <div class="btn-group">
+                                <button class="btn product-to-cart btn-success btn-compare"
+                                        data-product-id="<?= $product->id ?>"
+                                        data-product-count="1"
+                                        data-active="1">
+                                    В корзину
+                                </button>
+                            </div>
                         <?php else: ?>
-                            <span class="product-disabled">Нет в наличии</span>
+                            <div class="btn-group">
+                                <span class="product-disabled">Нет в наличии</span>
+                            </div>
                         <?php endif; ?>
-                        </div>
+
                         <div class="btn-group">
                             <button class="btn product-to-bookmark btn-default bookmark <?=$bookmark->isNewRecord ? '' : 'active'?>"
                                     data-product-id="<?= $product->id ?>"
@@ -98,9 +103,10 @@ if (!$bookmark) {
                     </div>
                 </div>
                 <div class="col-sm-4">
+                    <?php if ($product->readyToSale()) : ?>
                     <div class="product__delivery hidden-xs">
                         <table cellspacing="0" cellpadding="0" border="0">
-                            <?php if ($product->readyToSale()) : ?>
+
                             <tr>
                                 <td class="product__delivery-status available">
                                     <i class="fa fa-check fa-lg"></i> Товар в наличии
@@ -115,16 +121,9 @@ if (!$bookmark) {
                             <tr>
                                 <td style="font-size: 12px;">(по Вашему выбору)</td>
                             </tr>
-                            <?php else : ?>
-                                <tr>
-                                    <td class="product__delivery-status unavailable">
-                                        <span class="lnr lnr-sad"></span> Товар не доступен
-                                    </td>
-                                </tr>
-                            <?php endif; ?>
                         </table>
-
                     </div>
+                    <?php endif; ?>
                 </div>
             </div>
 
@@ -140,7 +139,7 @@ if (!$bookmark) {
                 <!-- Tab panes -->
                 <div class="tab-content">
                     <div role="tabpanel" class="tab-pane active" id="tab-description">
-                        <p>Тут будет описание?</p>
+                        <p>Описание отсутствует</p>
                     </div>
                     <div role="tabpanel" class="tab-pane" id="tab-param">
                         <ul class="product__params-list">

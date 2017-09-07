@@ -23,3 +23,10 @@
 .filter__item .btn  {
   width: 100%;
 }
+.order-item:hover td {
+  background-color: #efefef;
+  cursor: pointer;
+}
+.order-item:hover a {
+  text-decoration: underline;
+}

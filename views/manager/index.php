@@ -4,6 +4,7 @@ use app\assets\ManagerAsset;
 use app\components\Html;
 use app\models\Order;
 use yii\grid\GridView;
+use yii\helpers\Url;
 
 /* @var $this yii\web\View */
 /* @var $dataProvider yii\data\ActiveDataProvider */
@@ -30,6 +31,12 @@ ManagerAsset::register($this);
         <div class="product__table">
             <?= GridView::widget([
                 'dataProvider' => $dataProvider,
+                "rowOptions" => function (Order $order) {
+                    return [
+                        "class" => "order-item",
+                        "data-route" => Url::to(['/manager/view-order', 'id' => $order->id])
+                    ];
+                },
                 'columns' => [
                     [
                         'attribute' => 'ref',

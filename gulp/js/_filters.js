@@ -17,7 +17,9 @@
     //Параметры для ajax запроса. Очищаются после каждого запроса
     var ajaxParams = '',
         //с какого элемента выводить товары. По умолчанию 24, т.к. это число товаров уже выведенно.
-        offset = 24;
+        offset = 24,
+        productCount = $showMore.data('productCount'),
+        appliedFilters = [];
 
     var Data = function () {
         this.m = []; // filter for products [{id: 1, values: [1,2,3...n]}, ...]
@@ -36,7 +38,7 @@
             key: 'o',
             value: -1,
             getUrl: function () {
-                return  this.value == -1 ?
+                return  this.value === -1 ?
                     "" : this.key + ":" + (this.value) + ";";
             }
         };
@@ -47,11 +49,11 @@
          * @param {Object} obj
          * @param {number} obj.id
          * @param {number} obj.value
-         * @returns 0
+         * @return number
          */
         this.add = function (obj) {
             for(var i = 0; i < this.m.length; i++) {
-                if(this.m[i].id == obj.id) {
+                if(this.m[i].id === obj.id) {
                     this.m[i].values.push(obj.value);
                     return 0;
                 }
@@ -217,7 +219,8 @@
         init: function() {
             this.event();
             this.setFilter();
-            offset = this.getOffset();
+            this.visibleShowMoreBtn();
+            this.setOffset();
         },
         event: function() {
             var self = this;
@@ -267,17 +270,29 @@
                 $checkbox.each(function () {
                     var cur = $(this),
                         curVal = cur.val(),
-                        curName = cur.data('name');
+                        curName = cur.data('name'),
+                        cutTitle = cur.data('title');
+                    var applies = {
+                        title: cutTitle,
+                        value: []
+                    };
                     for(var i = 0; i < data.m.length; i++) {
                         if(data.m[i].id == curName) {
+
                             for(var k = 0; k < data.m[i].values.length; k++) {
                                 if(data.m[i].values[k] == curVal) {
+                                    applies.value.push(cur.parent().find('label').text().replace(/\s{2,}/g, ' '));
                                     cur.prop("checked", true);
                                 }
                             }
+
                         }
                     }
+                    if (applies.value.length > 0) {
+                        appliedFilters.push(applies);
+                    }
                 });
+                console.log(appliedFilters);
             } else {
                 Price().init();
             }
@@ -286,10 +301,17 @@
             }
         },
 
-        getFilteredData: function (append) {
+        setAppliedFilters: function () {
+            appliedFilters.map(function (item) {
+
+            });
+        },
+
+        getFilteredData: function () {
             var url = '/catalog/view/'+catalogID+'?' + data.getUrl();
 
             $loader.css('opacity', 1);
+            var self = this;
 
             this.getData(url, function (data) {
                 $content.html(data);
@@ -297,7 +319,7 @@
                 setTimeout(function() {
                     $loader.css('opacity', 0);
                 }, 150);
-                offset = this.getOffset();
+                self.setOffset();
             });
 
             // Change url
@@ -321,22 +343,30 @@
             });
         },
 
+        visibleShowMoreBtn: function () {
+            if (offset >= productCount) {
+                $showMore.hide();
+            } else {
+                $showMore.show();
+            }
+        },
+
         showMore: function () {
             var url = '/catalog/view/'+catalogID+'?' + data.getUrl() + '&offset=' + offset;
             var self = this;
-            $showMore.hide()
+            $showMore.hide();
             $preloader.show();
             self.getData(url, function (data) {
                 $content.append(data);
                 App.reinit();
                 setTimeout(function() {
-                    $showMore.show();
+                    self.visibleShowMoreBtn();
                     $preloader.hide();
                 }, 150);
                 $('html, body').animate({
                     scrollTop: self.getLastListProduct().offset().top - 20
                 }, 500);
-                offset = self.getOffset();
+                self.setOffset();
             });
         },
 
@@ -349,12 +379,10 @@
 
         /*
          * Находит offset последнего элемента.
-         *
-         * @returns integer
          */
-        getOffset: function () {
-            var _offset = this.getLastListProduct().data('offset');
-            return _offset || 1;
+        setOffset: function () {
+            offset = this.getLastListProduct().data('offset');
+            this.visibleShowMoreBtn();
         }
     };
 
