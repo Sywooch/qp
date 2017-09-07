@@ -120,4 +120,9 @@ $(document).ready(function () {
         var id = $(this).data('order-id');
         getFile("/manager/get-order-content-json?id=" + id, "../docs/order.tmpl.docx", "descr_", true);
     });
+
+    $('*[data-route]').on("click", function () {
+        var route = $(this).data('route');
+        window.location = route;
+    });
 });
