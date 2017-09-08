@@ -36,6 +36,7 @@ class SiteController extends Controller
                 'class' => AccessControl::className(),
                 'only' => ['profile'],
                 'denyCallback' => function($role, $action) {
+                    Yii::$app->user->returnUrl = Yii::$app->request->absoluteUrl;
                     Yii::$app->session->setFlash('warning',
                         ($action->id == 'logout' || $action->id == 'profile') ?
                         'Необходимо авторизоваться.' :
@@ -208,7 +209,7 @@ class SiteController extends Controller
         $model = new LoginForm();
         if ($model->load(Yii::$app->request->post()) && $model->validate()) {
             Yii::$app->user->login($model->getUser(), $model->rememberMe ? 3600*24*30 : 0);
-            return $this->goBack();
+            return $this->redirect(Yii::$app->user->returnUrl);
         }
         return $this->render('login', [
             'model' => $model,

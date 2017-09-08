@@ -28,6 +28,7 @@ class ProfileController extends \yii\web\Controller
             'access' => [
                 'class' => AccessControl::className(),
                 'denyCallback' => function($role, $action) {
+                    Yii::$app->user->returnUrl = Yii::$app->request->absoluteUrl;
                     $this->redirect('/site/login');
                 },
                 'except' => ['password'],
