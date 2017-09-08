@@ -200,6 +200,20 @@
     }
   }
 
+  &-title {
+    display: flex;
+    align-items: baseline;
+    h1 {
+      margin-top: 0;
+      margin-bottom: 40px;
+    }
+  }
+
+  &-count {
+    font-size: 16px;
+    padding-left: 7px;
+  }
+
 }
 
 /*

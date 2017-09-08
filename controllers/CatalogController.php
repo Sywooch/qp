@@ -227,7 +227,6 @@ class CatalogController extends \yii\web\Controller
     }
 
     public function actionSearchData() {
-        $get = Yii::$app->request->post();
 
         $selector = function($p) { return [ 'id' => $p->id, 'label' => $p->name ]; };
         if (Yii::$app->request->isAjax) {

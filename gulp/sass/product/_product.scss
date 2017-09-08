@@ -9,9 +9,7 @@
   }
 
   &-title {
-    white-space: nowrap;
-    text-overflow: ellipsis;
-    overflow: hidden;
+    line-height: 1.5em;
   }
 
   &-image {
@@ -103,5 +101,15 @@
         color: $black-4;
       }
     }
+  }
+}
+
+
+@media (max-width: $screen-xs-max) {
+  .product-title {
+    line-height: 24px;
+    font-size: 22px;
+    padding-top: 0;
+    margin-top: 0;
   }
 }

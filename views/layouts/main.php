@@ -48,13 +48,17 @@ AppAsset::register($this);
 
             echo $this->render('_null', ['content' => $content]);
 
-        } else{
-            echo Breadcrumbs::widget([
-                'links' => isset($this->params['breadcrumbs']) ? $this->params['breadcrumbs'] : [],
-            ]);
-            echo $content;
-        }
-        ?>
+        } else {
+            ?>
+            <div class="hidden-xs hidden-sm">
+                <?php
+                echo Breadcrumbs::widget([
+                    'links' => isset($this->params['breadcrumbs']) ? $this->params['breadcrumbs'] : [],
+                ]);
+                ?>
+            </div>
+            <?= $content; ?>
+        <?php } ?>
     </div>
 </div>
 

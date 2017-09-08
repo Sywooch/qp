@@ -75,6 +75,8 @@ $config = [
                 '<controller:profile>/<action:order>/view'=>'profile/view-order',
                 '<controller:(catalog|product)>/<action:[\wd-]+>/<id:\d+>' => '<controller>/<action>',
                 '<controller:(catalog|product)>/<action:[\wd-]+>/view/<id:\d+>' => '<controller>/<action>',
+                /* Manager */
+                'GET <controller:manager>/view-order/<id:\d+>' => '<controller>/view-order',
             ],
         ],
         'i18n' => [
