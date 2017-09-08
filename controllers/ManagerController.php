@@ -25,6 +25,10 @@ class ManagerController extends Controller
                         'roles' => ['manager'],
                     ],
                 ],
+                'denyCallback' => function($role, $action) {
+                    Yii::$app->user->returnUrl = Yii::$app->request->absoluteUrl;
+                    $this->redirect('/site/login');
+                },
             ],
             'verbs' => [
                 'class' => VerbFilter::className(),
