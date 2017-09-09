@@ -24,8 +24,6 @@ class OrderFilterForm extends Model
             [['before', 'after'], 'string'],
             // all status
             ['status', 'default', 'value' => -1],
-            ['before', 'default', 'value' => date('Y-m-d')],
-            ['after', 'default', 'value' => date('Y-m-d', time() - 7 * 60 * 60 * 24)],
             [['before', 'after', 'status'], 'safe'],
         ];
     }
@@ -60,8 +58,12 @@ class OrderFilterForm extends Model
                 ]
             ]
         ]);
-        $dataProvider->query->andFilterWhere(['>=', 'order.created_at', strtotime($this->after)]);
-        $dataProvider->query->andFilterWhere(['<=', 'order.created_at', strtotime($this->before)  + 60 * 60 * 24]);
+        if ($this->after) {
+            $dataProvider->query->andFilterWhere(['>=', 'order.created_at', strtotime($this->after)]);
+        }
+        if ($this->before) {
+            $dataProvider->query->andFilterWhere(['<=', 'order.created_at', strtotime($this->before) + 60 * 60 * 24]);
+        }
         if ($this->status != -1) {
             $dataProvider->query->andFilterWhere(['=', 'order.status', $this->status]);
         }

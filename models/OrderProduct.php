@@ -19,7 +19,7 @@ use yii\web\NotFoundHttpException;
 class OrderProduct extends CachedActiveRecord
 {
     // SUM(products_count) AS count_by_c1id, groupBy('product_c1id, product_name, old_price')
-    public $count_by_c1id, $confirmed_count_by_c1id;
+    public $count_by_c1id, $unconfirmed_count_by_c1id;
     /**
      * @inheritdoc
      */
@@ -56,7 +56,7 @@ class OrderProduct extends CachedActiveRecord
             'product_vendor' => 'Артикул',
             'provider' => '1с ИД Поставщика',
             'count_by_c1id' => 'Заказано товара',
-            'confirmed_count_by_c1id' => 'Подтверждено товара',
+            'unconfirmed_count_by_c1id' => 'Нехватка товара',
         ];
     }
 

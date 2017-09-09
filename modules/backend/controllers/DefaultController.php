@@ -2,7 +2,6 @@
 
 namespace app\modules\backend\controllers;
 
-use app\models\Good\Good;
 use app\models\OrderProduct;
 use app\modules\backend\models\UploadProvider;
 use app\modules\backend\models\UploadZipModel;
@@ -12,7 +11,7 @@ use yii\filters\VerbFilter;
 use yii\web\Controller;
 use yii\web\UploadedFile;
 use app\models\Profile\LoginForm;
-use app\models\Good\Menu;
+
 /**
  * Default controller for the `admin` module
  */
@@ -107,7 +106,8 @@ class DefaultController extends Controller
         $end = Yii::$app->request->post('end');
         $order_products = OrderProduct::find()->joinWith('order')
             ->select(["provider, product_name, product_vendor, product_c1id, old_price,
-                SUM(products_count) AS count_by_c1id, SUM(confirmed_count) AS confirmed_count_by_c1id"])
+                SUM(products_count) AS count_by_c1id,
+                SUM(products_count) - SUM(confirmed_count) AS unconfirmed_count_by_c1id"])
             ->where(['not', ['confirmed_count' => null]])
             ->groupBy('provider, product_name, product_vendor, product_c1id, old_price');
         if ($start) {
@@ -131,7 +131,7 @@ class DefaultController extends Controller
                         'desc' => ['count_by_c1id' => SORT_DESC],
                         'default' => SORT_DESC
                     ],
-                    'confirmed_count_by_c1id' => [
+                    'unconfirmed_count_by_c1id' => [
                         'asc' => ['count_by_c1id' => SORT_ASC],
                         'desc' => ['count_by_c1id' => SORT_DESC],
                         'default' => SORT_DESC
