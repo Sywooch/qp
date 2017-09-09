@@ -38,6 +38,16 @@ class Order extends CachedActiveRecord
     const STATUS_CANCELED = 52;
     const STATUS_NOT_TAKEN = 53;
 
+    public static function paid_status() {
+        return [
+            self::STATUS_PAID,
+            self::STATUS_ORDERED,
+            self::STATUS_DELIVERED,
+            self::STATUS_DONE,
+            self::STATUS_NOT_TAKEN,
+        ];
+    }
+
     static $STATUS_TO_STRING = [
         self::STATUS_NEW                => 'Проверяется наличие',
         self::STATUS_PROVIDER_CHECKING  => 'Проверяется наличие (Отправлен поставщику)',

@@ -33,6 +33,7 @@ use yii\web\NotFoundHttpException;
 class User extends CachedActiveRecord implements IdentityInterface
 {
     public $role;
+    public $payment_sum;
 
 //    const STATUS_DELETED = 0;
     const STATUS_NOT_ACTIVE = 1;
@@ -98,6 +99,7 @@ class User extends CachedActiveRecord implements IdentityInterface
             'role' => 'Роль',
             'created_at' => 'Создан',
             'updated_at' => 'Изменён',
+            'payment_sum' => 'Сумма оплаченных заказов',
         ];
     }
 
@@ -369,5 +371,16 @@ class User extends CachedActiveRecord implements IdentityInterface
         $mess->user_id = $this->id;
         $mess->text = $text;
         return $mess->save() ? false : $mess;
+    }
+
+    static public function findWithPaymentSum() {
+        return static::find()
+            ->leftJoin('order', 'user.id = order.user_id')
+            ->leftJoin('order_product', 'order_product.order_id = order.id')
+            ->where(['in', 'order.status', Order::paid_status()])
+            ->orWhere(['order.id' => null])
+            ->select('user.*, sum(order_product.old_price * order_product.confirmed_count) as payment_sum')
+            ->groupBy('user.id');
+
     }
 }

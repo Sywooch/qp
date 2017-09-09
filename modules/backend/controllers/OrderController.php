@@ -130,6 +130,10 @@ class OrderController extends Controller
             if ($product = Good::findOkStatus(['c1id' => $model->product_c1id])) {
                 $model->product_vendor = $product->vendor;
                 $model->provider = $product->provider;
+                $model->product_name = $product->name;
+                $model->old_price = $product->price;
+                $model->save();
+                return $this->redirect(['update', 'id' => $model->order_id]);
             }
             else {
                 Yii::$app->session->setFlash('error', "Товара с 1С ИД $model->product_c1id недоступен");
@@ -137,8 +141,6 @@ class OrderController extends Controller
                     'model' => $model,
                 ]);
             }
-            $model->save();
-            return $this->redirect(['update', 'id' => $model->order_id]);
         } else {
             return $this->render('product-create', [
                 'model' => $model,
