@@ -57,6 +57,7 @@ $form = ActiveForm::begin([
             'items' => [
                 ['label' => 'Сегодня', 'url' => ['/manager', 'before' => $today, 'after' => $today]],
                 ['label' => 'Вчера', 'url' => ['/manager', 'before' => $yesterday, 'after' => $yesterday]],
+                ['label' => 'Все', 'url' => ['/manager', 'before' => null, 'after' => null]],
             ],
         ]);
         ?>

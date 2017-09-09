@@ -59,6 +59,6 @@ yii\jui\DatePicker::widget([
         'product_vendor',
         'product_c1id',
         'count_by_c1id',
-        'confirmed_count_by_c1id',
+        'unconfirmed_count_by_c1id',
     ]
 ]);

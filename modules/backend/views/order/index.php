@@ -30,16 +30,7 @@ $this->params['breadcrumbs'][] = $this->title;
             'id',
             [
                 'attribute' => 'user_id',
-                'label' => 'ID пользователя',
-                'value' => function ($order) {
-                    return Html::a(Html::encode($order->user_id),
-                        Url::to(['user/view', 'id' => $order->user->id]));
-                },
-                'format' => 'raw',
-            ],
-            [
-                'attribute' => 'user.email',
-                'label' => 'Email пользователя',
+                'label' => 'Пользователь',
                 'value' => function ($order) {
                     return Html::a(Html::encode($order->user->email),
                         Url::to(['user/view', 'id' => $order->user->id]));
@@ -48,7 +39,12 @@ $this->params['breadcrumbs'][] = $this->title;
             ],
             'created_at:datetime',
             'updated_at:datetime',
-            'status_str',
+            [
+                'attribute' => 'status',
+                'value' => function ($order) {
+                    return $order->status_str;
+                },
+            ],
             [
                 'class' => 'yii\grid\ActionColumn',
                 'template' => '{update} {delete}',
