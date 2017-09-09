@@ -1,7 +1,7 @@
 <?php
 
-use yii\helpers\Html;
 use yii\grid\GridView;
+use app\components\Html;
 
 /* @var $this yii\web\View */
 /* @var $dataProvider yii\data\ActiveDataProvider */
@@ -37,7 +37,14 @@ $this->params['breadcrumbs'][] = $this->title;
             }],
             'created_at:datetime',
             'updated_at:datetime',
-
+            [
+                'attribute' => 'payment_sum',
+                'value' => function($model) {
+                    /* @var $model app\models\Good\Good */
+                    return Html::unstyled_price($model->payment_sum);
+                },
+                'enableSorting'=>TRUE,
+            ],
             [
                 'class' => 'yii\grid\ActionColumn',
                 'template' => '{view} {update} {delete}',

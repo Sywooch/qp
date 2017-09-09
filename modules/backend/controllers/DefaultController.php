@@ -2,9 +2,12 @@
 
 namespace app\modules\backend\controllers;
 
+use app\models\Good\Good;
+use app\models\OrderProduct;
 use app\modules\backend\models\UploadProvider;
 use app\modules\backend\models\UploadZipModel;
 use Yii;
+use yii\data\ActiveDataProvider;
 use yii\filters\VerbFilter;
 use yii\web\Controller;
 use yii\web\UploadedFile;
@@ -96,5 +99,50 @@ class DefaultController extends Controller
     public function actionManual()
     {
         return $this->render('manual');
+    }
+
+    public function actionReport()
+    {
+        $start = Yii::$app->request->post('start');
+        $end = Yii::$app->request->post('end');
+        $order_products = OrderProduct::find()->joinWith('order')
+            ->select(["provider, product_name, product_vendor, product_c1id, old_price,
+                SUM(products_count) AS count_by_c1id, SUM(confirmed_count) AS confirmed_count_by_c1id"])
+            ->where(['not', ['confirmed_count' => null]])
+            ->groupBy('provider, product_name, product_vendor, product_c1id, old_price');
+        if ($start) {
+            $start_timestamp = strtotime($start);
+            $order_products->andWhere(['>=', 'order.created_at', $start_timestamp]);
+        }
+        if ($end) {
+            $end_timestamp = strtotime($end) + 24 * 60 * 60;
+            $order_products->andWhere(['<=', 'order.created_at', $end_timestamp]);
+        }
+
+        $dataProvider = new ActiveDataProvider([
+            'query' => $order_products,
+        ]);
+
+        $dataProvider->setSort([
+            'attributes' =>
+                array_keys((new OrderProduct())->attributes) + [
+                    'count_by_c1id' => [
+                        'asc' => ['count_by_c1id' => SORT_ASC],
+                        'desc' => ['count_by_c1id' => SORT_DESC],
+                        'default' => SORT_DESC
+                    ],
+                    'confirmed_count_by_c1id' => [
+                        'asc' => ['count_by_c1id' => SORT_ASC],
+                        'desc' => ['count_by_c1id' => SORT_DESC],
+                        'default' => SORT_DESC
+                    ],
+                ]
+        ]);
+
+        return $this->render('report', [
+            'dataProvider' => $dataProvider,
+            'start' => $start,
+            'end' => $end,
+        ]);
     }
 }

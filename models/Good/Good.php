@@ -244,7 +244,7 @@ class Good extends CachedSearchActiveRecord implements CartPositionProviderInter
     static public function findOkStatus($cond)
     {
         $ret = self::cachedFindOne($cond);
-        if ($ret->status == self::STATUS_OK) {
+        if ($ret and $ret->status == self::STATUS_OK) {
             return $ret;
         }
         else {

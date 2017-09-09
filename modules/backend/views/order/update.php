@@ -1,6 +1,6 @@
 <?php
 
-use yii\helpers\Html;
+use app\components\Html;
 use yii\helpers\Url;
 use yii\grid\GridView;
 
@@ -30,8 +30,15 @@ $this->params['breadcrumbs'][] = "Редактирование заказа №$
             'product_name',
             'products_count',
             'confirmed_count',
+            [
+                'attribute' => 'old_price',
+                'value' => function($model) {
+                    /* @var $model app\models\Good\Good */
+                    return Html::unstyled_price($model->old_price);
+                },
+                'enableSorting'=>TRUE,
+            ],
             'provider_order_id',
-
             [
                 'class' => 'yii\grid\ActionColumn',
                 'template' => '{update} {delete}',

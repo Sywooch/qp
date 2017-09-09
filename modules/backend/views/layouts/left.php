@@ -36,6 +36,7 @@
 //                    ['label' => 'Gii', 'icon' => 'fa fa-file-code-o', 'url' => ['/gii']],
 //                    ['label' => 'Debug', 'icon' => 'fa fa-dashboard', 'url' => ['/debug']],
                     ['label' => 'Загрузки', 'icon' => 'fa fa-download ', 'url' => ['/backend/']],
+                    ['label' => 'Статистика', 'icon' => 'fa fa-download ', 'url' => ['/backend/default/report']],
                     ['label' => 'Мануал', 'icon' => 'fa fa-hand-lizard-o', 'url' => ['/backend/default/manual']],
                     ['label' => 'Пользователи', 'icon' => 'fa fa-user', 'url' => ['/backend/user']],
                     ['label' => 'Категории товаров', 'icon' => 'fa fa-sitemap', 'url' => ['/backend/menu']],

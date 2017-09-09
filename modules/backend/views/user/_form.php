@@ -15,6 +15,10 @@ use app\models\User;
 
     <?= $form->field($model, 'email')->input('email') ?>
 
+    <label class="control-label">Пароль</label> <br>
+    <?= Html::textInput("password", Yii::$app->security->generateRandomString(6)) ?>
+    <br>
+    <br>
     <?= $form->field($model, 'status')->dropDownList([
         User::$STATUS_TO_STRING
     ]) ?>

@@ -18,7 +18,6 @@ use Yii;
 use yii\filters\AccessControl;
 use yii\caching\TagDependency;
 use yii\filters\VerbFilter;
-use yii\web\NotFoundHttpException;
 
 class ProfileController extends \yii\web\Controller
 {

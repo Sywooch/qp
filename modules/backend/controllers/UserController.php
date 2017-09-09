@@ -31,9 +31,18 @@ class UserController extends Controller
     public function actionIndex()
     {
         $dataProvider = new ActiveDataProvider([
-            'query' => User::find(),
+            'query' => User::findWithPaymentSum(),
         ]);
-
+        $dataProvider->setSort([
+            'attributes' =>
+                array_keys((new User())->attributes) + [
+                    'payment_sum' => [
+                        'asc' => ['payment_sum' => SORT_ASC],
+                        'desc' => ['payment_sum' => SORT_DESC],
+                        'default' => SORT_DESC
+                    ],
+                ]
+        ]);
         return $this->render('index', [
             'dataProvider' => $dataProvider,
         ]);
@@ -60,8 +69,11 @@ class UserController extends Controller
     {
         $model = new User();
 
-        if ($model->load(Yii::$app->request->post()) && $model->save()) {
-            return $this->redirect(['index']);
+        if ($model->load(Yii::$app->request->post())) {
+            $model->setPassword(Yii::$app->request->post('password'));
+            if ($model->save()) {
+                return $this->redirect(['index']);
+            }
         } else {
             return $this->render('create', [
                 'model' => $model,
