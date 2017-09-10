@@ -14,23 +14,6 @@ $this->params['catalog'] = true;
 $tomorrow = date("d m", strtotime("+1 day"));
 ?>
 <div class="homepage">
-    <section class="schedule">
-        <div class="section-title">
-            Время доставки заказа
-        </div>
-        <div class="row schedule__list">
-            <?=$this->render('_schedule', [
-                'day' => 'Сегодня',
-                'date' => Html::dateRu(date('d m')),
-                'status' => false
-            ])?>
-            <?=$this->render('_schedule', [
-                'day' => 'Завтра',
-                'date' => Html::dateRu(date("d m", strtotime("+1 day"))),
-                'status' => true
-            ])?>
-        </div>
-    </section>
     <section class="top-product">
         <div class="section-title">
             <?= $is_discount ? 'Товары со скидкой' : 'Популярные товары' ?>

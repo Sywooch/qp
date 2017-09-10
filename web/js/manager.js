@@ -105,4 +105,6 @@ $(document).ready(function () {
             $end.val("");
         }
     });
+
+    $('[data-toggle="tooltip"]').tooltip();
 });

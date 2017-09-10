@@ -61,6 +61,9 @@ ManagerAsset::register($this);
                             ]);
                         },
                         'format' => 'raw',
+                        "contentOptions" => [
+                            'style' => 'min-width: 140px'
+                        ],
                     ],
                     [
                         'attribute' => 'total_price',
