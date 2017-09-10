@@ -1,5 +1,5 @@
 <?php
-use yii\helpers\Html;
+use app\components\Html;
 $this->title = 'Панель администратора';
 
 /**
@@ -20,8 +20,8 @@ $infoBoxes = [
     ], [
         'icon' => 'fa fa-credit-card',
         'title' => 'Всего продаж',
-        'number' => $salesTotal,
-        'url' => ['/backend/order']
+        'number' => Html::price($salesTotal),
+        'url' => ['/backend/default/report']
     ], [
         'icon' => 'lnr lnr-users',
         'title' => 'Пользователей',

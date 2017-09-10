@@ -2,11 +2,16 @@
 
 namespace app\modules\backend\controllers;
 
+use app\components\Html;
+use PHPExcel;
+use PHPExcel_Writer_Excel2007;
 use Yii;
 use app\models\User;
 use yii\data\ActiveDataProvider;
 use yii\web\Controller;
 use yii\filters\VerbFilter;
+
+require_once dirname(__FILE__) . '/../../../Classes/PHPExcel.php';
 
 /**
  * UserController implements the CRUD actions for User model.
@@ -119,5 +124,43 @@ class UserController extends Controller
         User::findOneOr404($id)->delete();
 
         return $this->redirect(['index']);
+    }
+
+    public function actionExcelExport()
+    {
+        $objPHPExcel = new PHPExcel();
+        $objPHPExcel->setActiveSheetIndex(0);
+        $rowCount = 1;
+
+        $objPHPExcel->getActiveSheet()->getColumnDimension('B')->setWidth(30);
+        $objPHPExcel->getActiveSheet()->SetCellValue('A'.$rowCount, 'ID');
+        $objPHPExcel->getActiveSheet()->SetCellValue('B'.$rowCount, 'Email');
+        $objPHPExcel->getActiveSheet()->SetCellValue('C'.$rowCount, 'Payments');
+        $rowCount++;
+
+        $selector = User::findWithPaymentSum();
+        if ($sort = Yii::$app->request->get('sort')) {
+            if ($sort[0] == '-') {
+                $ordering = SORT_DESC;
+                $sort = substr($sort, 1);
+            }
+            else {
+                $ordering = SORT_ASC;
+            }
+
+            $selector->orderBy([$sort => $ordering]);
+        }
+
+        foreach ($selector->all() as $user) {
+            $objPHPExcel->getActiveSheet()->SetCellValue('A'.$rowCount, $user->id);
+            $objPHPExcel->getActiveSheet()->SetCellValue('B'.$rowCount, $user->email);
+            $objPHPExcel->getActiveSheet()->SetCellValue('C'.$rowCount, Html::unstyled_price($user->payment_sum));
+            $rowCount++;
+        }
+        $objWriter = new PHPExcel_Writer_Excel2007($objPHPExcel);
+        $file_name = '../temp/report.xlsx';
+        $objWriter->save($file_name);
+        set_time_limit(5*60);
+        Yii::$app->response->sendFile($file_name);
     }
 }

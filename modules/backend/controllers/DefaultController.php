@@ -39,7 +39,11 @@ class DefaultController extends Controller
         $userTotal = User::find()->count();
         $orderTotal = Order::find()->count();
         $goodTotal = Good::find()->count();
-        $salesTotal = User::find()->count();
+        $users = User::findWithPaymentSum()->all();
+
+        $salesTotal = array_reduce($users, function($sum, $user) {
+            return $sum + $user->payment_sum;
+        }, 0);
 
         return $this->render('index', [
             'userTotal' => $userTotal,

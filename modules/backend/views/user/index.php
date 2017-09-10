@@ -14,17 +14,23 @@ $this->params['breadcrumbs'][] = $this->title;
 
     <h1><?= Html::encode($this->title) ?></h1>
 
+    <?php $sort = Yii::$app->getRequest()->get('sort'); ?>
+
     <p>
         <?= Html::a('Добавить пользователя', ['create'], ['class' => 'btn btn-primary']) ?>
+        <?= Html::a(
+            'Импортировать в Excel',
+            ['excel-export' . ($sort ? "?sort=$sort" : '')],
+            ['class' => 'btn btn-primary pull-right']
+        ) ?>
     </p>
+
     <?= GridView::widget([
         'dataProvider' => $dataProvider,
         'export' => false,
         'responsive' => true,
         'hover' => true,
         'columns' => [
-            ['class' => 'yii\grid\SerialColumn'],
-
             'id',
             'email:email',
             [ 'attribute' => 'status', 'value' => function($model) {
