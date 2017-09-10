@@ -30,6 +30,11 @@
 .order-item:hover a {
   text-decoration: underline;
 }
+/*-------------------*/
+.nav-pills>li.active > a {
+  color: #151516 !important;
+  background-color: #e9e9e9 !important;
+}
 
 .date-picker {
   position: relative;

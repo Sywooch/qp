@@ -53,15 +53,26 @@ $form = ActiveForm::begin([
             'options' => ['class' => 'nav nav-pills'],
             'encodeLabels' => false,
             'items' => [
-                ['label' => 'Сегодня', 'url' => ['/manager', 'before' => $today, 'after' => $today]],
-                ['label' => 'Вчера', 'url' => ['/manager', 'before' => $yesterday, 'after' => $yesterday]],
-                ['label' => 'Все', 'url' => ['/manager', 'before' => null, 'after' => null]],
+                [
+                    'label' => 'Сегодня',
+                    'url' => ['/manager', 'before' => $today, 'after' => $today],
+                    'active' => $today == $model->after && $today == $model->before
+                ],
+                [
+                    'label' => 'Вчера',
+                    'url' => ['/manager', 'before' => $yesterday, 'after' => $yesterday],
+                    'active' => $yesterday == $model->after && $yesterday == $model->before
+                ],
+                [
+                    'label' => 'Все',
+                    'url' => ['/manager', 'before' => null, 'after' => null],
+                    'active' => null == $model->after && null == $model->before
+                ],
             ],
         ]);
         ?>
 
-
-        echo '<label class="control-label">Задать интервал</label>';
+        <label class="control-label">Задать интервал</label>;
         <div class="date-picker">
             <?php
             echo DatePicker::widget([
@@ -73,7 +84,7 @@ $form = ActiveForm::begin([
                 'separator' => ' - ',
                 'pluginOptions' => [
                     'autoclose'=>true,
-                    'format' => 'dd.mm.yyyy'
+                    'format' => 'yyyy-mm-dd'
                 ]
             ]);
             ?>
