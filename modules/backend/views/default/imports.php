@@ -62,7 +62,7 @@ $this->params['breadcrumbs'][] = $this->title;
     </div>
     <div class="box-body">
         <p>Загрузить ответы поставщиков.</p>
-        <?= $form1->field($model, 'zipFile')->fileInput()->label(false) ?>
+        <?= $form3->field($provider, 'file')->fileInput()->label(false) ?>
         <button class="btn btn-primary">Отправить</button>
     </div>
     <?php ActiveForm::end() ?>
