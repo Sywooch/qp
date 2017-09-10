@@ -33,7 +33,7 @@
                 'options' => ['class' => 'sidebar-menu'],
                 'items' => [
                     ['label' => 'Menu Yii2', 'options' => ['class' => 'header']],
-                    ['label' => 'Загрузки', 'icon' => ' lnr lnr-download', 'url' => ['/backend/']],
+                    ['label' => 'Загрузки', 'icon' => ' lnr lnr-download', 'url' => ['/backend/default/imports']],
                     ['label' => 'Статистика', 'icon' => ' lnr lnr-pie-chart', 'url' => ['/backend/default/report']],
                     ['label' => 'Мануал', 'icon' => ' lnr lnr-question-circle', 'url' => ['/backend/default/manual']],
                     ['label' => 'Пользователи', 'icon' => ' lnr lnr-users', 'url' => ['/backend/user']],

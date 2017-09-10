@@ -1,37 +1,54 @@
 <?php
 use yii\helpers\Html;
-use yii\helpers\Url;
-use yii\widgets\ActiveForm;
-$this->title = 'Панель администратора'
+$this->title = 'Панель администратора';
 
-/* @var $this yii\web\View */
-/* @var $model app\modules\backend\models\UploadZipModel */
-/* @var $provider app\modules\backend\models\UploadProvider */
+/**
+ * @var $this yii\web\View
+ * @var int $userTotal
+ * @var int $orderTotal
+ * @var int $goodTotal
+ * @var int $salesTotal
+ * @var $provider app\modules\backend\models\UploadProvider
+ */
+
+$infoBoxes = [
+    [
+        'icon' => 'lnr lnr-cart',
+        'title' => 'Всего заказов',
+        'number' => $orderTotal,
+        'url' => ['/backend/order']
+    ], [
+        'icon' => 'fa fa-credit-card',
+        'title' => 'Всего продаж',
+        'number' => $salesTotal,
+        'url' => ['/backend/order']
+    ], [
+        'icon' => 'lnr lnr-users',
+        'title' => 'Пользователей',
+        'number' => $userTotal,
+        'url' => ['/backend/user']
+    ], [
+        'icon' => 'lnr lnr-layers',
+        'title' => 'Товаров',
+        'number' => $goodTotal,
+        'url' => ['/backend/good']
+    ]
+]
 ?>
-<?php $form1 = ActiveForm::begin(['options' => ['enctype' => 'multipart/form-data']]) ?>
-<?= $form1->field($model, 'zipFile')->fileInput()->label('Обновить базу данных из архива.') ?>
-    <button>Отправить</button>
-<?php ActiveForm::end() ?>
 
-<br>
-<?php $form2 = ActiveForm::begin(['action' => ['download-provider']]) ?>
-<label class="control-label">Выгрузить зявки поставщикам</label> <br>
-    <?=
-        yii\jui\DatePicker::widget([
-        'name' => 'date',
-        'language' => 'ru',
-        'dateFormat' => 'yyyy-MM-dd',
-        'value' => date('Y-m-d'),
-        'clientOptions' => ['value' => date('Y-m-d')],
-    ]) ?>
-    <button>Скачать</button>
-<?php ActiveForm::end() ?>
-
-<br>
-<?php $form3 = ActiveForm::begin([
-    'action' => ['upload-provider'],
-    'options' => ['enctype' => 'multipart/form-data']
-]) ?>
-<?= $form3->field($provider, 'file')->fileInput()->label('Загрузить ответы поставщиков.') ?>
-    <button>Отправить</button>
-<?php ActiveForm::end() ?>
+<div class="row">
+    <?php foreach ($infoBoxes as $box) : ?>
+        <div class="col-md-6 col-lg-3">
+            <div class="info-box">
+                <span class="info-box-icon bg-red"><i class="<?= $box['icon']?>"></i></span>
+                <div class="info-box-content">
+                    <span class="info-box-text"><?= $box['title']?></span>
+                    <span class="info-box-number"><?= $box['number']?></span>
+                </div>
+                <div class="info-box-footer">
+                    <?= Html::a('Подробней...', $box['url'], ['style' => 'padding: 10px; font-size: 13px;'])?>
+                </div>
+            </div>
+        </div>
+    <?php endforeach; ?>
+</div>

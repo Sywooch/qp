@@ -16,11 +16,11 @@ $this->params['breadcrumbs'][] = $this->title;
     <h1><?= Html::encode($this->title) ?></h1>
 
     <p>
-        <?= Html::a('Добавить заказ', ['create'], ['class' => 'btn btn-success']) ?>
+        <?= Html::a('Добавить заказ', ['create'], ['class' => 'btn btn-primary']) ?>
     </p>
     <?php if(YII_DEBUG) : ?>
 	    <p>
-	        <?= Html::a('Добавить случайный заказ', ['random'], ['class' => 'btn btn-success']) ?>
+	        <?= Html::a('Добавить случайный заказ', ['random'], ['class' => 'btn btn-primary']) ?>
 	    </p>
     <?php endif; ?>
 
