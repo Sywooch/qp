@@ -1,6 +1,7 @@
 <?php
 
-use yii\grid\GridView;
+use app\components\TimeAgoWidget\TimeAgoWidget;
+use kartik\grid\GridView;
 use app\components\Html;
 
 /* @var $this yii\web\View */
@@ -13,14 +14,23 @@ $this->params['breadcrumbs'][] = $this->title;
 
     <h1><?= Html::encode($this->title) ?></h1>
 
+    <?php $sort = Yii::$app->getRequest()->get('sort'); ?>
+
     <p>
-        <?= Html::a('Добавить пользователя', ['create'], ['class' => 'btn btn-success']) ?>
+        <?= Html::a('Добавить пользователя', ['create'], ['class' => 'btn btn-primary']) ?>
+        <?= Html::a(
+            'Импортировать в Excel',
+            ['excel-export' . ($sort ? "?sort=$sort" : '')],
+            ['class' => 'btn btn-primary pull-right']
+        ) ?>
     </p>
+
     <?= GridView::widget([
         'dataProvider' => $dataProvider,
+        'export' => false,
+        'responsive' => true,
+        'hover' => true,
         'columns' => [
-            ['class' => 'yii\grid\SerialColumn'],
-
             'id',
             'email:email',
             [ 'attribute' => 'status', 'value' => function($model) {
@@ -35,8 +45,26 @@ $this->params['breadcrumbs'][] = $this->title;
                 /* @var $model app\models\User */
                 return $model->getPhone();
             }],
-            'created_at:datetime',
-            'updated_at:datetime',
+            [
+                'attribute' => 'updated_at',
+                'label' => 'Обновлён',
+                'value' => function ($order) {
+                    return TimeAgoWidget::widget([
+                        'datetime' => $order->updated_at
+                    ]);
+                },
+                'format' => 'raw',
+            ],
+            [
+                'attribute' => 'created_at',
+                'label' => 'Создан',
+                'value' => function ($order) {
+                    return TimeAgoWidget::widget([
+                        'datetime' => $order->created_at
+                    ]);
+                },
+                'format' => 'raw',
+            ],
             [
                 'attribute' => 'payment_sum',
                 'value' => function($model) {

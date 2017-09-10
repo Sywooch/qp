@@ -47,21 +47,20 @@ class Html extends \yii\helpers\Html
         return $html;
     }
 
-    public static function dateRu($date) {
+    public static function dateRu($date ) {
         $date=explode(" ", $date);
-        $m = ['января',
-            'февраля',
-            'марта',
-            'апреля',
-            'мая',
-            'июня',
-            'июля',
-            'августа',
-            'сентября',
-            'октября',
-            'ноября',
-            'декабря'];
+        $m = self::getMounts();
         return (int)$date[0].' '.$m[(int)$date[1] - 1];
+    }
+
+    public static function getMounts($short = false) {
+        return $short ? [
+            'янв','фев','мар','апр','мая','июн','июл','авг','сен', 'окт','ноя','дек',
+        ] : ['января', 'февраля',
+            'марта', 'апреля', 'мая',
+            'июня', 'июля', 'августа',
+            'сентября', 'октября', 'ноября',
+            'декабря'];
     }
 
     /**

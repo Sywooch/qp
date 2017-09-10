@@ -20,7 +20,7 @@ $this->params['breadcrumbs'][] = $this->title;
         </div>
     <?php else: ?>
         <?=$this->render('_form', ['model' => $model])?>
-        <div class="review">
+        <div class="row review">
             <?php
             foreach ($feedbacks as $feedback) {
                 echo $this->render('_review', ['item' => $feedback]);

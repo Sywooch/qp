@@ -64,6 +64,6 @@ $this->params['breadcrumbs'][] = "Редактирование заказа №$
         ],
     ]); ?>
     <p>
-        <?= Html::a('Добавить товар', ['product-create', 'order_id' => $order->id], ['class' => 'btn btn-success']) ?>
+        <?= Html::a('Добавить товар', ['product-create', 'order_id' => $order->id], ['class' => 'btn btn-primary']) ?>
     </p>
 </div>

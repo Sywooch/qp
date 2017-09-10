@@ -3,6 +3,7 @@
  * @var $model app\models\OrderFilterForm
  */
 use app\models\Order;
+use kartik\date\DatePicker;
 use yii\bootstrap\ActiveForm;
 use yii\bootstrap\Nav;
 
@@ -17,7 +18,7 @@ $interval = isset($get['after']) && isset($get['before']) ? $get['after'] : '';
 <div class="filter__item filter-key">
     <span class="filter__item-title">Секретный ключ</span>
     <div class="text-subline"></div>
-    <div class="filter__item-prop input-group-custom">
+    <div class="input-group-custom">
         <div class="manager-password">
             <form action="/manager/secret" method="post">
                 <div>
@@ -46,23 +47,54 @@ $form = ActiveForm::begin([
 <div class="filter__item">
     <span class="filter__item-title">Дата</span>
     <div class="text-subline"></div>
-    <div class="filter__item-prop input-group-custom">
-        <input type="hidden" name="after" class="manager-date-start" value=<?=$model->after?>/>
-        <input type="hidden" name="before" class="manager-date-end" value=<?=$model->before?>/>
-
+    <div class="input-group-custom">
         <?php
         echo Nav::widget([
             'options' => ['class' => 'nav nav-pills'],
             'encodeLabels' => false,
             'items' => [
-                ['label' => 'Сегодня', 'url' => ['/manager', 'before' => $today, 'after' => $today]],
-                ['label' => 'Вчера', 'url' => ['/manager', 'before' => $yesterday, 'after' => $yesterday]],
-                ['label' => 'Все', 'url' => ['/manager', 'before' => null, 'after' => null]],
+                [
+                    'label' => 'Сегодня',
+                    'url' => ['/manager', 'before' => $today, 'after' => $today],
+                    'active' => $today == $model->after && $today == $model->before
+                ],
+                [
+                    'label' => 'Вчера',
+                    'url' => ['/manager', 'before' => $yesterday, 'after' => $yesterday],
+                    'active' => $yesterday == $model->after && $yesterday == $model->before
+                ],
+                [
+                    'label' => 'Все',
+                    'url' => ['/manager', 'before' => null, 'after' => null],
+                    'active' => null == $model->after && null == $model->before
+                ],
             ],
         ]);
         ?>
 
-        <input type="text" class="form-control date-interval" placeholder="Задать интервал"/>
+        <label class="control-label">Задать интервал</label>;
+        <div class="date-picker">
+            <?php
+            echo DatePicker::widget([
+                'name' => 'after',
+                'value' => $model->after,
+                'type' => DatePicker::TYPE_RANGE,
+                'name2' => 'before',
+                'value2' => $model->before,
+                'separator' => ' - ',
+                'pluginOptions' => [
+                    'autoclose'=>true,
+                    'format' => 'yyyy-mm-dd'
+                ]
+            ]);
+            ?>
+            <span class="js-clear after">
+                <span class="lnr lnr-cross"></span>
+            </span>
+            <span class="js-clear before">
+                <span class="lnr lnr-cross"></span>
+            </span>
+        </div>
 
     </div>
 </div>
@@ -70,7 +102,7 @@ $form = ActiveForm::begin([
 <div class="filter__item">
     <span class="filter__item-title">Статус</span>
     <div class="text-subline"></div>
-    <div class="filter__item-prop input-group-custom">
+    <div class="input-group-custom">
         <select name="status" class="form-control filter-status js-filter-status">
             <option value="-1">Все</option>
             <?php foreach (Order::$STATUS_TO_STRING as $k => $v) {
@@ -86,7 +118,7 @@ $form = ActiveForm::begin([
 
 <div class="filter__item">
     <button type="submit" class="btn btn-success">Применить</button>
-    <button class="btn js-print">
+    <button class="btn js-print" type="button">
         <span class="lnr lnr-printer"></span>
         Печать
     </button>

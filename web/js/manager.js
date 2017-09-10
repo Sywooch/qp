@@ -6,48 +6,19 @@ $(document).ready(function () {
     Date.prototype.timeNow = function () {
         return ((this.getHours() < 10)?"0":"") + this.getHours() +":"+ ((this.getMinutes() < 10)?"0":"") + this.getMinutes() +":"+ ((this.getSeconds() < 10)?"0":"") + this.getSeconds();
     };
-    $dateInterval = $('.date-interval');
 
-    $start = $('.manager-date-start');
-    $end = $('.manager-date-end');
-
-    $dateInterval.daterangepicker({
-        startDate: $start.val(),
-        endDate: $end.val(),
-        locale: {
-            format: 'YYYY-MM-DD',
-            applyLabel: "Принять",
-            cancelLabel: "Отмена",
-            daysOfWeek: ["Вс", "Пн", "Вт", "Ср", "Чт", "Пт", "Сб"],
-            monthNames: ["Январь", "Февраль", "Март", "Апрель", "Май", "Июнь", "Июль", "Август", "Сентябрь", "Октябрь", "Ноябрь", "Декабрь"],
-        }
-    });
-
-
-    function getFilter() {
-        return {
-            start: $('input[name=daterangepicker_start]'),
-            end: $('input[name=daterangepicker_end]')
-        }
-    }
-    $('.daterangepicker .applyBtn').click(function () {
-        setTimeout(function () {
-            var f = getFilter();
-            // $dateInterval.val(start + ' - ' + end);
-            $start.val(f.start.val());
-            $end.val(f.end.val());
-            $dateInterval.attr('name', '');
-        }, 0);
-    });
     function loadFile(url,callback){
         JSZipUtils.getBinaryContent(url,callback);
     }
+
+    $start = $('.form-control[name="after"]');
+    $end = $('.form-control[name="before"]');
 
     function getFile(url, tmplPath, nameFile, isSingle) {
         var dateTime = new Date().today() + "_" + new Date().timeNow();
         setTimeout(function () {
             $.ajax( {
-                url: url + "after=" + $start.val().slice(0, -1) +"&before=" + $end.val().slice(0, -1),
+                url: url + "after=" + $start.val() +"&before=" + $end.val(),
                 dataType: "json",
                 type: "get",
                 success: function( data ) {
@@ -125,4 +96,15 @@ $(document).ready(function () {
         var route = $(this).data('route');
         window.location = route;
     });
+
+    $('.js-clear').on("click", function () {
+        console.log("fdf");
+        if ($(this).hasClass('before')) {
+            $start.val("");
+        } else {
+            $end.val("");
+        }
+    });
+
+    $('[data-toggle="tooltip"]').tooltip();
 });

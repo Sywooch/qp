@@ -2,7 +2,10 @@
 
 namespace app\modules\backend\controllers;
 
+use app\models\Good\Good;
+use app\models\Order;
 use app\models\OrderProduct;
+use app\models\User;
 use app\modules\backend\models\UploadProvider;
 use app\modules\backend\models\UploadZipModel;
 use Yii;
@@ -29,12 +32,33 @@ class DefaultController extends Controller
             ],
         ];
     }
+
+    public function actionIndex()
+    {
+
+        $userTotal = User::find()->count();
+        $orderTotal = Order::find()->count();
+        $goodTotal = Good::find()->count();
+        $users = User::findWithPaymentSum()->all();
+
+        $salesTotal = array_reduce($users, function($sum, $user) {
+            return $sum + $user->payment_sum;
+        }, 0);
+
+        return $this->render('index', [
+            'userTotal' => $userTotal,
+            'orderTotal' => $orderTotal,
+            'salesTotal' => $salesTotal,
+            'goodTotal' => $goodTotal,
+        ]);
+    }
+
     /**
      * Renders the index view for the module
      * @return string
      */
 
-    public function actionIndex()
+    public function actionImports()
     {
         $model = new UploadZipModel();
         $provider = new UploadProvider();
@@ -45,7 +69,7 @@ class DefaultController extends Controller
                 yii::$app->session->addFlash('success', 'Архив принят на обработку');
             }
         }
-        return $this->render('index', [
+        return $this->render('imports', [
             'model' => $model,
             'provider' => $provider
         ]);
@@ -64,7 +88,7 @@ class DefaultController extends Controller
         }
         else {
             Yii::$app->session->setFlash('error', "Архив за $date не найден");
-            $this->redirect('/backend');
+            $this->redirect('/backend/default/imports');
         }
     }
 
@@ -73,7 +97,7 @@ class DefaultController extends Controller
         $provider = new UploadProvider();
         $provider->file = UploadedFile::getInstance($provider, 'file');
         $provider->upload();
-        return $this->redirect('index');
+        return $this->redirect('/backend/default/imports');
     }
     /**
      * Login action.
@@ -83,7 +107,7 @@ class DefaultController extends Controller
     public function actionLogin()
     {
         if (!Yii::$app->user->isGuest) {
-            return $this->redirect('index');
+            return $this->redirect('/backend/default/imports');
         }
         $model = new LoginForm();
         if ($model->load(Yii::$app->request->post()) && $model->validate()) {

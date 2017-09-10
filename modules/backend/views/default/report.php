@@ -1,6 +1,6 @@
 <?php
 use app\models\Good\PropertyValue;
-use yii\grid\GridView;
+use kartik\grid\GridView;
 use app\components\Html;
 use yii\widgets\ActiveForm;
 $this->title = 'Статистика'
@@ -10,32 +10,57 @@ $this->title = 'Статистика'
 /* @var $start, $end integer or null */
 ?>
 
+<style>
+    .date-picker > div:first-child {
+        padding-left: 15px;
+    }
+    .date-picker > div {
+        padding-left: 2px;
+        padding-right: 2px;
+    }
+</style>
+<div class="box box-primary">
+    <?php $form1 = ActiveForm::begin(['action' => ['report']]) ?>
+    <div class="box-header with-border">
+        <h3 class="box-title">Фильтры</h3>
+    </div>
+    <div class="box-body">
+        <p>Статистика неподтверждённых товаров за период</p>
+        <div class="row date-picker">
+            <div class="col-sm-2">
+                <?= yii\jui\DatePicker::widget([
+                    'name' => 'start',
+                    'language' => 'ru',
+                    'value' => $start,
+                    'dateFormat' => 'yyyy-MM-dd',
+                    'clientOptions' => ['value' => date('Y-m-d')],
+                    'options' => ['class' => 'form-control']
+                ]) ?>
+            </div>
+            <div class="col-sm-2">
+                <?= yii\jui\DatePicker::widget([
+                    'name' => 'end',
+                    'language' => 'ru',
+                    'dateFormat' => 'yyyy-MM-dd',
+                    'value' => $end,
+                    'clientOptions' => ['value' => date('Y-m-d')],
+                    'options' => ['class' => 'form-control']
+                ]) ?>
+            </div>
+            <div class="col-sm-2">
+                  <button class="btn btn-primary">Вывести</button>
+            </div>
+        </div>
+    </div>
+    <?php ActiveForm::end() ?>
+</div>
 
-<?php $form1 = ActiveForm::begin(['action' => ['report']]) ?>
-<label class="control-label">Статистика неподтверждённых товаров за период</label> <br>
-<?=
-yii\jui\DatePicker::widget([
-    'name' => 'start',
-    'language' => 'ru',
-    'value' => $start,
-    'dateFormat' => 'yyyy-MM-dd',
-    'clientOptions' => ['value' => date('Y-m-d')],
-])
-?>
-<?=
-yii\jui\DatePicker::widget([
-    'name' => 'end',
-    'language' => 'ru',
-    'dateFormat' => 'yyyy-MM-dd',
-    'value' => $end,
-    'clientOptions' => ['value' => date('Y-m-d')],
-])
-?>
-<button>Вывести</button>
-<?php ActiveForm::end() ?>
 
 <?= GridView::widget([
     'dataProvider' => $dataProvider,
+    'export' => false,
+    'responsive' => true,
+    'hover' => true,
     'columns' => [
         [
             'attribute' => 'provider',
@@ -55,9 +80,19 @@ yii\jui\DatePicker::widget([
             },
             'enableSorting'=>TRUE,
         ],
-        'product_name',
+        [
+            'attribute' => 'product_name',
+            'value' => function ($model) {
+                return $model->product_name;
+            },
+        ],
         'product_vendor',
-        'product_c1id',
+        [
+            'attribute' => 'product_c1id',
+            'value' => function ($model) {
+                return $model->product_c1id;
+            },
+        ],
         'count_by_c1id',
         'unconfirmed_count_by_c1id',
     ]
