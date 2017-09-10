@@ -12,7 +12,6 @@ use yii\web\UploadedFile;
 
 require_once dirname(__FILE__) . '/../../../Classes/PHPExcel.php';
 
-
 class UploadProvider extends Model
 {
     /**
@@ -103,8 +102,9 @@ class UploadProvider extends Model
                 $link = $order->getLink();
                 $msg = new Message([
                     'user_id' => $order->user_id,
-                    'text' => "$link был $order->status_str" . ($all_empty ? ' и должен быть оплачен до 23:30 ' .
-                        date('d.m.Y', time()) : '')
+                    'text' => "$link был $order->status_str" . (!$all_empty ?
+                        ' и должен быть оплачен до 23:30 текущих суток' .
+                        ', иначе он будет аннулирован как неподтверждённый.': '')
                 ]);
                 $msg->sendEmail();
                 $msg->save();
