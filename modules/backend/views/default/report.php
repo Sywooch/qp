@@ -1,6 +1,6 @@
 <?php
 use app\models\Good\PropertyValue;
-use yii\grid\GridView;
+use kartik\grid\GridView;
 use app\components\Html;
 use yii\widgets\ActiveForm;
 $this->title = 'Статистика'
@@ -58,6 +58,9 @@ $this->title = 'Статистика'
 
 <?= GridView::widget([
     'dataProvider' => $dataProvider,
+    'export' => false,
+    'responsive' => true,
+    'hover' => true,
     'columns' => [
         [
             'attribute' => 'provider',
@@ -77,9 +80,19 @@ $this->title = 'Статистика'
             },
             'enableSorting'=>TRUE,
         ],
-        'product_name',
+        [
+            'attribute' => 'product_name',
+            'value' => function ($model) {
+                return $model->product_name;
+            },
+        ],
         'product_vendor',
-        'product_c1id',
+        [
+            'attribute' => 'product_c1id',
+            'value' => function ($model) {
+                return $model->product_c1id;
+            },
+        ],
         'count_by_c1id',
         'unconfirmed_count_by_c1id',
     ]

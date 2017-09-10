@@ -35,7 +35,7 @@ class TimeAgoWidget extends Widget
         $y = date('Y', $date_str);
         $last = round(($time - $date_str)/60);
         $m_name = Html::getMounts(true);
-        $m_name = $m_name[(int)$m];
+        $m_name = $m_name[(int)$m - 1];
         $d_name = (int) $d;
         if ($last < 1) return "Только что";
         if( $last < 55 ) return $last. " " . Html::ending($last, ['минуту', 'минуты', 'минут']) . " назад";

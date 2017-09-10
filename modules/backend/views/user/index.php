@@ -1,7 +1,7 @@
 <?php
 
 use app\components\TimeAgoWidget\TimeAgoWidget;
-use yii\grid\GridView;
+use kartik\grid\GridView;
 use app\components\Html;
 
 /* @var $this yii\web\View */
@@ -19,6 +19,9 @@ $this->params['breadcrumbs'][] = $this->title;
     </p>
     <?= GridView::widget([
         'dataProvider' => $dataProvider,
+        'export' => false,
+        'responsive' => true,
+        'hover' => true,
         'columns' => [
             ['class' => 'yii\grid\SerialColumn'],
 
