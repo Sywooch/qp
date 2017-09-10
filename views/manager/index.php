@@ -78,27 +78,6 @@ ManagerAsset::register($this);
                         'width' => '150',
                         'value' => function($x) { return $x->status_str; }
                     ],
-                    [
-                        'class' => 'yii\grid\ActionColumn',
-                        'template' => '{order-ready}',
-                        'buttons' => [
-                            'order-ready' => function ($url, $model) {
-                                if ($model->status == Order::STATUS_ORDERED and Yii::$app->user->can('manager')){
-                                    return Html::a(
-                                        '<i class="fa fa-thumbs-o-up"></i>',
-                                        $url,
-                                        [
-                                            'data' => [
-                                                'confirm' => 'Вы уверены?',
-                                                'method' => 'post',
-                                            ],
-                                        ]
-                                    );
-                                }
-                                return null;
-                            },
-                        ],
-                    ],
                 ],
             ]); ?>
         </div>
