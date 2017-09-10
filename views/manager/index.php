@@ -4,7 +4,7 @@ use app\assets\ManagerAsset;
 use app\components\Html;
 use app\components\TimeAgoWidget\TimeAgoWidget;
 use app\models\Order;
-use yii\grid\GridView;
+use kartik\grid\GridView;
 use yii\helpers\Url;
 
 /* @var $this yii\web\View */
@@ -32,6 +32,9 @@ ManagerAsset::register($this);
         <div class="product__table">
             <?= GridView::widget([
                 'dataProvider' => $dataProvider,
+                'export' => false,
+                'responsive' => true,
+                'hover' => true,
                 "rowOptions" => function (Order $order) {
                     return [
                         "class" => "order-item",
@@ -42,6 +45,7 @@ ManagerAsset::register($this);
                     [
                         'attribute' => 'ref',
                         'format' => 'raw',
+                        'label' => '№',
                         'value' => function ($order) {
                             /* @var $order app\models\Order*/
                             return Html::a($order->id, ['view-order', 'id' => $order->id]);
@@ -68,7 +72,12 @@ ManagerAsset::register($this);
                         'format' => 'raw',
                         'value' => function($x) { return Html::unstyled_price($x->confirmed_price); }
                     ],
-                    'status_str',
+                    [
+                        'attribute' => 'status_str',
+                        'format' => 'raw',
+                        'width' => '150',
+                        'value' => function($x) { return $x->status_str; }
+                    ],
                     [
                         'class' => 'yii\grid\ActionColumn',
                         'template' => '{order-ready}',

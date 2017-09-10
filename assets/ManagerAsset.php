@@ -12,9 +12,6 @@ class ManagerAsset extends AssetBundle
         'css/manager.css',
     ];
     public $js = [
-        '//cdn.jsdelivr.net/momentjs/latest/moment.min.js',
-        '//cdn.jsdelivr.net/bootstrap.daterangepicker/2/daterangepicker.js',
-
         'helpers/docxtemplater-latest.js',
         '//cdnjs.cloudflare.com/ajax/libs/jszip/2.6.1/jszip.js',
         '//fastcdn.org/FileSaver.js/1.1.20151003/FileSaver.js',
