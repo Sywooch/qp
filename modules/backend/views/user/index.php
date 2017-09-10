@@ -20,7 +20,7 @@ $this->params['breadcrumbs'][] = $this->title;
         <?= Html::a('Добавить пользователя', ['create'], ['class' => 'btn btn-primary']) ?>
         <?= Html::a(
             'Импортировать в Excel',
-            ['excel-export' . ($sort ? "?sort=$sort" : '')],
+            ['excel-export', 'sort' => $sort],
             ['class' => 'btn btn-primary pull-right']
         ) ?>
     </p>

@@ -20,10 +20,13 @@ $this->title = 'Статистика'
     }
 </style>
 <div class="box box-primary">
-    <?php $form1 = ActiveForm::begin(['action' => ['report']]) ?>
+    <?php $sort = Yii::$app->getRequest()->get('sort'); ?>
+
+    <?php $form1 = ActiveForm::begin(['action' => ['report'], 'method' => 'get']) ?>
     <div class="box-header with-border">
         <h3 class="box-title">Фильтры</h3>
     </div>
+
     <div class="box-body">
         <p>Статистика неподтверждённых товаров за период</p>
         <div class="row date-picker">
@@ -55,6 +58,11 @@ $this->title = 'Статистика'
     <?php ActiveForm::end() ?>
 </div>
 
+<?= Html::a(
+    'Импортировать в Excel',
+    ['report-excel-export' ,'sort' => $sort, 'start' => $start, 'end' => $end],
+    ['class' => 'btn btn-primary pull-right']
+) ?>
 
 <?= GridView::widget([
     'dataProvider' => $dataProvider,
