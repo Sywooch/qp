@@ -1,5 +1,6 @@
 <?php
 
+use app\components\TimeAgoWidget\TimeAgoWidget;
 use yii\helpers\Html;
 use yii\grid\GridView;
 use yii\helpers\Url;
@@ -37,8 +38,26 @@ $this->params['breadcrumbs'][] = $this->title;
                 },
                 'format' => 'raw',
             ],
-            'created_at:datetime',
-            'updated_at:datetime',
+            [
+                'attribute' => 'updated_at',
+                'label' => 'Обновлён',
+                'value' => function ($order) {
+                    return TimeAgoWidget::widget([
+                        'datetime' => $order->updated_at
+                    ]);
+                },
+                'format' => 'raw',
+            ],
+            [
+                'attribute' => 'created_at',
+                'label' => 'Создан',
+                'value' => function ($order) {
+                    return TimeAgoWidget::widget([
+                            'datetime' => $order->created_at
+                    ]);
+                },
+                'format' => 'raw',
+            ],
             [
                 'attribute' => 'status',
                 'value' => function ($order) {

@@ -2,6 +2,7 @@
 
 use app\assets\ManagerAsset;
 use app\components\Html;
+use app\components\TimeAgoWidget\TimeAgoWidget;
 use app\models\Order;
 use yii\grid\GridView;
 use yii\helpers\Url;
@@ -47,7 +48,16 @@ ManagerAsset::register($this);
                         }
                     ],
                     'user.email',
-                    'created_at:datetime',
+                    [
+                        'attribute' => 'created_at',
+                        'label' => 'Создан',
+                        'value' => function ($order) {
+                            return TimeAgoWidget::widget([
+                                'datetime' => $order->created_at
+                            ]);
+                        },
+                        'format' => 'raw',
+                    ],
                     [
                         'attribute' => 'total_price',
                         'format' => 'raw',
