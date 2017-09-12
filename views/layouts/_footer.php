@@ -5,7 +5,6 @@ use yii\helpers\Url;
 $menuShop = [
     ['label' => 'О компании', 'url' => ['/p/about']],
     ['label' => 'Каталог', 'url' => ['/catalog']],
-    ['label' => 'Контакты', 'url' => ['/site/contact']],
     ['label' => 'Отзывы', 'url' => ['/site/reviews']],
 ];
 $menuUser = [
@@ -51,9 +50,10 @@ $menuUser = [
                 <div class="row">
                     <div class="col-md-6">
                         <span class="footer-title">Время работы</span>
-                        <div class="footer-hours">ПН-ПТ: 9:00-19:00<br/> СБ-ВС: 9:00-16:00</div>
+                        <div class="footer-hours">ПН-ПТ: <?=Yii::$app->params['working_time']?>
+                            <br/> СБ-ВС: <?=Yii::$app->params['weekend_working_time']?></div>
                         <div class="footer-phone">
-                            <?=isset(Yii::$app->params['phone.manager']) ? Yii::$app->params['phone.manager'] : "Номер телефона"; ?>
+                            <?=isset(Yii::$app->params['phone']) ? Yii::$app->params['phone'] : "Номер телефона"; ?>
                         </div>
                     </div>
                     <div class="col-md-6">

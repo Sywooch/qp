@@ -29,7 +29,7 @@ $itemMenu = [
                     </div>
                     <div>
                         <span class="phone lnr lnr-phone-handset"></span>
-                        <span class="phone-text"><?=Yii::$app->params['phone.manager']?></span>
+                        <span class="phone-text"><?=Yii::$app->params['phone']?></span>
                     </div>
                 </div>
                 <div class="col-md-2 col-xs-12 visible-md visible-lg">

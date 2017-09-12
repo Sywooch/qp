@@ -255,7 +255,7 @@ class SiteController extends Controller
             $model->name = Yii::$app->user->identity->name;
         }
         if ($model->load(Yii::$app->request->post())) {
-            if ($model->contact(Yii::$app->params['adminEmail']) && $model->save(false)) {
+            if ($model->contact(Yii::$app->params['admin_email']) && $model->save(false)) {
                 Yii::$app->session->setFlash('contactFormSubmitted');
             } else {
                 Yii::$app->session->setFlash('error', 'Возникла ошибка
