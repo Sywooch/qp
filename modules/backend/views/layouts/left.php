@@ -34,6 +34,7 @@
                 'items' => [
                     ['label' => 'Menu Yii2', 'options' => ['class' => 'header']],
                     ['label' => 'Загрузки', 'icon' => ' lnr lnr-download', 'url' => ['/backend/default/imports']],
+                    ['label' => 'Настройки', 'icon' => ' lnr lnr-leaf', 'url' => ['/backend/default/config']],
                     ['label' => 'Статистика', 'icon' => ' lnr lnr-pie-chart', 'url' => ['/backend/default/report']],
                     ['label' => 'Мануал', 'icon' => ' lnr lnr-question-circle', 'url' => ['/backend/default/manual']],
                     ['label' => 'Пользователи', 'icon' => ' lnr lnr-users', 'url' => ['/backend/user']],

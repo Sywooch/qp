@@ -8,6 +8,7 @@ use app\models\OrderProduct;
 use app\models\User;
 use app\modules\backend\models\UploadProvider;
 use app\modules\backend\models\UploadZipModel;
+use app\modules\backend\models\ConfigForm;
 use PHPExcel;
 use PHPExcel_Style_NumberFormat;
 use PHPExcel_Writer_Excel2007;
@@ -233,4 +234,23 @@ class DefaultController extends Controller
         set_time_limit(5*60);
         Yii::$app->response->sendFile($file_name);
     }
+
+    public function actionConfig()
+    {
+        $file = dirname(__FILE__) . '/../../../config/params.inc';
+        $model = new ConfigForm();
+        if ($model->load(Yii::$app->request->post()) && $model->validate()) {
+            $config = $model->getAttributes();
+            $str = serialize($config);
+            file_put_contents($file, $str);
+            Yii::$app->session->addFlash('success', 'Настройки сохранены.');
+        }
+        else {
+            $content = file_get_contents($file);
+            $arr = unserialize($content);
+            $model->setAttributes($arr);
+        }
+        return $this->render('config',['model'=>$model]);
+    }
 }
+?>

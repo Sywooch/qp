@@ -113,7 +113,7 @@ class ContactForm extends CachedActiveRecord
     public function contact($email)
     {
         if ($this->validate() && Yii::$app->mailer->compose()
-                ->setTo(Yii::$app->params['adminEmail'])
+                ->setTo(Yii::$app->params['admin_email'])
                 ->setFrom([Yii::$app->params['supportEmail']])
                 ->setSubject('Обращение на сайте ' . Yii::$app->name)
                 ->setTextBody("Пользователь $this->name с эл. ящиком $this->email оставил следующее обращение на сайте " .

@@ -1,7 +1,7 @@
 <li class="">
     <div class="side-nav__contacts">
         <div class="side-nav__contacts-phone">
-            <?=\Yii::$app->params['phone.manager'] ?>
+            <?=\Yii::$app->params['phone'] ?>
         </div>
         <span class="side-nav__contacts-desc">
            Заказы онлайн круглосуточно<br>
