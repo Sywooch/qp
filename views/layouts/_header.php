@@ -23,9 +23,9 @@ $itemMenu = [
     <div class="header__middle">
         <div class="container">
             <div class="row">
-                <div class="col-md-2 header__contact visible-md visible-lg">
+                <div class="col-md-3 header__contact visible-md visible-lg">
                     <div>
-                        <span class="clock lnr lnr-clock"></span><span class="clock-text">с 10:00 до 19:00</span>
+                        <span class="clock lnr lnr-clock"></span><span class="clock-text"><?=Yii::$app->params['working_time']?></span><br/>
                     </div>
                     <div>
                         <span class="phone lnr lnr-phone-handset"></span>
@@ -42,7 +42,7 @@ $itemMenu = [
                         </div>
                     </section>
                 </div>
-                <div class="col-md-3 col-xs-6 col-xs-offset-3 col-md-offset-0">
+                <div class="col-md-2 col-xs-6 col-xs-offset-3 col-md-offset-0">
                     <div class="header__logo">
                         <a class="header__logo-link" href="/">
                             <img src="/img/logo-qp.gif">
