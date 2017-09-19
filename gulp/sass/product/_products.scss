@@ -258,28 +258,33 @@
     }
   }
 }
+
 @media (max-width: $screen-sm-min) {
   .product {
     padding-bottom: 15px;
+    display: flex;
+    flex-flow: row wrap;
     .thumbnail {
       padding: 5px;
-    }
-    &-title {
-      a {
-        font-size: 1.6rem;
+      order: 1;
+      flex-basis: 35%;
+      img {
+        height: auto;
+        max-height: 100%;
       }
     }
-    &-counter {
-      float: right;
-      margin-right: 10px;
+    &-info {
+      order: 2;
+      display: flex;
+      flex-flow: column wrap;
+      flex-basis: 65%;
+      justify-content: space-around;
+      align-items: flex-end;
     }
-    .btn-group {
-      & > .btn-compare {
-        width: 100%;
-        display: block;
-        margin-top: 8px;
-      }
+    &-name {
+      flex-basis: 100%;
+      text-align: left;
+      font-weight: bold;
     }
-
   }
 }
