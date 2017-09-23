@@ -2,7 +2,7 @@
 $order = \app\models\Good\Good::$ORDERING_TO_STRING;
 ?>
 
-<div class= form-group">
+<div class= "form-group">
     <form name='sort' method="get">
     	<div>
 	        <label>Сортировать</label>
