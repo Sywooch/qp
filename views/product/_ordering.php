@@ -2,16 +2,27 @@
 $order = \app\models\Good\Good::$ORDERING_TO_STRING;
 ?>
 
-<div class="sorter form-group">
+<div class= "form-group">
     <form name='sort' method="get">
-        <label>Сортировать</label>
+    	<div>
+	        <label>Сортировать</label>
+	        <select name="order" id="sort" class="form-control">
+	            <?php foreach ($order as $key => $value) : ?>
+	                <option value="<?=$key?>"><?=$value?></option>
+	            <?php endforeach; ?>
+	        </select>
+        </div>
 
-        <select name="order" id="sort" class="form-control">
-            <?php foreach ($order as $key => $value) : ?>
-                <option value="<?=$key?>"><?=$value?></option>
-            <?php endforeach; ?>
-        </select>
+        <div>
+	        <label>Показывать по</label>
+	        <select name="limit" id="limit" class="form-control">
+	            <option value="<?=48?>">24</option>
+	            <option value="<?=96?>">48</option>
+	            <option value="<?=192?>">96</option>
+	        </select>
+        </div>
     </form>
+    <br>
 </div>
 
 

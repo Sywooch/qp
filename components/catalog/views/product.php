@@ -23,28 +23,30 @@ if (!$bookmark) {
     <div class="product">
         <?=Html::a($img, $url, ['class' => 'thumbnail'])?>
         <?=Html::a($product->name, $url, ['class' => 'product-name'])?>
-        <div class="product-price">
-            <?=Html::price($product->price)?>
-        </div>
-        <div class="product-action">
-            <button class="btn product-to-bookmark btn-default bookmark <?=$bookmark->isNewRecord ? '' : 'active'?>"
-                    data-product-id="<?= $product->id ?>"
-                    data-placement="top"
-                    title="<?=$bookmark->isNewRecord ? 'В избранное' : 'В избранном'?>">
-                <span class="icon lnr lnr-heart"></span>
-                <span class="counter"><?= $product->getBookmarksCount() ? $product->getBookmarksCount() : '' ?></span>
-            </button>
-
-            <?php if($product->readyToSale()) : ?>
-                <button class="btn product-to-cart btn-success btn-compare"
+        <div class="product-info">
+            <div class="product-price">
+                <?=Html::price($product->price)?>
+            </div>
+            <div class="product-action">
+                <button class="btn product-to-bookmark btn-default bookmark <?=$bookmark->isNewRecord ? '' : 'active'?>"
                         data-product-id="<?= $product->id ?>"
-                        data-product-count="1"
-                        data-active="1">
-                    В корзину
+                        data-placement="top"
+                        title="<?=$bookmark->isNewRecord ? 'В избранное' : 'В избранном'?>">
+                    <span class="icon lnr lnr-heart"></span>
+                    <span class="counter"><?= $product->getBookmarksCount() ? $product->getBookmarksCount() : '' ?></span>
                 </button>
-            <?php else: ?>
-                <span class="product-disabled">Нет в наличии</span>
-            <?php endif; ?>
+
+                <?php if($product->readyToSale()) : ?>
+                    <button class="btn product-to-cart btn-success btn-compare"
+                            data-product-id="<?= $product->id ?>"
+                            data-product-count="1"
+                            data-active="1">
+                        В корзину
+                    </button>
+                <?php else: ?>
+                    <span class="product-disabled">Нет в наличии</span>
+                <?php endif; ?>
+            </div>
         </div>
 
     </div>
