@@ -15,7 +15,24 @@ use yii\helpers\Html;
 </head>
 <body style="margin:0; padding:0;" bgcolor="#ffffff">
     <?php $this->beginBody() ?>
-        <?= $content ?>
+    <center>
+        <table width="100%" border="0" cellpadding="0" cellspacing="0" bgcolor="#F2F2F2">
+            <tr>
+                <td align="center" valign="top">
+                    <table width="100%" cellpadding="0" cellspacing="0" border="0">
+                        <?= $this->render("_header")?>
+                        <tr>
+                            <td align="center" valign="top">
+                                <?= $content ?>
+                            </td>
+                        </tr>
+                        <?= $this->render("_footer")?>
+                    </table>
+                </td>
+            </tr>
+        </table>
+    </center>
+
     <?php $this->endBody() ?>
 </body>
 </html>

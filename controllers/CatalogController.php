@@ -140,7 +140,6 @@ class CatalogController extends \yii\web\Controller
 
     public function actionProducts($cid)
     {
-        $limit = 24;
         $get = Yii::$app->request->get();
         $category = Menu::findOneOr404($cid);
 
@@ -160,6 +159,8 @@ class CatalogController extends \yii\web\Controller
 
 
         $offset = isset($get['offset']) ? $get['offset'] : 0;
+        $limit = isset($get['limit']) ? $get['limit'] : 48;
+        
 
         if (isset($get['ajax'])) {
             $filtered_products = [];

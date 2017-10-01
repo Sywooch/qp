@@ -330,6 +330,7 @@ var Cart = (function($){
         $content = $('.pjax-result'),
         $loader = $('.filter-loader'),
         $sort = $('#sort'),
+        $limit = $('#limit'),
         filterApply = 'filter-apply-btn',
         $filterApply = $('.' + filterApply),
         $showMore = $('.js-show-more'),
@@ -364,6 +365,11 @@ var Cart = (function($){
                     "" : this.key + ":" + (this.value) + ";";
             }
         };
+
+        this.limit = {
+            value: 0,
+        };
+
 
         /**
          * Add object to this.m
@@ -572,6 +578,9 @@ var Cart = (function($){
             $sort.on('change', function () {
                 self.sort($(this).val());
             });
+            $limit.on('change', function () {
+                self.limit($(this).val());
+            });
         },
         /*
          * @param {number} value
@@ -579,6 +588,14 @@ var Cart = (function($){
         sort: function (value) {
             App.log("Select order: " + value);
             data.setOrder(value);
+            this.getFilteredData();
+        },
+        /*
+         * @param {number} value
+         */
+        limit: function (value) {
+            App.log("Select order: " + value);
+            data.limit.value = value;
             this.getFilteredData();
         },
 
@@ -630,7 +647,7 @@ var Cart = (function($){
         },
 
         getFilteredData: function () {
-            var url = '/catalog/view/'+catalogID+'?' + data.getUrl();
+            var url = '/catalog/view/'+catalogID+'?' + data.getUrl() + '&limit=' + data.limit.value;
 
             $loader.css('opacity', 1);
             var self = this;
@@ -674,7 +691,7 @@ var Cart = (function($){
         },
 
         showMore: function () {
-            var url = '/catalog/view/'+catalogID+'?' + data.getUrl() + '&offset=' + offset;
+            var url = '/catalog/view/'+catalogID+'?' + data.getUrl() + '&offset=' + offset + '&limit=' + data.limit.value;
             var self = this;
             $showMore.hide();
             $preloader.show();

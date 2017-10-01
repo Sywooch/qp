@@ -141,12 +141,16 @@ $line-height-header: 60px;
     padding-top: 15px;
     margin-right: 20px;
     flex-basis: 45%;
+    padding-left: 25px;
     & > div {
       margin-bottom: 10px;
     }
     .lnr {
       margin-right: 10px;
       font-size: 16px;
+    }
+    .lnr-phone-handset {
+      margin-right: 5px;
     }
   }
   &__personal {
