@@ -1,6 +1,7 @@
 <?php
 namespace app\commands;
 
+use app\components\Html;
 use app\models\Good\PropertyValue;
 use app\models\Order;
 use app\models\OrderProduct;
@@ -21,16 +22,16 @@ class ProviderController extends Controller
 {
     private $_dir_name;
     private $_provider_order;
+    private $_time;
 
     public function initExcel($is_preorder, $pr) {
-        $time = time();
         $objPHPExcel = new PHPExcel();
         $objPHPExcel->setActiveSheetIndex(0)
             ->setCellValue('A1', 'Бланк' . ($is_preorder ? ' предварительного' : '') . ' заказа поставщику №')
             ->setCellValue('B1', $this->_provider_order->id)
 
             ->setCellValue('A2', 'Дата')
-            ->setCellValue('B2', PHPExcel_Shared_Date::PHPToExcel( $time, true ))
+            ->setCellValue('B2', PHPExcel_Shared_Date::PHPToExcel( $this->_time, true ))
 
             ->setCellValue('C1', 'Название поставщика')
             ->setCellValue('D1', PropertyValue::cachedFindOne(['c1id' => $pr])->value)
@@ -59,7 +60,7 @@ class ProviderController extends Controller
                 ->setCellValue('A3', 'к предварительному заказу №')
                 ->setCellValue('B3', $this->_provider_order->id)
                 ->setCellValue('A4', 'От')
-                ->setCellValue('B4', PHPExcel_Shared_Date::PHPToExcel( $time, true ));
+                ->setCellValue('B4', PHPExcel_Shared_Date::PHPToExcel( $this->_time, true ));
         }
 
 
@@ -69,6 +70,80 @@ class ProviderController extends Controller
             ->setFormatCode(PHPExcel_Style_NumberFormat::FORMAT_DATE_DDMMYYYY);
 
         return $objPHPExcel;
+    }
+
+    public function writeOrdersToExcel($orders, $objPHPExcel, $msg)
+    {
+        $objPHPExcel->getActiveSheet()
+            ->setCellValue('A1', $msg)
+            ->setCellValue('B1', PHPExcel_Shared_Date::PHPToExcel( $this->_time, true ))
+            ->getStyle("A1:B1")->getFont()->setBold(true);
+
+        $objPHPExcel->getActiveSheet()->getColumnDimension('A')->setWidth(20);
+        $objPHPExcel->getActiveSheet()->getColumnDimension('B')->setWidth(20);
+        $objPHPExcel->getActiveSheet()->getColumnDimension('C')->setWidth(20);
+        $objPHPExcel->getActiveSheet()->getColumnDimension('D')->setWidth(20);
+        $objPHPExcel->getActiveSheet()->getColumnDimension('E')->setWidth(20);
+        $objPHPExcel->getActiveSheet()->getStyle('B:B')
+            ->getNumberFormat()
+            ->setFormatCode(PHPExcel_Style_NumberFormat::FORMAT_TEXT);
+
+
+        $objPHPExcel->getActiveSheet()->getStyle('B1')->getNumberFormat()
+            ->setFormatCode(PHPExcel_Style_NumberFormat::FORMAT_DATE_DATETIME);
+
+
+        $row = 2;
+        foreach ($orders as $order) {
+            $row++;
+            $objPHPExcel->getActiveSheet()
+                ->setCellValue("A$row", "Заказ №{$order->id}")
+                ->setCellValue("B$row", "пользователь {$order->user->email}s")
+                ->setCellValue("C$row", "оплата №{$order->payment_id}")
+                ->getStyle("A$row:C$row")->getFont()->setBold(true);
+            $row++;
+            $objPHPExcel->getActiveSheet()
+                ->setCellValue("A$row", "Товар")
+                ->setCellValue("B$row", "артикул")
+                ->setCellValue("C$row", "количество")
+                ->setCellValue("D$row", "цена за ед.")
+                ->setCellValue("E$row", "поставщик")
+                ->getStyle("A$row:E$row")->getFont()->setBold(true);
+            $row++;
+            foreach($order->getOrderProducts() as $op) {
+                $objPHPExcel->getActiveSheet()
+                    ->setCellValue("A$row", $op->product_name)
+                    ->setCellValue("B$row", $op->product_vendor)
+                    ->setCellValue("C$row", $op->confirmed_count)
+                    ->setCellValue("D$row", Html::unstyled_price($op->old_price))
+                    ->setCellValue("E$row", PropertyValue::cachedFindOne($op->provider)->value)
+                ;
+                $row++;
+            }
+        }
+    }
+
+    public function excelLog()
+    {
+        $objPHPExcel = new PHPExcel();
+
+        $objPHPExcel->setActiveSheetIndex(0);
+        $this->writeOrdersToExcel(
+            Order::find()->where(['order.status' => Order::STATUS_PAID])->joinWith('user')->all(),
+            $objPHPExcel,
+            'Заказы отправленные поставщику от'
+        );
+
+        $objPHPExcel->createSheet();
+        $objPHPExcel->setActiveSheetIndex(1);
+        $this->writeOrdersToExcel(
+            Order::find()->where(['order.status' => [Order::STATUS_ORDERED, Order::STATUS_DELIVERED]])->joinWith('user')->all(),
+            $objPHPExcel,
+            'Заказы не выданные к'
+        );
+
+        $objWriter = PHPExcel_IOFactory::createWriter($objPHPExcel, 'Excel2007');
+        $objWriter->save($this->_dir_name . "/report.xlsx");
     }
 
     public function addOrders($orders, $excel, $is_preorder)
@@ -146,7 +221,7 @@ class ProviderController extends Controller
     public function actionPreOrders() {
         foreach($this->selectPreorders() as $pr => $orders) {
             $this->_provider_order = new ProviderOrder([
-                'pre_order_at' => time(),
+                'pre_order_at' => $this->_time,
                 'provider' => $pr
             ]);
             if(!$this->_provider_order->save()) {
@@ -172,7 +247,7 @@ class ProviderController extends Controller
             if(!$this->_provider_order) {
                 throw new Exception("ERROR: Can't find pre-order with id $provider_order_id \n");
             }
-            $this->_provider_order->order_at = time();
+            $this->_provider_order->order_at = $this->_time;
             if(!$this->_provider_order->save()) {
                 throw new Exception("ERROR: while saving provider_order in DB: " .
                     implode(', ', $this->_provider_order->getFirstErrors()) . "\n");
@@ -213,11 +288,12 @@ class ProviderController extends Controller
         ]);
     }
 
-    public function setNotTakenStatus() {
+    public function setNotTakenStatus()
+    {
         foreach(Order::find()->where(
             ['and',
                 'status=' . Order::STATUS_DELIVERED,
-                'updated_at<=' . (time() - Yii::$app->params['order.deliveredExpire'])
+                'updated_at<=' . ($this->_time - Yii::$app->params['order.deliveredExpire'])
             ])->all() as $order) {
             $msg = new Message([
                 'user_id' => $order->user_id,
@@ -229,19 +305,22 @@ class ProviderController extends Controller
 
         Order::updateAll(['status' => Order::STATUS_NOT_TAKEN],['and',
             'status=' . Order::STATUS_DELIVERED,
-            'updated_at<=' . (time() - Yii::$app->params['order.deliveredExpire'])
+            'updated_at<=' . ($this->_time - Yii::$app->params['order.deliveredExpire'])
         ]);
     }
 
     public function actionIndex()
     {
+        $this->_time = time();
         $this->_dir_name = \Yii::getAlias('@app') . '/temp/provider-order/' . date('Y-m-d');
         is_dir($this->_dir_name) or mkdir($this->_dir_name, 0755, true);
-        $this->setUnpaidStatus();
-        $this->setNotTakenStatus();
-        $this->actionPreOrders();
-        $this->actionOrders();
-        Helper::archiveDir($this->_dir_name);
-        Helper::deleteDir($this->_dir_name);
+
+        $this->excelLog();
+//        $this->setUnpaidStatus();
+//        $this->setNotTakenStatus();
+//        $this->actionPreOrders();
+//        $this->actionOrders();
+//        Helper::archiveDir($this->_dir_name);
+//        Helper::deleteDir($this->_dir_name);
     }
 }
