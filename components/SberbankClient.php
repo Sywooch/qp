@@ -16,9 +16,14 @@ use Yii;
 
 class SberbankClient
 {
-    private $login = 'kupi-api';
-    private $password = 'kupi';
-    private $url = "https://3dsec.sberbank.ru/payment/webservices/merchant-ws?wsdl";
+    private $login, $password, $url;
+
+    function __construct() {
+        $param = Yii::$app->params['sberbank'];
+        $this->login = $param['login'];
+        $this->password = $param['password'];
+        $this->url = $param['url'];
+    }
 
     private function getSoapHeaderWSSecurity()
     {

@@ -46,6 +46,5 @@ class ConfigForm extends Model
             [$attr, 'default', 'value' => ''],
         ];
     }
-
 }
 ?>

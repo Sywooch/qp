@@ -9,4 +9,4 @@ return $arr + [
     'phone.it' => '8 (423) 275-66-99',
     'order.deliveredExpire' => 14 * 24 * 3600,
     'public_host' => 'https://qpvl.ru/',
-];
+] + require(__DIR__ . '/private_params.php');

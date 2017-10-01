@@ -45,7 +45,8 @@ $this->params['breadcrumbs'][] = $this->title;
                 'attribute' => 'id',
                 'label' => 'Номер заказа',
                 'value' => function ($order) {
-                    return Html::a("Заказ № ". Html::encode($order->id), Url::to(['user/view', 'id' => $order->user->id])) . " от " .
+                    return Html::a(Html::encode("Заказ №" . $order->id),
+                        Url::to(['order/update', 'id' => $order->id])) . " от " .
                         Html::a(Html::encode($order->user->email),
                         Url::to(['user/view', 'id' => $order->user->id]));
                 },
