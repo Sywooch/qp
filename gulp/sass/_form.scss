@@ -17,14 +17,15 @@
   }
 
   &-success {
-    background-color: $cgreen;
-    border: 1px solid rgb(53, 186, 82);
+    background-color: $color-navbar;
+    border: 1px solid $color-navbar-dark ;
     border-radius: 4px;
     color: $colorwhite;
     transition: background-color 200ms linear;
-    &:focus,&:hover {
+    &:focus, &:hover {
       background-color: #fff;
-      color: rgb(45, 142, 71);
+      color: $color-navbar-dark;
+      border-color: $color-navbar-dark;
     }
   }
 
@@ -212,14 +213,14 @@ $check-icon: $fa-var-check !default;
 @include checkbox-variant('.checkbox-danger', $brand-danger);
 @include checkbox-variant('.checkbox-info', $brand-info);
 @include checkbox-variant('.checkbox-warning', $brand-warning);
-@include checkbox-variant('.checkbox-success', $brand-success);
+@include checkbox-variant('.checkbox-success', $color-brand);
 
 
 @include checkbox-variant-indeterminate('.checkbox-primary', $brand-primary);
 @include checkbox-variant-indeterminate('.checkbox-danger', $brand-danger);
 @include checkbox-variant-indeterminate('.checkbox-info', $brand-info);
 @include checkbox-variant-indeterminate('.checkbox-warning', $brand-warning);
-@include checkbox-variant-indeterminate('.checkbox-success', $brand-success);
+@include checkbox-variant-indeterminate('.checkbox-success', $color-brand);
 
 //
 // Radios

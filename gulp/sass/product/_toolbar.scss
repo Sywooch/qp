@@ -34,3 +34,23 @@
     margin-top: 10px;
   }
 }
+/*
+ * Toolbar mobile
+ */
+@media (max-width: $screen-xs-max) {
+  .toolbar {
+    padding-top: 20px;
+    .form-group {
+      display: flex;
+      flex-direction: row;
+      align-items: center;
+      margin-bottom: 10px;
+      label {
+        min-width: 30%;
+      }
+      .form-control {
+        width: 100%;
+      }
+    }
+  }
+}

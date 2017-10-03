@@ -319,7 +319,6 @@
                         appliedFilters.push(applies);
                     }
                 });
-                console.log(appliedFilters);
             } else {
                 Price().init();
             }
@@ -337,15 +336,13 @@
         getFilteredData: function () {
             var url = '/catalog/view/'+catalogID+'?' + data.getUrl();
 
-            $loader.css('opacity', 1);
+            $content.addClass('loading');
             var self = this;
 
             this.getData(url, function (data) {
                 $content.html(data);
                 App.reinit();
-                setTimeout(function() {
-                    $loader.css('opacity', 0);
-                }, 150);
+                $content.removeClass('loading');
                 self.setOffset();
             });
 
