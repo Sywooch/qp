@@ -4,8 +4,8 @@ $color-brand: #00C57B;
 $color-dark-blue: #3e5763;
 $color-dark-blue-2: #324853;
 
-$color-navbar: $color-dark-blue;
-$color-navbar-dark: $color-dark-blue-2;
+$color-navbar: $color-brand;
+$color-navbar-dark: darken($color-navbar, 5%);
 
 $color-bg: white;
 $black-1: #000;
