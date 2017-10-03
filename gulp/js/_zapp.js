@@ -47,6 +47,13 @@ var App = (function(){
 
             $('.button-collapse').sideNav({'edge': 'left'});
 
+            $('*[data-route]').on("click", function () {
+                var route = $(this).data('route');
+                window.location = route;
+            });
+
+            $('[data-toggle="tooltip"]').tooltip();
+
             this.reinit();
         },
 

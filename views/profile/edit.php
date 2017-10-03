@@ -18,16 +18,18 @@ $items = [
 ];
 ?>
 
-    <h1><?= Html::encode($this->title) ?></h1>
-<div class="row">
-    <div class="col-md-8">
-        <div class="profile-edit">
-            <?php
-            foreach ($items as $item) {
-                echo $this->render('_itemEdit', ['item' => $item]);
-            }
-            ?>
-        </div>
+<h1><?= Html::encode($this->title) ?></h1>
+<div class="page-static">
+    <div class="row">
+        <div class="col-md-8">
+            <div class="profile-edit">
+                <?php
+                foreach ($items as $item) {
+                    echo $this->render('_itemEdit', ['item' => $item]);
+                }
+                ?>
+            </div>
 
+        </div>
     </div>
 </div>

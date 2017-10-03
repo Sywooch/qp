@@ -5,11 +5,9 @@
       visibility: visible;
     }
   }
-  &.catalog-active {
-    background-color: $color-navbar-dark !important;
-  }
+
   &.active > a, &.catalog-active > a {
-    background-color: #324853 !important;
+    background-color: $color-navbar-dark !important;
     color: $white-1 !important;
     &:before {
       transform: rotate(-45deg);
@@ -18,6 +16,9 @@
     &:after {
       transform: rotate(45deg);
       top: 20px;
+    }
+    &:hover {
+      background-color: darken($color-navbar-dark, 5%);
     }
   }
   & > a {
@@ -53,7 +54,7 @@
     padding: 0;
     position: absolute;
     height: auto;
-    width: 250px;
+    width: 260px;
     background-color: white;
     z-index: 5;
     top: 57px;
