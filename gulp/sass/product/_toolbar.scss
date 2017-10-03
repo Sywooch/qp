@@ -1,3 +1,25 @@
+.toolbar {
+
+  .form-group {
+    margin: 0;
+    padding-right: 20px;
+  }
+  .form-control {
+    display: inline-block;
+    width: auto;
+    vertical-align: middle;
+    border: none;
+    border-bottom: 1px solid $color-dark-blue;
+    padding: 0;
+    height: 30px;
+    background-color: transparent;
+    cursor: pointer;
+    &:focus {
+      outline: none;
+      box-shadow: none;
+    }
+  }
+}
 @media #{$extra-large-and-up} {
   .sorter {
     position: absolute;

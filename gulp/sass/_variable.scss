@@ -1,7 +1,12 @@
 //== Colors
 $color-brand: #00C57B;
-$color-navbar: #3e5763;
-$color-navbar-dark: #324853;
+
+$color-dark-blue: #3e5763;
+$color-dark-blue-2: #324853;
+
+$color-navbar: $color-dark-blue;
+$color-navbar-dark: $color-dark-blue-2;
+
 $color-bg: white;
 $black-1: #000;
 $black-2: #151516;

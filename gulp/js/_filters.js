@@ -12,7 +12,8 @@
         $filterApply = $('.' + filterApply),
         $showMore = $('.js-show-more'),
         catalogID = $('.products-view').data("catalogId"),
-        $preloader = $('.preloader');
+        $preloader = $('.preloader'),
+        $limit = $('#limit');
 
     //Параметры для ajax запроса. Очищаются после каждого запроса
     var ajaxParams = '',
@@ -23,6 +24,18 @@
 
     var Data = function () {
         this.m = []; // filter for products [{id: 1, values: [1,2,3...n]}, ...]
+
+        this.limit = {
+            value: 0,
+            active: false,
+            getUrl: function (urlLength) {
+                var url = this.active ? "limit=" + this.value : "";
+                if (urlLength > 0 && url.length > 0) {
+                    return '&' + url;
+                }
+                return url;
+            }
+        };
 
         this.price = {
             key: 'p',
@@ -138,12 +151,16 @@
         this.setOrder = function (order) {
             this.order.value = order;
         };
-
+        /**
+         * Порядок имеет значение
+         * @returns {string}
+         */
         this.getUrl = function () {
             var url = "";
             url += this.price.getUrl();
             url += data.serialize();
             url += this.order.getUrl();
+            url += this.limit.getUrl(url.length);
             return url ? "f=" + url : "";
         };
     };
@@ -250,13 +267,23 @@
             $sort.on('change', function () {
                 self.sort($(this).val());
             });
+            $limit.on('change', function () {
+                self.limit($(this).val());
+            });
         },
         /*
          * @param {number} value
          */
         sort: function (value) {
-            App.log("Select order: " + value);
             data.setOrder(value);
+            this.getFilteredData();
+        },
+        /*
+         * @param {number} value
+         */
+        limit: function (value) {
+            data.limit.active = true;
+            data.limit.value = value;
             this.getFilteredData();
         },
 
