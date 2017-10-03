@@ -86,3 +86,33 @@
   font-size: 2.5rem;
   font-weight: bold;
 }
+
+/*
+ * Cart mobile
+ */
+@media (max-width: $screen-xs-max) {
+  .cart {
+    margin-top: 0.3em;
+    padding-bottom: 17px;
+    padding-top: 1px;
+    font-size: 12px;
+    .price {
+      font-size: 2rem;
+    }
+    h1 {
+      font-size: 25px;
+    }
+    p {
+      padding-left: 10px;
+    }
+    td, tr {
+      max-width: 20px;
+    }
+    .product-counter {
+      width: 60px;
+    }
+    .remove i {
+      margin-top: 50px;
+    }
+  }
+}
