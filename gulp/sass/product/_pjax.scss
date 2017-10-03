@@ -41,7 +41,7 @@
 @media (max-width: $screen-xs-max) {
   .pjax-result.loading {
     &::before {
-      left: 46%;
+      left: calc(50% - 30px);
     }
   }
 }
