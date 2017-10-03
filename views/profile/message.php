@@ -1,6 +1,7 @@
 <?php
 /* @var $ordersDataProvider yii\data\ActiveDataProvider */
 
+use app\components\TimeAgoWidget\TimeAgoWidget;
 use yii\grid\GridView;
 use yii\helpers\Html;
 
@@ -14,7 +15,19 @@ $this->params['breadcrumbs'][] = $this->title;
     <?= GridView::widget([
         'dataProvider' => $ordersDataProvider,
         'columns' => [
-            'created_at:datetime',
+            [
+                'attribute' => 'created_at',
+                'label' => 'Создан',
+                'value' => function ($model) {
+                    return TimeAgoWidget::widget([
+                        'datetime' => $model->created_at
+                    ]);
+                },
+                'format' => 'raw',
+                "contentOptions" => [
+                    'style' => 'min-width: 140px'
+                ],
+            ],
             [
                 'format' => 'raw',
                 'value' => function($model) { return Html::decode($model->text); },

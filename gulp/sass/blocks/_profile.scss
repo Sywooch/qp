@@ -1,11 +1,17 @@
 .profile {
   &-nav {
+    h3 {
+      padding-left: 15px;
+    }
+    background-color: $color-bg;
+    border: 1px solid $gray-2;
     ul {
       list-style: none;
       li {
         & > a {
           padding: 8px 15px;
           color: $black-2;
+          border-radius: 0;
         }
       }
       li.active {
@@ -24,6 +30,24 @@
     }
     .item:last-child {
       border-bottom: 1px solid #ccc;
+    }
+  }
+
+  .product__table {
+    tr:hover {
+      a {
+        text-decoration: underline;
+      }
+      td {
+        background-color: $gray-3;
+        cursor: pointer;
+      }
+
+    }
+    .cell-price {
+      & > span {
+        font-size: 2rem;
+      }
     }
   }
 }

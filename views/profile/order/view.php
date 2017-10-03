@@ -9,9 +9,10 @@ $this->params['breadcrumbs'][] = [
 ];
 $this->params['breadcrumbs'][] = $this->title;
 ?>
-
+<div class="page-static">
 <?=$this->render('/order/_view', [
     'products' => $products,
     'order' => $order,
     'is_owner' => $is_owner,
 ]); ?>
+</div>

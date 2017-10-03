@@ -2,7 +2,10 @@
 /* @var $ordersDataProvider yii\data\ActiveDataProvider */
 
 use app\components\Html;
-use yii\grid\GridView;
+use app\components\TimeAgoWidget\TimeAgoWidget;
+use app\models\Order;
+use kartik\grid\GridView;
+use yii\helpers\Url;
 
 $this->params['profileLayout'] = true;
 $this->title = 'История покупок';
@@ -13,6 +16,15 @@ $this->params['breadcrumbs'][] = $this->title;
 <div class="product__table">
     <?= GridView::widget([
         'dataProvider' => $ordersDataProvider,
+        'export' => false,
+        'responsive' => true,
+        'hover' => true,
+        "rowOptions" => function (Order $order) {
+            return [
+                "class" => "order-item",
+                "data-route" => Url::to(['/profile/order/view', 'id' => $order->id])
+            ];
+        },
         'columns' => [
             [
                 'attribute' => 'id',
@@ -23,7 +35,19 @@ $this->params['breadcrumbs'][] = $this->title;
                 },
                 'enableSorting'=>TRUE,
             ],
-            'created_at:datetime',
+            [
+                'attribute' => 'created_at',
+                'label' => 'Создан',
+                'value' => function ($order) {
+                    return TimeAgoWidget::widget([
+                        'datetime' => $order->created_at
+                    ]);
+                },
+                'format' => 'raw',
+                "contentOptions" => [
+                    'style' => 'min-width: 140px'
+                ],
+            ],
             'totalPriceHtml',
             'confirmedPriceHtml',
             [
