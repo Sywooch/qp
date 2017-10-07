@@ -16,9 +16,9 @@ $order = \app\models\Good\Good::$ORDERING_TO_STRING;
         <div>
 	        <label>Показывать по</label>
 	        <select name="limit" id="limit" class="form-control">
-	            <option value="<?=48?>">24</option>
-	            <option value="<?=96?>">48</option>
-	            <option value="<?=192?>">96</option>
+	            <option value="<?=48?>">48</option>
+	            <option value="<?=96?>">96</option>
+	            <option value="<?=192?>">192</option>
 	        </select>
         </div>
     </form>

@@ -367,7 +367,7 @@ var Cart = (function($){
         };
 
         this.limit = {
-            value: 0,
+            value: 48,
         };
 
 

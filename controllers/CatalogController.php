@@ -160,6 +160,7 @@ class CatalogController extends \yii\web\Controller
 
         $offset = isset($get['offset']) ? $get['offset'] : 0;
         $limit = isset($get['limit']) ? $get['limit'] : 48;
+        $limit = $limit ? $limit : 48;
         
 
         if (isset($get['ajax'])) {

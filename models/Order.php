@@ -216,7 +216,7 @@ class Order extends CachedActiveRecord
         if ($this->save()) {
             $response = $client->registerOrder(
                 $this->id . '_' . ($this->attempt_count - 1),
-                "Order in qpvl.ru",
+                "Order on qpvl.ru",
                 $this->getConfirmedPrice()
             );
 
