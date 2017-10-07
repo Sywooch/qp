@@ -330,12 +330,12 @@ var Cart = (function($){
         $content = $('.pjax-result'),
         $loader = $('.filter-loader'),
         $sort = $('#sort'),
-        $limit = $('#limit'),
         filterApply = 'filter-apply-btn',
         $filterApply = $('.' + filterApply),
         $showMore = $('.js-show-more'),
         catalogID = $('.products-view').data("catalogId"),
-        $preloader = $('.preloader');
+        $preloader = $('.preloader'),
+        $limit = $('#limit');
 
     //Параметры для ajax запроса. Очищаются после каждого запроса
     var ajaxParams = '',
@@ -346,6 +346,18 @@ var Cart = (function($){
 
     var Data = function () {
         this.m = []; // filter for products [{id: 1, values: [1,2,3...n]}, ...]
+
+        this.limit = {
+            value: 0,
+            active: false,
+            getUrl: function (urlLength) {
+                var url = this.active ? "limit=" + this.value : "";
+                if (urlLength > 0 && url.length > 0) {
+                    return '&' + url;
+                }
+                return url;
+            }
+        };
 
         this.price = {
             key: 'p',
@@ -466,12 +478,16 @@ var Cart = (function($){
         this.setOrder = function (order) {
             this.order.value = order;
         };
-
+        /**
+         * Порядок имеет значение
+         * @returns {string}
+         */
         this.getUrl = function () {
             var url = "";
             url += this.price.getUrl();
             url += data.serialize();
             url += this.order.getUrl();
+            url += this.limit.getUrl(url.length);
             return url ? "f=" + url : "";
         };
     };
@@ -586,7 +602,6 @@ var Cart = (function($){
          * @param {number} value
          */
         sort: function (value) {
-            App.log("Select order: " + value);
             data.setOrder(value);
             this.getFilteredData();
         },
@@ -594,7 +609,7 @@ var Cart = (function($){
          * @param {number} value
          */
         limit: function (value) {
-            App.log("Select order: " + value);
+            data.limit.active = true;
             data.limit.value = value;
             this.getFilteredData();
         },
@@ -631,7 +646,6 @@ var Cart = (function($){
                         appliedFilters.push(applies);
                     }
                 });
-                console.log(appliedFilters);
             } else {
                 Price().init();
             }
@@ -647,17 +661,15 @@ var Cart = (function($){
         },
 
         getFilteredData: function () {
-            var url = '/catalog/view/'+catalogID+'?' + data.getUrl() + '&limit=' + data.limit.value;
+            var url = '/catalog/view/'+catalogID+'?' + data.getUrl();
 
-            $loader.css('opacity', 1);
+            $content.addClass('loading');
             var self = this;
 
             this.getData(url, function (data) {
                 $content.html(data);
                 App.reinit();
-                setTimeout(function() {
-                    $loader.css('opacity', 0);
-                }, 150);
+                $content.removeClass('loading');
                 self.setOffset();
             });
 
@@ -691,7 +703,7 @@ var Cart = (function($){
         },
 
         showMore: function () {
-            var url = '/catalog/view/'+catalogID+'?' + data.getUrl() + '&offset=' + offset + '&limit=' + data.limit.value;
+            var url = '/catalog/view/'+catalogID+'?' + data.getUrl() + '&offset=' + offset;
             var self = this;
             $showMore.hide();
             $preloader.show();
@@ -2514,6 +2526,13 @@ var App = (function(){
             stage['product'] = Product;
 
             $('.button-collapse').sideNav({'edge': 'left'});
+
+            $('*[data-route]').on("click", function () {
+                var route = $(this).data('route');
+                window.location = route;
+            });
+
+            $('[data-toggle="tooltip"]').tooltip();
 
             this.reinit();
         },

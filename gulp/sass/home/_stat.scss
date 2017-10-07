@@ -8,18 +8,19 @@
       transition: all 0.3s cubic-bezier(.25,.8,.25,1);
       padding: 10px;
       margin-bottom: 15px;
-      height: 100px;
+      height: 110px;
 
       &__icon {
         float: left;
         padding-right: 16px;
         width: 100px;
-        height: 100px;
+        height: 110px;
         img {
           width: 100%;
         }
       }
       &__content {
+
         &-number {
           font-size: 26px;
           font-weight: bold;

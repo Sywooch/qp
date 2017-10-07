@@ -83,15 +83,16 @@ $this->params['breadcrumbs'][] = $this->title;
             ?>
         </div>
         <div class="good-index">
-            <?=AppliedFiltersWidget::widget()?>
             <div class="row">
-                <div class="col-xs-7 col-sm-12 col-lg-9 hidden-xs products-title">
+                <div class="col-xs-12 hidden-xs products-title">
                     <h1><?= Html::encode($this->title) ?></h1>
                     <span class="products-count text-nowrap text-ellipsis">
                         <?= $productCount. " " .Html::ending($productCount, ['товар', 'товара', 'товаров'])?>
                     </span>
                 </div>
-                <div class="col-xs-12 col-sm-12 col-lg-3 toolbar">
+            </div>
+            <div class="row toolbar">
+                <div class="col-xs-12">
                     <?=$this->render("_ordering") ?>
                 </div>
             </div>

@@ -1,4 +1,9 @@
+#mate-box {
+  max-height: 200px;
+  overflow-y: auto;
+}
 .mate {
+  border: 1px solid $gray-1;
   .btn {
     border-color: $green-1;
     font-size: 12px;
@@ -19,6 +24,9 @@
       & > a {
         padding: 5px 15px;
         color: $black-2;
+        &:hover {
+          background-color: $gray-2;
+        }
       }
     }
     li.active {

@@ -1,3 +1,25 @@
+.toolbar {
+
+  .form-group {
+    margin: 0;
+    padding-right: 20px;
+  }
+  .form-control {
+    display: inline-block;
+    width: auto;
+    vertical-align: middle;
+    border: none;
+    border-bottom: 1px dashed $color-dark-blue;
+    padding: 0;
+    height: 30px;
+    background-color: transparent;
+    cursor: pointer;
+    &:focus {
+      outline: none;
+      box-shadow: none;
+    }
+  }
+}
 @media #{$extra-large-and-up} {
   .sorter {
     position: absolute;
@@ -10,5 +32,25 @@
     position: relative;
     right: 0;
     margin-top: 10px;
+  }
+}
+/*
+ * Toolbar mobile
+ */
+@media (max-width: $screen-xs-max) {
+  .toolbar {
+    padding-top: 20px;
+    .form-group {
+      display: flex;
+      flex-direction: row;
+      align-items: center;
+      margin-bottom: 10px;
+      label {
+        min-width: 40%;
+      }
+      .form-control {
+        width: 100%;
+      }
+    }
   }
 }

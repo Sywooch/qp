@@ -1,7 +1,12 @@
 //== Colors
 $color-brand: #00C57B;
-$color-navbar: #3e5763;
-$color-navbar-dark: #324853;
+
+$color-dark-blue: #3e5763;
+$color-dark-blue-2: #324853;
+
+$color-navbar: $color-brand;
+$color-navbar-dark: darken($color-navbar, 5%);
+
 $color-bg: white;
 $black-1: #000;
 $black-2: #151516;
@@ -15,7 +20,7 @@ $gray-3: #f9f9f9;
 $white-1: #fff;
 
 $green-1: #58C56F;
-$green-2: #00C851;
+$green-2: $color-brand;
 $green-3: #00d255;
 $green-4: #3c6;
 

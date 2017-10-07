@@ -109,10 +109,7 @@ $line-height-header: 60px;
         padding: 8px 10px;
       }
       &.active > a, & > a:hover, & > a:focus {
-        //background-color: $cgreen;
-        //color: #fff;
-        background-color: #dddddf;
-        color: #434345;
+        background-color: $color-navbar-dark;
       }
     }
   }
