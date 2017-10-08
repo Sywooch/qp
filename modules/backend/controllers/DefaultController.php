@@ -79,9 +79,10 @@ class DefaultController extends Controller
         ProviderOrder::flushCache();
         $arches = ProviderOrder::cachedFindAll();
 
-        $arches =
-            array_map(function($x) {return $x->order_archive;}, $arches) +
-            array_map(function($x) {return $x->pre_order_archive;}, $arches);
+        $arches = array_merge(
+            array_map(function($x) {return $x->order_archive;}, $arches),
+            array_map(function($x) {return $x->pre_order_archive;}, $arches)
+        );
         $arches = array_filter(array_unique($arches, SORT_LOCALE_STRING), function($x) {return !is_null($x);});
         rsort($arches);
         return $this->render('imports', [
