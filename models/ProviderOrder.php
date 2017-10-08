@@ -29,7 +29,7 @@ class ProviderOrder extends CachedActiveRecord
     {
         return [
             [['pre_order_at', 'order_at'], 'integer'],
-            [['provider'], 'string', 'max' => 255],
+            [['provider', 'order_archive', 'pre_order_archive'], 'string', 'max' => 255],
         ];
     }
 }
