@@ -81,7 +81,7 @@ class Order extends CachedActiveRecord
             [['user_id'], 'required'],
             [['payment_id'], 'unique'],
             [['user_id', 'status', 'attempt_count'], 'integer'],
-            [['password', 'payment_id'], 'string', 'max' => 255],
+            [['password', 'payment_id', 'order_archive', 'pre_order_archive'], 'string', 'max' => 255],
             [['user_id'], 'exist',
                 'skipOnError' => true, 'targetClass' => User::className(),
                 'targetAttribute' => ['user_id' => 'id']],

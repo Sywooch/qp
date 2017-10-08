@@ -5,6 +5,7 @@ namespace app\modules\backend\controllers;
 use app\models\Good\Good;
 use app\models\Order;
 use app\models\OrderProduct;
+use app\models\ProviderOrder;
 use app\models\User;
 use app\modules\backend\models\UploadProvider;
 use app\modules\backend\models\UploadZipModel;
@@ -34,7 +35,6 @@ class DefaultController extends Controller
                 'class' => VerbFilter::className(),
                 'actions' => [
                     'upload-provider' => ['POST'],
-                    'download-provider' => ['POST'],
                 ],
             ],
         ];
@@ -76,25 +76,39 @@ class DefaultController extends Controller
                 yii::$app->session->addFlash('success', 'Архив принят на обработку');
             }
         }
+        ProviderOrder::flushCache();
+        $arches = ProviderOrder::cachedFindAll();
+
+        $arches =
+            array_map(function($x) {return $x->order_archive;}, $arches) +
+            array_map(function($x) {return $x->pre_order_archive;}, $arches);
+        $arches = array_filter(array_unique($arches, SORT_LOCALE_STRING), function($x) {return !is_null($x);});
+        rsort($arches);
         return $this->render('imports', [
             'model' => $model,
-            'provider' => $provider
+            'provider' => $provider,
+            'arches' => $arches,
         ]);
     }
 
     public function actionDownloadProvider()
     {
-        $date = Yii::$app->request->post('date');
-        if (!$date) {
-            $date = date('Y-m-d');
+        $arch = Yii::$app->request->get('arch');
+        if (!$arch) {
+            $date = Yii::$app->request->post('date');
+            if (!$date) {
+                $date = date('Y-m-d');
+            }
+            $arch = "$date.zip";
         }
-        $arch = "../temp/provider-order/$date.zip";
-        if (file_exists($arch)) {
+        $full_name = "../temp/provider-order/" . $arch;
+
+        if (file_exists($full_name)) {
             set_time_limit(5*60);
-            Yii::$app->response->sendFile($arch);
+            Yii::$app->response->sendFile($full_name);
         }
         else {
-            Yii::$app->session->setFlash('error', "Архив за $date не найден");
+            Yii::$app->session->setFlash('error', "Архив $arch не найден");
             $this->redirect('/backend/default/imports');
         }
     }

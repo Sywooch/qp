@@ -79,6 +79,5 @@ class Message extends CachedActiveRecord
             ->setSubject('Сообщение с сайта qpvl.ru')
             ->setHtmlBody($this->text)
             ->send();
-
     }
 }

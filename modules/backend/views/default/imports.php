@@ -8,6 +8,7 @@ $this->params['breadcrumbs'][] = $this->title;
 /* @var $this yii\web\View */
 /* @var $model app\modules\backend\models\UploadZipModel */
 /* @var $provider app\modules\backend\models\UploadProvider */
+/* @var $arches array */
 ?>
 
 <div class="box box-primary">
@@ -30,6 +31,13 @@ $this->params['breadcrumbs'][] = $this->title;
     </div>
     <div class="box-body">
         <p>Выгрузить зявки поставщикам.</p>
+
+        <?=
+            implode(", ", array_map(function($x) {
+                return Html::a($x, ["download-provider", 'arch' => $x]);
+            }, $arches))
+        ?>
+
         <div class="input-group col-sm-4">
             <div class="form-group">
                 <?=

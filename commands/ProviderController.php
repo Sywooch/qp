@@ -23,6 +23,7 @@ class ProviderController extends Controller
     private $_dir_name;
     private $_provider_order;
     private $_time;
+    private $_formatted_time;
 
     public function initExcel($is_preorder, $pr) {
         $objPHPExcel = new PHPExcel();
@@ -98,7 +99,7 @@ class ProviderController extends Controller
             $row++;
             $objPHPExcel->getActiveSheet()
                 ->setCellValue("A$row", "Заказ №{$order->id}")
-                ->setCellValue("B$row", "пользователь {$order->user->email}s")
+                ->setCellValue("B$row", "пользователь {$order->user->email}")
                 ->setCellValue("C$row", "оплата №{$order->payment_id}")
                 ->getStyle("A$row:C$row")->getFont()->setBold(true);
             $row++;
@@ -127,7 +128,7 @@ class ProviderController extends Controller
     {
         $objPHPExcel = new PHPExcel();
 
-        $objPHPExcel->setActiveSheetIndex(0);
+        $objPHPExcel->setActiveSheetIndex(0)->setTitle("Отправленные заказы");
         $this->writeOrdersToExcel(
             Order::find()->where(['order.status' => Order::STATUS_PAID])->joinWith('user')->all(),
             $objPHPExcel,
@@ -135,15 +136,22 @@ class ProviderController extends Controller
         );
 
         $objPHPExcel->createSheet();
-        $objPHPExcel->setActiveSheetIndex(1);
+        $objPHPExcel->setActiveSheetIndex(1)->setTitle("Не выданные заказы");
         $this->writeOrdersToExcel(
             Order::find()->where(['order.status' => [Order::STATUS_ORDERED, Order::STATUS_DELIVERED]])->joinWith('user')->all(),
             $objPHPExcel,
             'Заказы не выданные к'
         );
-
         $objWriter = PHPExcel_IOFactory::createWriter($objPHPExcel, 'Excel2007');
         $objWriter->save($this->_dir_name . "/report.xlsx");
+
+        Yii::$app->mailer->compose()
+            ->setFrom([Yii::$app->params['supportEmail'] => Yii::$app->name.' (отправлено роботом).'])
+            ->setTo(Yii::$app->params['admin_email'])
+            ->setSubject('Отчёт о заказах от  ' . $this->_formatted_time)
+            ->setHtmlBody("Отчёт во вложении. На 1-ой странице не выданные заказы, на 2-ой заказанные.")
+            ->attach($this->_dir_name . "/report.xlsx")
+            ->send();
     }
 
     public function addOrders($orders, $excel, $is_preorder)
@@ -199,7 +207,8 @@ class ProviderController extends Controller
         return $providers;
     }
 
-    public function selectOrders() {
+    public function selectOrders()
+    {
         $order_products = OrderProduct::find()->joinWith('order')
             ->select(["provider_order_id, provider, product_vendor, product_name, old_price, SUM(confirmed_count) AS count_by_c1id"])
             ->where(['order.status' => Order::STATUS_PAID])
@@ -218,11 +227,13 @@ class ProviderController extends Controller
         return $provider_orders;
     }
 
-    public function actionPreOrders() {
+    public function actionPreOrders()
+    {
         foreach($this->selectPreorders() as $pr => $orders) {
             $this->_provider_order = new ProviderOrder([
                 'pre_order_at' => $this->_time,
-                'provider' => $pr
+                'provider' => $pr,
+                'pre_order_archive' => $this->_formatted_time . '.zip',
             ]);
             if(!$this->_provider_order->save()) {
                 throw new Exception("ERROR: while saving provider_order in DB: " .
@@ -241,13 +252,16 @@ class ProviderController extends Controller
         Order::updateAll(['status' => Order::STATUS_PROVIDER_CHECKING], ['status' => Order::STATUS_NEW]);
     }
 
-    public function actionOrders() {
+    public function actionOrders()
+    {
         foreach($this->selectOrders() as $provider_order_id => $orders) {
             $this->_provider_order = ProviderOrder::cachedFindOne($provider_order_id);
             if(!$this->_provider_order) {
                 throw new Exception("ERROR: Can't find pre-order with id $provider_order_id \n");
             }
             $this->_provider_order->order_at = $this->_time;
+            $this->_provider_order->order_archive = $this->_formatted_time . '.zip';
+
             if(!$this->_provider_order->save()) {
                 throw new Exception("ERROR: while saving provider_order in DB: " .
                     implode(', ', $this->_provider_order->getFirstErrors()) . "\n");
@@ -267,7 +281,8 @@ class ProviderController extends Controller
     }
 
 
-    public function setUnpaidStatus() {
+    public function setUnpaidStatus()
+    {
         foreach(Order::find()->where(
         ['or',
             ['status' => Order::STATUS_CONFIRMED],
@@ -312,15 +327,17 @@ class ProviderController extends Controller
     public function actionIndex()
     {
         $this->_time = time();
-        $this->_dir_name = \Yii::getAlias('@app') . '/temp/provider-order/' . date('Y-m-d');
+        $this->_formatted_time = date('Y-m-d_H_i_s', $this->_time);
+        $this->_dir_name = \Yii::getAlias('@app') . '/temp/provider-order/' . $this->_formatted_time;
         is_dir($this->_dir_name) or mkdir($this->_dir_name, 0755, true);
 
         $this->excelLog();
-//        $this->setUnpaidStatus();
-//        $this->setNotTakenStatus();
-//        $this->actionPreOrders();
-//        $this->actionOrders();
-//        Helper::archiveDir($this->_dir_name);
-//        Helper::deleteDir($this->_dir_name);
+
+        $this->setUnpaidStatus();
+        $this->setNotTakenStatus();
+        $this->actionPreOrders();
+        $this->actionOrders();
+        Helper::archiveDir($this->_dir_name);
+        Helper::deleteDir($this->_dir_name);
     }
 }
