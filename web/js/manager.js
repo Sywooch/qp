@@ -92,8 +92,18 @@ $(document).ready(function () {
         getFile("/manager/get-order-content-json?id=" + id, "../docs/order.tmpl.docx", "descr_", true);
     });
 
-    $('*[data-route]').on("click", function () {
+    $('*[data-route]').on("click", function (event) {
         var route = $(this).data('route');
+        if (route === '!confirm') {
+            var confirmText = $(this).data('confirm-text');
+            if (typeof confirmText === 'undefined') {
+                return true;
+            }
+            if (!window.confirm(confirmText)) {
+                event.stopPropagation();
+                return false;
+            }
+        }
         window.location = route;
     });
 

@@ -348,7 +348,7 @@ var Cart = (function($){
         this.m = []; // filter for products [{id: 1, values: [1,2,3...n]}, ...]
 
         this.limit = {
-            value: 0,
+            value: 48,
             active: false,
             getUrl: function (urlLength) {
                 var url = this.active ? "limit=" + this.value : "";
@@ -377,11 +377,6 @@ var Cart = (function($){
                     "" : this.key + ":" + (this.value) + ";";
             }
         };
-
-        this.limit = {
-            value: 48,
-        };
-
 
         /**
          * Add object to this.m
