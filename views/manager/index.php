@@ -94,6 +94,7 @@ ManagerAsset::register($this);
                                             'data' => [
                                                 'confirm' => 'Вы уверены?',
                                                 'method' => 'post',
+		                                            'route' => '!confirm'
                                             ],
                                         ]
                                     );
