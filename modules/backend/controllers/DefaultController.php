@@ -20,6 +20,7 @@ use yii\web\Controller;
 use yii\web\UploadedFile;
 use app\models\Profile\LoginForm;
 use app\components\Html;
+use yii\data\ArrayDataProvider;
 
 require_once dirname(__FILE__) . '/../../../Classes/PHPExcel.php';
 
@@ -76,7 +77,6 @@ class DefaultController extends Controller
                 yii::$app->session->addFlash('success', 'Архив принят на обработку');
             }
         }
-        ProviderOrder::flushCache();
         $arches = ProviderOrder::cachedFindAll();
 
         $arches = array_merge(
@@ -88,20 +88,12 @@ class DefaultController extends Controller
         return $this->render('imports', [
             'model' => $model,
             'provider' => $provider,
-            'arches' => $arches,
+            'arch' => $arches[0],
         ]);
     }
 
-    public function actionDownloadProvider()
+    public function actionDownloadProvider($arch)
     {
-        $arch = Yii::$app->request->get('arch');
-        if (!$arch) {
-            $date = Yii::$app->request->post('date');
-            if (!$date) {
-                $date = date('Y-m-d');
-            }
-            $arch = "$date.zip";
-        }
         $full_name = "../temp/provider-order/" . $arch;
 
         if (file_exists($full_name)) {
@@ -110,7 +102,7 @@ class DefaultController extends Controller
         }
         else {
             Yii::$app->session->setFlash('error', "Архив $arch не найден");
-            $this->redirect('/backend/default/imports');
+            $this->redirect('/backend/default/provider-orders');
         }
     }
 
@@ -266,6 +258,18 @@ class DefaultController extends Controller
             $model->setAttributes($arr);
         }
         return $this->render('config',['model'=>$model]);
+    }
+
+    public function actionProviderOrders()
+    {
+        $arches = ProviderOrder::cachedFindAll();
+        $arches = array_merge(
+            array_map(function($x) {return $x->order_archive;}, $arches),
+            array_map(function($x) {return $x->pre_order_archive;}, $arches)
+        );
+        $arches = array_filter(array_unique($arches, SORT_LOCALE_STRING), function($x) {return !is_null($x);});
+        rsort($arches);
+        return $this->render('provider_orders',['dataProvider'=> (new ArrayDataProvider(['allModels' =>$arches]))]);
     }
 }
 ?>

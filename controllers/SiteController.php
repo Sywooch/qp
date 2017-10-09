@@ -9,7 +9,6 @@ use app\models\Order;
 use app\models\OrderProduct;
 use Yii;
 use yii\caching\TagDependency;
-use yii\data\ArrayDataProvider;
 use yii\filters\AccessControl;
 use yii\web\Controller;
 use yii\filters\VerbFilter;

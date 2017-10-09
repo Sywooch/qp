@@ -42,6 +42,9 @@
                     ['label' => 'Товары', 'icon' => ' lnr lnr-layers', 'url' => ['/backend/good']],
                     ['label' => 'Заказы', 'icon' => ' icon lnr lnr-cart', 'url' => ['/backend/order']],
                     ['label' => 'Отзывы', 'icon' => ' lnr lnr-bubble', 'url' => ['/backend/feedback']],
+                    ['label' => 'Архивы зак. пост.', 'icon' => ' lnr lnr-inbox',
+                        'url' => ['/backend/default/provider-orders']
+                    ],
                     ['label' => 'Login', 'url' => ['/default/login'], 'visible' => Yii::$app->user->isGuest],
                     [
                         'label' => 'Для разработчиков',
