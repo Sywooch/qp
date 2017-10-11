@@ -201,7 +201,7 @@ class ProviderController extends Controller
                 $providers[$key][] = $op;
             }
             else {
-                $providers[$key] =  [$op];
+                $providers[$key] = [$op];
             }
         }
         return $providers;
