@@ -28,12 +28,8 @@
         this.limit = {
             value: 48,
             active: false,
-            getUrl: function (urlLength) {
-                var url = this.active ? "limit=" + this.value : "";
-                if (urlLength > 0 && url.length > 0) {
-                    return '&' + url;
-                }
-                return url;
+            getUrl: function () {
+                return this.active ? "&limit=" + this.value : "";
             }
         };
 
