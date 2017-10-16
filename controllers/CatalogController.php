@@ -230,13 +230,19 @@ class CatalogController extends \yii\web\Controller
 
     public function actionSearchData() {
 
-        $selector = function($p) { return [ 'id' => $p->id, 'label' => $p->name ]; };
+        $prod = Good::getDb()->cache(function ($db)
+        {
+            return Good::find()->select('id , name as label')->where(['status' => Good::STATUS_OK])->asArray()->all();
+        }, null, new TagDependency(['tags'=>'cache_table_' . Good::tableName()]));
+        $category = Menu::getDb()->cache(function ($db)
+        {
+            return Menu::find()->select('id , name as label')->asArray()->all();
+        }, null, new TagDependency(['tags'=>'cache_table_' . Menu::tableName()]));
         if (Yii::$app->request->isAjax) {
-            $data = [
-                'products' => array_map($selector, Good::cachedFindAll(['status' => Good::STATUS_OK])),
-                'categories' => array_map($selector, Menu::cachedFindAll()),
-            ];
-            echo json_encode($data);
+            echo json_encode([
+                'products' => $prod,
+                'categories' => $category,
+            ]);
         }
     }
 
