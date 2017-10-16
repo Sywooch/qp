@@ -15,7 +15,8 @@ String.prototype.score=function(e,f){if(this===e)return 1;if(""===e)return 0;var
     var csrfToken = $('meta[name="csrf-token"]').attr("content");
 
     var dataProducts;
-    var dataCategories;
+    var dataCategories,
+        isLoadData = false;
 
     function lightwell(request, response) {
         function fuzzy_match(text, query) {
@@ -111,10 +112,12 @@ String.prototype.score=function(e,f){if(this===e)return 1;if(""===e)return 0;var
 
     var Search = {
         init: function() {
-
+            if (!$input.length) {
+                return;
+            }
             this.event();
-            this.getData();
-
+        },
+        initAutocomplete: function () {
             $input.autocomplete({
                 delay: 0,
                 source: lightwell,
@@ -157,9 +160,12 @@ String.prototype.score=function(e,f){if(this===e)return 1;if(""===e)return 0;var
                 var left = $input.parent().offset().left;
                 this.menu.element.css({left: left + 'px'});
             }
-
         },
         getData: function () {
+            if (isLoadData) {
+                return;
+            }
+            var self = this;
             $.ajax( {
                 url: "/catalog/search-data",
                 dataType: "json",
@@ -177,6 +183,8 @@ String.prototype.score=function(e,f){if(this===e)return 1;if(""===e)return 0;var
                     for(i = 0; i < dataCategories.length; i++) {
                         dataCategories[i].url = '/catalog/view/' + dataCategories[i].id;
                     }
+                    self.initAutocomplete();
+                    isLoadData = true;
                 },
                 error: function () {
                     App.log('Error #10');
@@ -215,6 +223,7 @@ String.prototype.score=function(e,f){if(this===e)return 1;if(""===e)return 0;var
             }, 200);
         },
         openSearch: function () {
+            this.getData();
             $input.focus();
             $mobileFooter.addClass('mini');
         }
