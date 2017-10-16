@@ -2574,27 +2574,3 @@ var App = (function(){
 })();
 
 App.init();
-
-$(document).ready(function () {
-    //$('[data-toggle="tooltip"]').tooltip();
-    if (skel.vars.mobile) {
-        var width = $('.yandex-map').width();
-        var isLoad = false;
-        for(var i = 1000; i < 30 * 1000; i += 1000) {
-            (function(i, width, isLoad) {
-                if (isLoad) {
-                    console.log('loaded');
-                    return;
-                }
-                setInterval(function () {
-                    var maps = $('ymaps[id]');
-                    if (maps.length) {
-                        maps.css({width: width + 'px'});
-                        isLoad = true;
-                    }
-                }, i);
-            }) (i, width, isLoad);
-
-        }
-    }
-});
